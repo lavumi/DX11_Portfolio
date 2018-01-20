@@ -1,0 +1,345 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="GameMain.cpp" />
+    <ClCompile Include="System\Keyboard.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="System\Mouse.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="System\Window.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="System\D3D.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="WinMain.cpp" />
+    <ClCompile Include="Camera\Camera.cpp">
+      <Filter>Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="System\Frames.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="System\TweakBar.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="Render\Texture.cpp">
+      <Filter>Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Render\VertexLayout.cpp">
+      <Filter>Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Render\UserInterface.cpp">
+      <Filter>Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader\Shader.cpp">
+      <Filter>Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="Render\Rasterizer.cpp">
+      <Filter>Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Render\Sampler.cpp">
+      <Filter>Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Mesh\Mesh.cpp">
+      <Filter>Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Mesh\ObjectMesh.cpp">
+      <Filter>Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Render\RenderTexture.cpp">
+      <Filter>Render</Filter>
+    </ClCompile>
+    <ClCompile Include="ProceduralTexture\Grass.cpp">
+      <Filter>ProceduralTexture</Filter>
+    </ClCompile>
+    <ClCompile Include="ProceduralTexture\RNDNoise.cpp">
+      <Filter>ProceduralTexture</Filter>
+    </ClCompile>
+    <ClCompile Include="Render\Blender.cpp">
+      <Filter>Render</Filter>
+    </ClCompile>
+    <ClCompile Include="ProceduralTexture\MosaicTile.cpp">
+      <Filter>ProceduralTexture</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader\NormalMapShader.cpp">
+      <Filter>Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader\DepthShadowShader.cpp">
+      <Filter>Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="Render\LightManager.cpp">
+      <Filter>Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader\SimpleShader.cpp">
+      <Filter>Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader\SkydomeShader.cpp">
+      <Filter>Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\TestCube.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\TestPlane.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\Mirror.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader\ShadowShader.cpp">
+      <Filter>Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\OrthoWindowPlane.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader\MirrorShader.cpp">
+      <Filter>Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="Render\Frustum.cpp">
+      <Filter>Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader\TerrianShader.cpp">
+      <Filter>Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="Terrian\Landscape.cpp">
+      <Filter>Terrian</Filter>
+    </ClCompile>
+    <ClCompile Include="Terrian\Skydome.cpp">
+      <Filter>Terrian</Filter>
+    </ClCompile>
+    <ClCompile Include="Terrian\QuadTree.cpp">
+      <Filter>Terrian</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader\BlurShader.cpp">
+      <Filter>Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="Terrian\Water.cpp">
+      <Filter>Terrian</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="GameMain.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="System\Keyboard.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="System\Mouse.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="System\Window.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="System\D3D.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera\Camera.h">
+      <Filter>Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="System\Frames.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="System\TweakBar.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\Texture.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\VertexLayout.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\UserInterface.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader\ShaderBuffer.h">
+      <Filter>Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader\Shader.h">
+      <Filter>Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader\CameraBuffer.h">
+      <Filter>Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader\WorldBuffer.h">
+      <Filter>Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\Rasterizer.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\Sampler.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh\Mesh.h">
+      <Filter>Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh\ObjectMesh.h">
+      <Filter>Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\RenderTexture.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="ProceduralTexture\Grass.h">
+      <Filter>ProceduralTexture</Filter>
+    </ClInclude>
+    <ClInclude Include="ProceduralTexture\RNDNoise.h">
+      <Filter>ProceduralTexture</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\Blender.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="ProceduralTexture\MosaicTile.h">
+      <Filter>ProceduralTexture</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader\NormalMapShader.h">
+      <Filter>Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader\DepthShadowShader.h">
+      <Filter>Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\LightManager.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader\SimpleShader.h">
+      <Filter>Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader\SkydomeShader.h">
+      <Filter>Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\TestCube.h">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\TestPlane.h">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\Mirror.h">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader\ShadowShader.h">
+      <Filter>Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\OrthoWindowPlane.h">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader\BlurShader.h">
+      <Filter>Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader\MirrorShader.h">
+      <Filter>Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\Frustum.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader\TerrianShader.h">
+      <Filter>Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="Terrian\Skydome.h">
+      <Filter>Terrian</Filter>
+    </ClInclude>
+    <ClInclude Include="Terrian\Landscape.h">
+      <Filter>Terrian</Filter>
+    </ClInclude>
+    <ClInclude Include="Terrian\QuadTree.h">
+      <Filter>Terrian</Filter>
+    </ClInclude>
+    <ClInclude Include="Terrian\Water.h">
+      <Filter>Terrian</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="System">
+      <UniqueIdentifier>{3f558f45-a2b3-429d-8250-d5d352d69585}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Camera">
+      <UniqueIdentifier>{0736847a-2512-428d-a0ba-f0b6d4583055}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Render">
+      <UniqueIdentifier>{25457864-9887-4cb1-809d-4f1243c8c952}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Mesh">
+      <UniqueIdentifier>{a788f370-b405-435f-862b-ba835acd0020}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shader">
+      <UniqueIdentifier>{55ca23e0-d999-4a31-a218-2e166de4f1b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ProceduralTexture">
+      <UniqueIdentifier>{073f2afb-1241-4f9a-a8a1-c98ee22134b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shader\FX">
+      <UniqueIdentifier>{caf5405c-847a-4e3d-85bb-567eb1844735}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object">
+      <UniqueIdentifier>{a63c572a-ace9-47d6-99b9-2989996ca2c5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Terrian">
+      <UniqueIdentifier>{f735152f-a932-4153-86a6-c07d550df435}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Mesh\Mesh.fx">
+      <Filter>Mesh</Filter>
+    </None>
+    <None Include="Shader\FX\BaseTile.fx">
+      <Filter>Shader\FX</Filter>
+    </None>
+    <None Include="Shader\FX\CreateTangentMap.fx">
+      <Filter>Shader\FX</Filter>
+    </None>
+    <None Include="Shader\FX\directionalWarp.fx">
+      <Filter>Shader\FX</Filter>
+    </None>
+    <None Include="Shader\FX\DrawPatternInTile.fx">
+      <Filter>Shader\FX</Filter>
+    </None>
+    <None Include="Shader\FX\finalDraw.fx">
+      <Filter>Shader\FX</Filter>
+    </None>
+    <None Include="Shader\FX\midPointGrad.fx">
+      <Filter>Shader\FX</Filter>
+    </None>
+    <None Include="Shader\FX\NormalMap.fx">
+      <Filter>Shader\FX</Filter>
+    </None>
+    <None Include="Shader\FX\randomSRT.fx">
+      <Filter>Shader\FX</Filter>
+    </None>
+    <None Include="Shader\FX\randomSRTInstance.fx">
+      <Filter>Shader\FX</Filter>
+    </None>
+    <None Include="Shader\FX\rndNoise.fx">
+      <Filter>Shader\FX</Filter>
+    </None>
+    <None Include="Shader\FX\rndSRTBlend.fx">
+      <Filter>Shader\FX</Filter>
+    </None>
+    <None Include="Shader\FX\singleGrass.fx">
+      <Filter>Shader\FX</Filter>
+    </None>
+    <None Include="Shader\FX\SquarePattern.fx">
+      <Filter>Shader\FX</Filter>
+    </None>
+    <None Include="Shader\FX\UIShader.fx">
+      <Filter>Shader\FX</Filter>
+    </None>
+    <None Include="Shader\FX\SimpleShader.fx">
+      <Filter>Shader\FX</Filter>
+    </None>
+    <None Include="Shader\FX\Skydome.fx">
+      <Filter>Shader\FX</Filter>
+    </None>
+    <None Include="Shader\FX\LightDepthShader.fx">
+      <Filter>Shader\FX</Filter>
+    </None>
+    <None Include="Shader\FX\Shadow.fx">
+      <Filter>Shader\FX</Filter>
+    </None>
+    <None Include="Shader\FX\BlurShader.fx">
+      <Filter>Shader\FX</Filter>
+    </None>
+    <None Include="Shader\FX\MirrorShader.fx">
+      <Filter>Shader\FX</Filter>
+    </None>
+    <None Include="Shader\FX\Terrian.fx">
+      <Filter>Shader\FX</Filter>
+    </None>
+  </ItemGroup>
+</Project>
