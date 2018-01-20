@@ -218,8 +218,8 @@ void GameMain::Render()
 		
 		Rasterizer::Get()->SetOffCullMode();
 		{
-			skydome->Render();
-			skydomeShader->Render(skydome->indexCount, skydome->world);
+		//	skydome->Render();
+		//	skydomeShader->Render(skydome->indexCount, skydome->world);
 		}
 		
 		D3D::Get()->ClearDepthStencil(D3D11_CLEAR_DEPTH, 1, 0);
