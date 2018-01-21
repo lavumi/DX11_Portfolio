@@ -4,10 +4,10 @@
 Skyplane::Skyplane()
 {
 
-	skyPlaneResolution = 50;
+	skyPlaneResolution = 20;
 	skyPlaneWidth = 10.0f;
-	skyPlaneTop = 0.5f;
-	skyPlaneBottom = 0.0f;
+	skyPlaneTop = 0.7f;
+	skyPlaneBottom = -0.3f;
 
 
 	CreateVertexData();

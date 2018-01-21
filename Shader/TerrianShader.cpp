@@ -77,7 +77,7 @@ void TerrianShader::Render(UINT indexCount, D3DXMATRIX world, ID3D11ShaderResour
 
 
 	worldBuffer->SetWorld(world);
-	D3D::GetDeviceContext()->PSSetShaderResources(10, 2, diffuseMap);
+	D3D::GetDeviceContext()->PSSetShaderResources(10, 3, diffuseMap);
 	D3D::GetDeviceContext()->PSSetShaderResources(1, 1, &lightMap);
 	D3D::GetDeviceContext()->PSSetShaderResources(2, 1, &normalMap);
 

@@ -110,6 +110,7 @@ void GameMain::Update()
 
 	skydome->Update();
 	landscape->Update();
+	cloud->Update();
 
 	
 	testcube->Update();
@@ -118,9 +119,9 @@ void GameMain::Update()
 
 	
 
-	if (Keyboard::Get()->KeyUp(VK_SPACE)) {
+	//if (Keyboard::Get()->KeyUp(VK_SPACE)) {
 		landscape->changeLOD(frustum);
-	}
+//	}
 
 	if (Keyboard::Get()->KeyUp('1')) {
 		landscapeWireFrame = !landscapeWireFrame;
@@ -186,7 +187,7 @@ void GameMain::Render()
 
 		Blender::Get()->SetBlendAdd();
 		cloud->Render();
-		skyplaneShader->Render(cloud->getIndexCount(), skydome->getWorld(), cloud->getDiffuseMap(), cloud->getPerlinMap());
+		skyplaneShader->Render(cloud->getIndexCount(), cloud->getWorld(), cloud->getDiffuseMap(), cloud->getPerlinMap());
 		Blender::Get()->SetOff();
 	}
 	D3D::Get()->SetDepthStencilOnState();

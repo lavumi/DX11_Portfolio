@@ -62,20 +62,12 @@ float4 PS(PixelInput input) : SV_Target
     float4 cloudColor;
 
     float2 uv = input.uv;
-	// Translate the texture coordinate sampling location by the translation value.
+
     uv.x = uv.x + _translation;
-
-	// Sample the texture value from the perturb texture using the translated texture coordinates.
     perturbValue = _perlin.Sample(samp[0], uv);
-
-	// Multiply the perturb value by the perturb scale.
-    perturbValue = perturbValue * _scale;
-
-	// Add the texture coordinates as well as the translation value to get the perturbed texture coordinate sampling location.
-    perturbValue.xy = perturbValue.xy +uv + _translation;
-
-	// Now sample the color from the cloud texture using the perturbed sampling coordinates.
-    cloudColor = _map.Sample(samp[0], perturbValue.xy);
+    perturbValue *= _scale;
+   uv += perturbValue.xy  + _translation;
+    cloudColor = _map.Sample(samp[0], uv);
 
 	// Reduce the color cloud by the brightness value.
     cloudColor = cloudColor * _brightness;

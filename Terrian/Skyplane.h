@@ -21,6 +21,10 @@ public:
 	ID3D11ShaderResourceView* getPerlinMap() {
 		return perlin;
 	}
+
+	D3DXMATRIX getWorld() {
+		return world;
+	}
 	
 	
 private:

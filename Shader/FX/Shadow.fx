@@ -104,10 +104,10 @@ float4 PS(PixelInput input) : SV_TARGET
 
         if (lightDepthValue < depthValue)
         {
-            lightIntensity = saturate(dot(normal, lightDir));
-
-            if (lightIntensity > 0.01f)
-            {
+           lightIntensity = saturate(dot(normal, lightDir));
+          
+           if (lightIntensity > 0.01f)
+           {
                shadow = 1;
             }
            
@@ -115,6 +115,7 @@ float4 PS(PixelInput input) : SV_TARGET
     }
     else
         shadow = 1;
+
 
 
 

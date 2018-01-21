@@ -37,9 +37,10 @@ struct PixelInput
 {
     float4 position : SV_POSITION;
     float2 uv : TEXCOORD0;
-    float worldHeight : TEXCOORD1;
+    float3 worldPosition : TEXCOORD1;
     float3 lightDir : TEXCOORD2;
     float3 normal : NORMAL0;
+    float3 worldNormal : NORMAL1;
     
     float4 viewPosition : TEXCOORD5;
 
@@ -60,7 +61,7 @@ PixelInput VS(VertexInput input)
     input.position.w = 1.0f;
 
     output.position = mul(input.position, _world);
-    output.worldHeight = output.position.y;
+    output.worldPosition = output.position.xyz;
     output.position = mul(output.position, _view);
     output.position = mul(output.position, _projection);
    
@@ -82,7 +83,7 @@ PixelInput VS(VertexInput input)
 
     output.uv = input.uv;
     output.normal = normalize(mul(input.normal, tbnMatrix));
-  
+    output.worldNormal = input.normal;
 
     return output;
 
@@ -92,7 +93,7 @@ PixelInput VS(VertexInput input)
 
 
 
-Texture2D _map[2] : register(t10);
+Texture2D _map[3] : register(t10);
 
 Texture2D _lightMap : register(t1);
 Texture2D _normalMap : register(t2);
@@ -136,8 +137,25 @@ float4 PS(PixelInput input) : SV_TARGET
     intensity *= shadowValue;
 
 
+    //텍스쳐링
+    float3 blending = abs(input.worldNormal);
+    blending.y -= (blending.x + blending.z) / 2;
+    blending = normalize(max(blending, 0.0001f));
 
-    float4 diffuseMap = lerp(_map[0].Sample(samp[0], uv), _map[1].Sample(samp[0], uv), step(input.worldHeight, -7.8f));
+
+
+
+    
+    float4 Mountain = _map[2].Sample(samp[0], uv);
+    float4 Grass = _map[0].Sample(samp[0], uv);
+    
+   
+    float4 landNmountain = Mountain * blending.x + Grass * blending.y + Mountain * blending.z;
+
+
+
+   float blendFactor = saturate((input.worldPosition.y + 7.7f) / 0.4f);
+   float4 diffuseMap = lerp(_map[1].Sample(samp[0], uv), landNmountain, blendFactor);
 
 
 

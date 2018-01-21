@@ -24,7 +24,7 @@ Landscape::Landscape()
 	quadTree->CreateTree();
 
 
-	diffuseMap = new ID3D11ShaderResourceView*[2];
+	diffuseMap = new ID3D11ShaderResourceView*[3];
 
 	HRESULT hr = D3DX11CreateShaderResourceViewFromFile(D3D::GetDevice(), L"./Terrian/normal.jpg", nullptr, nullptr, &normalMap, nullptr);
 	
@@ -33,6 +33,8 @@ Landscape::Landscape()
 
 	assert(SUCCEEDED(hr));
 	hr = D3DX11CreateShaderResourceViewFromFile(D3D::GetDevice(), L"./Terrian/sand.jpg", nullptr, nullptr, &diffuseMap[1], nullptr);
+	assert(SUCCEEDED(hr));
+	hr = D3DX11CreateShaderResourceViewFromFile(D3D::GetDevice(), L"./Terrian/mountain.jpg", nullptr, nullptr, &diffuseMap[2], nullptr);
 	assert(SUCCEEDED(hr));
 
 }
