@@ -37,8 +37,10 @@ struct PixelInput
 {
     float4 position : SV_POSITION;
     float2 uv : TEXCOORD0;
+    float worldHeight : TEXCOORD1;
     float3 lightDir : TEXCOORD2;
     float3 normal : NORMAL0;
+    
     float4 viewPosition : TEXCOORD5;
 
 
@@ -58,6 +60,7 @@ PixelInput VS(VertexInput input)
     input.position.w = 1.0f;
 
     output.position = mul(input.position, _world);
+    output.worldHeight = output.position.y;
     output.position = mul(output.position, _view);
     output.position = mul(output.position, _projection);
    
@@ -89,7 +92,7 @@ PixelInput VS(VertexInput input)
 
 
 
-Texture2D _map : register(t0);
+Texture2D _map[2] : register(t10);
 
 Texture2D _lightMap : register(t1);
 Texture2D _normalMap : register(t2);
@@ -134,7 +137,7 @@ float4 PS(PixelInput input) : SV_TARGET
 
 
 
-    float4 diffuseMap =  _map.Sample(samp[0], uv);
+    float4 diffuseMap = lerp(_map[0].Sample(samp[0], uv), _map[1].Sample(samp[0], uv), step(input.worldHeight, -7.8f));
 
 
 

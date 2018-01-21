@@ -11,6 +11,7 @@ public:
 	void SetMaxBlender();
 	void SetOff();
 	void SetNone();
+	void SetBlendAdd();
 	void SetBlandFacter(float factor);
 private:
 	static Blender* instance;

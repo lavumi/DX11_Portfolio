@@ -10,6 +10,7 @@ public:
 	static void AddMaterial(string groupName, D3DXCOLOR* ambient, D3DXCOLOR* diffuse);
 	
 	static void AddSkydome(D3DXCOLOR* apex, D3DXCOLOR* center);
+	static void AddSkyplane(float* scale, float* brightness);
 	static void AddBrushMenu(int* type, int* size, float* type2, int*  imagenum);
 	static void AddGrassCreationMenu(int * count, float * banding, float * banding2, int * rotation, int* width, float * minSize, float * maxSize, D3DXCOLOR * color1, D3DXCOLOR * color2);
 

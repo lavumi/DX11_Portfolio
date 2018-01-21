@@ -16,6 +16,7 @@ SkydomeShader::SkydomeShader()
 
 SkydomeShader::~SkydomeShader()
 {
+	SAFE_RELEASE(buffer);
 }
 
 void SkydomeShader::Update()
@@ -33,7 +34,7 @@ void SkydomeShader::Render(UINT indexCount, D3DXMATRIX world)
 		buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &subResource
 	);
 
-	memcpy(subResource.pData, &data, sizeof(Data));
+	memcpy(subResource.pData, &data, sizeof(SkyColor));
 	D3D::GetDeviceContext()->Unmap(buffer, 0);
 
 
@@ -63,7 +64,7 @@ void SkydomeShader::CreateBuffers()
 
 	ZeroMemory(&desc, sizeof(D3D11_BUFFER_DESC));
 	desc.Usage = D3D11_USAGE_DYNAMIC;
-	desc.ByteWidth = sizeof(Data);
+	desc.ByteWidth = sizeof(SkyColor);
 	desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 	desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 	desc.MiscFlags = 0;

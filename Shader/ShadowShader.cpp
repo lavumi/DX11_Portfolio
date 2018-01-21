@@ -11,6 +11,7 @@ ShadowShader::ShadowShader()
 
 ShadowShader::~ShadowShader()
 {
+	SAFE_RELEASE(LightBuffer);
 }
 
 void ShadowShader::Update()

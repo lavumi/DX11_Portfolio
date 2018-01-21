@@ -10,8 +10,14 @@ public:
 	void Update();
 	void Render();
 
-	UINT indexCount;
-	D3DXMATRIX world;
+	UINT getIndexCount() {
+		return indexCount;
+	}
+
+	D3DXMATRIX getWorld() {
+		return world;
+	}
+	
 private:
 	void CreateBuffer();
 
@@ -20,5 +26,6 @@ private:
 	
 
 	UINT vertexCount;
-	
+	UINT indexCount;
+	D3DXMATRIX world;
 };

@@ -6,15 +6,6 @@ class QuadTree;
 class Landscape 
 {
 public:
-	struct VertexTextureNormalTangent
-	{
-		D3DXVECTOR3 position;
-		D3DXVECTOR2 uv;
-		D3DXVECTOR3 normal;
-		D3DXVECTOR3 tangent;
-	};
-
-
 	Landscape();
 	~Landscape();
 
@@ -32,16 +23,32 @@ public:
 	//Brush* brush;
 
 	void SetTexture(ID3D11ShaderResourceView* diffuse, ID3D11ShaderResourceView* normal, ID3D11ShaderResourceView* specular) {
-		diffuseMap = diffuse;
+		diffuseMap[0] = diffuse;
 		specularMap = specular;
 	}
 
 
 
-	int getvertexCount() {
+	UINT getvertexCount() {
 		return vertexCount;
 	}
 
+
+	UINT getIndexCount() {
+		return indexCount;
+	}
+
+	ID3D11ShaderResourceView** getDiffuseMap() {
+		return diffuseMap;
+	}
+
+	ID3D11ShaderResourceView* getNormalMap() {
+		return normalMap;
+	}
+
+	D3DXMATRIX getWorld() {
+		return world;
+	}
 
 	 void getVertexData(VertexTextureNormalTangent* vertices) {
 
@@ -54,11 +61,7 @@ public:
 	 void changeLOD(Frustum* frustum);
 
 
-	UINT indexCount;
-	ID3D11ShaderResourceView* diffuseMap;
-	ID3D11ShaderResourceView* normalMap;
-	ID3D11ShaderResourceView* specularMap;
-	D3DXMATRIX world;
+
 private:
 
 
@@ -81,7 +84,11 @@ private:
 	vector<UINT> indexData;
 
 	UINT vertexCount;
-
+	UINT indexCount;
+	ID3D11ShaderResourceView** diffuseMap;
+	ID3D11ShaderResourceView* normalMap;
+	ID3D11ShaderResourceView* specularMap;
+	D3DXMATRIX world;
 
 
 	QuadTree* quadTree;

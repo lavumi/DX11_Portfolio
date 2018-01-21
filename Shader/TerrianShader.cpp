@@ -16,6 +16,10 @@ TerrianShader::TerrianShader()
 
 TerrianShader::~TerrianShader()
 {
+	SAFE_RELEASE(LightBuffer);
+	SAFE_RELEASE(MaterialBuffer);
+	SAFE_RELEASE(ExtraBuffer);
+
 }
 
 void TerrianShader::Update()
@@ -23,7 +27,7 @@ void TerrianShader::Update()
 
 }
 
-void TerrianShader::Render(UINT indexCount, D3DXMATRIX world, ID3D11ShaderResourceView * diffuseMap, ID3D11ShaderResourceView* normalMap, ID3D11ShaderResourceView* lightMap)
+void TerrianShader::Render(UINT indexCount, D3DXMATRIX world, ID3D11ShaderResourceView ** diffuseMap, ID3D11ShaderResourceView* normalMap, ID3D11ShaderResourceView* lightMap)
 {
 	D3D11_MAPPED_SUBRESOURCE subResource = { 0 };
 
@@ -73,7 +77,7 @@ void TerrianShader::Render(UINT indexCount, D3DXMATRIX world, ID3D11ShaderResour
 
 
 	worldBuffer->SetWorld(world);
-	D3D::GetDeviceContext()->PSSetShaderResources(0, 1, &diffuseMap);
+	D3D::GetDeviceContext()->PSSetShaderResources(10, 2, diffuseMap);
 	D3D::GetDeviceContext()->PSSetShaderResources(1, 1, &lightMap);
 	D3D::GetDeviceContext()->PSSetShaderResources(2, 1, &normalMap);
 

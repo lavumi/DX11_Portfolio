@@ -26,6 +26,7 @@ class BlurShader;
 class MirrorShader;
 class TerrianShader;
 class ColorShader;
+class SkyplaneShader;
 
 class Frustum;
 
@@ -82,4 +83,5 @@ private:
 	MirrorShader* mirrorShader;
 	TerrianShader* terrianShader;
 	ColorShader* colorShader;
+	SkyplaneShader* skyplaneShader;
 };

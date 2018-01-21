@@ -10,6 +10,7 @@ DepthShadowShader::DepthShadowShader()
 
 DepthShadowShader::~DepthShadowShader()
 {
+	SAFE_RELEASE(lightBuffer);
 }
 
 void DepthShadowShader::Update()
