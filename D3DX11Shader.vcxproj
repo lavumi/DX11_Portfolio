@@ -178,10 +178,11 @@
     <ClInclude Include="Render\VertexLayout.h" />
     <ClInclude Include="Shader\BlurShader.h" />
     <ClInclude Include="Shader\CameraBuffer.h" />
+    <ClInclude Include="Shader\ColorShader.h" />
     <ClInclude Include="Shader\DepthShadowShader.h" />
     <ClInclude Include="Shader\MirrorShader.h" />
     <ClInclude Include="Shader\ShadowShader.h" />
-    <ClInclude Include="Shader\SimpleShader.h" />
+    <ClInclude Include="Shader\TextureShader.h" />
     <ClInclude Include="Shader\NormalMapShader.h" />
     <ClInclude Include="Shader\Shader.h" />
     <ClInclude Include="Shader\ShaderBuffer.h" />
@@ -200,6 +201,7 @@
     <ClInclude Include="Terrian\Landscape.h" />
     <ClInclude Include="Terrian\QuadTree.h" />
     <ClInclude Include="Terrian\Skydome.h" />
+    <ClInclude Include="Terrian\Skyplane.h" />
     <ClInclude Include="Terrian\Water.h" />
   </ItemGroup>
   <ItemGroup>
@@ -224,10 +226,11 @@
     <ClCompile Include="Render\UserInterface.cpp" />
     <ClCompile Include="Render\VertexLayout.cpp" />
     <ClCompile Include="Shader\BlurShader.cpp" />
+    <ClCompile Include="Shader\ColorShader.cpp" />
     <ClCompile Include="Shader\DepthShadowShader.cpp" />
     <ClCompile Include="Shader\MirrorShader.cpp" />
     <ClCompile Include="Shader\ShadowShader.cpp" />
-    <ClCompile Include="Shader\SimpleShader.cpp" />
+    <ClCompile Include="Shader\TextureShader.cpp" />
     <ClCompile Include="Shader\NormalMapShader.cpp" />
     <ClCompile Include="Shader\Shader.cpp" />
     <ClCompile Include="Shader\SkydomeShader.cpp" />
@@ -241,6 +244,7 @@
     <ClCompile Include="Terrian\Landscape.cpp" />
     <ClCompile Include="Terrian\QuadTree.cpp" />
     <ClCompile Include="Terrian\Skydome.cpp" />
+    <ClCompile Include="Terrian\Skyplane.cpp" />
     <ClCompile Include="Terrian\Water.cpp" />
     <ClCompile Include="WinMain.cpp" />
   </ItemGroup>
@@ -299,7 +303,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shader\FX\SimpleShader.fx">
+    <None Include="Shader\FX\TextureShader.fx">
       <FileType>Document</FileType>
     </None>
   </ItemGroup>
@@ -325,6 +329,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Shader\FX\Terrian.fx">
+      <FileType>Document</FileType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shader\FX\ColorShader.fx">
       <FileType>Document</FileType>
     </None>
   </ItemGroup>

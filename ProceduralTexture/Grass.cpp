@@ -44,9 +44,9 @@ Grass::Grass()
 
 
 
-	UserInterface::AddGrassCreationMenu(
-		&count,  &banding, &banding2, &rotation, &width
-		,&minSize ,&maxSize ,&color1, &color2);
+	//UserInterface::AddGrassCreationMenu(
+	//	&count,  &banding, &banding2, &rotation, &width
+	//	,&minSize ,&maxSize ,&color1, &color2);
 }	
 
 Grass::~Grass()

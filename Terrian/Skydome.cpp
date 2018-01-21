@@ -39,6 +39,9 @@ void Skydome::Render()
 	
 }
 
+
+
+
 void Skydome::CreateBuffer()
 {
 	HRESULT hr;

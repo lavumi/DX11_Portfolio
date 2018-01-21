@@ -1,10 +1,10 @@
 #pragma once
 #include "Shader.h"
 
-class SimpleShader : public Shader {
+class TextureShader : public Shader {
 public:
-	SimpleShader();
-	~SimpleShader();
+	TextureShader();
+	~TextureShader();
 
 
 	virtual void Update();
@@ -17,7 +17,6 @@ private:
 	void CreateBuffers();
 
 
-	ID3D11Buffer* lightBuffer;
 
 
 

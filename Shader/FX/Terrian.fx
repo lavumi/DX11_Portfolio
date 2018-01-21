@@ -121,13 +121,8 @@ float4 PS(PixelInput input) : SV_TARGET
 
     float nDotL = saturate(dot(normal, light));
 
-   // return float4(light, 1);
 
     float4 intensity = ambient * globalAmbient + diffuse * nDotL;
-
-        
-
-
 
 
     float2 projectTexCoord;
@@ -140,6 +135,9 @@ float4 PS(PixelInput input) : SV_TARGET
 
 
     float4 diffuseMap =  _map.Sample(samp[0], uv);
+
+
+
     return intensity * diffuseMap;
 }
 

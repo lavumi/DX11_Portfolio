@@ -7,6 +7,8 @@ class RenderTexture;
 class Skydome;
 class Landscape;
 class Water;
+class Skyplane;
+	
 
 class Grass;
 class MosaicTile;
@@ -17,12 +19,13 @@ class Mirror;
 
 class NormalMapShader;
 class DepthShadowShader;
-class SimpleShader;
+class TextureShader;
 class SkydomeShader;
 class ShadowShader;
 class BlurShader;
 class MirrorShader;
 class TerrianShader;
+class ColorShader;
 
 class Frustum;
 
@@ -56,6 +59,7 @@ private:
 	//RNDNoise* noise;
 
 	Skydome* skydome;
+	Skyplane* cloud;
 	Landscape* landscape;
 	Water* lake;
 
@@ -72,9 +76,10 @@ private:
 	SkydomeShader* skydomeShader;
 	NormalMapShader* normalMapShader;
 	DepthShadowShader* depthShadowShader;
-	SimpleShader* simpleShader;
+	TextureShader* textureShader;
 	ShadowShader* shadowShader;
 	BlurShader* blurShader;
 	MirrorShader* mirrorShader;
 	TerrianShader* terrianShader;
+	ColorShader* colorShader;
 };

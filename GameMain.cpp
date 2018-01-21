@@ -10,6 +10,7 @@
 #include "./ProceduralTexture/RNDNoise.h"
 
 #include "./Terrian/Skydome.h"
+#include "./Terrian/Skyplane.h"
 #include "./Terrian/Landscape.h"
 #include "./Terrian/Water.h"
 
@@ -20,12 +21,13 @@
 
 #include "../Shader/NormalMapShader.h"
 #include "../Shader/DepthShadowShader.h"
-#include "../Shader/SimpleShader.h"
+#include "../Shader/TextureShader.h"
 #include "../Shader/SkydomeShader.h"
 #include "../Shader/ShadowShader.h"
 #include "../Shader/BlurShader.h"
 #include "../Shader/MirrorShader.h"
 #include "../Shader/TerrianShader.h"
+#include "../Shader/ColorShader.h"
 
 
 
@@ -46,6 +48,7 @@ void GameMain::Initialize()
 	testcube = new TestCube();
 	//testplane = new Mirror();
 	skydome = new Skydome();
+	cloud = new Skyplane();
 	landscape = new Landscape();
 	lake = new Water();
 
@@ -60,12 +63,13 @@ void GameMain::Initialize()
 
 	normalMapShader = new NormalMapShader();
 	depthShadowShader = new DepthShadowShader();
-	simpleShader = new SimpleShader();
+	textureShader = new TextureShader();
 	skydomeShader = new SkydomeShader();
 	shadowShader = new ShadowShader();
 	blurShader = new BlurShader();
 	mirrorShader = new MirrorShader();
 	terrianShader = new TerrianShader();
+	colorShader = new ColorShader();
 
 
 
@@ -177,6 +181,9 @@ void GameMain::Render()
 	{
 		skydome->Render();
 		skydomeShader->Render(skydome->indexCount, skydome->world);
+
+		cloud->Render();
+		colorShader->Render(cloud->indexCount, skydome->world, D3DXCOLOR(1, 0, 0, 1));
 	}
 	D3D::Get()->SetDepthStencilOnState();
 	Rasterizer::Get()->SetOnCullMode();
@@ -208,22 +215,24 @@ void GameMain::Render()
 		D3D::Get()->SetDepthStencilMirrorPreState();
 	
 		//°Å¿ï ¹Ý»ç½Ã ºûµµ ¹æÇâÀ» ¹Ù²ãÁà¾ßÇÑ´Ù
-
+		Blender::Get()->SetLinear();
+		//Blender::Get()->SetBlandFacter(0.5f);
 		lake->Render();
-		simpleShader->Render(lake->indexCount, lake->world, nullptr);
+		colorShader->Render(lake->indexCount, lake->world, D3DXCOLOR(0.2f,0.5f,1,0.5f));
 
 		D3D::Get()->SetDepthStencilMirrorState();
-		Blender::Get()->SetOff();
-
+		//
 		
-		Rasterizer::Get()->SetOffCullMode();
-		{
+
+	
+		//Rasterizer::Get()->SetOffCullMode();
+		//{
 		//	skydome->Render();
 		//	skydomeShader->Render(skydome->indexCount, skydome->world);
-		}
+		//}
 		
 		D3D::Get()->ClearDepthStencil(D3D11_CLEAR_DEPTH, 1, 0);
-
+		
 		
 
 		Rasterizer::Get()->SetFrontCullMode();
@@ -237,7 +246,7 @@ void GameMain::Render()
 		landscape->Render();
 		mirrorShader->Render(landscape->indexCount, landscape->world, landscape->diffuseMap, nullptr, nullptr, *blurShadowTexture->GetShadowResourceView());
 
-	
+		Blender::Get()->SetOff();
 		Rasterizer::Get()->SetOnCullMode();
 	
 	

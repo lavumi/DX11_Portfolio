@@ -51,7 +51,7 @@ void SkydomeShader::Render(UINT indexCount, D3DXMATRIX world)
 	D3D::GetDeviceContext()->PSSetConstantBuffers(1, 1, &buffer);
 
 
-		D3D::GetDeviceContext()->DrawIndexed(indexCount, 0, 0);
+	D3D::GetDeviceContext()->DrawIndexed(indexCount, 0, 0);
 
 	
 }

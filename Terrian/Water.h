@@ -6,6 +6,7 @@ public:
 	Water();
 	~Water();
 
+	void Update();
 	void Render();
 
 	UINT indexCount;

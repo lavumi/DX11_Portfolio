@@ -72,9 +72,6 @@
     <ClCompile Include="Render\LightManager.cpp">
       <Filter>Render</Filter>
     </ClCompile>
-    <ClCompile Include="Shader\SimpleShader.cpp">
-      <Filter>Shader</Filter>
-    </ClCompile>
     <ClCompile Include="Shader\SkydomeShader.cpp">
       <Filter>Shader</Filter>
     </ClCompile>
@@ -115,6 +112,15 @@
       <Filter>Shader</Filter>
     </ClCompile>
     <ClCompile Include="Terrian\Water.cpp">
+      <Filter>Terrian</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader\TextureShader.cpp">
+      <Filter>Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader\ColorShader.cpp">
+      <Filter>Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="Terrian\Skyplane.cpp">
       <Filter>Terrian</Filter>
     </ClCompile>
   </ItemGroup>
@@ -199,9 +205,6 @@
     <ClInclude Include="Render\LightManager.h">
       <Filter>Render</Filter>
     </ClInclude>
-    <ClInclude Include="Shader\SimpleShader.h">
-      <Filter>Shader</Filter>
-    </ClInclude>
     <ClInclude Include="Shader\SkydomeShader.h">
       <Filter>Shader</Filter>
     </ClInclude>
@@ -242,6 +245,15 @@
       <Filter>Terrian</Filter>
     </ClInclude>
     <ClInclude Include="Terrian\Water.h">
+      <Filter>Terrian</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader\TextureShader.h">
+      <Filter>Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader\ColorShader.h">
+      <Filter>Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="Terrian\Skyplane.h">
       <Filter>Terrian</Filter>
     </ClInclude>
   </ItemGroup>
@@ -320,9 +332,6 @@
     <None Include="Shader\FX\UIShader.fx">
       <Filter>Shader\FX</Filter>
     </None>
-    <None Include="Shader\FX\SimpleShader.fx">
-      <Filter>Shader\FX</Filter>
-    </None>
     <None Include="Shader\FX\Skydome.fx">
       <Filter>Shader\FX</Filter>
     </None>
@@ -339,6 +348,12 @@
       <Filter>Shader\FX</Filter>
     </None>
     <None Include="Shader\FX\Terrian.fx">
+      <Filter>Shader\FX</Filter>
+    </None>
+    <None Include="Shader\FX\TextureShader.fx">
+      <Filter>Shader\FX</Filter>
+    </None>
+    <None Include="Shader\FX\ColorShader.fx">
       <Filter>Shader\FX</Filter>
     </None>
   </ItemGroup>
