@@ -19,12 +19,12 @@ void LightManager::Update()
 	D3DXVec3Normalize(&forward, &forward);
 	D3DXVec3Normalize(&lightData.lightDirection, &lightData.lightDirection);
 
-	position += forward * 50 - lightData.lightDirection * 50;
+	position += forward * 250 - lightData.lightDirection * 250;
 
 
 	D3DXMatrixLookAtLH(&lightData.lightView, &position, &(lightData.lightDirection + position), &up);
 
-	D3DXMatrixOrthoLH(&lightData.lightProjection,100, 100, 0.1f, 100);
+	D3DXMatrixOrthoLH(&lightData.lightProjection,500, 500, 0.1f, 500);
 	
 
 	D3DXMatrixTranspose(&lightData.lightView, &lightData.lightView);

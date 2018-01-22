@@ -42,6 +42,8 @@ public:
 		return diffuseMap;
 	}
 
+
+
 	ID3D11ShaderResourceView* getNormalMap() {
 		return normalMap;
 	}

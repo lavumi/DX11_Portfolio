@@ -296,6 +296,12 @@ void Landscape::changeLOD(Frustum* frustum)
 		indexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &subResource
 	);
 
+	if (indexDataTemp.size() == 0) {
+		D3D::GetDeviceContext()->Unmap(indexBuffer, 0);
+		indexCount = indexDataTemp.size();
+		return;
+	}
+		
 	memcpy(subResource.pData, &indexDataTemp[0], sizeof(UINT) * indexDataTemp.size());
 
 	D3D::GetDeviceContext()->Unmap(indexBuffer, 0);
