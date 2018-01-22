@@ -19,5 +19,4 @@ public:
 private:
 	D3DXPLANE m_planes[6];
 
-	
 };
