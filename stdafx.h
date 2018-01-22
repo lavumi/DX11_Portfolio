@@ -47,7 +47,7 @@ using namespace std;
 //#include "./Render/DepthStencil.h"
 #include "./Render/VertexLayout.h"
 #include "./Render/UserInterface.h"
-#include "./Render/Blender.h"
+//#include "./Render/Blender.h"
 #include "./Render/LightManager.h"
 
 #include "./Camera/Camera.h"

@@ -227,7 +227,7 @@ void MosaicTile::DrawNoise()
 
 void MosaicTile::Render()
 {
-	Blender::Get()->SetOff();
+	D3D::Get()->SetBlender_Off();
 	CreateShader((int)ShaderList.size() - 1);
 	UINT stride = sizeof(VertexTexture);
 	UINT offset = 0;

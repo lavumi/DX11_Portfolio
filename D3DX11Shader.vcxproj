@@ -171,7 +171,6 @@
     <ClInclude Include="ProceduralTexture\Grass.h" />
     <ClInclude Include="ProceduralTexture\MosaicTile.h" />
     <ClInclude Include="ProceduralTexture\RNDNoise.h" />
-    <ClInclude Include="Render\Blender.h" />
     <ClInclude Include="Render\Frustum.h" />
     <ClInclude Include="Render\LightManager.h" />
     <ClInclude Include="Render\Rasterizer.h" />
@@ -221,7 +220,6 @@
     <ClCompile Include="ProceduralTexture\Grass.cpp" />
     <ClCompile Include="ProceduralTexture\MosaicTile.cpp" />
     <ClCompile Include="ProceduralTexture\RNDNoise.cpp" />
-    <ClCompile Include="Render\Blender.cpp" />
     <ClCompile Include="Render\Frustum.cpp" />
     <ClCompile Include="Render\LightManager.cpp" />
     <ClCompile Include="Render\Rasterizer.cpp" />

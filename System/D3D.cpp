@@ -1,6 +1,7 @@
 #include "../stdafx.h"
 #include "D3D.h"
 
+
 D3D* D3D::instance = NULL;
 ID3D11Device* D3D::device = NULL;
 ID3D11DeviceContext* D3D::deviceContext = NULL;
@@ -17,6 +18,7 @@ D3D * D3D::Get()
 void D3D::Delete()
 {
 	SAFE_DELETE(instance);
+	
 }
 
 void D3D::BeginScene()
@@ -52,12 +54,9 @@ D3D::D3D()
 	CreateDefaultDepthView();
 
 
-	CreateOnState();
-	CreateOffState();
-	CreateMirrorStencilTest();
+	CreateDepthStencil();
 
-
-
+	CreateBlenders();
 
 
 
@@ -77,6 +76,10 @@ D3D::D3D()
 		(float)d3dInfo.screenWidth, (float)d3dInfo.screenHeight,
 		Camera::screenNear, Camera::screenDepth
 	);
+
+
+
+
 }
 
 D3D::~D3D()
@@ -87,6 +90,7 @@ D3D::~D3D()
 	SAFE_RELEASE(deviceContext);
 	SAFE_RELEASE(device);
 	SAFE_RELEASE(swapChain);
+
 }
 
 void D3D::CreateAdapter()
@@ -265,7 +269,7 @@ void D3D::CreateDefaultDepthStencilTexture()
 	assert(SUCCEEDED(hr));
 }
 
-void D3D::CreateOnState()
+void D3D::CreateDepthStencil()
 {
 	D3D11_DEPTH_STENCIL_DESC desc = { 0 };
 	desc.DepthEnable = true;
@@ -291,11 +295,8 @@ void D3D::CreateOnState()
 	assert(SUCCEEDED(hr));
 
 	deviceContext->OMSetDepthStencilState(onState, 1);
-}
 
-void D3D::CreateOffState()
-{
-	D3D11_DEPTH_STENCIL_DESC desc = { 0 };
+
 	desc.DepthEnable = true;
 	desc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ZERO;
 	desc.DepthFunc = D3D11_COMPARISON_ALWAYS;
@@ -314,15 +315,11 @@ void D3D::CreateOffState()
 	desc.BackFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
 	desc.BackFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
 
-	HRESULT hr;
+
 	hr = device->CreateDepthStencilState(&desc, &offState);
 	assert(SUCCEEDED(hr));
-}
 
-void D3D::CreateMirrorStencilTest()
-{
 
-	D3D11_DEPTH_STENCIL_DESC desc = { 0 };
 	desc.DepthEnable = true;
 	desc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ZERO;
 	desc.DepthFunc = D3D11_COMPARISON_LESS;
@@ -344,7 +341,7 @@ void D3D::CreateMirrorStencilTest()
 	desc.BackFace.StencilFunc = D3D11_COMPARISON_NEVER;
 
 
-	HRESULT hr;
+
 	hr = device->CreateDepthStencilState(&desc, &mirrorState);
 	assert(SUCCEEDED(hr));
 
@@ -357,8 +354,22 @@ void D3D::CreateMirrorStencilTest()
 
 	hr = device->CreateDepthStencilState(&desc, &mirrorState2);
 	assert(SUCCEEDED(hr));
-	//D3D::GetDeviceContext()->OMSetDepthStencilState(onState, 1);
 }
+
+//void D3D::CreateOffState()
+//{
+//	D3D11_DEPTH_STENCIL_DESC desc = { 0 };
+//
+//}
+//
+//void D3D::CreateMirrorStencilTest()
+//{
+//
+//	D3D11_DEPTH_STENCIL_DESC desc = { 0 };
+//
+//	//D3D::GetDeviceContext()->OMSetDepthStencilState(onState, 1);
+//}
+
 
 void D3D::CreateDefaultRenderTarget()
 {
@@ -383,4 +394,117 @@ void D3D::CreateDefaultDepthView()
 	assert(SUCCEEDED(hr));
 
 	
+}
+
+
+
+
+
+
+
+
+//////////////////////////////////////////////////////////////
+//////////////////////////////ºí·£´õ//////////////////////////
+/////////////////////////////////////////////////////////////
+void D3D::CreateBlenders()
+{
+	d3dBlendState = new ID3D11BlendState*[6];
+
+
+	D3D11_BLEND_DESC omDesc;
+	ZeroMemory(&omDesc, sizeof(D3D11_BLEND_DESC));
+
+
+	omDesc.RenderTarget[0].BlendEnable = true;
+	omDesc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
+	omDesc.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
+	omDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
+	omDesc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
+	omDesc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
+	omDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+	omDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+
+	D3D::GetDevice()->CreateBlendState(&omDesc, &d3dBlendState[0]);
+
+
+
+	omDesc.RenderTarget[0].BlendEnable = false;
+	D3D::GetDevice()->CreateBlendState(&omDesc, &d3dBlendState[1]);
+
+
+	omDesc.RenderTarget[0].BlendEnable = true;
+	omDesc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
+	omDesc.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
+	omDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_MAX;
+	omDesc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_INV_DEST_ALPHA;
+	omDesc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ONE;
+	omDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+	omDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+	
+	D3D::GetDevice()->CreateBlendState(&omDesc, &d3dBlendState[2]);
+
+
+
+	omDesc.RenderTarget[0].SrcBlend = D3D11_BLEND_ZERO;
+	omDesc.RenderTarget[0].DestBlend = D3D11_BLEND_ONE;
+	omDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
+	omDesc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
+	omDesc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
+	omDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+	omDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+
+	D3D::GetDevice()->CreateBlendState(&omDesc, &d3dBlendState[3]);
+
+
+
+	omDesc.RenderTarget[0].SrcBlend = D3D11_BLEND_INV_BLEND_FACTOR;
+	omDesc.RenderTarget[0].DestBlend = D3D11_BLEND_BLEND_FACTOR;
+	omDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
+	omDesc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
+	omDesc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
+	omDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+	omDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+
+	D3D::GetDevice()->CreateBlendState(&omDesc, &d3dBlendState[4]);
+
+
+	omDesc.RenderTarget[0].SrcBlend = D3D11_BLEND_ONE;
+	omDesc.RenderTarget[0].DestBlend = D3D11_BLEND_ONE;
+	omDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
+	omDesc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
+	omDesc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
+	omDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+	omDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+
+	D3D::GetDevice()->CreateBlendState(&omDesc, &d3dBlendState[5]);
+}
+
+void D3D::SetBlender_Linear()
+{
+	deviceContext->OMSetBlendState(d3dBlendState[0], 0, 0xffffffff);
+}
+
+void D3D::SetBlender_MaxBlend()
+{
+	deviceContext->OMSetBlendState(d3dBlendState[2], 0, 0xffffffff);
+}
+
+void D3D::SetBlender_Off()
+{
+	deviceContext->OMSetBlendState(d3dBlendState[1], 0, 0xffffffff);
+}
+
+void D3D::SetBlender_None()
+{
+	deviceContext->OMSetBlendState(d3dBlendState[3], 0, 0xffffffff);
+}
+
+void D3D::SetBlender_AddBlend()
+{
+	deviceContext->OMSetBlendState(d3dBlendState[5], 0, 0xffffffff);
+}
+
+void D3D::SetBlender_BlandFacter(const float factor)
+{
+	deviceContext->OMSetBlendState(d3dBlendState[4], &factor, 0xffffffff);
 }

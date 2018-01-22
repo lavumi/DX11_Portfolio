@@ -32,7 +32,7 @@ void Frustum::SetFrustum(float screenDepth, D3DXMATRIX viewMatrix, D3DXMATRIX pr
 	D3DXMatrixInverse(&matInv, NULL, &viewProj);
 
 
-	//각 점에 곱해주면 기존 점들 위치를 알수 있게 된다.
+	//각 점에 곱해주면 점들의 기존 위치를 알수 있게 된다.
 	//이 점들을 이용해 평면을 만든다.
 	for (int i = 0; i < 8; i++)
 		D3DXVec3TransformCoord(&vtx[i], &vtx[i], &matInv);

@@ -185,10 +185,10 @@ void GameMain::Render()
 		skydome->Render();
 		skydomeShader->Render(skydome->getIndexCount(), skydome->getWorld());
 
-		Blender::Get()->SetBlendAdd();
+		D3D::Get()->SetBlender_AddBlend();
 		cloud->Render();
 		skyplaneShader->Render(cloud->getIndexCount(), cloud->getWorld(), cloud->getDiffuseMap(), cloud->getPerlinMap());
-		Blender::Get()->SetOff();
+		D3D::Get()->SetBlender_Off();
 	}
 	D3D::Get()->SetDepthStencilOnState();
 	Rasterizer::Get()->SetOnCullMode();
@@ -219,7 +219,7 @@ void GameMain::Render()
 		D3D::Get()->ClearDepthStencil(D3D11_CLEAR_STENCIL,0, 0);
 		D3D::Get()->SetDepthStencilMirrorPreState();
 	
-		Blender::Get()->SetLinear();
+		D3D::Get()->SetBlender_Linear();
 		lake->Render();
 		colorShader->Render(lake->indexCount, lake->world, D3DXCOLOR(0.2f,0.5f,1,0.5f));
 
@@ -243,7 +243,7 @@ void GameMain::Render()
 	//	cloud->Render();
 		//mirrorShader->Render(cloud->indexCount, skydome->world);
 
-		Blender::Get()->SetOff();
+		D3D::Get()->SetBlender_Off();
 
 
 
@@ -258,7 +258,7 @@ void GameMain::Render()
 		landscape->Render();
 		mirrorShader->Render(landscape->getIndexCount(), landscape->getWorld(), landscape->getDiffuseMap(), landscape->getNormalMap(), nullptr, *blurShadowTexture->GetShadowResourceView());
 
-		Blender::Get()->SetOff();
+		D3D::Get()->SetBlender_Off();
 		Rasterizer::Get()->SetOnCullMode();
 	
 	

@@ -57,9 +57,6 @@
     <ClCompile Include="ProceduralTexture\RNDNoise.cpp">
       <Filter>ProceduralTexture</Filter>
     </ClCompile>
-    <ClCompile Include="Render\Blender.cpp">
-      <Filter>Render</Filter>
-    </ClCompile>
     <ClCompile Include="ProceduralTexture\MosaicTile.cpp">
       <Filter>ProceduralTexture</Filter>
     </ClCompile>
@@ -192,9 +189,6 @@
     </ClInclude>
     <ClInclude Include="ProceduralTexture\RNDNoise.h">
       <Filter>ProceduralTexture</Filter>
-    </ClInclude>
-    <ClInclude Include="Render\Blender.h">
-      <Filter>Render</Filter>
     </ClInclude>
     <ClInclude Include="ProceduralTexture\MosaicTile.h">
       <Filter>ProceduralTexture</Filter>

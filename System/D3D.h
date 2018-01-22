@@ -1,5 +1,7 @@
 #pragma once
 
+
+
 struct D3DInfo
 {
 	wstring appName;
@@ -12,6 +14,9 @@ struct D3DInfo
 	D3DXCOLOR clearColor;
 };
 
+
+class Blender;
+class DepthStencil;
 class D3D
 {
 public:
@@ -65,12 +70,26 @@ public:
 	void SetDefaultRenderView();
 
 
+
+
 	void SetDepthStencilOnState();
 	void SetDepthStencilOffState();
 	void SetDepthStencilMirrorPreState();
 	void SetDepthStencilMirrorState();
 
+
+
+	//Blender
+	void SetBlender_Linear();
+	void SetBlender_MaxBlend();
+	void SetBlender_Off();
+	void SetBlender_None();
+	void SetBlender_AddBlend();
+	void SetBlender_BlandFacter(float factor);
+
 	void ClearDepthStencil(UINT clearFlag, float depth, UINT8 stencil);
+
+
 
 private:
 	D3D();
@@ -117,9 +136,18 @@ private:
 
 	
 
-	void CreateOnState();
-	void CreateOffState();
-	void CreateMirrorStencilTest();
+	void CreateDepthStencil();
+//	void CreateOffState();
+//	void CreateMirrorStencilTest();
+
+
+
+
+
+	//Blender
+
+	void CreateBlenders();
+	ID3D11BlendState** d3dBlendState;
 
 
 

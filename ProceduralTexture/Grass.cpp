@@ -112,7 +112,7 @@ void Grass::DrawTexture()
 
 void Grass::Render()
 {
-	Blender::Get()->SetOff();
+	D3D::Get()->SetBlender_Off();
 	CreateShader((int)ShaderList.size()-1);
 	UINT stride = sizeof(VertexTexture);
 	UINT offset = 0;
@@ -315,7 +315,7 @@ void Grass::DirectionalWarp()
 
 
 
-	Blender::Get()->SetMaxBlender();
+	D3D::Get()->SetBlender_MaxBlend();
 	D3D::GetDeviceContext()->DrawIndexed(6, 0, 0);
 
 
