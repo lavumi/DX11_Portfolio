@@ -240,7 +240,7 @@ void GameMain::Render()
 		
 		//Blender::Get()->SetBlendAdd();
 		
-		cloud->Render();
+	//	cloud->Render();
 		//mirrorShader->Render(cloud->indexCount, skydome->world);
 
 		Blender::Get()->SetOff();
@@ -249,14 +249,14 @@ void GameMain::Render()
 
 		Rasterizer::Get()->SetFrontCullMode();
 		testcube->Render();
-		mirrorShader->Render(testcube->indexCount, testcube->world[0], testcube->diffuseMap, testcube->normalMap, testcube->heightMap, *blurShadowTexture->GetShadowResourceView());
-		mirrorShader->Render(testcube->indexCount, testcube->world[1], testcube->diffuseMap, testcube->normalMap, testcube->heightMap, *blurShadowTexture->GetShadowResourceView());
-		mirrorShader->Render(testcube->indexCount, testcube->world[2], testcube->diffuseMap, testcube->normalMap, testcube->heightMap, *blurShadowTexture->GetShadowResourceView());
+		mirrorShader->Render(testcube->indexCount, testcube->world[0], &(testcube->diffuseMap), testcube->normalMap, testcube->heightMap, *blurShadowTexture->GetShadowResourceView());
+		mirrorShader->Render(testcube->indexCount, testcube->world[1], &(testcube->diffuseMap), testcube->normalMap, testcube->heightMap, *blurShadowTexture->GetShadowResourceView());
+		mirrorShader->Render(testcube->indexCount, testcube->world[2], &(testcube->diffuseMap), testcube->normalMap, testcube->heightMap, *blurShadowTexture->GetShadowResourceView());
 	
 	
 		
-		//landscape->Render();
-		//mirrorShader->Render(landscape->getIndexCount(), landscape->getWorld(), landscape->getDiffuseMap(), landscape->getNormalMap(), nullptr, *blurShadowTexture->GetShadowResourceView());
+		landscape->Render();
+		mirrorShader->Render(landscape->getIndexCount(), landscape->getWorld(), landscape->getDiffuseMap(), landscape->getNormalMap(), nullptr, *blurShadowTexture->GetShadowResourceView());
 
 		Blender::Get()->SetOff();
 		Rasterizer::Get()->SetOnCullMode();

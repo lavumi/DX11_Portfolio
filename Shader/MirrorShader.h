@@ -10,7 +10,7 @@ public:
 	virtual void Update();
 	virtual void Render(UINT indexCount,
 		D3DXMATRIX world, 
-		ID3D11ShaderResourceView* diffuseMap,
+		ID3D11ShaderResourceView** diffuseMap,
 		ID3D11ShaderResourceView* normalMap,
 		ID3D11ShaderResourceView* heightMap, 
 		ID3D11ShaderResourceView* lightMap);

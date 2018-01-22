@@ -31,7 +31,7 @@ void MirrorShader::Update()
 
 }
 
-void MirrorShader::Render(UINT indexCount, D3DXMATRIX world, ID3D11ShaderResourceView * diffuseMap, ID3D11ShaderResourceView * normalMap, ID3D11ShaderResourceView * heightMap, ID3D11ShaderResourceView* lightMap)
+void MirrorShader::Render(UINT indexCount, D3DXMATRIX world, ID3D11ShaderResourceView ** diffuseMap, ID3D11ShaderResourceView * normalMap, ID3D11ShaderResourceView * heightMap, ID3D11ShaderResourceView* lightMap)
 {
 
 	//월드의 역행렬 
@@ -122,7 +122,7 @@ void MirrorShader::Render(UINT indexCount, D3DXMATRIX world, ID3D11ShaderResourc
 	cameraBuffer->SetVSBuffer(0);
 	worldBuffer->SetVSBuffer(1);
 
-	D3D::GetDeviceContext()->PSSetShaderResources(0, 1, &diffuseMap);
+	D3D::GetDeviceContext()->PSSetShaderResources(0, 1, diffuseMap);
 	D3D::GetDeviceContext()->PSSetShaderResources(1, 1, &normalMap);
 	D3D::GetDeviceContext()->PSSetShaderResources(2, 1, &heightMap);
 	D3D::GetDeviceContext()->PSSetShaderResources(3, 1, &lightMap);
