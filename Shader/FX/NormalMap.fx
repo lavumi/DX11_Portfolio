@@ -324,7 +324,7 @@ float4 PS2(PixelInput input) : SV_TARGET
 
 }
 
-float4 P333S(PixelInput input) : SV_TARGET
+float4 BlinPhong(PixelInput input) : SV_TARGET
 {
     float4 diffuseMap = lerp(_map.Sample(samp[0], input.uv), float4(0.4, 0.2, 1, 1), step(drawTexture, 0.5));
 
@@ -391,7 +391,7 @@ float4 ParallexMapping(PixelInput input) : SV_TARGET
 }
 
 
-float4 Shadow(PixelInput input) : SV_TARGET
+float4 ParallexShadow(PixelInput input) : SV_TARGET
 {
     float2 uv;
   
