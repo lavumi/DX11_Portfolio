@@ -14,8 +14,8 @@ void Frustum::SetFrustum(float screenDepth, D3DXMATRIX viewMatrix, D3DXMATRIX pr
 	D3DXVECTOR3* vtx = new D3DXVECTOR3[8];
 
 
-	//ºä, ÇÁ·ÎÁ§¼Ç ¿¬»êÀÌ ³¡³ª¸é ¸ðµç Á¡Àº (-1, -1, 0) ~ (1, 1, 1)  »çÀÌÀ¸ ¤Ó°ªÀ¸·Î º¯È¯µÈ´Ù
-	//±× ²ÀÁöÁ¡ °ªµéÀ» ÁöÁ¤ÇØµÐ´Ù
+	//ë·°, í”„ë¡œì ì…˜ ì—°ì‚°ì´ ëë‚˜ë©´ ëª¨ë“  ì ì€ (-1, -1, 0) ~ (1, 1, 1)  ì‚¬ì´ìœ¼ ã…£ê°’ìœ¼ë¡œ ë³€í™˜ëœë‹¤
+	//ê·¸ ê¼­ì§€ì  ê°’ë“¤ì„ ì§€ì •í•´ë‘”ë‹¤
 	vtx[0] = D3DXVECTOR3(	-1.0f,		-1.0f,		0.0f);
 	vtx[1] = D3DXVECTOR3(	1.0f,		-1.0f,		0.0f);
 	vtx[2] = D3DXVECTOR3(	1.0f,		-1.0f,		1.0f);
@@ -26,85 +26,23 @@ void Frustum::SetFrustum(float screenDepth, D3DXMATRIX viewMatrix, D3DXMATRIX pr
 	vtx[7] = D3DXVECTOR3(	-1.0f,		1.0f,		1.0f);
 
 
-	//ºä, ÇÁ·ÎÁ§¼Ç ¿¬»êÀÇ ¿ªÇà·ÄÀ» ±¸ÇØ¼­
+	//ë·°, í”„ë¡œì ì…˜ ì—°ì‚°ì˜ ì—­í–‰ë ¬ì„ êµ¬í•´ì„œ
 	D3DXMATRIX viewProj = viewMatrix * projectionMatrix;
 	D3DXMATRIXA16	matInv;
 	D3DXMatrixInverse(&matInv, NULL, &viewProj);
 
 
-	//°¢ Á¡¿¡ °öÇØÁÖ¸é ±âÁ¸ Á¡µé À§Ä¡¸¦ ¾Ë¼ö ÀÖ°Ô µÈ´Ù.
-	//ÀÌ Á¡µéÀ» ÀÌ¿ëÇØ Æò¸éÀ» ¸¸µç´Ù.
+	//ê° ì ì— ê³±í•´ì£¼ë©´ ê¸°ì¡´ ì ë“¤ ìœ„ì¹˜ë¥¼ ì•Œìˆ˜ ìžˆê²Œ ëœë‹¤.
+	//ì´ ì ë“¤ì„ ì´ìš©í•´ í‰ë©´ì„ ë§Œë“ ë‹¤.
 	for (int i = 0; i < 8; i++)
 		D3DXVec3TransformCoord(&vtx[i], &vtx[i], &matInv);
 
 
-	D3DXPlaneFromPoints(&m_planes[0], &vtx[2], &vtx[6], &vtx[7]);	// ¿ø Æò¸é(far)
-	D3DXPlaneFromPoints(&m_planes[1], &vtx[0], &vtx[3], &vtx[7]);	// ÁÂ Æò¸é(left)
-	D3DXPlaneFromPoints(&m_planes[2], &vtx[1], &vtx[5], &vtx[6]);	// ¿ì Æò¸é(right)
-
-	/*
-	float zMinimum, r;
-	D3DXMATRIX matrix;
-
-
-	// Calculate the minimum Z distance in the frustum.
-	zMinimum = -projectionMatrix._43 / projectionMatrix._33;
-	r = screenDepth / (screenDepth - zMinimum);
-	projectionMatrix._33 = r;
-	projectionMatrix._43 = -r * zMinimum;
-
-	// Create the frustum matrix from the view matrix and updated projection matrix.
-	D3DXMatrixMultiply(&matrix, &viewMatrix, &projectionMatrix);
-
-
-
-	// Calculate far plane of frustum.
-	m_planes[0].a = matrix._14 - matrix._13;
-	m_planes[0].b = matrix._24 - matrix._23;
-	m_planes[0].c = matrix._34 - matrix._33;
-	m_planes[0].d = matrix._44 - matrix._43;
-	D3DXPlaneNormalize(&m_planes[0], &m_planes[0]);
-
-	// Calculate left plane of frustum.
-	m_planes[1].a = matrix._14 + matrix._11;
-	m_planes[1].b = matrix._24 + matrix._21;
-	m_planes[1].c = matrix._34 + matrix._31;
-	m_planes[1].d = matrix._44 + matrix._41;
-	D3DXPlaneNormalize(&m_planes[1], &m_planes[1]);
-
-	// Calculate right plane of frustum.
-	m_planes[2].a = matrix._14 - matrix._11;
-	m_planes[2].b = matrix._24 - matrix._21;
-	m_planes[2].c = matrix._34 - matrix._31;
-	m_planes[2].d = matrix._44 - matrix._41;
-	D3DXPlaneNormalize(&m_planes[2], &m_planes[2]);
-
-
-	// Calculate near plane of frustum.
-	m_planes[3].a = matrix._14 + matrix._13;
-	m_planes[3].b = matrix._24 + matrix._23;
-	m_planes[3].c = matrix._34 + matrix._33;
-	m_planes[3].d = matrix._44 + matrix._43;
-	D3DXPlaneNormalize(&m_planes[3], &m_planes[3]);
-
-	// Calculate top plane of frustum.
-	m_planes[4].a = matrix._14 - matrix._12;
-	m_planes[4].b = matrix._24 - matrix._22;
-	m_planes[4].c = matrix._34 - matrix._32;
-	m_planes[4].d = matrix._44 - matrix._42;
-	D3DXPlaneNormalize(&m_planes[4], &m_planes[4]);
-
-	// Calculate bottom plane of frustum.
-	m_planes[5].a = matrix._14 + matrix._12;
-	m_planes[5].b = matrix._24 + matrix._22;
-	m_planes[5].c = matrix._34 + matrix._32;
-	m_planes[5].d = matrix._44 + matrix._42;
-	D3DXPlaneNormalize(&m_planes[5], &m_planes[5]);
-
-
+	D3DXPlaneFromPoints(&m_planes[0], &vtx[2], &vtx[6], &vtx[7]);	// ì› í‰ë©´(far)
+	D3DXPlaneFromPoints(&m_planes[1], &vtx[0], &vtx[3], &vtx[7]);	// ì¢Œ í‰ë©´(left)
+	D3DXPlaneFromPoints(&m_planes[2], &vtx[1], &vtx[5], &vtx[6]);	// ìš° í‰ë©´(right)
 
 	return;
-	*/
 }
 
 bool Frustum::CheckCapsule(D3DXVECTOR3 start, D3DXVECTOR3 end, float radius)
