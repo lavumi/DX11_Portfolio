@@ -14,8 +14,8 @@ void Frustum::SetFrustum(float screenDepth, D3DXMATRIX viewMatrix, D3DXMATRIX pr
 	D3DXVECTOR3* vtx = new D3DXVECTOR3[8];
 
 
-	//ºä, ÇÁ·ÎÁ§¼Ç ¿¬»êÀÌ ³¡³ª¸é ¸ðµç Á¡Àº (-1, -1, 0) ~ (1, 1, 1)  »çÀÌÀ¸ ¤Ó°ªÀ¸·Î º¯È¯µÈ´Ù
-	//±× ²ÀÁöÁ¡ °ªµéÀ» ÁöÁ¤ÇØµÐ´Ù
+	//ë·°, í”„ë¡œì ì…˜ ì—°ì‚°ì´ ëë‚˜ë©´ ëª¨ë“  ì ì€ (-1, -1, 0) ~ (1, 1, 1)  ì‚¬ì´ìœ¼ ã…£ê°’ìœ¼ë¡œ ë³€í™˜ëœë‹¤
+	//ê·¸ ê¼­ì§€ì  ê°’ë“¤ì„ ì§€ì •í•´ë‘”ë‹¤...
 	vtx[0] = D3DXVECTOR3(	-1.0f,		-1.0f,		0.0f);
 	vtx[1] = D3DXVECTOR3(	1.0f,		-1.0f,		0.0f);
 	vtx[2] = D3DXVECTOR3(	1.0f,		-1.0f,		1.0f);
@@ -26,24 +26,24 @@ void Frustum::SetFrustum(float screenDepth, D3DXMATRIX viewMatrix, D3DXMATRIX pr
 	vtx[7] = D3DXVECTOR3(	-1.0f,		1.0f,		1.0f);
 
 
-	//ºä, ÇÁ·ÎÁ§¼Ç ¿¬»êÀÇ ¿ªÇà·ÄÀ» ±¸ÇØ¼­
+	//ë·°, í”„ë¡œì ì…˜ ì—°ì‚°ì˜ ì—­í–‰ë ¬ì„ êµ¬í•´ì„œ
 	D3DXMATRIX viewProj = viewMatrix * projectionMatrix;
 	D3DXMATRIXA16	matInv;
 	D3DXMatrixInverse(&matInv, NULL, &viewProj);
 
 
-	//°¢ Á¡¿¡ °öÇØÁÖ¸é ±âÁ¸ Á¡µé À§Ä¡¸¦ ¾Ë¼ö ÀÖ°Ô µÈ´Ù.
-	//ÀÌ Á¡µéÀ» ÀÌ¿ëÇØ Æò¸éÀ» ¸¸µç´Ù.
+	//ê° ì ì— ê³±í•´ì£¼ë©´ ê¸°ì¡´ ì ë“¤ ìœ„ì¹˜ë¥¼ ì•Œìˆ˜ ìžˆê²Œ ëœë‹¤.
+	//ì´ ì ë“¤ì„ ì´ìš©í•´ í‰ë©´ì„ ë§Œë“ ë‹¤.
 	for (int i = 0; i < 8; i++)
 		D3DXVec3TransformCoord(&vtx[i], &vtx[i], &matInv);
 
 
-	D3DXPlaneFromPoints(&m_planes[0], &vtx[2], &vtx[6], &vtx[7]);	// ¿ø Æò¸é(far)
-	D3DXPlaneFromPoints(&m_planes[1], &vtx[0], &vtx[3], &vtx[7]);	// ÁÂ Æò¸é(left)
-	D3DXPlaneFromPoints(&m_planes[2], &vtx[1], &vtx[5], &vtx[6]);	// ¿ì Æò¸é(right)
-	//	D3DXPlaneFromPoints(&m_plane[3], &vtx[4], &vtx[7], &vtx[6]);	// »ó Æò¸é(top)
-	//	D3DXPlaneFromPoints(&m_plane[4], &vtx  ,  &vtx[1], &vtx[2]);	// ÇÏ Æò¸é(bottom)
-	//	D3DXPlaneFromPoints(&m_plane[5], &vtx  ,  &vtx[4], &vtx[5]);	// ±Ù Æò¸é(near)
+	D3DXPlaneFromPoints(&m_planes[0], &vtx[2], &vtx[6], &vtx[7]);	// ì› í‰ë©´(far)
+	D3DXPlaneFromPoints(&m_planes[1], &vtx[0], &vtx[3], &vtx[7]);	// ì¢Œ í‰ë©´(left)
+	D3DXPlaneFromPoints(&m_planes[2], &vtx[1], &vtx[5], &vtx[6]);	// ìš° í‰ë©´(right)
+	//	D3DXPlaneFromPoints(&m_plane[3], &vtx[4], &vtx[7], &vtx[6]);	// ìƒ í‰ë©´(top)
+	//	D3DXPlaneFromPoints(&m_plane[4], &vtx  ,  &vtx[1], &vtx[2]);	// í•˜ í‰ë©´(bottom)
+	//	D3DXPlaneFromPoints(&m_plane[5], &vtx  ,  &vtx[4], &vtx[5]);	// ê·¼ í‰ë©´(near)
 	return;
 }
 
