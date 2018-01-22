@@ -1,15 +1,12 @@
-cbuffer CameraBuffer : register(b0)
-{
-    matrix _view;
-    matrix _projection;
-    float3 _cameraPosition;
-    float _paddd;
-};
-
-cbuffer WorldBuffer : register(b1)
+cbuffer MatrixBuffer : register(b0)
 {
     matrix _world;
-}
+    matrix _view;
+    matrix _projection;
+
+};
+
+
 
 cbuffer LightBuffer : register(b2)
 {
@@ -194,6 +191,7 @@ float4 PS(PixelInput input) : SV_TARGET
     //blin pong 쉐이딩
     float3 light = normalize(input.lightDir);
     float4 diffuseMap = _map.Sample(samp[2], uv);
+
     float3 normal = _normalMap.Sample(samp[0], uv).rgb;
     normal = (normal * 2.0f) - 1.0f;
     normal = normalize(normal);
@@ -205,9 +203,9 @@ float4 PS(PixelInput input) : SV_TARGET
 
     float power = pow(nDotH, shininess);
 
-    float4 intensity = ambient * globalAmbient + diffuse * nDotL + specular * power;
+    float4 intensity = ambient * globalAmbient + diffuse * nDotL;//    +specular * power;
 
-    return intensity * diffuseMap;
+  
 
    //그림자 계산 시작
    float shadow = 0.3f;
@@ -217,13 +215,16 @@ float4 PS(PixelInput input) : SV_TARGET
    projectTexCoord.y = -input.viewPosition.y / input.viewPosition.w / 2.0f + 0.5f;
    
    
-   float shadowValue = _lightMap.Sample(samp[1], projectTexCoord).g;
+   float shadowValue = _lightMap.Sample(samp[0], projectTexCoord).g;
    shadowValue *= 0.3;
    
    
-   intensity *= shadowValue;
+ //intensity *= shadowValue;
+    diffuseMap *= intensity;
 
-   
+    diffuseMap.a = 0.5f;
+
+    return diffuseMap;
 }
 
 

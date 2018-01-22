@@ -31,9 +31,11 @@ void MirrorShader::Update()
 
 }
 
-void MirrorShader::Render(UINT indexCount, D3DXMATRIX world, ID3D11ShaderResourceView ** diffuseMap, ID3D11ShaderResourceView * normalMap, ID3D11ShaderResourceView * heightMap, ID3D11ShaderResourceView* lightMap)
+void MirrorShader::Render(UINT indexCount, D3DXMATRIX world, D3DXMATRIX view, D3DXMATRIX projection, ID3D11ShaderResourceView ** diffuseMap, ID3D11ShaderResourceView * normalMap, ID3D11ShaderResourceView * heightMap, ID3D11ShaderResourceView* lightMap)
 {
+	SetMatrix(world, view, projection);
 
+	D3D::GetDeviceContext()->VSSetConstantBuffers(0, 1, &wvpBuffer);
 	//월드의 역행렬 
 	D3D11_MAPPED_SUBRESOURCE subResource = { 0 };
 	D3DXMATRIX invWorld;
@@ -96,7 +98,11 @@ void MirrorShader::Render(UINT indexCount, D3DXMATRIX world, ID3D11ShaderResourc
 	
 	
 	D3DXMATRIX R;
+
+
 	D3DXPLANE plane(0.0f, -1.0f, 0.0f, -7.80f); // xy plane
+	//D3DXPLANE plane(0.0f, 0.0f, 1.0f, -20.0f); // xy plane
+
 	D3DXMatrixReflect(&R, &plane);
 	mirrorCameraData.view =  R* mirrorCameraData.view;
 	
@@ -118,9 +124,6 @@ void MirrorShader::Render(UINT indexCount, D3DXMATRIX world, ID3D11ShaderResourc
 
 
 
-	worldBuffer->SetWorld(world);
-	cameraBuffer->SetVSBuffer(0);
-	worldBuffer->SetVSBuffer(1);
 
 	D3D::GetDeviceContext()->PSSetShaderResources(0, 1, diffuseMap);
 	D3D::GetDeviceContext()->PSSetShaderResources(1, 1, &normalMap);

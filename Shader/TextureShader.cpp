@@ -17,18 +17,16 @@ void TextureShader::Update()
 
 }
 
-void TextureShader::Render(UINT indexCount, D3DXMATRIX world1, ID3D11ShaderResourceView* diffuse)
+void TextureShader::Render(UINT indexCount, D3DXMATRIX world, D3DXMATRIX view, D3DXMATRIX projection, ID3D11ShaderResourceView* diffuse)
 {
 
 	D3D::GetDeviceContext()->IASetInputLayout(layout);
 	D3D::GetDeviceContext()->VSSetShader(vertexShader, NULL, 0);
 	D3D::GetDeviceContext()->PSSetShader(pixelShader, NULL, 0);
 
-	cameraBuffer->Update();
-	cameraBuffer->SetVSBuffer(0);
+	SetMatrix(world, view, projection);
 
-	worldBuffer->SetWorld(world1);
-	worldBuffer->SetVSBuffer(1);
+	D3D::GetDeviceContext()->VSSetConstantBuffers(0, 1, &wvpBuffer);
 
 	if(diffuse != nullptr)
 		D3D::GetDeviceContext()->PSSetShaderResources(0, 1, &diffuse);

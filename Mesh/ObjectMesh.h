@@ -10,7 +10,6 @@ public:
 	void Render();
 	void Update();
 
-	void Move(D3DXVECTOR3);
 private:
 
 	void CreateBuffer();

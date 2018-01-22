@@ -32,9 +32,14 @@ void NormalMapShader::Update()
 
 }
 
-void NormalMapShader::Render(UINT indexCount, D3DXMATRIX world, 
+void NormalMapShader::Render(UINT indexCount, D3DXMATRIX world, D3DXMATRIX view, D3DXMATRIX projection,
 	ID3D11ShaderResourceView * diffuseMap, ID3D11ShaderResourceView * normalMap, ID3D11ShaderResourceView * heightMap, ID3D11ShaderResourceView* lightMap)
 {
+	SetMatrix(world, view, projection);
+
+	D3D::GetDeviceContext()->VSSetConstantBuffers(0, 1, &wvpBuffer);
+
+
 	D3D11_MAPPED_SUBRESOURCE subResource = { 0 };
 	D3DXMATRIX invWorld;
 	D3DXMatrixInverse(&invWorld, nullptr, &world);
@@ -92,7 +97,6 @@ void NormalMapShader::Render(UINT indexCount, D3DXMATRIX world,
 
 
 
-	worldBuffer->SetWorld(world);
 	D3D::GetDeviceContext()->PSSetShaderResources(0, 1, &diffuseMap);
 	D3D::GetDeviceContext()->PSSetShaderResources(1, 1, &normalMap);
 	D3D::GetDeviceContext()->PSSetShaderResources(2, 1, &heightMap);
@@ -108,8 +112,6 @@ void NormalMapShader::Render(UINT indexCount, D3DXMATRIX world,
 	D3D::GetDeviceContext()->VSSetShader(vertexShader, NULL, 0);
 	D3D::GetDeviceContext()->PSSetShader(pixelShader, NULL, 0);
 
-	cameraBuffer->SetVSBuffer(0);
-	worldBuffer->SetVSBuffer(1);
 
 	D3D::GetDeviceContext()->DrawIndexed(indexCount, 0, 0);
 	Sampler::Get()->SetDefault();

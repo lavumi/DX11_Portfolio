@@ -18,8 +18,11 @@ void DepthShadowShader::Update()
 
 }
 
-void DepthShadowShader::Render(UINT indexCount, D3DXMATRIX world1)
+void DepthShadowShader::Render(UINT indexCount, D3DXMATRIX world, D3DXMATRIX view, D3DXMATRIX projection)
 {
+	SetMatrix(world, view, projection);
+
+	D3D::GetDeviceContext()->VSSetConstantBuffers(0, 1, &wvpBuffer);
 
 	D3D::GetDeviceContext()->IASetInputLayout(layout);
 	D3D::GetDeviceContext()->VSSetShader(vertexShader, NULL, 0);
@@ -42,11 +45,7 @@ void DepthShadowShader::Render(UINT indexCount, D3DXMATRIX world1)
 
 	D3D::GetDeviceContext()->VSSetConstantBuffers(2, 1, &lightBuffer);
 
-	cameraBuffer->Update();
-	cameraBuffer->SetVSBuffer(0);
 
- 	worldBuffer->SetWorld(world1);
-	worldBuffer->SetVSBuffer(1);
 
 	D3D::GetDeviceContext()->DrawIndexed(indexCount, 0, 0);
 }

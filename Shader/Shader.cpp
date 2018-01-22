@@ -1,75 +1,54 @@
 #include "../stdafx.h"
 #include "Shader.h"
 
-CameraBuffer* Shader::cameraBuffer = NULL;
 
 
 void Shader::Update()
 {
-	worldBuffer->Update();
+
 
 }
 
-void Shader::Render(UINT indexCount)
+
+void Shader::SetMatrix(D3DXMATRIX world, D3DXMATRIX view, D3DXMATRIX projection)
 {
-	D3D::GetDeviceContext()->IASetInputLayout(layout);
-	D3D::GetDeviceContext()->VSSetShader(vertexShader, NULL, 0);
-	D3D::GetDeviceContext()->PSSetShader(pixelShader, NULL, 0);
+	D3D11_MAPPED_SUBRESOURCE subResource = { 0 };
 
-	cameraBuffer->SetVSBuffer(0);
-	worldBuffer->SetVSBuffer(1);
+	wvpData.world = world;
+	wvpData.view = view;
+	wvpData.projection = projection;
 
-	D3D::GetDeviceContext()->DrawIndexed(indexCount, 0, 0);
-	Sampler::Get()->SetDefault();
+	D3DXMatrixTranspose(&wvpData.world, &wvpData.world);
+	D3DXMatrixTranspose(&wvpData.view, &wvpData.view);
+	D3DXMatrixTranspose(&wvpData.projection, &wvpData.projection);
+
+	ZeroMemory(&subResource, sizeof(D3D11_MAPPED_SUBRESOURCE));
+	D3D::GetDeviceContext()->Map
+	(
+		wvpBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &subResource
+	);
+
+	memcpy(subResource.pData, &wvpData, sizeof(WVP));
+	D3D::GetDeviceContext()->Unmap(wvpBuffer, 0);
 }
-
-void Shader::MirrorUpdate()
-{
-	
-	worldBuffer->Update();
-}
-
-void Shader::CreateBuffer()
-{
-	if (cameraBuffer == NULL)
-		cameraBuffer = new CameraBuffer();
-
-}
-
-void Shader::DeleteBuffer()
-{
-	SAFE_DELETE(cameraBuffer);
-}
-
-void Shader::bufferupdate()
-{
-	cameraBuffer->Update();
-	
-
-}
-
-//void Shader::bufferMirrorupdate()
-//{
-//	cameraBuffer->MirrorUpdate();
-//}
 
 Shader::Shader(wstring shaderFile)
 	: shaderFile(shaderFile)
 {
 	CreateVertexShader();
 	CreatePixelShader();
-
-	worldBuffer = new WorldBuffer();
+	CreateMATRIXBuffer();
 }
 
 Shader::~Shader()
 {
-	SAFE_DELETE(worldBuffer);
+
 
 	SAFE_RELEASE(layout);
 
 	SAFE_RELEASE(vertexBlob);
 	SAFE_RELEASE(vertexShader);
+	SAFE_RELEASE(wvpBuffer);
 
 	SAFE_RELEASE(pixelBlob);
 	SAFE_RELEASE(pixelShader);
@@ -87,6 +66,25 @@ void Shader::CreateInputLayout(D3D11_INPUT_ELEMENT_DESC * desc, UINT count)
 	);
 	if(!SUCCEEDED(hr))
 		assert(0);
+}
+
+void Shader::CreateMATRIXBuffer()
+{
+	D3D11_BUFFER_DESC desc;
+	HRESULT hr;
+
+
+	ZeroMemory(&desc, sizeof(D3D11_BUFFER_DESC));
+	desc.Usage = D3D11_USAGE_DYNAMIC;
+	desc.ByteWidth = sizeof(WVP);
+	desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	desc.MiscFlags = 0;
+	desc.StructureByteStride = 0;
+
+	hr = D3D::GetDevice()->CreateBuffer(&desc, NULL, &wvpBuffer);
+	assert(SUCCEEDED(hr));
+
 }
 
 void Shader::CreateVertexShader()

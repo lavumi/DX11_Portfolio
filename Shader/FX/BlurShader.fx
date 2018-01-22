@@ -1,17 +1,12 @@
-cbuffer CameraBuffer : register(b0)
+cbuffer MatrixBuffer : register(b0)
 {
+    matrix _world;
     matrix _view;
     matrix _projection;
-    float3 _cameraPosition;
-    float _paddd;
+
 };
 
 
-
-cbuffer WorldBuffer : register(b1)
-{
-    matrix _world;
-}
 
 cbuffer ScreenSize : register(b2)
 {

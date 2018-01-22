@@ -43,11 +43,10 @@ void GameMain::Initialize()
 
 	UserInterface::Get();
 	LightManager::Get();
-	Shader::CreateBuffer();
 	frustum = new Frustum();
 
 	testcube = new TestCube();
-	//testplane = new Mirror();
+	testplane = new Mirror();
 	skydome = new Skydome();
 	cloud = new Skyplane();
 	landscape = new Landscape();
@@ -86,7 +85,6 @@ void GameMain::Destroy()
 {
 	SAFE_DELETE(skydome);
 	SAFE_DELETE(landscape);
-	Shader::DeleteBuffer();
 	UserInterface::Delete();
 }
 
@@ -97,7 +95,6 @@ void GameMain::Update()
 
 	LightManager::Get()->Update();;
 	Camera::Get()->Update();
-	Shader::bufferupdate();
 
 	D3DXMATRIX view, projection;
 
@@ -119,9 +116,13 @@ void GameMain::Update()
 
 	
 
-	//if (Keyboard::Get()->KeyUp(VK_SPACE)) {
+	if (Keyboard::Get()->KeyUp(VK_SPACE)) {
+		depthShadowTexture->SaveTexture(L"depthShadow.png");
+		shadowTexture->SaveTexture(L"shadow.png");
+		blurShadowTexture->SaveTexture(L"blur.png");
+		}
 		landscape->changeLOD(frustum);
-//	}
+
 
 	if (Keyboard::Get()->KeyUp('1')) {
 		landscapeWireFrame = !landscapeWireFrame;
@@ -131,46 +132,62 @@ void GameMain::Update()
 
 void GameMain::PreRender()
 {
+
+	D3DXMATRIX view, projection;
+	D3DXMatrixIdentity(&view);
+	D3DXMatrixIdentity(&projection);
+
 	{
+
 		depthShadowTexture->SetTarget();
 		depthShadowTexture->Clear(0, 0, 0, 1);
 
-		//testplane->Render();
-		//depthShadowShader->Render(testplane->indexCount, testplane->world);
+		testplane->Render();
+		depthShadowShader->Render(testplane->indexCount, testplane->world, view, projection);
 
 
 		testcube->Render();
-		depthShadowShader->Render(testcube->indexCount, testcube->world[0]);
-		depthShadowShader->Render(testcube->indexCount, testcube->world[1]);
-		depthShadowShader->Render(testcube->indexCount, testcube->world[2]);
+		depthShadowShader->Render(testcube->indexCount, testcube->world[0],view, projection);
+		depthShadowShader->Render(testcube->indexCount, testcube->world[1],view, projection);
+		depthShadowShader->Render(testcube->indexCount, testcube->world[2],view, projection);
 
 		landscape->Render();
-		depthShadowShader->Render(landscape->getIndexCount(), landscape->getWorld());
+		depthShadowShader->Render(landscape->getIndexCount(), landscape->getWorld(),view, projection);
+
+
 	}
+
+
 	{
-		
 		shadowTexture->SetTarget();
 		shadowTexture->Clear();
 
-		//testplane->Render();
-		//shadowShader->Render(testplane->indexCount, testplane->world, *depthShadowTexture->GetShadowResourceView());
+		Camera::Get()->GetView(&view);
+		D3D::Get()->GetProjection(&projection);
+
+		testplane->Render();
+		shadowShader->Render(testplane->indexCount, testplane->world,  view, projection,*depthShadowTexture->GetShadowResourceView());
 		
 		testcube->Render();
-		shadowShader->Render(testcube->indexCount, testcube->world[0], *depthShadowTexture->GetShadowResourceView());
-		shadowShader->Render(testcube->indexCount, testcube->world[1], *depthShadowTexture->GetShadowResourceView());
-		shadowShader->Render(testcube->indexCount, testcube->world[2], *depthShadowTexture->GetShadowResourceView());
+		shadowShader->Render(testcube->indexCount, testcube->world[0], view, projection, *depthShadowTexture->GetShadowResourceView());
+		shadowShader->Render(testcube->indexCount, testcube->world[1], view, projection, *depthShadowTexture->GetShadowResourceView());
+		shadowShader->Render(testcube->indexCount, testcube->world[2], view, projection, *depthShadowTexture->GetShadowResourceView());
 		
 		
 		landscape->Render();
-		shadowShader->Render(landscape->getIndexCount(), landscape->getWorld(), *depthShadowTexture->GetShadowResourceView());
-	
+		shadowShader->Render(landscape->getIndexCount(), landscape->getWorld(), view, projection, *depthShadowTexture->GetShadowResourceView());
 	}
+
 	{
 		blurShadowTexture->SetTarget(true);
-		blurShadowTexture->Clear(0,0,1,1);
+		blurShadowTexture->Clear(0,0,0,1);
+
+
+		Camera::Get()->GetDefaultView(&view);
+		D3D::Get()->GetOrthoProjection(&projection);
 		
 		shadowtestPlane->Render();
-		blurShader->Render(shadowtestPlane->indexCount, shadowtestPlane->world, *shadowTexture->GetShadowResourceView());
+		blurShader->Render(shadowtestPlane->indexCount, shadowtestPlane->world, view, projection, *shadowTexture->GetShadowResourceView());
 	}
 	D3D::Get()->SetDefaultRenderView();
 	
@@ -178,27 +195,32 @@ void GameMain::PreRender()
 
 void GameMain::Render()
 {
+	D3DXMATRIX view, projection;
+
+
+	Camera::Get()->GetView(&view);
+	D3D::Get()->GetProjection(&projection);
+
 
 	D3D::Get()->SetDepthStencilOffState();
 	Rasterizer::Get()->SetOffCullMode();
 	{
 		skydome->Render();
-		skydomeShader->Render(skydome->getIndexCount(), skydome->getWorld());
+		skydomeShader->Render(skydome->getIndexCount(), skydome->getWorld(),view, projection );
 
 		D3D::Get()->SetBlender_AddBlend();
 		cloud->Render();
-		skyplaneShader->Render(cloud->getIndexCount(), cloud->getWorld(), cloud->getDiffuseMap(), cloud->getPerlinMap());
+		skyplaneShader->Render(cloud->getIndexCount(), cloud->getWorld(), view, projection, cloud->getDiffuseMap(), cloud->getPerlinMap());
 		D3D::Get()->SetBlender_Off();
 	}
 	D3D::Get()->SetDepthStencilOnState();
 	Rasterizer::Get()->SetOnCullMode();
 
-
 	
 	testcube->Render();
-	normalMapShader->Render(testcube->indexCount, testcube->world[0], testcube->diffuseMap, testcube->normalMap, testcube->heightMap, *blurShadowTexture->GetShadowResourceView());
-	normalMapShader->Render(testcube->indexCount, testcube->world[1], testcube->diffuseMap, testcube->normalMap, testcube->heightMap, *blurShadowTexture->GetShadowResourceView());
-	normalMapShader->Render(testcube->indexCount, testcube->world[2], testcube->diffuseMap, testcube->normalMap, testcube->heightMap, *blurShadowTexture->GetShadowResourceView());
+	normalMapShader->Render(testcube->indexCount, testcube->world[0],view, projection,testcube->diffuseMap, testcube->normalMap, testcube->heightMap, *blurShadowTexture->GetShadowResourceView());
+	normalMapShader->Render(testcube->indexCount, testcube->world[1],view, projection,testcube->diffuseMap, testcube->normalMap, testcube->heightMap, *blurShadowTexture->GetShadowResourceView());
+	normalMapShader->Render(testcube->indexCount, testcube->world[2],view, projection,testcube->diffuseMap, testcube->normalMap, testcube->heightMap, *blurShadowTexture->GetShadowResourceView());
 
 	
 	if(landscapeWireFrame)
@@ -206,22 +228,27 @@ void GameMain::Render()
 
 
 	landscape->Render();
-	terrianShader->Render(landscape->getIndexCount(), landscape->getWorld(), landscape->getDiffuseMap(), landscape->getNormalMap(), *blurShadowTexture->GetShadowResourceView());
+	terrianShader->Render(landscape->getIndexCount(), landscape->getWorld(), view, projection, landscape->getDiffuseMap(), landscape->getNormalMap(), *blurShadowTexture->GetShadowResourceView());
 	Rasterizer::Get()->SetSolid();
 
-	//testplane->Render();
-	//simpleShader->Render(testplane->indexCount, testplane->world, nullptr);
+	testplane->Render();
+	colorShader->Render(testplane->indexCount, testplane->world, view, projection, D3DXCOLOR(0,0,0,1));
 
 
 
-	//MIRROR RENDER
+	//WATER REFLECTION
+
+	
+
 	{
 		D3D::Get()->ClearDepthStencil(D3D11_CLEAR_STENCIL,0, 0);
 		D3D::Get()->SetDepthStencilMirrorPreState();
 	
 		D3D::Get()->SetBlender_Linear();
+		//testplane->RenderMirror();
+		//colorShader->Render(testplane->indexCount, testplane->world, D3DXCOLOR(0.2f, 0.5f, 1, 1.0f));
 		lake->Render();
-		colorShader->Render(lake->indexCount, lake->world, D3DXCOLOR(0.2f,0.5f,1,0.5f));
+		colorShader->Render(lake->indexCount, lake->world, view, projection, D3DXCOLOR(0.2f,0.5f,1,0.5f));
 
 
 
@@ -243,28 +270,23 @@ void GameMain::Render()
 	//	cloud->Render();
 		//mirrorShader->Render(cloud->indexCount, skydome->world);
 
-		D3D::Get()->SetBlender_Off();
+		//D3D::Get()->SetBlender_BlendFacter(0.5f);
 
 
 
 		Rasterizer::Get()->SetFrontCullMode();
 		testcube->Render();
-		mirrorShader->Render(testcube->indexCount, testcube->world[0], &(testcube->diffuseMap), testcube->normalMap, testcube->heightMap, *blurShadowTexture->GetShadowResourceView());
-		mirrorShader->Render(testcube->indexCount, testcube->world[1], &(testcube->diffuseMap), testcube->normalMap, testcube->heightMap, *blurShadowTexture->GetShadowResourceView());
-		mirrorShader->Render(testcube->indexCount, testcube->world[2], &(testcube->diffuseMap), testcube->normalMap, testcube->heightMap, *blurShadowTexture->GetShadowResourceView());
+		mirrorShader->Render(testcube->indexCount, testcube->world[0],view, projection, &(testcube->diffuseMap), testcube->normalMap, testcube->heightMap, *blurShadowTexture->GetShadowResourceView());
+		mirrorShader->Render(testcube->indexCount, testcube->world[1],view, projection, &(testcube->diffuseMap), testcube->normalMap, testcube->heightMap, *blurShadowTexture->GetShadowResourceView());
+		mirrorShader->Render(testcube->indexCount, testcube->world[2],view, projection, &(testcube->diffuseMap), testcube->normalMap, testcube->heightMap, *blurShadowTexture->GetShadowResourceView());
 	
 	
 		
 		landscape->Render();
-		mirrorShader->Render(landscape->getIndexCount(), landscape->getWorld(), landscape->getDiffuseMap(), landscape->getNormalMap(), nullptr, *blurShadowTexture->GetShadowResourceView());
+		mirrorShader->Render(landscape->getIndexCount(), landscape->getWorld(), view, projection, landscape->getDiffuseMap(), landscape->getNormalMap(), nullptr, *blurShadowTexture->GetShadowResourceView());
 
 		D3D::Get()->SetBlender_Off();
 		Rasterizer::Get()->SetOnCullMode();
-	
-	
-	
-		
-	
 	}
 
 	

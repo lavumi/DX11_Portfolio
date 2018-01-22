@@ -13,6 +13,12 @@ Camera::Camera()
 	, translationSpeed(28.0f), rotationSpeed(1.5f)
 {
 	D3DXMatrixIdentity(&view);
+
+	D3DXVECTOR3 position = D3DXVECTOR3(0, 0, -10);
+	D3DXVECTOR3 forward = D3DXVECTOR3(0, 0, 1);
+	D3DXVECTOR3 up = D3DXVECTOR3(0, 1, 0);
+	D3DXMatrixLookAtLH(&defaultView, &position, &(position + forward), &up);
+
 	UpdateRotationMatrix();
 	UpdateViewMatrix();
 }

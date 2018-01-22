@@ -11,7 +11,7 @@ TestPlane::TestPlane()
 
 
 
-		D3DXMatrixTranslation(&world, 10.0f, 5.0f, 20.0f);
+		D3DXMatrixTranslation(&world, 10.0f, 0.0f, 20.0f);
 
 
 

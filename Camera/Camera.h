@@ -45,6 +45,9 @@ public:
 		memcpy(view, this->view, sizeof(D3DXMATRIX));
 	}
 
+	void GetDefaultView(D3DXMATRIX* view) {
+		memcpy(view, this->defaultView, sizeof(D3DXMATRIX));
+	}
 	//void GetProjection(D3DXMATRIX* projection)
 	//{
 	//	memcpy(projection, this->projection, sizeof(D3DXMATRIX));
@@ -76,6 +79,8 @@ private:
 
 	D3DXMATRIX view;
 	D3DXMATRIX rotation;
+
+	D3DXMATRIX defaultView;
 
 	float translationSpeed;
 	float rotationSpeed;

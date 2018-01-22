@@ -27,10 +27,6 @@ void ObjectMesh::Render()
 	D3D::GetDeviceContext()->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R32_UINT, 0);
 	D3D::GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	
-
-	Shader::Render(indexCount);
-
-
 }
 
 void ObjectMesh::Update()
@@ -38,12 +34,7 @@ void ObjectMesh::Update()
 	Shader::Update();
 }
 
-void ObjectMesh::Move(D3DXVECTOR3 move)
-{
-	D3DXMatrixTranslation(&world, move.x, move.y, move.z);
-	worldBuffer->SetWorld(world);
 
-}
 
 
 void ObjectMesh::CreateBuffer()

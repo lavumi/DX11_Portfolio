@@ -85,7 +85,7 @@ public:
 	void SetBlender_Off();
 	void SetBlender_None();
 	void SetBlender_AddBlend();
-	void SetBlender_BlandFacter(float factor);
+	void SetBlender_BlendFacter(float factor);
 
 	void ClearDepthStencil(UINT clearFlag, float depth, UINT8 stencil);
 

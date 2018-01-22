@@ -12,10 +12,6 @@ SkyplaneShader::SkyplaneShader()
 	data.translation = 0.0f;
 
 	UserInterface::AddSkyplane(&data.scale, &data.brightness);
-
-
-
-
 }
 
 SkyplaneShader::~SkyplaneShader()
@@ -27,7 +23,7 @@ void SkyplaneShader::Update()
 
 }
 
-void SkyplaneShader::Render(UINT indexCount, D3DXMATRIX world1, ID3D11ShaderResourceView* diffuse, ID3D11ShaderResourceView* perlin)
+void SkyplaneShader::Render(UINT indexCount, D3DXMATRIX world, D3DXMATRIX view, D3DXMATRIX projection, ID3D11ShaderResourceView* diffuse, ID3D11ShaderResourceView* perlin)
 {
 	data.translation += 0.0001f;
 	if (data.translation >= 1.0f) {
@@ -54,11 +50,11 @@ void SkyplaneShader::Render(UINT indexCount, D3DXMATRIX world1, ID3D11ShaderReso
 	D3D::GetDeviceContext()->VSSetShader(vertexShader, NULL, 0);
 	D3D::GetDeviceContext()->PSSetShader(pixelShader, NULL, 0);
 
-	cameraBuffer->Update();
-	cameraBuffer->SetVSBuffer(0);
+	SetMatrix(world, view, projection);
 
-	worldBuffer->SetWorld(world1);
-	worldBuffer->SetVSBuffer(1);
+	D3D::GetDeviceContext()->VSSetConstantBuffers(0, 1, &wvpBuffer);
+
+
 
 	D3D::GetDeviceContext()->PSSetConstantBuffers(0, 1, &skyplaneBuffer);
 	D3D::GetDeviceContext()->PSSetShaderResources(0, 1, &diffuse);

@@ -66,7 +66,7 @@ private:
 
 
 	TestCube* testcube;
-	//Mirror* testplane;
+	Mirror* testplane;
 
 
 

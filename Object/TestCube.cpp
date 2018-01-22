@@ -11,7 +11,7 @@ TestCube::TestCube()
 
 
 	for (int i = 0; i < 6; i++) {
-		D3DXMatrixTranslation(&world[i], 128 + 3.5f*i , 5, 128);
+		D3DXMatrixTranslation(&world[i], 10 + 3.5f*i , 0, 10);
 	}
 
 

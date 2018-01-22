@@ -18,18 +18,18 @@ void BlurShader::Update()
 
 }
 
-void BlurShader::Render(UINT indexCount, D3DXMATRIX world1, ID3D11ShaderResourceView* diffuse)
+void BlurShader::Render(UINT indexCount, D3DXMATRIX world, D3DXMATRIX view, D3DXMATRIX projection, ID3D11ShaderResourceView* diffuse)
 {
+
+	SetMatrix(world, view, projection);
+
+	D3D::GetDeviceContext()->VSSetConstantBuffers(0, 1, &wvpBuffer);
 
 	D3D::GetDeviceContext()->IASetInputLayout(layout);
 	D3D::GetDeviceContext()->VSSetShader(vertexShader, NULL, 0);
 	D3D::GetDeviceContext()->PSSetShader(pixelShader, NULL, 0);
 
-	cameraBuffer->OrthoUpdate();
-	cameraBuffer->SetVSBuffer(0);
 
-	worldBuffer->SetWorld(world1);
-	worldBuffer->SetVSBuffer(1);
 
 	D3D::GetDeviceContext()->VSSetConstantBuffers(2, 1, &screenSizeBuffer);
 

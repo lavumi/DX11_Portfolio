@@ -19,8 +19,13 @@ void ShadowShader::Update()
 
 }
 
-void ShadowShader::Render(UINT indexCount, D3DXMATRIX world, ID3D11ShaderResourceView * lightMap)
+void ShadowShader::Render(UINT indexCount, D3DXMATRIX world, D3DXMATRIX view, D3DXMATRIX projection, ID3D11ShaderResourceView * lightMap)
 {
+	SetMatrix(world, view, projection);
+
+	D3D::GetDeviceContext()->VSSetConstantBuffers(0, 1, &wvpBuffer);
+
+
 	D3D11_MAPPED_SUBRESOURCE subResource = { 0 };
 
 	ZeroMemory(&subResource, sizeof(D3D11_MAPPED_SUBRESOURCE));
@@ -34,13 +39,6 @@ void ShadowShader::Render(UINT indexCount, D3DXMATRIX world, ID3D11ShaderResourc
 	D3D::GetDeviceContext()->Unmap(LightBuffer, 0);
 
 
-
-
-	cameraBuffer->Update();
-	cameraBuffer->SetVSBuffer(0);
-
-	worldBuffer->SetWorld(world);
-	worldBuffer->SetVSBuffer(1);
 	D3D::GetDeviceContext()->VSSetConstantBuffers(2, 1, &LightBuffer);
 
 

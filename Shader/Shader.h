@@ -6,31 +6,37 @@
 class Shader
 {
 public:
-	static void CreateBuffer();
-	static void DeleteBuffer();
-	static void bufferupdate();
 
+	void SetMatrix(D3DXMATRIX world, D3DXMATRIX view, D3DXMATRIX projection);
+
+	
 protected:
 	Shader(wstring vertexshaderFile);
 	~Shader();
 
 	void CreateInputLayout(D3D11_INPUT_ELEMENT_DESC* desc, UINT count);
+	void CreateMATRIXBuffer();
 
 	virtual void Update();
-	virtual void Render(UINT indexCount);
-	void MirrorUpdate();
+	
+
 
 	ID3D10Blob* vertexBlob;
 	ID3D10Blob* pixelBlob;
 
-	WorldBuffer* worldBuffer;
+
 	ID3D11InputLayout* layout;
 
 
-	static CameraBuffer* cameraBuffer;
+
+	struct WVP {
+		D3DXMATRIX world;
+		D3DXMATRIX view;
+		D3DXMATRIX projection;
+	} wvpData;
 
 
-
+	ID3D11Buffer* wvpBuffer;
 
 
 	void CreateVertexShader();

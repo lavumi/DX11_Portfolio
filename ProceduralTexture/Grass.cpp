@@ -101,7 +101,7 @@ void Grass::DrawTexture()
 	D3D::Get()->SetDepthStencilOnState();
 	//최종 그릴 이미지
 	SetFinalResult(rndDraw);
-	rndDraw->SaveTexture(L"Grass.png");
+	
 	//SetFinalResult(directionalWarp);
 
 	//렌더링 타겟 되돌리기

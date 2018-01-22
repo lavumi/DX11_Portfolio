@@ -1,9 +1,9 @@
-cbuffer CameraBuffer : register(b0)
+cbuffer MatrixBuffer : register(b0)
 {
+    matrix _world;
     matrix _view;
     matrix _projection;
-    float3 _cameraPosition;
-    float _paddd;
+
 };
 
 
@@ -17,10 +17,6 @@ cbuffer LightView : register(b2)
 };
 
 
-cbuffer WorldBuffer : register(b1)
-{
-    matrix _world;
-}
 
 struct VertexInput
 {

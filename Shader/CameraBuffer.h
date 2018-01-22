@@ -58,6 +58,7 @@ public:
 		D3DXVECTOR3 forward = D3DXVECTOR3(0, 0, 1);
 		D3DXVECTOR3 up = D3DXVECTOR3(0, 1, 0);
 		D3DXMatrixLookAtLH(&data.view, &position, &(position + forward), &up);
+
 		D3D::Get()->GetOrthoProjection(&data.projection);
 		Camera::Get()->GetPosition(&data.position);
 

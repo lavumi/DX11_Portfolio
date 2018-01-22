@@ -27,8 +27,13 @@ void TerrianShader::Update()
 
 }
 
-void TerrianShader::Render(UINT indexCount, D3DXMATRIX world, ID3D11ShaderResourceView ** diffuseMap, ID3D11ShaderResourceView* normalMap, ID3D11ShaderResourceView* lightMap)
+void TerrianShader::Render(UINT indexCount, D3DXMATRIX world, D3DXMATRIX view, D3DXMATRIX projection, ID3D11ShaderResourceView ** diffuseMap, ID3D11ShaderResourceView* normalMap, ID3D11ShaderResourceView* lightMap)
 {
+	SetMatrix(world, view, projection);
+
+	D3D::GetDeviceContext()->VSSetConstantBuffers(0, 1, &wvpBuffer);
+
+
 	D3D11_MAPPED_SUBRESOURCE subResource = { 0 };
 
 
@@ -76,7 +81,8 @@ void TerrianShader::Render(UINT indexCount, D3DXMATRIX world, ID3D11ShaderResour
 
 
 
-	worldBuffer->SetWorld(world);
+	
+
 	D3D::GetDeviceContext()->PSSetShaderResources(10, 3, diffuseMap);
 	D3D::GetDeviceContext()->PSSetShaderResources(1, 1, &lightMap);
 	D3D::GetDeviceContext()->PSSetShaderResources(2, 1, &normalMap);
@@ -87,12 +93,18 @@ void TerrianShader::Render(UINT indexCount, D3DXMATRIX world, ID3D11ShaderResour
 	D3D::GetDeviceContext()->VSSetConstantBuffers(2, 1, &LightBuffer);
 	D3D::GetDeviceContext()->VSSetConstantBuffers(3, 1, &ExtraBuffer);
 
+
+
+
 	D3D::GetDeviceContext()->IASetInputLayout(layout);
 	D3D::GetDeviceContext()->VSSetShader(vertexShader, NULL, 0);
 	D3D::GetDeviceContext()->PSSetShader(pixelShader, NULL, 0);
 
-	cameraBuffer->SetVSBuffer(0);
-	worldBuffer->SetVSBuffer(1);
+
+
+
+
+
 
 	D3D::GetDeviceContext()->DrawIndexed(indexCount, 0, 0);
 	Sampler::Get()->SetDefault();

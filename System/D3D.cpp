@@ -457,8 +457,8 @@ void D3D::CreateBlenders()
 
 
 
-	omDesc.RenderTarget[0].SrcBlend = D3D11_BLEND_INV_BLEND_FACTOR;
-	omDesc.RenderTarget[0].DestBlend = D3D11_BLEND_BLEND_FACTOR;
+	omDesc.RenderTarget[0].SrcBlend = D3D11_BLEND_BLEND_FACTOR;
+	omDesc.RenderTarget[0].DestBlend = D3D11_BLEND_INV_BLEND_FACTOR;
 	omDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
 	omDesc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
 	omDesc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
@@ -504,7 +504,7 @@ void D3D::SetBlender_AddBlend()
 	deviceContext->OMSetBlendState(d3dBlendState[5], 0, 0xffffffff);
 }
 
-void D3D::SetBlender_BlandFacter(const float factor)
+void D3D::SetBlender_BlendFacter(const float factor)
 {
 	deviceContext->OMSetBlendState(d3dBlendState[4], &factor, 0xffffffff);
 }
