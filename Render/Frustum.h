@@ -18,6 +18,6 @@ public:
 	void Render();
 private:
 	D3DXPLANE m_planes[6];
-
+	D3DXPLANE m_plane[6];
 	
 };
