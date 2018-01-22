@@ -4,10 +4,10 @@
 Skyplane::Skyplane()
 {
 
-	skyPlaneResolution = 50;
+	skyPlaneResolution = 20;
 	skyPlaneWidth = 10.0f;
-	skyPlaneTop = 0.5f;
-	skyPlaneBottom = 0.0f;
+	skyPlaneTop = 0.7f;
+	skyPlaneBottom = -0.3f;
 
 
 	CreateVertexData();
@@ -16,6 +16,14 @@ Skyplane::Skyplane()
 
 
 	D3DXMatrixIdentity(&world);
+
+	HRESULT hr = D3DX11CreateShaderResourceViewFromFile(D3D::GetDevice(), L"./Terrian/cloud001.dds", nullptr, nullptr, &diffuse, nullptr);
+
+	assert(SUCCEEDED(hr));
+
+	hr = D3DX11CreateShaderResourceViewFromFile(D3D::GetDevice(), L"./Terrian/perturb001.dds", nullptr, nullptr, &perlin, nullptr);
+
+	assert(SUCCEEDED(hr));
 }
 
 Skyplane::~Skyplane()
@@ -51,7 +59,7 @@ void Skyplane::CreateVertexData()
 
 	vertexCount = (skyPlaneResolution + 1) * (skyPlaneResolution + 1);
 
-	float positionX, positionY, positionZ;
+	float positionX, positionZ;
 
 	vertexData = new VertexTexture[vertexCount];
 	for (UINT z = 0; z <= skyPlaneResolution; z++)

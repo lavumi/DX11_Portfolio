@@ -37,6 +37,12 @@ void UserInterface::AddSkydome(D3DXCOLOR * apex, D3DXCOLOR * center)
 	TwAddVarRW(bar, "Center", TW_TYPE_COLOR3F, center, "ground='Sky'");
 }
 
+void UserInterface::AddSkyplane(float* scale, float* brightness)
+{
+	TwAddVarRW(bar, "scale", TW_TYPE_FLOAT, scale, "min=0 max=40 group='Skyplane'");
+	TwAddVarRW(bar, "brightness", TW_TYPE_FLOAT, brightness, "min=0 max=40 group='Skyplane'");
+}
+
 void UserInterface::AddBrushMenu(int * type, int * size, float * type2, int* imagenum)
 {
 	TwAddVarRW(bar, "Brush Type", TW_TYPE_INT32, type, "min=0 max=1 step=1 group='Brush'");

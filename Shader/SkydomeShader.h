@@ -21,7 +21,7 @@ private:
 
 
 
-	struct Data
+	struct SkyColor
 	{
 		D3DXCOLOR center;
 		D3DXCOLOR apex;

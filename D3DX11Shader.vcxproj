@@ -186,6 +186,7 @@
     <ClInclude Include="Shader\DepthShadowShader.h" />
     <ClInclude Include="Shader\MirrorShader.h" />
     <ClInclude Include="Shader\ShadowShader.h" />
+    <ClInclude Include="Shader\SkyplaneShader.h" />
     <ClInclude Include="Shader\TextureShader.h" />
     <ClInclude Include="Shader\NormalMapShader.h" />
     <ClInclude Include="Shader\Shader.h" />
@@ -234,6 +235,7 @@
     <ClCompile Include="Shader\DepthShadowShader.cpp" />
     <ClCompile Include="Shader\MirrorShader.cpp" />
     <ClCompile Include="Shader\ShadowShader.cpp" />
+    <ClCompile Include="Shader\SkyplaneShader.cpp" />
     <ClCompile Include="Shader\TextureShader.cpp" />
     <ClCompile Include="Shader\NormalMapShader.cpp" />
     <ClCompile Include="Shader\Shader.cpp" />
@@ -338,6 +340,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Shader\FX\ColorShader.fx">
+      <FileType>Document</FileType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shader\FX\SkyplaneShader.fx">
       <FileType>Document</FileType>
     </None>
   </ItemGroup>

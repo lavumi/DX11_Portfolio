@@ -19,6 +19,12 @@ NormalMapShader::NormalMapShader()
 
 NormalMapShader::~NormalMapShader()
 {
+	SAFE_RELEASE(LightBuffer);
+	SAFE_RELEASE(mirrorViewBuffer);
+	SAFE_RELEASE(ExtraBuffer);
+	SAFE_RELEASE(MaterialBuffer);
+	SAFE_RELEASE(parallaxBuffer);
+
 }
 
 void NormalMapShader::Update()

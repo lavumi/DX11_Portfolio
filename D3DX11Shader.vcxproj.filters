@@ -123,6 +123,9 @@
     <ClCompile Include="Terrian\Skyplane.cpp">
       <Filter>Terrian</Filter>
     </ClCompile>
+    <ClCompile Include="Shader\SkyplaneShader.cpp">
+      <Filter>Shader</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameMain.h" />
@@ -256,6 +259,9 @@
     <ClInclude Include="Terrian\Skyplane.h">
       <Filter>Terrian</Filter>
     </ClInclude>
+    <ClInclude Include="Shader\SkyplaneShader.h">
+      <Filter>Shader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="System">
@@ -354,6 +360,9 @@
       <Filter>Shader\FX</Filter>
     </None>
     <None Include="Shader\FX\ColorShader.fx">
+      <Filter>Shader\FX</Filter>
+    </None>
+    <None Include="Shader\FX\SkyplaneShader.fx">
       <Filter>Shader\FX</Filter>
     </None>
   </ItemGroup>

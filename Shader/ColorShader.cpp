@@ -10,6 +10,7 @@ ColorShader::ColorShader()
 
 ColorShader::~ColorShader()
 {
+	SAFE_RELEASE(colorBuffer);
 }
 
 void ColorShader::Update()

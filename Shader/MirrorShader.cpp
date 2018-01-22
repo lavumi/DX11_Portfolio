@@ -18,6 +18,12 @@ MirrorShader::MirrorShader()
 
 MirrorShader::~MirrorShader()
 {
+	SAFE_RELEASE(LightBuffer);
+	SAFE_RELEASE(mirrorViewBuffer);
+	SAFE_RELEASE(ExtraBuffer);
+	SAFE_RELEASE(MaterialBuffer);
+	SAFE_RELEASE(parallaxBuffer);
+	SAFE_RELEASE(lightMatrixBuffer);
 }
 
 void MirrorShader::Update()

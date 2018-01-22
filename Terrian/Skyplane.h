@@ -10,8 +10,23 @@ public:
 	void Update();
 	void Render();
 
-	UINT indexCount;
-	D3DXMATRIX world;
+	UINT getIndexCount() {
+		return indexCount;
+	}
+
+	ID3D11ShaderResourceView* getDiffuseMap() {
+		return diffuse;
+	}
+
+	ID3D11ShaderResourceView* getPerlinMap() {
+		return perlin;
+	}
+
+	D3DXMATRIX getWorld() {
+		return world;
+	}
+	
+	
 private:
 	void CreateVertexData();
 	void CreateIndexData();
@@ -22,10 +37,16 @@ private:
 
 
 	UINT vertexCount;
+	UINT indexCount;
 	VertexTexture* vertexData;
 	vector<UINT> indexData;
 
 
-	int skyPlaneResolution;
+	UINT skyPlaneResolution;
 	float skyPlaneWidth, skyPlaneTop, skyPlaneBottom;
+
+	
+	ID3D11ShaderResourceView* diffuse;
+	ID3D11ShaderResourceView* perlin;
+	D3DXMATRIX world;
 };

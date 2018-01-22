@@ -10,6 +10,7 @@ BlurShader::BlurShader()
 
 BlurShader::~BlurShader()
 {
+	SAFE_RELEASE(screenSizeBuffer);
 }
 
 void BlurShader::Update()
