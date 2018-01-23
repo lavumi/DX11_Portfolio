@@ -218,25 +218,6 @@ void D3D::SetDefaultRenderView()
 
 
 
-void D3D::SetDepthStencilOnState()
-{
-	deviceContext->OMSetDepthStencilState(onState, 1);
-}
-
-void D3D::SetDepthStencilOffState()
-{
-	deviceContext->OMSetDepthStencilState(offState, 1);
-}
-
-void D3D::SetDepthStencilMirrorPreState()
-{
-	deviceContext->OMSetDepthStencilState(mirrorState, 1);
-}
-
-void D3D::SetDepthStencilMirrorState()
-{
-	deviceContext->OMSetDepthStencilState(mirrorState2, 1);
-}
 
 void D3D::ClearDepthStencil(UINT clearFlag, float depth, UINT8 stencil)
 {
@@ -271,6 +252,9 @@ void D3D::CreateDefaultDepthStencilTexture()
 
 void D3D::CreateDepthStencil()
 {
+	depthstencilstate = new ID3D11DepthStencilState*[10];
+
+
 	D3D11_DEPTH_STENCIL_DESC desc = { 0 };
 	desc.DepthEnable = true;
 	desc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
@@ -291,12 +275,13 @@ void D3D::CreateDepthStencil()
 	desc.BackFace.StencilFunc = D3D11_COMPARISON_NEVER;
 
 	HRESULT hr;
-	hr = device->CreateDepthStencilState(&desc, &onState);
+	hr = device->CreateDepthStencilState(&desc, &depthstencilstate[0]);
 	assert(SUCCEEDED(hr));
 
-	deviceContext->OMSetDepthStencilState(onState, 1);
+	deviceContext->OMSetDepthStencilState(depthstencilstate[0], 1);
 
 
+	//스카이 
 	desc.DepthEnable = true;
 	desc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ZERO;
 	desc.DepthFunc = D3D11_COMPARISON_ALWAYS;
@@ -316,10 +301,13 @@ void D3D::CreateDepthStencil()
 	desc.BackFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
 
 
-	hr = device->CreateDepthStencilState(&desc, &offState);
+	hr = device->CreateDepthStencilState(&desc, &depthstencilstate[1]);
 	assert(SUCCEEDED(hr));
 
 
+
+
+	//반사평면
 	desc.DepthEnable = true;
 	desc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ZERO;
 	desc.DepthFunc = D3D11_COMPARISON_LESS;
@@ -342,9 +330,10 @@ void D3D::CreateDepthStencil()
 
 
 
-	hr = device->CreateDepthStencilState(&desc, &mirrorState);
+	hr = device->CreateDepthStencilState(&desc, &depthstencilstate[2]);
 	assert(SUCCEEDED(hr));
 
+	//반사평면 오브젝트
 	desc.DepthEnable = true;
 	desc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
 	desc.DepthFunc = D3D11_COMPARISON_LESS;
@@ -352,8 +341,23 @@ void D3D::CreateDepthStencil()
 	desc.BackFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
 	desc.BackFace.StencilFunc = D3D11_COMPARISON_EQUAL;
 
-	hr = device->CreateDepthStencilState(&desc, &mirrorState2);
+	hr = device->CreateDepthStencilState(&desc, &depthstencilstate[3]);
 	assert(SUCCEEDED(hr));
+
+
+	//반사평면 하늘
+	desc.DepthEnable = true;
+	desc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ZERO;
+	desc.DepthFunc = D3D11_COMPARISON_ALWAYS;
+
+	hr = device->CreateDepthStencilState(&desc, &depthstencilstate[4]);
+	assert(SUCCEEDED(hr));
+}
+
+
+void D3D::SetDepthStencilState(DS_state state)
+{
+	deviceContext->OMSetDepthStencilState(depthstencilstate[(int)state], 1);
 }
 
 //void D3D::CreateOffState()
@@ -478,6 +482,8 @@ void D3D::CreateBlenders()
 
 	D3D::GetDevice()->CreateBlendState(&omDesc, &d3dBlendState[5]);
 }
+
+
 
 void D3D::SetBlender_Linear()
 {

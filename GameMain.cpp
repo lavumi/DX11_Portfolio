@@ -94,7 +94,7 @@ void GameMain::Update()
 
 
 	LightManager::Get()->Update();;
-	Camera::Get()->Update();
+//	Camera::Get()->Update();
 
 	D3DXMATRIX view, projection;
 
@@ -202,7 +202,8 @@ void GameMain::Render()
 	D3D::Get()->GetProjection(&projection);
 
 
-	D3D::Get()->SetDepthStencilOffState();
+
+	D3D::Get()->SetDepthStencilState(D3D::DS_state::offState);
 	Rasterizer::Get()->SetOffCullMode();
 	{
 		skydome->Render();
@@ -213,7 +214,7 @@ void GameMain::Render()
 		skyplaneShader->Render(cloud->getIndexCount(), cloud->getWorld(), view, projection, cloud->getDiffuseMap(), cloud->getPerlinMap());
 		D3D::Get()->SetBlender_Off();
 	}
-	D3D::Get()->SetDepthStencilOnState();
+	D3D::Get()->SetDepthStencilState(D3D::DS_state::onState);
 	Rasterizer::Get()->SetOnCullMode();
 
 	
@@ -238,60 +239,54 @@ void GameMain::Render()
 
 	//WATER REFLECTION
 
-	
+
 
 	{
+		//스텐실 버퍼 삭제
 		D3D::Get()->ClearDepthStencil(D3D11_CLEAR_STENCIL,0, 0);
-		D3D::Get()->SetDepthStencilMirrorPreState();
-	
+
+		//그려야 할 곳(물)을 스텐실 버퍼에 기록
+		D3D::Get()->SetDepthStencilState(D3D::DS_state::mirrorPlaneRenderState);
 		D3D::Get()->SetBlender_Linear();
-		//testplane->RenderMirror();
-		//colorShader->Render(testplane->indexCount, testplane->world, D3DXCOLOR(0.2f, 0.5f, 1, 1.0f));
 		lake->Render();
 		colorShader->Render(lake->indexCount, lake->world, view, projection, D3DXCOLOR(0.2f,0.5f,1,0.5f));
 
 
-
-		D3D::Get()->SetDepthStencilMirrorState();
-		
-		
-
+		//물 위에 그리는 셋팅
 	
-		//Rasterizer::Get()->SetOffCullMode();
-		//{
-		//	skydome->Render();
-		//	skydomeShader->Render(skydome->indexCount, skydome->world);
-		//}
+		//깊이버퍼를 삭제하여 다시 그릴수 있게 만듬
 		D3D::Get()->ClearDepthStencil(D3D11_CLEAR_DEPTH, 1, 0);
-		
-		
-		//Blender::Get()->SetBlendAdd();
-		
-	//	cloud->Render();
-		//mirrorShader->Render(cloud->indexCount, skydome->world);
-
-		//D3D::Get()->SetBlender_BlendFacter(0.5f);
 
 
-
+		//반사된 세계는 현실 세계에 대해 뒤집혀있으므로 컬모드가 반대다
 		Rasterizer::Get()->SetFrontCullMode();
+
+		//반사된 뷰, 프로젝션 받기
+		Camera::Get()->GetMirrorView(&view);
+		D3D::Get()->GetProjection(&projection);
+
+		D3D::Get()->SetDepthStencilState(D3D::DS_state::offState);
+		cloud->Render();
+		skyplaneShader->Render(cloud->getIndexCount(), cloud->getWorld(), view, projection, cloud->getDiffuseMap(), cloud->getPerlinMap());
+
+
+
+		D3D::Get()->SetDepthStencilState(D3D::DS_state::mirrorObjectRenderState);
 		testcube->Render();
-		mirrorShader->Render(testcube->indexCount, testcube->world[0],view, projection, &(testcube->diffuseMap), testcube->normalMap, testcube->heightMap, *blurShadowTexture->GetShadowResourceView());
-		mirrorShader->Render(testcube->indexCount, testcube->world[1],view, projection, &(testcube->diffuseMap), testcube->normalMap, testcube->heightMap, *blurShadowTexture->GetShadowResourceView());
-		mirrorShader->Render(testcube->indexCount, testcube->world[2],view, projection, &(testcube->diffuseMap), testcube->normalMap, testcube->heightMap, *blurShadowTexture->GetShadowResourceView());
-	
-	
+		normalMapShader->Render(testcube->indexCount, testcube->world[0], view, projection, testcube->diffuseMap, testcube->normalMap, testcube->heightMap, *blurShadowTexture->GetShadowResourceView());
+		normalMapShader->Render(testcube->indexCount, testcube->world[1], view, projection, testcube->diffuseMap, testcube->normalMap, testcube->heightMap, *blurShadowTexture->GetShadowResourceView());
+		normalMapShader->Render(testcube->indexCount, testcube->world[2], view, projection, testcube->diffuseMap, testcube->normalMap, testcube->heightMap, *blurShadowTexture->GetShadowResourceView());
+
 		
 		landscape->Render();
-		mirrorShader->Render(landscape->getIndexCount(), landscape->getWorld(), view, projection, landscape->getDiffuseMap(), landscape->getNormalMap(), nullptr, *blurShadowTexture->GetShadowResourceView());
+		terrianShader->Render(landscape->getIndexCount(), landscape->getWorld(), view, projection, landscape->getDiffuseMap(), landscape->getNormalMap(), *blurShadowTexture->GetShadowResourceView());
 
 		D3D::Get()->SetBlender_Off();
 		Rasterizer::Get()->SetOnCullMode();
 	}
 
 	
-
-	D3D::Get()->SetDepthStencilOnState();
+	D3D::Get()->SetDepthStencilState(D3D::DS_state::onState);
 }
 
 void GameMain::ControlCamera()

@@ -14,9 +14,6 @@ struct D3DInfo
 	D3DXCOLOR clearColor;
 };
 
-
-class Blender;
-class DepthStencil;
 class D3D
 {
 public:
@@ -72,10 +69,19 @@ public:
 
 
 
-	void SetDepthStencilOnState();
-	void SetDepthStencilOffState();
-	void SetDepthStencilMirrorPreState();
-	void SetDepthStencilMirrorState();
+
+	//DepthStencil State
+
+	enum DS_state {
+		onState=0,
+		offState,
+		mirrorPlaneRenderState,
+		mirrorObjectRenderState,
+		mirrorSkyplaneState,
+	};
+
+	void SetDepthStencilState(DS_state);
+
 
 
 
@@ -137,8 +143,7 @@ private:
 	
 
 	void CreateDepthStencil();
-//	void CreateOffState();
-//	void CreateMirrorStencilTest();
+
 
 
 
@@ -155,8 +160,7 @@ private:
 	ID3D11DepthStencilView* defaultDepthView;
 	ID3D11RenderTargetView* defaultRenderView;
 
-	ID3D11DepthStencilState* onState;
-	ID3D11DepthStencilState* offState;
-	ID3D11DepthStencilState* mirrorState;
-	ID3D11DepthStencilState* mirrorState2;
+
+	ID3D11DepthStencilState** depthstencilstate;
+
 };

@@ -23,7 +23,7 @@ public:
 	void CreateBuffers();
 	
 	ID3D11Buffer* LightBuffer;
-	ID3D11Buffer* mirrorViewBuffer;
+	ID3D11Buffer* cameraPosBuffer;
 	ID3D11Buffer* ExtraBuffer;
 	ID3D11Buffer* MaterialBuffer;
 	ID3D11Buffer* parallaxBuffer;

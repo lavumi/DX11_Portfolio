@@ -91,14 +91,15 @@ void Grass::DrawTexture()
 	D3D::GetDeviceContext()->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R32_UINT, 0);
 	D3D::GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	Sampler::Get()->SetDefault();
-	D3D::Get()->SetDepthStencilOffState();
+
+	D3D::Get()->SetDepthStencilState(D3D::DS_state::offState);
 
 	//그리기
 	DrawGrassSingle();
 	DirectionalWarp();
 	//RND_SRT();
 	RND_SRT_Instancing();
-	D3D::Get()->SetDepthStencilOnState();
+	D3D::Get()->SetDepthStencilState(D3D::DS_state::onState);
 	//최종 그릴 이미지
 	SetFinalResult(rndDraw);
 	

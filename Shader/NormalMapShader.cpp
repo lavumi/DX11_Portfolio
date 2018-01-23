@@ -20,7 +20,6 @@ NormalMapShader::NormalMapShader()
 NormalMapShader::~NormalMapShader()
 {
 	SAFE_RELEASE(LightBuffer);
-	SAFE_RELEASE(mirrorViewBuffer);
 	SAFE_RELEASE(ExtraBuffer);
 	SAFE_RELEASE(MaterialBuffer);
 	SAFE_RELEASE(parallaxBuffer);
@@ -58,6 +57,20 @@ void NormalMapShader::Render(UINT indexCount, D3DXMATRIX world, D3DXMATRIX view,
 	D3D::GetDeviceContext()->Unmap(ExtraBuffer, 0);
 
 	
+	D3DXVECTOR3 cameraPos;
+	Camera::Get()->GetPosition(&cameraPos);
+
+	ZeroMemory(&subResource, sizeof(D3D11_MAPPED_SUBRESOURCE));
+	D3D::GetDeviceContext()->Map
+	(
+		cameraPosBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &subResource
+	);
+
+	memcpy(subResource.pData, &cameraPos, sizeof(D3DXVECTOR4));
+
+	D3D::GetDeviceContext()->Unmap(cameraPosBuffer, 0);
+
+
 
 	ZeroMemory(&subResource, sizeof(D3D11_MAPPED_SUBRESOURCE));
 	D3D::GetDeviceContext()->Map
@@ -103,8 +116,10 @@ void NormalMapShader::Render(UINT indexCount, D3DXMATRIX world, D3DXMATRIX view,
 	D3D::GetDeviceContext()->PSSetShaderResources(3, 1, &lightMap);
 
 
+	D3D::GetDeviceContext()->VSSetConstantBuffers(1, 1, &cameraPosBuffer);
 	D3D::GetDeviceContext()->VSSetConstantBuffers(2, 1, &LightBuffer);
 	D3D::GetDeviceContext()->VSSetConstantBuffers(3, 1, &ExtraBuffer);
+
 	D3D::GetDeviceContext()->PSSetConstantBuffers(0, 1, &MaterialBuffer);
 	D3D::GetDeviceContext()->PSSetConstantBuffers(1, 1, &parallaxBuffer);
 	
@@ -175,13 +190,13 @@ void NormalMapShader::CreateBuffers()
 
 	ZeroMemory(&desc, sizeof(D3D11_BUFFER_DESC));
 	desc.Usage = D3D11_USAGE_DYNAMIC;
-	desc.ByteWidth = sizeof(D3DXMATRIX);
+	desc.ByteWidth = sizeof(D3DXVECTOR4);
 	desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 	desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 	desc.MiscFlags = 0;
 	desc.StructureByteStride = 0;
 
-	hr = D3D::GetDevice()->CreateBuffer(&desc, NULL, &mirrorViewBuffer);
+	hr = D3D::GetDevice()->CreateBuffer(&desc, NULL, &cameraPosBuffer);
 	assert(SUCCEEDED(hr));
 
 }

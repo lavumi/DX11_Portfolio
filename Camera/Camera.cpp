@@ -83,10 +83,12 @@ void Camera::UpdateRotationMatrix()
 void Camera::UpdateViewMatrix()
 {                                                               
 	D3DXMatrixLookAtLH(&view, &position, &(position + forward), &up);
-}
 
-void Camera::Update()
-{
+	D3DXMATRIX R;
+	D3DXPLANE plane(0.0f, 1.0f, 0.0f, 7.7f); // xy plane}
+	D3DXMatrixReflect(&R, &plane);
+	mirrorView = R * view;
+
 }
 
 void Camera::Move(D3DXVECTOR3 translation)

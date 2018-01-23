@@ -97,7 +97,9 @@ float4 PS(PixelInput input) : SV_TARGET
 
         lightDepthValue = input.lightWorldPosition.z / input.lightWorldPosition.w;
 
-        lightDepthValue = lightDepthValue - 0.01;
+
+        //TODO : bias 외부에서 받아서 셋팅할수 있게 하자
+        lightDepthValue = lightDepthValue - 0.01f;
 
         if (lightDepthValue < depthValue)
         {

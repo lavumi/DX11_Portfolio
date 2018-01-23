@@ -23,7 +23,7 @@ public:
 	//void UpdateProjectionMatrix();
 	//void UpdateProjection2Orth();
 	void UpdateViewMatrix();
-	void Update();
+	//void Update();
 
 	void Move(D3DXVECTOR3 translation);
 	void MoveUp();
@@ -43,6 +43,10 @@ public:
 	void GetView(D3DXMATRIX* view)
 	{
 		memcpy(view, this->view, sizeof(D3DXMATRIX));
+	}
+
+	void GetMirrorView(D3DXMATRIX* view) {
+		memcpy(view, this->mirrorView, sizeof(D3DXMATRIX));
 	}
 
 	void GetDefaultView(D3DXMATRIX* view) {
@@ -78,6 +82,7 @@ private:
 	D3DXVECTOR2 rotate; //È¸Àü
 
 	D3DXMATRIX view;
+	D3DXMATRIX mirrorView;
 	D3DXMATRIX rotation;
 
 	D3DXMATRIX defaultView;
