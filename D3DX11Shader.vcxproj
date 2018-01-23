@@ -192,6 +192,7 @@
     <ClInclude Include="Shader\ShaderBuffer.h" />
     <ClInclude Include="Shader\SkydomeShader.h" />
     <ClInclude Include="Shader\TerrianShader.h" />
+    <ClInclude Include="Shader\WaterShader.h" />
     <ClInclude Include="Shader\WorldBuffer.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
     </ClInclude>
@@ -239,6 +240,7 @@
     <ClCompile Include="Shader\Shader.cpp" />
     <ClCompile Include="Shader\SkydomeShader.cpp" />
     <ClCompile Include="Shader\TerrianShader.cpp" />
+    <ClCompile Include="Shader\WaterShader.cpp" />
     <ClCompile Include="System\D3D.cpp" />
     <ClCompile Include="System\Frames.cpp" />
     <ClCompile Include="System\Keyboard.cpp" />
@@ -343,6 +345,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Shader\FX\SkyplaneShader.fx">
+      <FileType>Document</FileType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shader\FX\WaterShader.fx">
       <FileType>Document</FileType>
     </None>
   </ItemGroup>

@@ -43,6 +43,13 @@ void UserInterface::AddSkyplane(float* scale, float* brightness)
 	TwAddVarRW(bar, "brightness", TW_TYPE_FLOAT, brightness, "min=0 max=40 group='Skyplane'");
 }
 
+void UserInterface::AddWave(float * translation, float * size, float* angle)
+{
+	TwAddVarRW(bar, "translation", TW_TYPE_FLOAT, translation, "min=0 max=1 step=0.001 group='Water'");
+	TwAddVarRW(bar, "size", TW_TYPE_FLOAT, size, "min=0 max=40 group='Water'");
+	TwAddVarRW(bar, "angle", TW_TYPE_FLOAT, angle, "min=0 max=180 step=5 group='Water'");
+}
+
 void UserInterface::AddBrushMenu(int * type, int * size, float * type2, int* imagenum)
 {
 	TwAddVarRW(bar, "Brush Type", TW_TYPE_INT32, type, "min=0 max=1 step=1 group='Brush'");

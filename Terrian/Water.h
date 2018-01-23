@@ -13,10 +13,16 @@ public:
 
 	D3DXMATRIX world;
 
+	ID3D11ShaderResourceView* getNormalTexture() {
+		return normal;
+	}
 
+	float GetWaterHeigh() {
+		return waterHeight;
+	}
 private:
 
-
+	float waterHeight;
 
 
 
@@ -35,4 +41,6 @@ private:
 	D3DXMATRIX Rworld;
 	ID3D11Buffer* worldBuffer;
 
+
+	ID3D11ShaderResourceView* normal;
 };

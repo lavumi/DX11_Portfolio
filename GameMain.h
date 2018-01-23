@@ -27,6 +27,7 @@ class MirrorShader;
 class TerrianShader;
 class ColorShader;
 class SkyplaneShader;
+class WaterShader;
 
 class Frustum;
 
@@ -51,6 +52,8 @@ private:
 	RenderTexture* depthShadowTexture;
 	RenderTexture* shadowTexture;
 	RenderTexture* blurShadowTexture;
+
+	RenderTexture* lakeReflectionTexture;
 
 
 	Frustum* frustum;
@@ -84,4 +87,5 @@ private:
 	TerrianShader* terrianShader;
 	ColorShader* colorShader;
 	SkyplaneShader* skyplaneShader;
+	WaterShader* waterShader;
 };

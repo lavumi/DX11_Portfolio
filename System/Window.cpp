@@ -143,6 +143,7 @@ WPARAM Window::Run()
 			PreRender();
 			D3D::Get()->BeginScene();
 			{
+				D3D::Get()->SetDefaultRenderView();
 				Render();
 
 				if (Keyboard::Get()->KeyDown(VK_F11))

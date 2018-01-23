@@ -28,6 +28,7 @@
 #include "../Shader/MirrorShader.h"
 #include "../Shader/TerrianShader.h"
 #include "../Shader/ColorShader.h"
+#include "../Shader/WaterShader.h"
 #include "../Shader/SkyplaneShader.h"
 
 
@@ -39,6 +40,7 @@ void GameMain::Initialize()
 	depthShadowTexture = new RenderTexture(1280, 1280);
 	shadowTexture = new RenderTexture();
 	blurShadowTexture = new RenderTexture();
+	lakeReflectionTexture = new RenderTexture();
 
 
 	UserInterface::Get();
@@ -71,6 +73,7 @@ void GameMain::Initialize()
 	terrianShader = new TerrianShader();
 	colorShader = new ColorShader();
 	skyplaneShader = new SkyplaneShader();
+	waterShader = new WaterShader();
 
 
 
@@ -117,9 +120,10 @@ void GameMain::Update()
 	
 
 	if (Keyboard::Get()->KeyUp(VK_SPACE)) {
-		depthShadowTexture->SaveTexture(L"depthShadow.png");
-		shadowTexture->SaveTexture(L"shadow.png");
-		blurShadowTexture->SaveTexture(L"blur.png");
+		//depthShadowTexture->SaveTexture(L"depthShadow.png");
+		//shadowTexture->SaveTexture(L"shadow.png");
+		//blurShadowTexture->SaveTexture(L"blur.png");
+		lakeReflectionTexture->SaveTexture(L"Mirror.png");
 		}
 		landscape->changeLOD(frustum);
 
@@ -165,8 +169,8 @@ void GameMain::PreRender()
 		Camera::Get()->GetView(&view);
 		D3D::Get()->GetProjection(&projection);
 
-		testplane->Render();
-		shadowShader->Render(testplane->indexCount, testplane->world,  view, projection,*depthShadowTexture->GetShadowResourceView());
+		//testplane->Render();
+		//shadowShader->Render(testplane->indexCount, testplane->world,  view, projection,*depthShadowTexture->GetShadowResourceView());
 		
 		testcube->Render();
 		shadowShader->Render(testcube->indexCount, testcube->world[0], view, projection, *depthShadowTexture->GetShadowResourceView());
@@ -189,18 +193,72 @@ void GameMain::PreRender()
 		shadowtestPlane->Render();
 		blurShader->Render(shadowtestPlane->indexCount, shadowtestPlane->world, view, projection, *shadowTexture->GetShadowResourceView());
 	}
-	D3D::Get()->SetDefaultRenderView();
+	
+	{
+		lakeReflectionTexture->SetTarget();
+		lakeReflectionTexture->Clear();
+
+
+		//반사된 세계는 현실 세계에 대해 뒤집혀있으므로 컬모드가 반대다
+		Rasterizer::Get()->SetFrontCullMode();
+
+
+		//반사된 뷰, 프로젝션 받기
+		Camera::Get()->GetMirrorView(&view);
+		D3D::Get()->GetProjection(&projection);
+
+	
+
+
+		//스카이돔, 구름 그리기
+		D3D::Get()->SetDepthStencilState(D3D::DS_state::offState);
+		Rasterizer::Get()->SetOffCullMode();
+		{
+			//반사된 평면에 맞춰서 카메라의 위치, 스카이 플레인의 위치까지 보정해주어야 함
+			D3DXMATRIX world;
+			D3DXVECTOR3 camPos;
+			Camera::Get()->GetPosition(&camPos);
+			camPos.y = -camPos.y + (lake->GetWaterHeigh() * 2.0f);
+			D3DXMatrixTranslation(&world, camPos.x, camPos.y, camPos.z);
+
+
+			skydome->Render();
+			skydomeShader->Render(skydome->getIndexCount(), world, view, projection);
+			D3D::Get()->SetBlender_AddBlend();
+			cloud->Render();
+			skyplaneShader->Render(cloud->getIndexCount(), world, view, projection, cloud->getDiffuseMap(), cloud->getPerlinMap());
+			D3D::Get()->SetBlender_Off();
+		}
+		D3D::Get()->SetDepthStencilState(D3D::DS_state::onState);
+		Rasterizer::Get()->SetOnCullMode();
+
+
+		testcube->Render();
+		normalMapShader->Render(testcube->indexCount, testcube->world[0], view, projection, testcube->diffuseMap, testcube->normalMap, testcube->heightMap, *blurShadowTexture->GetShadowResourceView());
+		normalMapShader->Render(testcube->indexCount, testcube->world[1], view, projection, testcube->diffuseMap, testcube->normalMap, testcube->heightMap, *blurShadowTexture->GetShadowResourceView());
+		normalMapShader->Render(testcube->indexCount, testcube->world[2], view, projection, testcube->diffuseMap, testcube->normalMap, testcube->heightMap, *blurShadowTexture->GetShadowResourceView());
+
+
+		landscape->Render();
+		terrianShader->Render(landscape->getIndexCount(), landscape->getWorld(), view, projection, landscape->getDiffuseMap(), landscape->getNormalMap(), *blurShadowTexture->GetShadowResourceView());
+		Rasterizer::Get()->SetSolid();
+
+		testplane->Render();
+		colorShader->Render(testplane->indexCount, testplane->world, view, projection, D3DXCOLOR(0, 0, 0, 1));
+	}
+
 	
 }
 
 void GameMain::Render()
 {
+	
+
 	D3DXMATRIX view, projection;
 
 
 	Camera::Get()->GetView(&view);
 	D3D::Get()->GetProjection(&projection);
-
 
 
 	D3D::Get()->SetDepthStencilState(D3D::DS_state::offState);
@@ -209,6 +267,8 @@ void GameMain::Render()
 		skydome->Render();
 		skydomeShader->Render(skydome->getIndexCount(), skydome->getWorld(),view, projection );
 
+
+
 		D3D::Get()->SetBlender_AddBlend();
 		cloud->Render();
 		skyplaneShader->Render(cloud->getIndexCount(), cloud->getWorld(), view, projection, cloud->getDiffuseMap(), cloud->getPerlinMap());
@@ -216,8 +276,8 @@ void GameMain::Render()
 	}
 	D3D::Get()->SetDepthStencilState(D3D::DS_state::onState);
 	Rasterizer::Get()->SetOnCullMode();
-
 	
+
 	testcube->Render();
 	normalMapShader->Render(testcube->indexCount, testcube->world[0],view, projection,testcube->diffuseMap, testcube->normalMap, testcube->heightMap, *blurShadowTexture->GetShadowResourceView());
 	normalMapShader->Render(testcube->indexCount, testcube->world[1],view, projection,testcube->diffuseMap, testcube->normalMap, testcube->heightMap, *blurShadowTexture->GetShadowResourceView());
@@ -232,15 +292,8 @@ void GameMain::Render()
 	terrianShader->Render(landscape->getIndexCount(), landscape->getWorld(), view, projection, landscape->getDiffuseMap(), landscape->getNormalMap(), *blurShadowTexture->GetShadowResourceView());
 	Rasterizer::Get()->SetSolid();
 
-	testplane->Render();
-	colorShader->Render(testplane->indexCount, testplane->world, view, projection, D3DXCOLOR(0,0,0,1));
-
-
 
 	//WATER REFLECTION
-
-
-
 	{
 		//스텐실 버퍼 삭제
 		D3D::Get()->ClearDepthStencil(D3D11_CLEAR_STENCIL,0, 0);
@@ -249,9 +302,12 @@ void GameMain::Render()
 		D3D::Get()->SetDepthStencilState(D3D::DS_state::mirrorPlaneRenderState);
 		D3D::Get()->SetBlender_Linear();
 		lake->Render();
-		colorShader->Render(lake->indexCount, lake->world, view, projection, D3DXCOLOR(0.2f,0.5f,1,0.5f));
+		//colorShader->Render(lake->indexCount, lake->world, view, projection, D3DXCOLOR(0, 1, 0, 1));
+		waterShader->Render(lake->indexCount, lake->world, view, projection, nullptr, lake->getNormalTexture(), cloud->getPerlinMap());
 
 
+		//반사 예전 버전
+		
 		//물 위에 그리는 셋팅
 	
 		//깊이버퍼를 삭제하여 다시 그릴수 있게 만듬
@@ -261,15 +317,28 @@ void GameMain::Render()
 		//반사된 세계는 현실 세계에 대해 뒤집혀있으므로 컬모드가 반대다
 		Rasterizer::Get()->SetFrontCullMode();
 
+
 		//반사된 뷰, 프로젝션 받기
 		Camera::Get()->GetMirrorView(&view);
 		D3D::Get()->GetProjection(&projection);
 
-		D3D::Get()->SetDepthStencilState(D3D::DS_state::offState);
+		D3D::Get()->SetDepthStencilState(D3D::DS_state::mirrorSkyplaneState);
+	
+
+		D3DXMATRIX world;
+		D3DXVECTOR3 camPos;
+		Camera::Get()->GetPosition(&camPos);
+
+		camPos.y = -camPos.y + (lake->GetWaterHeigh() * 2.0f);
+
+		D3DXMatrixTranslation(&world, camPos.x, camPos.y, camPos.z);
+
+
 		cloud->Render();
-		skyplaneShader->Render(cloud->getIndexCount(), cloud->getWorld(), view, projection, cloud->getDiffuseMap(), cloud->getPerlinMap());
+		skyplaneShader->Render(cloud->getIndexCount(), world, view, projection, cloud->getDiffuseMap(), cloud->getPerlinMap());
+		
 
-
+		D3D::Get()->SetBlender_AddBlend();
 
 		D3D::Get()->SetDepthStencilState(D3D::DS_state::mirrorObjectRenderState);
 		testcube->Render();
@@ -281,11 +350,12 @@ void GameMain::Render()
 		landscape->Render();
 		terrianShader->Render(landscape->getIndexCount(), landscape->getWorld(), view, projection, landscape->getDiffuseMap(), landscape->getNormalMap(), *blurShadowTexture->GetShadowResourceView());
 
-		D3D::Get()->SetBlender_Off();
-		Rasterizer::Get()->SetOnCullMode();
+		
+		
 	}
 
-	
+	D3D::Get()->SetBlender_Off();
+	Rasterizer::Get()->SetOnCullMode();
 	D3D::Get()->SetDepthStencilState(D3D::DS_state::onState);
 }
 

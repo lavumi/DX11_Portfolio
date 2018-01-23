@@ -9,12 +9,14 @@ Water::Water()
 	: vertexBuffer(nullptr), indexBuffer(nullptr)
 {
 
+	waterHeight = -7.9f;
 
-
-	D3DXMatrixTranslation(&world, 0.0f, -7.9f, 0.0f);
+	D3DXMatrixTranslation(&world, 0.0f, waterHeight, 0.0f);
 
 	CreateBuffer();
 
+	HRESULT hr = D3DX11CreateShaderResourceViewFromFile(D3D::GetDevice(), L"./Terrian/water_normal.jpg", nullptr, nullptr, &normal, nullptr);
+	assert(SUCCEEDED(hr));
 
 }
 
