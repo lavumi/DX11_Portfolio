@@ -11,7 +11,8 @@ SkyplaneShader::SkyplaneShader()
 	data.scale = 0.3f;
 	data.translation = 0.0f;
 
-	UserInterface::AddSkyplane(&data.scale, &data.brightness);
+	speed = 0.0001f;
+	UserInterface::AddSkyplane(&data.scale, &data.brightness, &speed);
 }
 
 SkyplaneShader::~SkyplaneShader()
@@ -25,7 +26,7 @@ void SkyplaneShader::Update()
 
 void SkyplaneShader::Render(UINT indexCount, D3DXMATRIX world, D3DXMATRIX view, D3DXMATRIX projection, ID3D11ShaderResourceView* diffuse, ID3D11ShaderResourceView* perlin)
 {
-	data.translation += 0.0001f;
+	data.translation += speed;
 	if (data.translation >= 1.0f) {
 		data.translation -= 1.0f;
 	}

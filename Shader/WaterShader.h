@@ -11,9 +11,9 @@ public:
 	virtual void Update();
 	virtual void Render(UINT indexCount,
 		D3DXMATRIX world, D3DXMATRIX view, D3DXMATRIX projection,
-		ID3D11ShaderResourceView* diffuseMap,
-		ID3D11ShaderResourceView* normalMap,
-		ID3D11ShaderResourceView* perlin);
+		ID3D11ShaderResourceView * normalMap, 
+		ID3D11ShaderResourceView* perlin, 
+		ID3D11ShaderResourceView * reflectionTexture, ID3D11ShaderResourceView * refractionTexture);
 
 
 

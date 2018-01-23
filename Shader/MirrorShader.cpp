@@ -91,40 +91,6 @@ void MirrorShader::Render(UINT indexCount, D3DXMATRIX world, D3DXMATRIX view, D3
 	D3D::GetDeviceContext()->Unmap(LightBuffer, 0);
 
 
-	//반사된 뷰, 카메라 포지션
-	Camera::Get()->GetView(&mirrorCameraData.view);
-	D3D::Get()->GetProjection(&mirrorCameraData.projection);
-	Camera::Get()->GetPosition(&mirrorCameraData.position);
-	
-	
-	D3DXMATRIX R;
-
-
-	D3DXPLANE plane(0.0f, -1.0f, 0.0f, -7.80f); // xy plane
-	//D3DXPLANE plane(0.0f, 0.0f, 1.0f, -20.0f); // xy plane
-
-	D3DXMatrixReflect(&R, &plane);
-	mirrorCameraData.view =  R* mirrorCameraData.view;
-	
-	D3DXVec3TransformCoord(&mirrorCameraData.position, &mirrorCameraData.position, &R);
-
-	D3DXMatrixTranspose(&mirrorCameraData.view, &mirrorCameraData.view);
-	D3DXMatrixTranspose(&mirrorCameraData.projection, &mirrorCameraData.projection);
-
-	
-	ZeroMemory(&subResource, sizeof(D3D11_MAPPED_SUBRESOURCE));
-	D3D::GetDeviceContext()->Map
-	(
-		mirrorViewBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &subResource
-	);
-
-	memcpy(subResource.pData, &mirrorCameraData, sizeof(MirrorCameraData));
-
-	D3D::GetDeviceContext()->Unmap(mirrorViewBuffer, 0);
-
-
-
-
 	D3D::GetDeviceContext()->PSSetShaderResources(0, 1, diffuseMap);
 	D3D::GetDeviceContext()->PSSetShaderResources(1, 1, &normalMap);
 	D3D::GetDeviceContext()->PSSetShaderResources(2, 1, &heightMap);

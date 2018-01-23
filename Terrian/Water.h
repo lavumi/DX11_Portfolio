@@ -20,8 +20,13 @@ public:
 	float GetWaterHeigh() {
 		return waterHeight;
 	}
+
+	D3DXPLANE getwaterPlane() {
+		return waterPlane;
+	}
 private:
 
+	D3DXPLANE waterPlane;
 	float waterHeight;
 
 

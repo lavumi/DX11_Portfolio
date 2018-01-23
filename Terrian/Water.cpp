@@ -13,6 +13,7 @@ Water::Water()
 
 	D3DXMatrixTranslation(&world, 0.0f, waterHeight, 0.0f);
 
+	waterPlane = D3DXPLANE(0, 1, 0, -waterHeight);
 	CreateBuffer();
 
 	HRESULT hr = D3DX11CreateShaderResourceViewFromFile(D3D::GetDevice(), L"./Terrian/water_normal.jpg", nullptr, nullptr, &normal, nullptr);
@@ -26,6 +27,10 @@ Water::~Water()
 	SAFE_RELEASE(indexBuffer);
 }
 
+
+void Water::Update()
+{
+}
 
 void Water::Render()
 {

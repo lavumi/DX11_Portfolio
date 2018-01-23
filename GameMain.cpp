@@ -41,7 +41,7 @@ void GameMain::Initialize()
 	shadowTexture = new RenderTexture();
 	blurShadowTexture = new RenderTexture();
 	lakeReflectionTexture = new RenderTexture();
-
+	lakeRefractionTexture = new RenderTexture();
 
 	UserInterface::Get();
 	LightManager::Get();
@@ -123,7 +123,7 @@ void GameMain::Update()
 		//depthShadowTexture->SaveTexture(L"depthShadow.png");
 		//shadowTexture->SaveTexture(L"shadow.png");
 		//blurShadowTexture->SaveTexture(L"blur.png");
-		lakeReflectionTexture->SaveTexture(L"Mirror.png");
+		lakeRefractionTexture->SaveTexture(L"Mirror.png");
 		}
 		landscape->changeLOD(frustum);
 
@@ -141,6 +141,7 @@ void GameMain::PreRender()
 	D3DXMatrixIdentity(&view);
 	D3DXMatrixIdentity(&projection);
 
+	//광원의 시점에서 물체까지의 거리(depth)기록
 	{
 
 		depthShadowTexture->SetTarget();
@@ -160,8 +161,8 @@ void GameMain::PreRender()
 
 
 	}
-
-
+	//기록된 depth를 바탕으로 그림자 연산
+	//TODO 여기서 텍스쳐를 여러개 쓰고 각 텍스쳐별로 bias를 따로 설정해주어야 한다.
 	{
 		shadowTexture->SetTarget();
 		shadowTexture->Clear();
@@ -181,7 +182,7 @@ void GameMain::PreRender()
 		landscape->Render();
 		shadowShader->Render(landscape->getIndexCount(), landscape->getWorld(), view, projection, *depthShadowTexture->GetShadowResourceView());
 	}
-
+	//연산된 그림자를 blur 처리
 	{
 		blurShadowTexture->SetTarget(true);
 		blurShadowTexture->Clear(0,0,0,1);
@@ -194,6 +195,7 @@ void GameMain::PreRender()
 		blurShader->Render(shadowtestPlane->indexCount, shadowtestPlane->world, view, projection, *shadowTexture->GetShadowResourceView());
 	}
 	
+	//호수의 반사평면 그리기
 	{
 		lakeReflectionTexture->SetTarget();
 		lakeReflectionTexture->Clear();
@@ -230,8 +232,8 @@ void GameMain::PreRender()
 			D3D::Get()->SetBlender_Off();
 		}
 		D3D::Get()->SetDepthStencilState(D3D::DS_state::onState);
-		Rasterizer::Get()->SetOnCullMode();
-
+		
+		Rasterizer::Get()->SetFrontCullMode();
 
 		testcube->Render();
 		normalMapShader->Render(testcube->indexCount, testcube->world[0], view, projection, testcube->diffuseMap, testcube->normalMap, testcube->heightMap, *blurShadowTexture->GetShadowResourceView());
@@ -240,14 +242,36 @@ void GameMain::PreRender()
 
 
 		landscape->Render();
-		terrianShader->Render(landscape->getIndexCount(), landscape->getWorld(), view, projection, landscape->getDiffuseMap(), landscape->getNormalMap(), *blurShadowTexture->GetShadowResourceView());
-		Rasterizer::Get()->SetSolid();
-
-		testplane->Render();
-		colorShader->Render(testplane->indexCount, testplane->world, view, projection, D3DXCOLOR(0, 0, 0, 1));
+		terrianShader->Render(landscape->getIndexCount(), landscape->getWorld(), view, projection, landscape->getDiffuseMap(), landscape->getNormalMap(), *blurShadowTexture->GetShadowResourceView(),lake->getwaterPlane());
+		Rasterizer::Get()->SetOnCullMode();
 	}
 
-	
+	//호수의 굴절 평면 그리기 
+	//이건 굴절이 아니라 그냥 투시된 형태
+	//TODO : 굴절을 표현하기 위해서 어떻게 해야할까?
+	{
+		lakeRefractionTexture->SetTarget();
+		lakeRefractionTexture->Clear();
+
+		//뷰, 프로젝션 받기
+		Camera::Get()->GetView(&view);
+		D3D::Get()->GetProjection(&projection);
+
+		//testcube->Render();
+		//normalMapShader->Render(testcube->indexCount, testcube->world[0], view, projection, testcube->diffuseMap, testcube->normalMap, testcube->heightMap, *blurShadowTexture->GetShadowResourceView());
+		//normalMapShader->Render(testcube->indexCount, testcube->world[1], view, projection, testcube->diffuseMap, testcube->normalMap, testcube->heightMap, *blurShadowTexture->GetShadowResourceView());
+		//normalMapShader->Render(testcube->indexCount, testcube->world[2], view, projection, testcube->diffuseMap, testcube->normalMap, testcube->heightMap, *blurShadowTexture->GetShadowResourceView());
+
+
+		//호수 아랫면을 랜더링하게 클립면을 바꿔준다
+		D3DXPLANE clipPlane = lake->getwaterPlane();
+		clipPlane *= -1;
+
+
+		landscape->Render();
+		terrianShader->Render(landscape->getIndexCount(), landscape->getWorld(), view, projection, landscape->getDiffuseMap(), landscape->getNormalMap(), *blurShadowTexture->GetShadowResourceView(),clipPlane);
+		Rasterizer::Get()->SetSolid();
+	}
 }
 
 void GameMain::Render()
@@ -289,13 +313,20 @@ void GameMain::Render()
 
 
 	landscape->Render();
-	terrianShader->Render(landscape->getIndexCount(), landscape->getWorld(), view, projection, landscape->getDiffuseMap(), landscape->getNormalMap(), *blurShadowTexture->GetShadowResourceView());
+	terrianShader->Render(landscape->getIndexCount(), landscape->getWorld(), view, projection, landscape->getDiffuseMap(), landscape->getNormalMap(), *blurShadowTexture->GetShadowResourceView(),lake->getwaterPlane());
 	Rasterizer::Get()->SetSolid();
 
 
-	//WATER REFLECTION
+
+	lake->Render();
+	waterShader->Render(lake->indexCount, lake->world, view, projection, lake->getNormalTexture(), cloud->getPerlinMap(), *lakeReflectionTexture->GetShadowResourceView(), *lakeRefractionTexture->GetShadowResourceView());
+
+
+	//WATER REFLECTION OLD ver.
 	{
+		/*
 		//스텐실 버퍼 삭제
+		//1.스텐실 버퍼를 초기화 한 후 그 위에다 거울면을 그린다(깊이 버퍼는 남겨 있기에 적절히 z버퍼로 가려짐)
 		D3D::Get()->ClearDepthStencil(D3D11_CLEAR_STENCIL,0, 0);
 
 		//그려야 할 곳(물)을 스텐실 버퍼에 기록
@@ -304,13 +335,10 @@ void GameMain::Render()
 		lake->Render();
 		//colorShader->Render(lake->indexCount, lake->world, view, projection, D3DXCOLOR(0, 1, 0, 1));
 		waterShader->Render(lake->indexCount, lake->world, view, projection, nullptr, lake->getNormalTexture(), cloud->getPerlinMap());
-
-
-		//반사 예전 버전
+		//호수 모양만 스텐실 버퍼가 기록되어있음
 		
-		//물 위에 그리는 셋팅
-	
-		//깊이버퍼를 삭제하여 다시 그릴수 있게 만듬
+		
+		//깊이버퍼를 삭제하여 다시 호수 위에 그릴수 있게 만듬
 		D3D::Get()->ClearDepthStencil(D3D11_CLEAR_DEPTH, 1, 0);
 
 
@@ -322,9 +350,13 @@ void GameMain::Render()
 		Camera::Get()->GetMirrorView(&view);
 		D3D::Get()->GetProjection(&projection);
 
+
+		//호수면에만 그리도록 뎁스 스텐실 변경해준다
 		D3D::Get()->SetDepthStencilState(D3D::DS_state::mirrorSkyplaneState);
 	
 
+
+		//스카이뷰를 그릴때 카메라 위치도 다시 셋팅해줘야 한다.
 		D3DXMATRIX world;
 		D3DXVECTOR3 camPos;
 		Camera::Get()->GetPosition(&camPos);
@@ -338,6 +370,8 @@ void GameMain::Render()
 		skyplaneShader->Render(cloud->getIndexCount(), world, view, projection, cloud->getDiffuseMap(), cloud->getPerlinMap());
 		
 
+
+		//물과의 색상혼합을 해줌
 		D3D::Get()->SetBlender_AddBlend();
 
 		D3D::Get()->SetDepthStencilState(D3D::DS_state::mirrorObjectRenderState);
@@ -351,7 +385,7 @@ void GameMain::Render()
 		terrianShader->Render(landscape->getIndexCount(), landscape->getWorld(), view, projection, landscape->getDiffuseMap(), landscape->getNormalMap(), *blurShadowTexture->GetShadowResourceView());
 
 		
-		
+		*/
 	}
 
 	D3D::Get()->SetBlender_Off();

@@ -126,10 +126,12 @@
     <ClCompile Include="Shader\WaterShader.cpp">
       <Filter>Shader</Filter>
     </ClCompile>
+    <ClCompile Include="Shader\TerrianReflectionShader.cpp">
+      <Filter>Shader</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameMain.h" />
-    <ClInclude Include="stdafx.h" />
     <ClInclude Include="System\Keyboard.h">
       <Filter>System</Filter>
     </ClInclude>
@@ -262,6 +264,9 @@
     <ClInclude Include="Shader\WaterShader.h">
       <Filter>Shader</Filter>
     </ClInclude>
+    <ClInclude Include="Shader\TerrianReflectionShader.h">
+      <Filter>Shader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="System">
@@ -367,6 +372,9 @@
     </None>
     <None Include="Shader\FX\WaterShader.fx">
       <Filter>Shader\FX</Filter>
+    </None>
+    <None Include="..\..\..\Downloads\tersrc16\source\reflection.vs">
+      <Filter>Shader</Filter>
     </None>
   </ItemGroup>
 </Project>

@@ -54,7 +54,7 @@ private:
 	RenderTexture* blurShadowTexture;
 
 	RenderTexture* lakeReflectionTexture;
-
+	RenderTexture* lakeRefractionTexture;
 
 	Frustum* frustum;
 

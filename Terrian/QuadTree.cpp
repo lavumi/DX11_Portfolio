@@ -422,7 +422,7 @@ void QuadTree::SetNode(Node* node, UINT startX_Idx, UINT startY_Idx, UINT width,
 
 	//TODO 이 부분 수정할 필요 있음 (직접 버텍스에서 받아오던가 높이도 추가하던가
 	node->center = D3DXVECTOR3((float)(startX_Idx + width / 2), 0, (float)(startY_Idx + height / 2));
-	node->radius = (float)max(width, height) *0.71f;
+	node->radius = (float)max(width, height);
 
 	//node->endX = startX_Idx + width - 1;
 	//node->endY = startY_Idx + height - 1;

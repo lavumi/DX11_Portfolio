@@ -25,6 +25,6 @@ private:
 	void CreateBuffers();
 	ID3D11Buffer* skyplaneBuffer;
 
-
+	float speed;
 
 };

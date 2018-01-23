@@ -41,7 +41,7 @@ void WaterShader::Update()
 }
 
 void WaterShader::Render(UINT indexCount, D3DXMATRIX world, D3DXMATRIX view, D3DXMATRIX projection,
-	ID3D11ShaderResourceView * diffuseMap, ID3D11ShaderResourceView * normalMap, ID3D11ShaderResourceView* perlin)
+	ID3D11ShaderResourceView * normalMap, ID3D11ShaderResourceView* perlin, ID3D11ShaderResourceView * reflectionTexture, ID3D11ShaderResourceView * refractionTexture)
 {
 	SetMatrix(world, view, projection);
 
@@ -127,9 +127,11 @@ void WaterShader::Render(UINT indexCount, D3DXMATRIX world, D3DXMATRIX view, D3D
 
 
 
-	D3D::GetDeviceContext()->PSSetShaderResources(0, 1, &diffuseMap);
+	
 	D3D::GetDeviceContext()->PSSetShaderResources(1, 1, &normalMap);
 	D3D::GetDeviceContext()->PSSetShaderResources(2, 1, &perlin);
+	D3D::GetDeviceContext()->PSSetShaderResources(3, 1, &reflectionTexture);
+	D3D::GetDeviceContext()->PSSetShaderResources(4, 1, &refractionTexture);
 
 	D3D::GetDeviceContext()->VSSetConstantBuffers(1, 1, &cameraPosBuffer);
 	D3D::GetDeviceContext()->VSSetConstantBuffers(2, 1, &LightBuffer);

@@ -10,7 +10,7 @@ void Shader::Update()
 }
 
 
-void Shader::SetMatrix(D3DXMATRIX world, D3DXMATRIX view, D3DXMATRIX projection)
+void Shader::SetMatrix(D3DXMATRIX& world, D3DXMATRIX& view, D3DXMATRIX& projection)
 {
 	D3D11_MAPPED_SUBRESOURCE subResource = { 0 };
 

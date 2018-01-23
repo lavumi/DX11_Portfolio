@@ -7,7 +7,7 @@ class Shader
 {
 public:
 
-	void SetMatrix(D3DXMATRIX world, D3DXMATRIX view, D3DXMATRIX projection);
+	void SetMatrix(D3DXMATRIX& world, D3DXMATRIX& view, D3DXMATRIX& projection);
 
 	
 protected:

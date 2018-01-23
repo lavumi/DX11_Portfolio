@@ -34,20 +34,21 @@ void UserInterface::AddMaterial(string groupName, D3DXCOLOR * ambient, D3DXCOLOR
 void UserInterface::AddSkydome(D3DXCOLOR * apex, D3DXCOLOR * center)
 {
 	TwAddVarRW(bar, "Apex", TW_TYPE_COLOR3F, apex, "group='Sky'");
-	TwAddVarRW(bar, "Center", TW_TYPE_COLOR3F, center, "ground='Sky'");
+	TwAddVarRW(bar, "Center", TW_TYPE_COLOR3F, center, "group='Sky'");
 }
 
-void UserInterface::AddSkyplane(float* scale, float* brightness)
+void UserInterface::AddSkyplane(float* scale, float* brightness, float* speed)
 {
-	TwAddVarRW(bar, "scale", TW_TYPE_FLOAT, scale, "min=0 max=40 group='Skyplane'");
-	TwAddVarRW(bar, "brightness", TW_TYPE_FLOAT, brightness, "min=0 max=40 group='Skyplane'");
+	TwAddVarRW(bar, "speed", TW_TYPE_FLOAT, speed, "min=0 max=1 step=0.0001 group='Cloud'");
+	TwAddVarRW(bar, "scale", TW_TYPE_FLOAT, scale, "min=0 max=1 step=0.1 group='Cloud'");
+	TwAddVarRW(bar, "brightness", TW_TYPE_FLOAT, brightness, "min=0 max=1 step=0.1 group='Cloud'");
 }
 
 void UserInterface::AddWave(float * translation, float * size, float* angle)
 {
 	TwAddVarRW(bar, "translation", TW_TYPE_FLOAT, translation, "min=0 max=1 step=0.001 group='Water'");
-	TwAddVarRW(bar, "size", TW_TYPE_FLOAT, size, "min=0 max=40 group='Water'");
-	TwAddVarRW(bar, "angle", TW_TYPE_FLOAT, angle, "min=0 max=180 step=5 group='Water'");
+	TwAddVarRW(bar, "size", TW_TYPE_FLOAT, size, "min=0 max=50 group='Water'");
+	TwAddVarRW(bar, "angle", TW_TYPE_FLOAT, angle, "min=0 max=360 step=5 group='Water'");
 }
 
 void UserInterface::AddBrushMenu(int * type, int * size, float * type2, int* imagenum)

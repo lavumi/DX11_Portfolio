@@ -186,6 +186,7 @@
     <ClInclude Include="Shader\MirrorShader.h" />
     <ClInclude Include="Shader\ShadowShader.h" />
     <ClInclude Include="Shader\SkyplaneShader.h" />
+    <ClInclude Include="Shader\TerrianReflectionShader.h" />
     <ClInclude Include="Shader\TextureShader.h" />
     <ClInclude Include="Shader\NormalMapShader.h" />
     <ClInclude Include="Shader\Shader.h" />
@@ -196,7 +197,6 @@
     <ClInclude Include="Shader\WorldBuffer.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
     </ClInclude>
-    <ClInclude Include="stdafx.h" />
     <ClInclude Include="System\D3D.h" />
     <ClInclude Include="System\Frames.h" />
     <ClInclude Include="System\Keyboard.h" />
@@ -235,6 +235,7 @@
     <ClCompile Include="Shader\MirrorShader.cpp" />
     <ClCompile Include="Shader\ShadowShader.cpp" />
     <ClCompile Include="Shader\SkyplaneShader.cpp" />
+    <ClCompile Include="Shader\TerrianReflectionShader.cpp" />
     <ClCompile Include="Shader\TextureShader.cpp" />
     <ClCompile Include="Shader\NormalMapShader.cpp" />
     <ClCompile Include="Shader\Shader.cpp" />
@@ -255,6 +256,7 @@
     <ClCompile Include="WinMain.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\..\Downloads\tersrc16\source\reflection.vs" />
     <None Include="Mesh\Mesh.fx">
       <FileType>Document</FileType>
     </None>
