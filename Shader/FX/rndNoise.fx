@@ -30,9 +30,7 @@ float CosineLerp(float x, float y, float fractional)
     return x * (1.0f - f) + y * f;
 }
 
-#define ONE 0.00390625
-#define ONEHALF 0.001953125
-
+//망함. 쓰지 말자
 float Noise(float2 uv)
 {
    float result = frac(cos(dot(uv, float2(52.49024f, 11.23151f))) * 41214.3215);

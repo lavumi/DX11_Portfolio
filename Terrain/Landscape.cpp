@@ -5,7 +5,7 @@
 //#include "../ProceduralTexture/RNDNoise.h"
 
 Landscape::Landscape()
-	:heightMapFile(L"./Terrian/heightmap.jpg")
+	:heightMapFile(L"./Terrain/heightmap.jpg")
 
 {
 	LoadHeightMap();
@@ -26,15 +26,15 @@ Landscape::Landscape()
 
 	diffuseMap = new ID3D11ShaderResourceView*[3];
 
-	HRESULT hr = D3DX11CreateShaderResourceViewFromFile(D3D::GetDevice(), L"./Terrian/normal.jpg", nullptr, nullptr, &normalMap, nullptr);
+	HRESULT hr = D3DX11CreateShaderResourceViewFromFile(D3D::GetDevice(), L"./Terrain/normal.jpg", nullptr, nullptr, &normalMap, nullptr);
 	
 
 
 
 	assert(SUCCEEDED(hr));
-	hr = D3DX11CreateShaderResourceViewFromFile(D3D::GetDevice(), L"./Terrian/underwater.jpg", nullptr, nullptr, &diffuseMap[1], nullptr);
+	hr = D3DX11CreateShaderResourceViewFromFile(D3D::GetDevice(), L"./Terrain/underwater.jpg", nullptr, nullptr, &diffuseMap[1], nullptr);
 	assert(SUCCEEDED(hr));
-	hr = D3DX11CreateShaderResourceViewFromFile(D3D::GetDevice(), L"./Terrian/mountain.jpg", nullptr, nullptr, &diffuseMap[2], nullptr);
+	hr = D3DX11CreateShaderResourceViewFromFile(D3D::GetDevice(), L"./Terrain/mountain.jpg", nullptr, nullptr, &diffuseMap[2], nullptr);
 	assert(SUCCEEDED(hr));
 
 }

@@ -18,8 +18,7 @@ private:
 	struct SkyplaneData {
 		float translation;
 		float scale;
-		float brightness;
-		float padding;
+		D3DXVECTOR2 pad;
 	} data;
 
 	void CreateBuffers();

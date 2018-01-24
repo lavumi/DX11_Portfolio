@@ -24,7 +24,7 @@ class SkydomeShader;
 class ShadowShader;
 class BlurShader;
 class MirrorShader;
-class TerrianShader;
+class TerrainShader;
 class ColorShader;
 class SkyplaneShader;
 class WaterShader;
@@ -44,6 +44,7 @@ public:
 private:
 
 	static bool landscapeWireFrame;
+	bool LodOff;
 
 
 	void ControlCamera();
@@ -84,7 +85,7 @@ private:
 	ShadowShader* shadowShader;
 	BlurShader* blurShader;
 	MirrorShader* mirrorShader;
-	TerrianShader* terrianShader;
+	TerrainShader* terrainShader;
 	ColorShader* colorShader;
 	SkyplaneShader* skyplaneShader;
 	WaterShader* waterShader;

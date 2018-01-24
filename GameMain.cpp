@@ -9,10 +9,10 @@
 #include "./ProceduralTexture/MosaicTile.h"
 #include "./ProceduralTexture/RNDNoise.h"
 
-#include "./Terrian/Skydome.h"
-#include "./Terrian/Skyplane.h"
-#include "./Terrian/Landscape.h"
-#include "./Terrian/Water.h"
+#include "./Terrain/Skydome.h"
+#include "./Terrain/Skyplane.h"
+#include "./Terrain/Landscape.h"
+#include "./Terrain/Water.h"
 
 
 #include "./Object/TestCube.h"
@@ -26,7 +26,7 @@
 #include "../Shader/ShadowShader.h"
 #include "../Shader/BlurShader.h"
 #include "../Shader/MirrorShader.h"
-#include "../Shader/TerrianShader.h"
+#include "../Shader/TerrainShader.h"
 #include "../Shader/ColorShader.h"
 #include "../Shader/WaterShader.h"
 #include "../Shader/SkyplaneShader.h"
@@ -70,7 +70,7 @@ void GameMain::Initialize()
 	shadowShader = new ShadowShader();
 	blurShader = new BlurShader();
 	mirrorShader = new MirrorShader();
-	terrianShader = new TerrianShader();
+	terrainShader = new TerrainShader();
 	colorShader = new ColorShader();
 	skyplaneShader = new SkyplaneShader();
 	waterShader = new WaterShader();
@@ -82,6 +82,7 @@ void GameMain::Initialize()
 	grass->DrawTexture();
 	landscape->SetTexture(grass->diffuse, nullptr, nullptr);
 	
+	LodOff = false;
 }
 
 void GameMain::Destroy()
@@ -123,12 +124,13 @@ void GameMain::Update()
 		//depthShadowTexture->SaveTexture(L"depthShadow.png");
 		//shadowTexture->SaveTexture(L"shadow.png");
 		//blurShadowTexture->SaveTexture(L"blur.png");
-		lakeRefractionTexture->SaveTexture(L"Mirror.png");
-		}
-		landscape->changeLOD(frustum);
+	//	lakeRefractionTexture->SaveTexture(L"Mirror.png");
+		LodOff = !LodOff;
+	}
+	if(!LodOff)		landscape->changeLOD(frustum);
 
 
-	if (Keyboard::Get()->KeyUp('1')) {
+	if (Keyboard::Get()->KeyUp('P')) {
 		landscapeWireFrame = !landscapeWireFrame;
 	}
 
@@ -152,9 +154,9 @@ void GameMain::PreRender()
 
 
 		testcube->Render();
-		depthShadowShader->Render(testcube->indexCount, testcube->world[0],view, projection);
-		depthShadowShader->Render(testcube->indexCount, testcube->world[1],view, projection);
-		depthShadowShader->Render(testcube->indexCount, testcube->world[2],view, projection);
+		for (int i = 0; i < 6; i++) {
+			depthShadowShader->Render(testcube->indexCount, testcube->world[i], view, projection);
+		}
 
 		landscape->Render();
 		depthShadowShader->Render(landscape->getIndexCount(), landscape->getWorld(),view, projection);
@@ -174,9 +176,9 @@ void GameMain::PreRender()
 		//shadowShader->Render(testplane->indexCount, testplane->world,  view, projection,*depthShadowTexture->GetShadowResourceView());
 		
 		testcube->Render();
-		shadowShader->Render(testcube->indexCount, testcube->world[0], view, projection, *depthShadowTexture->GetShadowResourceView());
-		shadowShader->Render(testcube->indexCount, testcube->world[1], view, projection, *depthShadowTexture->GetShadowResourceView());
-		shadowShader->Render(testcube->indexCount, testcube->world[2], view, projection, *depthShadowTexture->GetShadowResourceView());
+		for (int i = 0; i < 6; i++) {
+			shadowShader->Render(testcube->indexCount, testcube->world[i], view, projection, *depthShadowTexture->GetShadowResourceView());
+		}
 		
 		
 		landscape->Render();
@@ -236,13 +238,15 @@ void GameMain::PreRender()
 		Rasterizer::Get()->SetFrontCullMode();
 
 		testcube->Render();
-		normalMapShader->Render(testcube->indexCount, testcube->world[0], view, projection, testcube->diffuseMap, testcube->normalMap, testcube->heightMap, *blurShadowTexture->GetShadowResourceView());
-		normalMapShader->Render(testcube->indexCount, testcube->world[1], view, projection, testcube->diffuseMap, testcube->normalMap, testcube->heightMap, *blurShadowTexture->GetShadowResourceView());
-		normalMapShader->Render(testcube->indexCount, testcube->world[2], view, projection, testcube->diffuseMap, testcube->normalMap, testcube->heightMap, *blurShadowTexture->GetShadowResourceView());
-
+		for (int i = 0; i < 6; i++) {
+			normalMapShader->Render(testcube->indexCount, testcube->world[i], view, projection, testcube->diffuseMap, testcube->normalMap, testcube->heightMap, *blurShadowTexture->GetShadowResourceView());
+		}
+		
+		if (landscapeWireFrame)
+			Rasterizer::Get()->SetWireframe();
 
 		landscape->Render();
-		terrianShader->Render(landscape->getIndexCount(), landscape->getWorld(), view, projection, landscape->getDiffuseMap(), landscape->getNormalMap(), *blurShadowTexture->GetShadowResourceView(),lake->getwaterPlane());
+		terrainShader->Render(landscape->getIndexCount(), landscape->getWorld(), view, projection, landscape->getDiffuseMap(), landscape->getNormalMap(), *blurShadowTexture->GetShadowResourceView(),lake->getwaterPlane());
 		Rasterizer::Get()->SetOnCullMode();
 	}
 
@@ -258,18 +262,20 @@ void GameMain::PreRender()
 		D3D::Get()->GetProjection(&projection);
 
 		//testcube->Render();
-		//normalMapShader->Render(testcube->indexCount, testcube->world[0], view, projection, testcube->diffuseMap, testcube->normalMap, testcube->heightMap, *blurShadowTexture->GetShadowResourceView());
-		//normalMapShader->Render(testcube->indexCount, testcube->world[1], view, projection, testcube->diffuseMap, testcube->normalMap, testcube->heightMap, *blurShadowTexture->GetShadowResourceView());
-		//normalMapShader->Render(testcube->indexCount, testcube->world[2], view, projection, testcube->diffuseMap, testcube->normalMap, testcube->heightMap, *blurShadowTexture->GetShadowResourceView());
-
+		//for (int i = 0; i < 6; i++) {
+		//	normalMapShader->Render(testcube->indexCount, testcube->world[i], view, projection, testcube->diffuseMap, testcube->normalMap, testcube->heightMap, *blurShadowTexture->GetShadowResourceView());
+		//}
+		
 
 		//호수 아랫면을 랜더링하게 클립면을 바꿔준다
 		D3DXPLANE clipPlane = lake->getwaterPlane();
 		clipPlane *= -1;
 
 
+		if (landscapeWireFrame)
+			Rasterizer::Get()->SetWireframe();
 		landscape->Render();
-		terrianShader->Render(landscape->getIndexCount(), landscape->getWorld(), view, projection, landscape->getDiffuseMap(), landscape->getNormalMap(), *blurShadowTexture->GetShadowResourceView(),clipPlane);
+		terrainShader->Render(landscape->getIndexCount(), landscape->getWorld(), view, projection, landscape->getDiffuseMap(), landscape->getNormalMap(), *blurShadowTexture->GetShadowResourceView(),clipPlane);
 		Rasterizer::Get()->SetSolid();
 	}
 }
@@ -303,17 +309,16 @@ void GameMain::Render()
 	
 
 	testcube->Render();
-	normalMapShader->Render(testcube->indexCount, testcube->world[0],view, projection,testcube->diffuseMap, testcube->normalMap, testcube->heightMap, *blurShadowTexture->GetShadowResourceView());
-	normalMapShader->Render(testcube->indexCount, testcube->world[1],view, projection,testcube->diffuseMap, testcube->normalMap, testcube->heightMap, *blurShadowTexture->GetShadowResourceView());
-	normalMapShader->Render(testcube->indexCount, testcube->world[2],view, projection,testcube->diffuseMap, testcube->normalMap, testcube->heightMap, *blurShadowTexture->GetShadowResourceView());
-
+	for (int i = 0; i < 6; i++) {
+		normalMapShader->Render(testcube->indexCount, testcube->world[i], view, projection, testcube->diffuseMap, testcube->normalMap, testcube->heightMap, *blurShadowTexture->GetShadowResourceView());
+	}
 	
 	if(landscapeWireFrame)
 		Rasterizer::Get()->SetWireframe();
 
 
 	landscape->Render();
-	terrianShader->Render(landscape->getIndexCount(), landscape->getWorld(), view, projection, landscape->getDiffuseMap(), landscape->getNormalMap(), *blurShadowTexture->GetShadowResourceView(),lake->getwaterPlane());
+	terrainShader->Render(landscape->getIndexCount(), landscape->getWorld(), view, projection, landscape->getDiffuseMap(), landscape->getNormalMap(), *blurShadowTexture->GetShadowResourceView(),lake->getwaterPlane());
 	Rasterizer::Get()->SetSolid();
 
 
@@ -376,13 +381,13 @@ void GameMain::Render()
 
 		D3D::Get()->SetDepthStencilState(D3D::DS_state::mirrorObjectRenderState);
 		testcube->Render();
-		normalMapShader->Render(testcube->indexCount, testcube->world[0], view, projection, testcube->diffuseMap, testcube->normalMap, testcube->heightMap, *blurShadowTexture->GetShadowResourceView());
-		normalMapShader->Render(testcube->indexCount, testcube->world[1], view, projection, testcube->diffuseMap, testcube->normalMap, testcube->heightMap, *blurShadowTexture->GetShadowResourceView());
-		normalMapShader->Render(testcube->indexCount, testcube->world[2], view, projection, testcube->diffuseMap, testcube->normalMap, testcube->heightMap, *blurShadowTexture->GetShadowResourceView());
-
+		for (int i = 0; i < 6; i++) {
+		normalMapShader->Render(testcube->indexCount, testcube->world[i], view, projection, testcube->diffuseMap, testcube->normalMap, testcube->heightMap, *blurShadowTexture->GetShadowResourceView());
+		}
+		
 		
 		landscape->Render();
-		terrianShader->Render(landscape->getIndexCount(), landscape->getWorld(), view, projection, landscape->getDiffuseMap(), landscape->getNormalMap(), *blurShadowTexture->GetShadowResourceView());
+		terrainShader->Render(landscape->getIndexCount(), landscape->getWorld(), view, projection, landscape->getDiffuseMap(), landscape->getNormalMap(), *blurShadowTexture->GetShadowResourceView());
 
 		
 		*/

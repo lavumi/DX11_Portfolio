@@ -16,7 +16,7 @@ Water::Water()
 	waterPlane = D3DXPLANE(0, 1, 0, -waterHeight);
 	CreateBuffer();
 
-	HRESULT hr = D3DX11CreateShaderResourceViewFromFile(D3D::GetDevice(), L"./Terrian/water_normal.jpg", nullptr, nullptr, &normal, nullptr);
+	HRESULT hr = D3DX11CreateShaderResourceViewFromFile(D3D::GetDevice(), L"./Terrain/water_normal.jpg", nullptr, nullptr, &normal, nullptr);
 	assert(SUCCEEDED(hr));
 
 }

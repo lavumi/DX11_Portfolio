@@ -1,7 +1,7 @@
-#include "TerrianShader.h"
+#include "TerrainReflectionShader.h"
 
-TerrianShader::TerrianShader()
-	:Shader(L"./Shader/FX/Terrian.fx")
+TerrainReflectionShader::TerrainReflectionShader()
+	:Shader(L"./Shader/FX/Terrain.fx")
 {
 	CreateInputLayout(VertexTextureNormalTangent::desc, VertexTextureNormalTangent::count);
 
@@ -14,7 +14,7 @@ TerrianShader::TerrianShader()
 	material.globalAmbient = D3DXCOLOR(0.6f, 0.6f, 0.6f, 1.0f);
 }
 
-TerrianShader::~TerrianShader()
+TerrainReflectionShader::~TerrainReflectionShader()
 {
 	SAFE_RELEASE(LightBuffer);
 	SAFE_RELEASE(MaterialBuffer);
@@ -22,14 +22,12 @@ TerrianShader::~TerrianShader()
 
 }
 
-void TerrianShader::Update()
+void TerrainReflectionShader::Update()
 {
 
 }
 
-void TerrianShader::Render(UINT indexCount, D3DXMATRIX world, D3DXMATRIX view, D3DXMATRIX projection, 
-	ID3D11ShaderResourceView ** diffuseMap, ID3D11ShaderResourceView* normalMap, ID3D11ShaderResourceView* lightMap,
-	D3DXPLANE clipPlane)
+void TerrainReflectionShader::Render(UINT indexCount, D3DXMATRIX world, D3DXMATRIX view, D3DXMATRIX projection, ID3D11ShaderResourceView ** diffuseMap, ID3D11ShaderResourceView* normalMap, ID3D11ShaderResourceView* lightMap)
 {
 	SetMatrix(world, view, projection);
 
@@ -83,20 +81,6 @@ void TerrianShader::Render(UINT indexCount, D3DXMATRIX world, D3DXMATRIX view, D
 
 
 
-
-
-	D3DXVECTOR4 clipPlaneData = D3DXVECTOR4(clipPlane.a, clipPlane.b, clipPlane.c, clipPlane.d);
-
-	ZeroMemory(&subResource, sizeof(D3D11_MAPPED_SUBRESOURCE));
-	D3D::GetDeviceContext()->Map
-	(
-		clipPlaneBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &subResource
-	);
-
-	memcpy(subResource.pData, &clipPlaneData, sizeof(D3DXVECTOR4));
-
-	D3D::GetDeviceContext()->Unmap(clipPlaneBuffer, 0);
-
 	
 
 	D3D::GetDeviceContext()->PSSetShaderResources(10, 3, diffuseMap);
@@ -104,11 +88,11 @@ void TerrianShader::Render(UINT indexCount, D3DXMATRIX world, D3DXMATRIX view, D
 	D3D::GetDeviceContext()->PSSetShaderResources(2, 1, &normalMap);
 
 
-	D3D::GetDeviceContext()->PSSetConstantBuffers(0, 1, &MaterialBuffer);
 
+	D3D::GetDeviceContext()->PSSetConstantBuffers(0, 1, &MaterialBuffer);
 	D3D::GetDeviceContext()->VSSetConstantBuffers(2, 1, &LightBuffer);
 	D3D::GetDeviceContext()->VSSetConstantBuffers(3, 1, &ExtraBuffer);
-	D3D::GetDeviceContext()->VSSetConstantBuffers(11, 1, &clipPlaneBuffer);
+
 
 
 
@@ -127,7 +111,7 @@ void TerrianShader::Render(UINT indexCount, D3DXMATRIX world, D3DXMATRIX view, D
 
 }
 
-void TerrianShader::CreateBuffers()
+void TerrainReflectionShader::CreateBuffers()
 {
 	D3D11_BUFFER_DESC desc;
 	HRESULT hr;
@@ -165,17 +149,5 @@ void TerrianShader::CreateBuffers()
 	desc.StructureByteStride = 0;
 
 	hr = D3D::GetDevice()->CreateBuffer(&desc, NULL, &ExtraBuffer);
-	assert(SUCCEEDED(hr));
-
-
-	ZeroMemory(&desc, sizeof(D3D11_BUFFER_DESC));
-	desc.Usage = D3D11_USAGE_DYNAMIC;
-	desc.ByteWidth = sizeof(D3DXVECTOR4);
-	desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-	desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-	desc.MiscFlags = 0;
-	desc.StructureByteStride = 0;
-
-	hr = D3D::GetDevice()->CreateBuffer(&desc, NULL, &clipPlaneBuffer);
 	assert(SUCCEEDED(hr));
 }

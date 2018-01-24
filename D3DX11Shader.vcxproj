@@ -186,13 +186,13 @@
     <ClInclude Include="Shader\MirrorShader.h" />
     <ClInclude Include="Shader\ShadowShader.h" />
     <ClInclude Include="Shader\SkyplaneShader.h" />
-    <ClInclude Include="Shader\TerrianReflectionShader.h" />
+    <ClInclude Include="Shader\TerrainReflectionShader.h" />
     <ClInclude Include="Shader\TextureShader.h" />
     <ClInclude Include="Shader\NormalMapShader.h" />
     <ClInclude Include="Shader\Shader.h" />
     <ClInclude Include="Shader\ShaderBuffer.h" />
     <ClInclude Include="Shader\SkydomeShader.h" />
-    <ClInclude Include="Shader\TerrianShader.h" />
+    <ClInclude Include="Shader\TerrainShader.h" />
     <ClInclude Include="Shader\WaterShader.h" />
     <ClInclude Include="Shader\WorldBuffer.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
@@ -203,11 +203,11 @@
     <ClInclude Include="System\Mouse.h" />
     <ClInclude Include="System\TweakBar.h" />
     <ClInclude Include="System\Window.h" />
-    <ClInclude Include="Terrian\Landscape.h" />
-    <ClInclude Include="Terrian\QuadTree.h" />
-    <ClInclude Include="Terrian\Skydome.h" />
-    <ClInclude Include="Terrian\Skyplane.h" />
-    <ClInclude Include="Terrian\Water.h" />
+    <ClInclude Include="Terrain\Landscape.h" />
+    <ClInclude Include="Terrain\QuadTree.h" />
+    <ClInclude Include="Terrain\Skydome.h" />
+    <ClInclude Include="Terrain\Skyplane.h" />
+    <ClInclude Include="Terrain\Water.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera\Camera.cpp" />
@@ -235,12 +235,12 @@
     <ClCompile Include="Shader\MirrorShader.cpp" />
     <ClCompile Include="Shader\ShadowShader.cpp" />
     <ClCompile Include="Shader\SkyplaneShader.cpp" />
-    <ClCompile Include="Shader\TerrianReflectionShader.cpp" />
+    <ClCompile Include="Shader\TerrainReflectionShader.cpp" />
     <ClCompile Include="Shader\TextureShader.cpp" />
     <ClCompile Include="Shader\NormalMapShader.cpp" />
     <ClCompile Include="Shader\Shader.cpp" />
     <ClCompile Include="Shader\SkydomeShader.cpp" />
-    <ClCompile Include="Shader\TerrianShader.cpp" />
+    <ClCompile Include="Shader\TerrainShader.cpp" />
     <ClCompile Include="Shader\WaterShader.cpp" />
     <ClCompile Include="System\D3D.cpp" />
     <ClCompile Include="System\Frames.cpp" />
@@ -248,15 +248,14 @@
     <ClCompile Include="System\Mouse.cpp" />
     <ClCompile Include="System\TweakBar.cpp" />
     <ClCompile Include="System\Window.cpp" />
-    <ClCompile Include="Terrian\Landscape.cpp" />
-    <ClCompile Include="Terrian\QuadTree.cpp" />
-    <ClCompile Include="Terrian\Skydome.cpp" />
-    <ClCompile Include="Terrian\Skyplane.cpp" />
-    <ClCompile Include="Terrian\Water.cpp" />
+    <ClCompile Include="Terrain\Landscape.cpp" />
+    <ClCompile Include="Terrain\QuadTree.cpp" />
+    <ClCompile Include="Terrain\Skydome.cpp" />
+    <ClCompile Include="Terrain\Skyplane.cpp" />
+    <ClCompile Include="Terrain\Water.cpp" />
     <ClCompile Include="WinMain.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\..\Downloads\tersrc16\source\reflection.vs" />
     <None Include="Mesh\Mesh.fx">
       <FileType>Document</FileType>
     </None>
@@ -290,9 +289,6 @@
       <FileType>Document</FileType>
     </None>
     <None Include="Shader\FX\rndNoise.fx">
-      <FileType>Document</FileType>
-    </None>
-    <None Include="Shader\FX\rndSRTBlend.fx">
       <FileType>Document</FileType>
     </None>
     <None Include="Shader\FX\singleGrass.fx">
@@ -336,7 +332,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shader\FX\Terrian.fx">
+    <None Include="Shader\FX\Terrain.fx">
       <FileType>Document</FileType>
     </None>
   </ItemGroup>
