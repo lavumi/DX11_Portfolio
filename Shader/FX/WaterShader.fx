@@ -182,8 +182,8 @@ float4 PS(PixelInput input) : SV_TARGET
     projectTexCoord.y = -input.viewPosition.y / input.viewPosition.w / 2.0f + 0.5f;
 
 
-    float4 reflection = _reflectionMap.Sample(samp[0], projectTexCoord);
-    float4 refraction = _refractionMap.Sample(samp[0], projectTexCoord);
+    float4 reflection = _reflectionMap.Sample(samp[0], projectTexCoord + normal.xy*0.01f);
+    float4 refraction = _refractionMap.Sample(samp[0], projectTexCoord + normal.xy*0.01f);
 
 
 
