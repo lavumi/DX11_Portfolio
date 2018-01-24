@@ -2,10 +2,10 @@
 
 #include "Shader.h"
 
-class TerrianReflectionShader : public Shader {
+class TerrainReflectionShader : public Shader {
 public:
-	TerrianReflectionShader();
-	~TerrianReflectionShader();
+	TerrainReflectionShader();
+	~TerrainReflectionShader();
 
 
 	virtual void Update();

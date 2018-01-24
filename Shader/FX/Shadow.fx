@@ -82,7 +82,7 @@ float4 PS(PixelInput input) : SV_TARGET
 
     float shadow = 0.3f;
     float2 projectTexCoord;
-    float lightIntensity;
+  
     projectTexCoord.x = input.lightWorldPosition.x / input.lightWorldPosition.w / 2.0f + 0.5f;
     projectTexCoord.y = -input.lightWorldPosition.y / input.lightWorldPosition.w / 2.0f + 0.5f;
 
@@ -91,6 +91,9 @@ float4 PS(PixelInput input) : SV_TARGET
 
     float depthValue;
     float lightDepthValue;
+    float lightIntensity;
+
+    //라이트 텍스쳐가 존재하는 부분만 그림자 처리 연산
     if ((saturate(projectTexCoord.x) == projectTexCoord.x) && (saturate(projectTexCoord.y) == projectTexCoord.y))
     {
         depthValue = _lightMap.Sample(samp[2], projectTexCoord).r;

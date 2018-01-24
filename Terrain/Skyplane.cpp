@@ -17,11 +17,11 @@ Skyplane::Skyplane()
 
 	D3DXMatrixIdentity(&world);
 
-	HRESULT hr = D3DX11CreateShaderResourceViewFromFile(D3D::GetDevice(), L"./Terrian/cloud001.dds", nullptr, nullptr, &diffuse, nullptr);
+	HRESULT hr = D3DX11CreateShaderResourceViewFromFile(D3D::GetDevice(), L"./Terrain/cloud001.dds", nullptr, nullptr, &diffuse, nullptr);
 
 	assert(SUCCEEDED(hr));
 
-	hr = D3DX11CreateShaderResourceViewFromFile(D3D::GetDevice(), L"./Terrian/perturb001.dds", nullptr, nullptr, &perlin, nullptr);
+	hr = D3DX11CreateShaderResourceViewFromFile(D3D::GetDevice(), L"./Terrain/perturb001.dds", nullptr, nullptr, &perlin, nullptr);
 
 	assert(SUCCEEDED(hr));
 }

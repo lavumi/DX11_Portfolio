@@ -93,23 +93,8 @@
     <ClCompile Include="Render\Frustum.cpp">
       <Filter>Render</Filter>
     </ClCompile>
-    <ClCompile Include="Shader\TerrianShader.cpp">
-      <Filter>Shader</Filter>
-    </ClCompile>
-    <ClCompile Include="Terrian\Landscape.cpp">
-      <Filter>Terrian</Filter>
-    </ClCompile>
-    <ClCompile Include="Terrian\Skydome.cpp">
-      <Filter>Terrian</Filter>
-    </ClCompile>
-    <ClCompile Include="Terrian\QuadTree.cpp">
-      <Filter>Terrian</Filter>
-    </ClCompile>
     <ClCompile Include="Shader\BlurShader.cpp">
       <Filter>Shader</Filter>
-    </ClCompile>
-    <ClCompile Include="Terrian\Water.cpp">
-      <Filter>Terrian</Filter>
     </ClCompile>
     <ClCompile Include="Shader\TextureShader.cpp">
       <Filter>Shader</Filter>
@@ -117,17 +102,32 @@
     <ClCompile Include="Shader\ColorShader.cpp">
       <Filter>Shader</Filter>
     </ClCompile>
-    <ClCompile Include="Terrian\Skyplane.cpp">
-      <Filter>Terrian</Filter>
-    </ClCompile>
     <ClCompile Include="Shader\SkyplaneShader.cpp">
       <Filter>Shader</Filter>
     </ClCompile>
     <ClCompile Include="Shader\WaterShader.cpp">
       <Filter>Shader</Filter>
     </ClCompile>
-    <ClCompile Include="Shader\TerrianReflectionShader.cpp">
+    <ClCompile Include="Shader\TerrainReflectionShader.cpp">
       <Filter>Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader\TerrainShader.cpp">
+      <Filter>Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="Terrain\Water.cpp">
+      <Filter>Terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="Terrain\Landscape.cpp">
+      <Filter>Terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="Terrain\QuadTree.cpp">
+      <Filter>Terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="Terrain\Skydome.cpp">
+      <Filter>Terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="Terrain\Skyplane.cpp">
+      <Filter>Terrain</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -234,29 +234,11 @@
     <ClInclude Include="Render\Frustum.h">
       <Filter>Render</Filter>
     </ClInclude>
-    <ClInclude Include="Shader\TerrianShader.h">
-      <Filter>Shader</Filter>
-    </ClInclude>
-    <ClInclude Include="Terrian\Skydome.h">
-      <Filter>Terrian</Filter>
-    </ClInclude>
-    <ClInclude Include="Terrian\Landscape.h">
-      <Filter>Terrian</Filter>
-    </ClInclude>
-    <ClInclude Include="Terrian\QuadTree.h">
-      <Filter>Terrian</Filter>
-    </ClInclude>
-    <ClInclude Include="Terrian\Water.h">
-      <Filter>Terrian</Filter>
-    </ClInclude>
     <ClInclude Include="Shader\TextureShader.h">
       <Filter>Shader</Filter>
     </ClInclude>
     <ClInclude Include="Shader\ColorShader.h">
       <Filter>Shader</Filter>
-    </ClInclude>
-    <ClInclude Include="Terrian\Skyplane.h">
-      <Filter>Terrian</Filter>
     </ClInclude>
     <ClInclude Include="Shader\SkyplaneShader.h">
       <Filter>Shader</Filter>
@@ -264,8 +246,26 @@
     <ClInclude Include="Shader\WaterShader.h">
       <Filter>Shader</Filter>
     </ClInclude>
-    <ClInclude Include="Shader\TerrianReflectionShader.h">
+    <ClInclude Include="Shader\TerrainReflectionShader.h">
       <Filter>Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader\TerrainShader.h">
+      <Filter>Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="Terrain\Landscape.h">
+      <Filter>Terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="Terrain\QuadTree.h">
+      <Filter>Terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="Terrain\Skydome.h">
+      <Filter>Terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="Terrain\Skyplane.h">
+      <Filter>Terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="Terrain\Water.h">
+      <Filter>Terrain</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -293,7 +293,7 @@
     <Filter Include="Object">
       <UniqueIdentifier>{a63c572a-ace9-47d6-99b9-2989996ca2c5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Terrian">
+    <Filter Include="Terrain">
       <UniqueIdentifier>{f735152f-a932-4153-86a6-c07d550df435}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -331,9 +331,6 @@
     <None Include="Shader\FX\rndNoise.fx">
       <Filter>Shader\FX</Filter>
     </None>
-    <None Include="Shader\FX\rndSRTBlend.fx">
-      <Filter>Shader\FX</Filter>
-    </None>
     <None Include="Shader\FX\singleGrass.fx">
       <Filter>Shader\FX</Filter>
     </None>
@@ -358,9 +355,6 @@
     <None Include="Shader\FX\MirrorShader.fx">
       <Filter>Shader\FX</Filter>
     </None>
-    <None Include="Shader\FX\Terrian.fx">
-      <Filter>Shader\FX</Filter>
-    </None>
     <None Include="Shader\FX\TextureShader.fx">
       <Filter>Shader\FX</Filter>
     </None>
@@ -373,8 +367,8 @@
     <None Include="Shader\FX\WaterShader.fx">
       <Filter>Shader\FX</Filter>
     </None>
-    <None Include="..\..\..\Downloads\tersrc16\source\reflection.vs">
-      <Filter>Shader</Filter>
+    <None Include="Shader\FX\Terrain.fx">
+      <Filter>Shader\FX</Filter>
     </None>
   </ItemGroup>
 </Project>

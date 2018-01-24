@@ -40,8 +40,6 @@ cbuffer SkyBuffer : register(b0)
 {
     float _translation;
     float _scale;
-    float _brightness;
-    float _padding;
 };
 
 Texture2D _map : register(t0);
@@ -61,11 +59,10 @@ float4 PS(PixelInput input) : SV_Target
     uv.x = uv.x + _translation;
     perturbValue = _perlin.Sample(samp[0], uv);
     perturbValue *= _scale;
-   uv += perturbValue.xy  + _translation;
+    uv += perturbValue.xy  + _translation;
     cloudColor = _map.Sample(samp[0], uv);
 
-	// Reduce the color cloud by the brightness value.
-    cloudColor = cloudColor * _brightness;
+
 
 
    

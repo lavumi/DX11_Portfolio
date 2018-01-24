@@ -37,11 +37,11 @@ void UserInterface::AddSkydome(D3DXCOLOR * apex, D3DXCOLOR * center)
 	TwAddVarRW(bar, "Center", TW_TYPE_COLOR3F, center, "group='Sky'");
 }
 
-void UserInterface::AddSkyplane(float* scale, float* brightness, float* speed)
+void UserInterface::AddSkyplane(float* scale, float* speed)
 {
 	TwAddVarRW(bar, "speed", TW_TYPE_FLOAT, speed, "min=0 max=1 step=0.0001 group='Cloud'");
 	TwAddVarRW(bar, "scale", TW_TYPE_FLOAT, scale, "min=0 max=1 step=0.1 group='Cloud'");
-	TwAddVarRW(bar, "brightness", TW_TYPE_FLOAT, brightness, "min=0 max=1 step=0.1 group='Cloud'");
+
 }
 
 void UserInterface::AddWave(float * translation, float * size, float* angle)

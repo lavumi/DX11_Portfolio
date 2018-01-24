@@ -7,12 +7,11 @@ SkyplaneShader::SkyplaneShader()
 
 	CreateBuffers();
 
-	data.brightness = 0.5f;
 	data.scale = 0.3f;
 	data.translation = 0.0f;
 
 	speed = 0.0001f;
-	UserInterface::AddSkyplane(&data.scale, &data.brightness, &speed);
+	UserInterface::AddSkyplane(&data.scale,&speed);
 }
 
 SkyplaneShader::~SkyplaneShader()

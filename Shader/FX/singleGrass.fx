@@ -48,7 +48,6 @@ float4 PS(PixelInput input) : SV_Target
     //원 그리기
     float circle = lerp(0, 1, step(uv.x * uv.x + uv.y*uv.y, 0.3));
 
-
     //둘 합치기
     float grass = lerp(circle, rect, step(0.5, originuv.y));
 

@@ -2,10 +2,10 @@
 
 #include "Shader.h"
 
-class TerrianShader : public Shader {
+class TerrainShader : public Shader {
 public:
-	TerrianShader();
-	~TerrianShader();
+	TerrainShader();
+	~TerrainShader();
 
 
 	virtual void Update();

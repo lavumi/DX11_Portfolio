@@ -8,11 +8,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdPa
 	D3DInfo info;
 	info.appName = L"DirectX Game";
 	info.instance = hInstance;
-	info.isFullScreen = false;
+	info.isFullScreen = true;
 	info.isVsync = true;
 	info.mainHandle = NULL;
-	info.screenWidth = 1280;
-	info.screenHeight = 720;
+	info.screenWidth = 1920;
+	info.screenHeight = 1080;
 	info.clearColor = D3DXCOLOR(34.0f / 255.0f, 161.0f / 255.0f, 193.0f / 255.0f, 1.0f);
 	D3D::SetInfo(info);
 

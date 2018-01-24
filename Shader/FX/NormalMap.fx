@@ -23,7 +23,7 @@ cbuffer LightBuffer : register(b2)
 
 cbuffer ExtraBuffer : register(b3)
 {
-    matrix worldInverseTransposeMatrix;
+    matrix _inverseWorld;
     float shadowBias;
 
 }
@@ -67,18 +67,16 @@ PixelInput VS(VertexInput input)
 
 
     float3 viewDir = _cameraPosition - output.position.xyz;
-
     float3 halfVector = normalize(normalize(-_lightDir) + normalize(viewDir));
 
 
-
-
-    float3 n = mul(input.normal, (float3x3) worldInverseTransposeMatrix);
-    float3 t = mul(input.tangent, (float3x3) worldInverseTransposeMatrix);
+    float3 n = mul(input.normal, (float3x3) _inverseWorld);
+    float3 t = mul(input.tangent, (float3x3) _inverseWorld);
     float3 b = cross(n, t);
     float3x3 tbnMatrix = float3x3(t.x, b.x, n.x,
 	                              t.y, b.y, n.y,
 	                              t.z, b.z, n.z);
+
 
     output.halfVector = mul(halfVector, tbnMatrix);
     output.lightDir = normalize(mul(-_lightDir, tbnMatrix));
@@ -141,7 +139,7 @@ float4 PS(PixelInput input) : SV_TARGET
 
     //≥Î∏ª∏ ¿« layer 
     float2 uv;
-     float3 viewDir = normalize(input.viewDir);
+    float3 viewDir = normalize(input.viewDir);
     float layer_depth = 1.0 / layer;
     float cur_layer_depth = 0.0;
 

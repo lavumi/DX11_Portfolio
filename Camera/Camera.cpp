@@ -10,7 +10,7 @@ Camera::Camera()
 	: position(0, 0, -20)
 	, forward(0, 0, 0), right(0, 0, 0), up(0, 0, 0)
 	, rotate(0, 0)
-	, translationSpeed(28.0f), rotationSpeed(1.5f)
+	, translationSpeed(58.0f), rotationSpeed(1.5f)
 {
 	D3DXMatrixIdentity(&view);
 

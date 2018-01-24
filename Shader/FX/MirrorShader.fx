@@ -18,7 +18,7 @@ cbuffer LightBuffer : register(b2)
 
 cbuffer ExtraBuffer : register(b3)
 {
-    matrix worldInverseTransposeMatrix;
+    matrix _inverseWorld;
     float4 options;
 
 }
@@ -75,8 +75,8 @@ PixelInput VS(VertexInput input)
 
 
 
-    float3 n = mul(input.normal, (float3x3) worldInverseTransposeMatrix);
-    float3 t = mul(input.tangent, (float3x3) worldInverseTransposeMatrix);
+    float3 n = mul(input.normal, (float3x3) _inverseWorld);
+    float3 t = mul(input.tangent, (float3x3) _inverseWorld);
     float3 b = cross(n, t);
     float3x3 tbnMatrix = float3x3(t.x, b.x, n.x,
 	                              t.y, b.y, n.y,
