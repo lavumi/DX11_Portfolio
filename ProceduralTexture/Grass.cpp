@@ -44,9 +44,9 @@ Grass::Grass()
 
 
 
-	UserInterface::AddGrassCreationMenu(
-		&count,  &banding, &banding2, &rotation, &width
-		,&minSize ,&maxSize ,&color1, &color2);
+	//UserInterface::AddGrassCreationMenu(
+	//	&count,  &banding, &banding2, &rotation, &width
+	//	,&minSize ,&maxSize ,&color1, &color2);
 }	
 
 Grass::~Grass()
@@ -529,6 +529,7 @@ void Grass::RND_SRT_Instancing()
 
 
 
+
 	////////////////////////////////////////////////////////////////////
 
 	//쉐이더 만들기
@@ -794,6 +795,7 @@ void Grass::RND_SRT_Instancing()
 	D3D::GetDeviceContext()->PSSetShader(pixelShader, NULL, 0);
 	D3D::GetDeviceContext()->PSSetShaderResources(0, 1, directionalWarp->GetShadowResourceView());
 	D3D::GetDeviceContext()->PSSetConstantBuffers(0, 1, &bufferColor);
+
 
 
 	D3D::GetDeviceContext()->DrawIndexedInstanced(6, totalcount, 0, 0, 0);
