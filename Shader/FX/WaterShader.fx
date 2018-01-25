@@ -136,15 +136,25 @@ cbuffer water : register(b1)
 
 float4 PS(PixelInput input) : SV_TARGET
 {
-    float4 perturbValue;
+
+    //반사, 굴절된 이미지의 Texcoord 세팅
+    float2 projectTexCoord;
+    projectTexCoord.x = input.viewPosition.x / input.viewPosition.w / 2.0f + 0.5f;
+    projectTexCoord.y = -input.viewPosition.y / input.viewPosition.w / 2.0f + 0.5f;
+
+
+    //터레인의 a값에 저장된 수면부터의 거리값 받아와 깊이 설정
+    float waterDepth = _refractionMap.Sample(samp[1], projectTexCoord).a;
+
+    waterDepth = saturate(waterDepth)*0.3f;
 
 
     //물 노말맵 크기 설정
     float2 temp_uv = input.uv * _scale;
   
-   //흐르는 셋팅
-   temp_uv.y += _translation * cos(_angle);
-   temp_uv.x -= _translation * sin(_angle);
+    //흐르는 셋팅
+    temp_uv.y += _translation * cos(_angle);
+    temp_uv.x -= _translation * sin(_angle);
     
     //노말맵 각도 회전
     
@@ -155,16 +165,15 @@ float4 PS(PixelInput input) : SV_TARGET
     uv += _scale / 2;
 
 
-  //  float4  = float4(0.2f, 0.5f, 1, 0.5f);
-
-
-    float3 halfVector = normalize(input.halfVector);
-
     float3 normal = _normalMap.Sample(samp[0], uv).rgb;
-
     normal = (normal * 2.0f) - 1.0f;
- 
     normal = normalize(normal);
+
+
+    normal = lerp(float3(0, 1, 0), normal, waterDepth);
+
+    //블린퐁
+    float3 halfVector = normalize(input.halfVector);
 
     float3 light = normalize(input.lightDir);
 
@@ -176,16 +185,11 @@ float4 PS(PixelInput input) : SV_TARGET
     float4 intensity = ambient * globalAmbient + diffuse * nDotL + specular * power;
 
 
-    //반사된 이미지 로드 시작
-    float2 projectTexCoord;
-    projectTexCoord.x = input.viewPosition.x / input.viewPosition.w / 2.0f + 0.5f;
-    projectTexCoord.y = -input.viewPosition.y / input.viewPosition.w / 2.0f + 0.5f;
 
 
-    //물결 웨이브 구현을 위해 노말맵 만큼 이동시켜줌
-    //수치는 변경할수 있게 할까?
-    projectTexCoord += normal.xy * 0.01f;
 
+    //이미지 흔들리는 효과를 위해 노멀맵과 연산
+    projectTexCoord += normal.xz * 0.01f;
     projectTexCoord =  saturate(projectTexCoord);
 
     float4 reflection = _reflectionMap.Sample(samp[1], projectTexCoord);
@@ -198,10 +202,10 @@ float4 PS(PixelInput input) : SV_TARGET
     float blendFactor = dot(float3(0, 1, 0), viewDir);
    
 
+    float4 diffuse = lerp(reflection, refraction, blendFactor);
+            
 
-
-
-    return lerp(reflection, refraction, blendFactor) * intensity;
+    return diffuse * intensity;
 }
 
 

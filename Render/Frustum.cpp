@@ -11,6 +11,8 @@ Frustum::~Frustum()
 
 void Frustum::SetFrustum(float screenDepth, D3DXMATRIX viewMatrix, D3DXMATRIX projectionMatrix)
 {
+
+	DWORD starttime = timeGetTime();
 	D3DXVECTOR3* vtx = new D3DXVECTOR3[8];
 
 
@@ -44,6 +46,10 @@ void Frustum::SetFrustum(float screenDepth, D3DXMATRIX viewMatrix, D3DXMATRIX pr
 	//	D3DXPlaneFromPoints(&m_plane[3], &vtx[4], &vtx[7], &vtx[6]);	// 상 평면(top)
 	//	D3DXPlaneFromPoints(&m_plane[4], &vtx  ,  &vtx[1], &vtx[2]);	// 하 평면(bottom)
 	//	D3DXPlaneFromPoints(&m_plane[5], &vtx  ,  &vtx[4], &vtx[5]);	// 근 평면(near)
+
+
+	DWORD currentTime = timeGetTime();
+	DWORD spendTime = currentTime - starttime;
 	return;
 }
 

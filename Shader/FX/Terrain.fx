@@ -163,7 +163,7 @@ float4 PS(PixelInput input) : SV_TARGET
     float blendFactor = saturate((input.worldPosition.y + 7.7f) / 0.4f);
     float4 diffuseMap = lerp(_map[1].Sample(samp[0], uv), landNmountain, blendFactor);
 
-
+    diffuseMap.a = input.clip;
 
     return intensity * diffuseMap;
 }

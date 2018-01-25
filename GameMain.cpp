@@ -234,7 +234,6 @@ void GameMain::PreRender()
 			D3D::Get()->SetBlender_Off();
 		}
 		D3D::Get()->SetDepthStencilState(D3D::DS_state::onState);
-		
 		Rasterizer::Get()->SetFrontCullMode();
 
 		testcube->Render();
@@ -245,8 +244,11 @@ void GameMain::PreRender()
 		if (landscapeWireFrame)
 			Rasterizer::Get()->SetWireframe();
 
+		D3DXPLANE waterPlane = lake->getwaterPlane();
+	
+
 		landscape->Render();
-		terrainShader->Render(landscape->getIndexCount(), landscape->getWorld(), view, projection, landscape->getDiffuseMap(), landscape->getNormalMap(), *blurShadowTexture->GetShadowResourceView(),lake->getwaterPlane());
+		terrainShader->Render(landscape->getIndexCount(), landscape->getWorld(), view, projection, landscape->getDiffuseMap(), landscape->getNormalMap(), *blurShadowTexture->GetShadowResourceView(), waterPlane);
 		Rasterizer::Get()->SetOnCullMode();
 	}
 

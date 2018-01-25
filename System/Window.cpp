@@ -9,7 +9,7 @@ LRESULT CALLBACK WndProc(HWND handle, UINT message, WPARAM wParam, LPARAM lParam
 	if (TweakBar::Get() != NULL)
 		TweakBar::Get()->InputProc(handle, message, wParam, lParam);
 
-	if (message == WM_CLOSE || message == WM_DESTROY)
+	if (message == WM_CLOSE || message == WM_DESTROY || message == WM_QUIT)
 	{
 		PostQuitMessage(0);
 		return 0;
@@ -73,6 +73,9 @@ Window::Window()
 
 	
 	RECT rect = { 0, 0, (LONG)info.screenWidth, (LONG)info.screenHeight };
+
+
+	UINT temp = GetSystemMetrics(SM_CXSCREEN);
 
 	UINT centerX = (GetSystemMetrics(SM_CXSCREEN) - info.screenWidth) / 2;
 	UINT centerY = (GetSystemMetrics(SM_CYSCREEN) - info.screenHeight) / 2;
