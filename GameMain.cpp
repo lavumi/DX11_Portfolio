@@ -127,7 +127,7 @@ void GameMain::Update()
 	//	lakeRefractionTexture->SaveTexture(L"Mirror.png");
 		LodOff = !LodOff;
 	}
-	if(!LodOff)		landscape->changeLOD(frustum);
+	//if(!LodOff)		landscape->changeLOD(frustum);
 
 
 	if (Keyboard::Get()->KeyUp('P')) {
@@ -138,7 +138,7 @@ void GameMain::Update()
 
 void GameMain::PreRender()
 {
-
+	return;
 	D3DXMATRIX view, projection;
 	D3DXMatrixIdentity(&view);
 	D3DXMatrixIdentity(&projection);
@@ -292,6 +292,16 @@ void GameMain::Render()
 	Camera::Get()->GetView(&view);
 	D3D::Get()->GetProjection(&projection);
 
+	D3D::Get()->SetBlender_Off();
+
+	testcube->Render();
+	for (int i = 0; i < 6; i++) {
+		normalMapShader->Render(testcube->indexCount, testcube->world[i], view, projection, testcube->diffuseMap, testcube->normalMap, testcube->heightMap, *blurShadowTexture->GetShadowResourceView());
+	}
+
+	lake->Render();
+	normalMapShader->Render(lake->indexCount, lake->world, view, projection, lake->getNormalTexture(), cloud->getPerlinMap(), *lakeReflectionTexture->GetShadowResourceView(), *lakeRefractionTexture->GetShadowResourceView());
+	return;//
 
 	D3D::Get()->SetDepthStencilState(D3D::DS_state::offState);
 	Rasterizer::Get()->SetOffCullMode();
@@ -318,7 +328,7 @@ void GameMain::Render()
 	if(landscapeWireFrame)
 		Rasterizer::Get()->SetWireframe();
 
-
+	
 	landscape->Render();
 	terrainShader->Render(landscape->getIndexCount(), landscape->getWorld(), view, projection, landscape->getDiffuseMap(), landscape->getNormalMap(), *blurShadowTexture->GetShadowResourceView(),lake->getwaterPlane());
 	Rasterizer::Get()->SetSolid();

@@ -68,7 +68,7 @@ PixelInput VS(VertexInput input)
 
     float3 viewDir = _cameraPosition - output.position.xyz;
 
-    float3 halfVector = normalize(normalize(-_lightDir) + normalize(viewDir));
+    float3 halfVector =  normalize(normalize(-_lightDir) + normalize(viewDir));
 
 
 
@@ -80,7 +80,7 @@ PixelInput VS(VertexInput input)
 	                              t.y, b.y, n.y,
 	                              t.z, b.z, n.z);
 
-    output.halfVector = mul(halfVector, tbnMatrix);
+    output.halfVector =  mul(halfVector, tbnMatrix);
     output.lightDir = normalize(mul(-_lightDir, tbnMatrix));
 
     output.viewDir = viewDir;
@@ -146,7 +146,8 @@ float4 PS(PixelInput input) : SV_TARGET
     //터레인의 a값에 저장된 수면부터의 거리값 받아와 깊이 설정
     float waterDepth = _refractionMap.Sample(samp[1], projectTexCoord).a;
 
-    waterDepth = saturate(waterDepth)*0.3f;
+    waterDepth = waterDepth *0.01f;
+    waterDepth = saturate(waterDepth);
 
 
     //물 노말맵 크기 설정
@@ -170,7 +171,7 @@ float4 PS(PixelInput input) : SV_TARGET
     normal = normalize(normal);
 
 
-    normal = lerp(float3(0, 1, 0), normal, waterDepth);
+   // normal = lerp(float3(0, 1, 0), normal, waterDepth);
 
     //블린퐁
     float3 halfVector = normalize(input.halfVector);
@@ -184,12 +185,12 @@ float4 PS(PixelInput input) : SV_TARGET
 
     float4 intensity = ambient * globalAmbient + diffuse * nDotL + specular * power;
 
-
+    intensity.xyz =   specular * power;
 
 
 
     //이미지 흔들리는 효과를 위해 노멀맵과 연산
-    projectTexCoord += normal.xz * 0.01f;
+    projectTexCoord += normal.x *0.2f;
     projectTexCoord =  saturate(projectTexCoord);
 
     float4 reflection = _reflectionMap.Sample(samp[1], projectTexCoord);
@@ -199,13 +200,19 @@ float4 PS(PixelInput input) : SV_TARGET
 
     float3 viewDir = normalize(input.viewDir);
 
+
+
+
     float blendFactor = dot(float3(0, 1, 0), viewDir);
+
+    blendFactor = 0.02037f + 0.97963f * (1 - blendFactor) * (1 - blendFactor) * (1 - blendFactor) * (1 - blendFactor) * (1 - blendFactor);
    
 
-    float4 diffuse = lerp(reflection, refraction, blendFactor);
+    float4 diffuse = lerp(refraction, reflection, blendFactor);
             
 
-    return diffuse * intensity;
+    return float4(intensity.xyz, 1); //
+    diffuse * intensity;
 }
 
 

@@ -73,12 +73,13 @@ void Water::CreateBuffer()
 
 	vertexData[i].position = D3DXVECTOR3(0,0,0);			vertexData[i++].uv = D3DXVECTOR2(0, 0);
 	vertexData[i].position = D3DXVECTOR3(256,0,0);			vertexData[i++].uv = D3DXVECTOR2(1, 0);
-	vertexData[i].position = D3DXVECTOR3(256,0,256);			vertexData[i++].uv = D3DXVECTOR2(1, 1);
-	vertexData[i].position = D3DXVECTOR3(0,0,256);			vertexData[i++].uv = D3DXVECTOR2(0, 1);
+	vertexData[i].position = D3DXVECTOR3(0, 0, 256);			vertexData[i++].uv = D3DXVECTOR2(0, 1);
+	vertexData[i].position = D3DXVECTOR3(256,0,256);		vertexData[i++].uv = D3DXVECTOR2(1, 1);
+
 
 
 	UINT* indexData = new UINT[indexCount]{
-		0, 3, 1, 3, 2, 1,
+		0, 2, 1, 2, 3,1
 	};
 
 

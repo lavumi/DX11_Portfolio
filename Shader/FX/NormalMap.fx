@@ -193,8 +193,7 @@ float4 PS(PixelInput input) : SV_TARGET
     float power = pow(nDotH, shininess);
 
     float4 intensity = ambient * globalAmbient + diffuse * nDotL + specular * power;
-
-
+    intensity = specular * power;
 
 
 
@@ -237,7 +236,7 @@ float4 PS(PixelInput input) : SV_TARGET
 
     float shadowValue = _lightMap.Sample(samp[1], projectTexCoord).g;
     shadowValue *= 0.3;
-    intensity *= shadowValue;
+    //intensity *= shadowValue;
 
     return intensity * diffuseMap;
 }
