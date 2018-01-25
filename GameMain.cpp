@@ -33,7 +33,7 @@
 
 
 
-bool GameMain::landscapeWireFrame = false;
+//bool GameMain::landscapeWireFrame = false;
 
 void GameMain::Initialize()
 {
@@ -82,6 +82,11 @@ void GameMain::Initialize()
 	grass->DrawTexture();
 	landscape->SetTexture(grass->diffuse, nullptr, nullptr);
 	
+
+
+
+	landscapeWireFrame = false;
+	LODcamera = true;
 }
 
 void GameMain::Destroy()
@@ -123,8 +128,12 @@ void GameMain::Update()
 		//depthShadowTexture->SaveTexture(L"depthShadow.png");
 		//shadowTexture->SaveTexture(L"shadow.png");
 		//blurShadowTexture->SaveTexture(L"blur.png");
-		lakeRefractionTexture->SaveTexture(L"Mirror.png");
-		}
+		//lakeRefractionTexture->SaveTexture(L"Mirror.png");
+		LODcamera = !LODcamera;
+		grass->DrawTexture();
+	}
+
+	if(LODcamera)
 		landscape->changeLOD(frustum);
 
 
@@ -136,7 +145,7 @@ void GameMain::Update()
 
 void GameMain::PreRender()
 {
-
+	return;
 	D3DXMATRIX view, projection;
 	D3DXMatrixIdentity(&view);
 	D3DXMatrixIdentity(&projection);
@@ -147,8 +156,8 @@ void GameMain::PreRender()
 		depthShadowTexture->SetTarget();
 		depthShadowTexture->Clear(0, 0, 0, 1);
 
-		testplane->Render();
-		depthShadowShader->Render(testplane->indexCount, testplane->world, view, projection);
+		//testplane->Render();
+		//depthShadowShader->Render(testplane->indexCount, testplane->world, view, projection);
 
 
 		testcube->Render();
@@ -240,6 +249,8 @@ void GameMain::PreRender()
 		normalMapShader->Render(testcube->indexCount, testcube->world[1], view, projection, testcube->diffuseMap, testcube->normalMap, testcube->heightMap, *blurShadowTexture->GetShadowResourceView());
 		normalMapShader->Render(testcube->indexCount, testcube->world[2], view, projection, testcube->diffuseMap, testcube->normalMap, testcube->heightMap, *blurShadowTexture->GetShadowResourceView());
 
+		if (landscapeWireFrame)
+			Rasterizer::Get()->SetWireframe();
 
 		landscape->Render();
 		terrianShader->Render(landscape->getIndexCount(), landscape->getWorld(), view, projection, landscape->getDiffuseMap(), landscape->getNormalMap(), *blurShadowTexture->GetShadowResourceView(),lake->getwaterPlane());
@@ -267,6 +278,8 @@ void GameMain::PreRender()
 		D3DXPLANE clipPlane = lake->getwaterPlane();
 		clipPlane *= -1;
 
+		if (landscapeWireFrame)
+			Rasterizer::Get()->SetWireframe();
 
 		landscape->Render();
 		terrianShader->Render(landscape->getIndexCount(), landscape->getWorld(), view, projection, landscape->getDiffuseMap(), landscape->getNormalMap(), *blurShadowTexture->GetShadowResourceView(),clipPlane);
@@ -277,6 +290,8 @@ void GameMain::PreRender()
 void GameMain::Render()
 {
 	
+	grass->Render();
+	return;
 
 	D3DXMATRIX view, projection;
 

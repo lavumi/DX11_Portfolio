@@ -43,8 +43,8 @@ public:
 
 private:
 
-	static bool landscapeWireFrame;
-
+	bool landscapeWireFrame;
+	bool LODcamera;
 
 	void ControlCamera();
 
