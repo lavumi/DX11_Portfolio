@@ -44,9 +44,6 @@ void DepthShadowShader::Render(UINT indexCount, D3DXMATRIX world, D3DXMATRIX vie
 	D3D::GetDeviceContext()->Unmap(lightBuffer, 0);
 
 	D3D::GetDeviceContext()->VSSetConstantBuffers(2, 1, &lightBuffer);
-
-
-
 	D3D::GetDeviceContext()->DrawIndexed(indexCount, 0, 0);
 }
 

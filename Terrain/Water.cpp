@@ -68,25 +68,68 @@ void Water::CreateBuffer()
 	vertexCount = 4;
 	indexCount = 6;
 
+	//VertexTextureNormalTangent* vertexData = new VertexTextureNormalTangent[vertexCount];
+	//int i = 0;
+	//vertexData[i].position = D3DXVECTOR3(0,0,0);			vertexData[i++].uv = D3DXVECTOR2(0, 0);
+	//vertexData[i].position = D3DXVECTOR3(256,0,0);			vertexData[i++].uv = D3DXVECTOR2(1, 0);
+	//vertexData[i].position = D3DXVECTOR3(256, 0, 256);		vertexData[i++].uv = D3DXVECTOR2(1, 1);
+	//vertexData[i].position = D3DXVECTOR3(0,0,256);			vertexData[i++].uv = D3DXVECTOR2(0, 1);
+
+
+
+	//UINT* indexData = new UINT[indexCount]{
+	//	1, 0, 3, 1, 3, 2,
+	//};
+
+
+
+	UINT width =1, height =1;
+	
+
+	vertexCount = (width + 1) * (height + 1);
+
+	UINT heightIndex = 0;
 	VertexTextureNormalTangent* vertexData = new VertexTextureNormalTangent[vertexCount];
-	int i = 0;
+	for (UINT z = 0; z <= height; z++)
+	{
+		for (UINT x = 0; x <= width; x++)
+		{
+			int index = (width + 1) * z + x;
 
-	vertexData[i].position = D3DXVECTOR3(0,0,0);			vertexData[i++].uv = D3DXVECTOR2(0, 0);
-	vertexData[i].position = D3DXVECTOR3(256,0,0);			vertexData[i++].uv = D3DXVECTOR2(1, 0);
-	vertexData[i].position = D3DXVECTOR3(0, 0, 256);			vertexData[i++].uv = D3DXVECTOR2(0, 1);
-	vertexData[i].position = D3DXVECTOR3(256,0,256);		vertexData[i++].uv = D3DXVECTOR2(1, 1);
+			vertexData[index].position.x = (float)x * 255 / (width);
+			vertexData[index].position.y = 0;
+			vertexData[index].position.z = (float)z * 255 / (height);
+
+			vertexData[index].uv.x = (float)(x);// (float)width;
+			vertexData[index].uv.y = (float)(z);// (float)height;
+
+			vertexData[index].normal = D3DXVECTOR3(0, 0, 0);
+		}
+	}
 
 
+	indexCount = width * height * 6;
+	UINT* indexData = new UINT[indexCount];
 
-	UINT* indexData = new UINT[indexCount]{
-		0, 2, 1, 2, 3,1
-	};
-
+	UINT count = 0;
+	for (UINT z = 0; z < height; z++)
+	{
+		for (UINT x = 0; x < width; x++)
+		{
+			indexData[count + 0] = (width + 1) * z + x;
+			indexData[count + 1] = (width + 1) * (z + 1) + x;
+			indexData[count + 2] = (width + 1) * z + x + 1;
+			indexData[count + 3] = (width + 1) * z + x + 1;
+			indexData[count + 4] = (width + 1) * (z + 1) + x;
+			indexData[count + 5] = (width + 1) * (z + 1) + (x + 1);
+			
+			count += 6;
+		}//for(x)
+	}//for(z)
 
 	for (UINT i = 0; i < vertexCount; i++) {
 		vertexData[i].normal = vertexData[i].tangent = D3DXVECTOR3(0, 0, 0);
 	}
-
 
 
 
@@ -123,16 +166,13 @@ void Water::CreateBuffer()
 
 	for (UINT i = 0; i < vertexCount; i++)
 	{
-		D3DXVec3Normalize
-		(
-			&vertexData[i].normal
-			, &vertexData[i].normal
-		);
+		D3DXVec3Normalize(&vertexData[i].normal, &vertexData[i].normal);
+		D3DXVec3Normalize(&vertexData[i].tangent, &vertexData[i].tangent);
 	}
 
 
-
-
+	VertexTextureNormalTangent lastPoint = vertexData[3];
+	VertexTextureNormalTangent firstPoint = vertexData[0];
 	D3D11_BUFFER_DESC desc;
 	D3D11_SUBRESOURCE_DATA data;
 

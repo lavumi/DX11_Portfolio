@@ -165,6 +165,6 @@ float4 PS(PixelInput input) : SV_TARGET
 
     diffuseMap.a = input.clip;
 
-    return intensity * diffuseMap;
+    return intensity*diffuseMap;
 }
 

@@ -7,17 +7,20 @@ const float Camera::screenNear = 0.1f;
 const float Camera::screenDepth = 1000.0f;
 
 Camera::Camera()
-	: position(0, 0, -20)
-	, forward(0, 0, 0), right(0, 0, 0), up(0, 0, 0)
+	: position(0, 010, 0)
+	, forward(0, 128, 0), right(0, 0, 0), up(0, 0, 0)
 	, rotate(0, 0)
 	, translationSpeed(58.0f), rotationSpeed(1.5f)
 {
 	D3DXMatrixIdentity(&view);
 
-	D3DXVECTOR3 position = D3DXVECTOR3(0, 0, -10);
-	D3DXVECTOR3 forward = D3DXVECTOR3(0, 0, 1);
-	D3DXVECTOR3 up = D3DXVECTOR3(0, 1, 0);
-	D3DXMatrixLookAtLH(&defaultView, &position, &(position + forward), &up);
+
+	//OrthoWindow용 기본 카메라 세팅
+	D3DXVECTOR3 defaultposition = D3DXVECTOR3(0, 0, -10);
+    D3DXVECTOR3 defaultforward = D3DXVECTOR3(0, 0, 1);
+	D3DXVECTOR3 defaultup = D3DXVECTOR3(0, 1, 0);
+	D3DXMatrixLookAtLH(&defaultView, &defaultposition, &(defaultposition + defaultforward), &defaultup);
+
 
 	UpdateRotationMatrix();
 	UpdateViewMatrix();

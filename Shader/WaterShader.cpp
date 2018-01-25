@@ -12,15 +12,15 @@ WaterShader::WaterShader()
 	material.ambient = D3DXCOLOR(0.5f, 0.5f, 0.5f, 1.0f);
 	material.diffuse = D3DXCOLOR(0.7f, 0.7f, 0.7f, 1.0f);
 	material.specular = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
-	material.shininess = 100;
-	material.globalAmbient = D3DXCOLOR(0.9f, 0.9f, 0.9f, 1.0f);
+	material.shininess = 200;
+	material.globalAmbient = D3DXCOLOR(0.3f, 0.3f, 0.3f, 1.0f);
 
 
 	angle = 90;
-	speed = 0.01f;
+	speed = 0.003f;
 
 	waterData.translation = 0;
-	waterData.scale = 50;
+	waterData.scale = 20;
 	waterData.angle =  D3DX_PI / 180 * angle;
 
 

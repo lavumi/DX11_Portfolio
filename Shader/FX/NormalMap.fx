@@ -44,12 +44,10 @@ struct PixelInput
     float2 uv : TEXCOORD0;
     float3 halfVector : TEXCOORD1;
     float3 lightDir : TEXCOORD2;
-    float3 normal : NORMAL0;
+
     float3 viewDir : TEXCOORD3;
 
-    float options : TEXCOORD4;
     float4 viewPosition : TEXCOORD5;
-  
 
 };
 
@@ -67,7 +65,7 @@ PixelInput VS(VertexInput input)
 
 
     float3 viewDir = _cameraPosition - output.position.xyz;
-    float3 halfVector = normalize(normalize(-_lightDir) + normalize(viewDir));
+    float3 halfVector = normalize(-_lightDir) + normalize(viewDir);
 
 
     float3 n = mul(input.normal, (float3x3) _inverseWorld);
@@ -79,7 +77,7 @@ PixelInput VS(VertexInput input)
 
 
     output.halfVector = mul(halfVector, tbnMatrix);
-    output.lightDir = normalize(mul(-_lightDir, tbnMatrix));
+    output.lightDir = mul(-_lightDir, tbnMatrix);
     output.viewDir = mul(viewDir, tbnMatrix);
 
    
@@ -89,11 +87,8 @@ PixelInput VS(VertexInput input)
     output.viewPosition = output.position;
 
     output.uv = input.uv;
-    output.normal = normalize(mul(input.normal, tbnMatrix));
+  //  output.normal = mul(input.normal, tbnMatrix);
 
-
-    output.options = shadowBias;
-   
 
     return output;
 
@@ -179,11 +174,12 @@ float4 PS(PixelInput input) : SV_TARGET
 
 
     //blin pong ½¦ÀÌµù
-    float3 light = normalize(input.lightDir);
+   
     float4 diffuseMap = _map.Sample(samp[0], uv);
     float3 normal = _normalMap.Sample(samp[0], uv).rgb;
     normal = (normal * 2.0f) - 1.0f;
     normal = normalize(normal);
+    float3 light = normalize(input.lightDir);
     float3 halfVector = normalize(input.halfVector);
 
 
@@ -192,7 +188,7 @@ float4 PS(PixelInput input) : SV_TARGET
 
     float power = pow(nDotH, shininess);
 
-    float4 intensity = ambient * globalAmbient + diffuse * nDotL + specular * power;
+    float4 intensity = ambient * globalAmbient + diffuse * nDotL    +specular * power;
     intensity = specular * power;
 
 
@@ -236,9 +232,9 @@ float4 PS(PixelInput input) : SV_TARGET
 
     float shadowValue = _lightMap.Sample(samp[1], projectTexCoord).g;
     shadowValue *= 0.3;
-    //intensity *= shadowValue;
+    intensity *= shadowValue;
 
-    return intensity * diffuseMap;
+    return  intensity * diffuseMap;
 }
 
 

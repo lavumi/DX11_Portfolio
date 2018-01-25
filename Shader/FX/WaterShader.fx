@@ -46,11 +46,9 @@ struct PixelInput
     float3 lightDir : TEXCOORD2;
     float3 normal : NORMAL0;
     float3 viewDir : TEXCOORD3;
-
-    float options : TEXCOORD4;
     float4 viewPosition : TEXCOORD5;
   
-
+    float4 TestValue : TEXCOORD6;
 };
 
 
@@ -70,7 +68,7 @@ PixelInput VS(VertexInput input)
 
     float3 halfVector =  normalize(normalize(-_lightDir) + normalize(viewDir));
 
-
+   
 
 
     float3 n = mul(input.normal, (float3x3) worldInverseTransposeMatrix);
@@ -83,6 +81,9 @@ PixelInput VS(VertexInput input)
     output.halfVector =  mul(halfVector, tbnMatrix);
     output.lightDir = normalize(mul(-_lightDir, tbnMatrix));
 
+
+    output.TestValue = float4(input.tangent, 1);
+
     output.viewDir = viewDir;
    
     output.position = mul(output.position, _view);
@@ -94,8 +95,9 @@ PixelInput VS(VertexInput input)
     output.normal = normalize(mul(input.normal, tbnMatrix));
 
 
-    output.options = shadowBias;
    
+
+
 
     return output;
 
@@ -144,10 +146,11 @@ float4 PS(PixelInput input) : SV_TARGET
 
 
     //터레인의 a값에 저장된 수면부터의 거리값 받아와 깊이 설정
-    float waterDepth = _refractionMap.Sample(samp[1], projectTexCoord).a;
+    //망함 이걸로 하면 안된다
+    //뭔가 다른 방식으로 물의 깊이값을 받아오자
 
-    waterDepth = waterDepth *0.01f;
-    waterDepth = saturate(waterDepth);
+    float waterDepth = _refractionMap.Sample(samp[1], projectTexCoord).a;
+    waterDepth = saturate(waterDepth * waterDepth * 0.1f);
 
 
     //물 노말맵 크기 설정
@@ -168,14 +171,15 @@ float4 PS(PixelInput input) : SV_TARGET
 
     float3 normal = _normalMap.Sample(samp[0], uv).rgb;
     normal = (normal * 2.0f) - 1.0f;
+ //   normal = normalize(normal);
+
+
+    normal = lerp(float3(0, 0, 1), normal, waterDepth);
+
+
     normal = normalize(normal);
-
-
-   // normal = lerp(float3(0, 1, 0), normal, waterDepth);
-
     //블린퐁
     float3 halfVector = normalize(input.halfVector);
-
     float3 light = normalize(input.lightDir);
 
     float nDotL = saturate(dot(normal, light));
@@ -185,13 +189,11 @@ float4 PS(PixelInput input) : SV_TARGET
 
     float4 intensity = ambient * globalAmbient + diffuse * nDotL + specular * power;
 
-    intensity.xyz =   specular * power;
-
 
 
     //이미지 흔들리는 효과를 위해 노멀맵과 연산
-    projectTexCoord += normal.x *0.2f;
-    projectTexCoord =  saturate(projectTexCoord);
+    projectTexCoord += normal.x * 0.05f;
+    
 
     float4 reflection = _reflectionMap.Sample(samp[1], projectTexCoord);
     float4 refraction = _refractionMap.Sample(samp[1], projectTexCoord);
@@ -211,8 +213,7 @@ float4 PS(PixelInput input) : SV_TARGET
     float4 diffuse = lerp(refraction, reflection, blendFactor);
             
 
-    return float4(intensity.xyz, 1); //
-    diffuse * intensity;
+    return diffuse * intensity;
 }
 
 

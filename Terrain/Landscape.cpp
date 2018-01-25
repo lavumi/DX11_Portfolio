@@ -173,11 +173,8 @@ void Landscape::CreateNormalData()
 
 	for (UINT i = 0; i < vertexCount; i++)
 	{
-		D3DXVec3Normalize
-		(
-			&vertexData[i].normal
-			, &vertexData[i].normal
-		);
+		D3DXVec3Normalize(&vertexData[i].normal, &vertexData[i].normal);
+		D3DXVec3Normalize(&vertexData[i].tangent, &vertexData[i].tangent);
 	}
 }
 
