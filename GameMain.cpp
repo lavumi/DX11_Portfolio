@@ -25,7 +25,6 @@
 #include "../Shader/SkydomeShader.h"
 #include "../Shader/ShadowShader.h"
 #include "../Shader/BlurShader.h"
-#include "../Shader/MirrorShader.h"
 #include "../Shader/TerrainShader.h"
 #include "../Shader/ColorShader.h"
 #include "../Shader/WaterShader.h"
@@ -69,7 +68,6 @@ void GameMain::Initialize()
 	skydomeShader = new SkydomeShader();
 	shadowShader = new ShadowShader();
 	blurShader = new BlurShader();
-	mirrorShader = new MirrorShader();
 	terrainShader = new TerrainShader();
 	colorShader = new ColorShader();
 	skyplaneShader = new SkyplaneShader();
@@ -226,6 +224,8 @@ void GameMain::PreRender()
 			D3DXMatrixTranslation(&world, camPos.x, camPos.y, camPos.z);
 
 
+			
+
 			skydome->Render();
 			skydomeShader->Render(skydome->getIndexCount(), world, view, projection);
 			D3D::Get()->SetBlender_AddBlend();
@@ -284,8 +284,6 @@ void GameMain::PreRender()
 
 void GameMain::Render()
 {
-
-
 	D3DXMATRIX view, projection;
 
 

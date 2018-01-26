@@ -189,8 +189,6 @@ float4 PS(PixelInput input) : SV_TARGET
     float power = pow(nDotH, shininess);
 
     float4 intensity = ambient * globalAmbient + diffuse * nDotL    +specular * power;
-    intensity = specular * power;
-
 
 
     //그림자 계산 시작

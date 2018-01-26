@@ -21,6 +21,11 @@ public:
 		memcpy(view, this->lightData.lightProjection, sizeof(D3DXMATRIX));
 	}
 
+	void GetLightDirection(D3DXVECTOR3* out_lightDir) {
+		memcpy(out_lightDir, this->lightData.lightDirection, sizeof(D3DXVECTOR3));
+
+	}
+
 	LightData* GetLightData() {
 		return &lightData;
 	}
@@ -35,4 +40,7 @@ private:
 
 
 	D3DXVECTOR3 up = D3DXVECTOR3(0, 1, 0);
+
+
+	float anglex, angley;
 };

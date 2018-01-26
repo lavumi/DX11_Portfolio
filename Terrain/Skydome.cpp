@@ -6,7 +6,7 @@
 Skydome::Skydome()
 {
 	CreateBuffer();
-
+	D3DXMatrixIdentity(&world);
 }
 
 Skydome::~Skydome()
@@ -23,7 +23,12 @@ void Skydome::Update()
 	Camera::Get()->GetPosition(&position);
 
 	
-	D3DXMatrixTranslation(&world, position.x, position.y, position.z);
+	D3DXMatrixScaling(&world, 2, 2, 2);
+
+	D3DXMATRIX trans;
+	D3DXMatrixTranslation(&trans, position.x, position.y, position.z);
+	world *= trans;
+	
 
 }
 

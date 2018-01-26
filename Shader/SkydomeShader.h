@@ -17,14 +17,14 @@ private:
 
 
 	D3D11_BUFFER_DESC desc;
-	ID3D11Buffer* buffer;
-
+	ID3D11Buffer* skydomeBuffer;
+	ID3D11Buffer* LightBuffer;
 
 
 	struct SkyColor
 	{
 		D3DXCOLOR center;
 		D3DXCOLOR apex;
-	} data;
+	} skydomeData;
 
 };

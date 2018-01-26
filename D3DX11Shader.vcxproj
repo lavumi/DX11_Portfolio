@@ -183,10 +183,8 @@
     <ClInclude Include="Shader\CameraBuffer.h" />
     <ClInclude Include="Shader\ColorShader.h" />
     <ClInclude Include="Shader\DepthShadowShader.h" />
-    <ClInclude Include="Shader\MirrorShader.h" />
     <ClInclude Include="Shader\ShadowShader.h" />
     <ClInclude Include="Shader\SkyplaneShader.h" />
-    <ClInclude Include="Shader\TerrainReflectionShader.h" />
     <ClInclude Include="Shader\TextureShader.h" />
     <ClInclude Include="Shader\NormalMapShader.h" />
     <ClInclude Include="Shader\Shader.h" />
@@ -232,10 +230,8 @@
     <ClCompile Include="Shader\BlurShader.cpp" />
     <ClCompile Include="Shader\ColorShader.cpp" />
     <ClCompile Include="Shader\DepthShadowShader.cpp" />
-    <ClCompile Include="Shader\MirrorShader.cpp" />
     <ClCompile Include="Shader\ShadowShader.cpp" />
     <ClCompile Include="Shader\SkyplaneShader.cpp" />
-    <ClCompile Include="Shader\TerrainReflectionShader.cpp" />
     <ClCompile Include="Shader\TextureShader.cpp" />
     <ClCompile Include="Shader\NormalMapShader.cpp" />
     <ClCompile Include="Shader\Shader.cpp" />

@@ -17,11 +17,11 @@ WaterShader::WaterShader()
 
 
 	angle = 90;
-	speed = 0.003f;
+	speed = 0.001f;
 
 	waterData.translation = 0;
 	waterData.scale = 20;
-	waterData.angle =  D3DX_PI / 180 * angle;
+	waterData.angle =  (float)D3DX_PI / 180 * angle;
 
 
 	UserInterface::AddWave(&speed, &waterData.scale, &angle);
@@ -106,7 +106,7 @@ void WaterShader::Render(UINT indexCount, D3DXMATRIX world, D3DXMATRIX view, D3D
 
 
 	waterData.translation += speed;
-	waterData.angle = D3DX_PI / 180 * angle;
+	waterData.angle = (float)D3DX_PI / 180 * angle;
 	//if (waterData.translation >= 1.0f) {
 	//	waterData.translation -= 1.0f;
 	//}

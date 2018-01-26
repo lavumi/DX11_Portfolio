@@ -87,9 +87,6 @@
     <ClCompile Include="Object\OrthoWindowPlane.cpp">
       <Filter>Object</Filter>
     </ClCompile>
-    <ClCompile Include="Shader\MirrorShader.cpp">
-      <Filter>Shader</Filter>
-    </ClCompile>
     <ClCompile Include="Render\Frustum.cpp">
       <Filter>Render</Filter>
     </ClCompile>
@@ -106,9 +103,6 @@
       <Filter>Shader</Filter>
     </ClCompile>
     <ClCompile Include="Shader\WaterShader.cpp">
-      <Filter>Shader</Filter>
-    </ClCompile>
-    <ClCompile Include="Shader\TerrainReflectionShader.cpp">
       <Filter>Shader</Filter>
     </ClCompile>
     <ClCompile Include="Shader\TerrainShader.cpp">
@@ -228,9 +222,6 @@
     <ClInclude Include="Shader\BlurShader.h">
       <Filter>Shader</Filter>
     </ClInclude>
-    <ClInclude Include="Shader\MirrorShader.h">
-      <Filter>Shader</Filter>
-    </ClInclude>
     <ClInclude Include="Render\Frustum.h">
       <Filter>Render</Filter>
     </ClInclude>
@@ -244,9 +235,6 @@
       <Filter>Shader</Filter>
     </ClInclude>
     <ClInclude Include="Shader\WaterShader.h">
-      <Filter>Shader</Filter>
-    </ClInclude>
-    <ClInclude Include="Shader\TerrainReflectionShader.h">
       <Filter>Shader</Filter>
     </ClInclude>
     <ClInclude Include="Shader\TerrainShader.h">

@@ -23,7 +23,6 @@ class TextureShader;
 class SkydomeShader;
 class ShadowShader;
 class BlurShader;
-class MirrorShader;
 class TerrainShader;
 class ColorShader;
 class SkyplaneShader;
@@ -84,7 +83,6 @@ private:
 	TextureShader* textureShader;
 	ShadowShader* shadowShader;
 	BlurShader* blurShader;
-	MirrorShader* mirrorShader;
 	TerrainShader* terrainShader;
 	ColorShader* colorShader;
 	SkyplaneShader* skyplaneShader;

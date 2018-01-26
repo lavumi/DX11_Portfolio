@@ -532,6 +532,7 @@ void QuadTree::Node::getIndecies(UINT* & out_indices, UINT & out_width, UINT& ou
 	}
 
 	//각 레벨의 가로, 세로 버텍스 갯수
+	
 	out_width = ceil((float)(width - 1) / (float)level) + 1;
 	out_height = ceil((float)(height - 1) / (float)level) + 1;
 
