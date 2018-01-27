@@ -43,7 +43,7 @@ void QuadTree::setIndexByLOD(vector<UINT>& indexData, Frustum* frustum)
 
 void QuadTree::Scan(vector<UINT>& indexData, Node * node, Frustum* frustum)
 {
-	bool  _isVisible = frustum->CheckSphere(node->center, node->radius);
+	bool  _isVisible =  frustum->CheckSphere(node->center, node->radius);
 	if (!_isVisible)
 		return;
 	if (node->subNodes[0] != 0) {

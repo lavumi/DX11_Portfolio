@@ -51,9 +51,6 @@
     <ClCompile Include="Render\RenderTexture.cpp">
       <Filter>Render</Filter>
     </ClCompile>
-    <ClCompile Include="ProceduralTexture\Grass.cpp">
-      <Filter>ProceduralTexture</Filter>
-    </ClCompile>
     <ClCompile Include="ProceduralTexture\RNDNoise.cpp">
       <Filter>ProceduralTexture</Filter>
     </ClCompile>
@@ -123,6 +120,15 @@
     <ClCompile Include="Terrain\Skyplane.cpp">
       <Filter>Terrain</Filter>
     </ClCompile>
+    <ClCompile Include="Terrain\TerrainGrass.cpp">
+      <Filter>Terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="ProceduralTexture\GrassTexture.cpp">
+      <Filter>ProceduralTexture</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader\InstanceTextureShader.cpp">
+      <Filter>Shader</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameMain.h" />
@@ -182,9 +188,6 @@
     </ClInclude>
     <ClInclude Include="Render\RenderTexture.h">
       <Filter>Render</Filter>
-    </ClInclude>
-    <ClInclude Include="ProceduralTexture\Grass.h">
-      <Filter>ProceduralTexture</Filter>
     </ClInclude>
     <ClInclude Include="ProceduralTexture\RNDNoise.h">
       <Filter>ProceduralTexture</Filter>
@@ -254,6 +257,15 @@
     </ClInclude>
     <ClInclude Include="Terrain\Water.h">
       <Filter>Terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="Terrain\TerrainGrass.h">
+      <Filter>Terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="ProceduralTexture\GrassTexture.h">
+      <Filter>ProceduralTexture</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader\InstanceTextureShader.h">
+      <Filter>Shader</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -356,6 +368,9 @@
       <Filter>Shader\FX</Filter>
     </None>
     <None Include="Shader\FX\Terrain.fx">
+      <Filter>Shader\FX</Filter>
+    </None>
+    <None Include="Shader\FX\InstanceTextureShader.fx">
       <Filter>Shader\FX</Filter>
     </None>
   </ItemGroup>

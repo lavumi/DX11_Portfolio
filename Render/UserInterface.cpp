@@ -19,8 +19,8 @@ void UserInterface::Delete()
 
 void UserInterface::AddSun(D3DXVECTOR3 * lightDir, float* base)
 {
-	TwAddVarRW(bar, "Light Direction", TW_TYPE_DIR3F, lightDir, "group='Light'");
-	TwAddVarRW(bar, "BaseLight", TW_TYPE_FLOAT, base, "min=0 max=1 step=0.01 group='Light'");
+	//TwAddVarRW(bar, "Light Direction", TW_TYPE_DIR3F, lightDir, "group='Light'");
+	TwAddVarRW(bar, "Speed", TW_TYPE_FLOAT, base, "min=0 max=1 step=0.1 group='Light'");
 }
 
 void UserInterface::AddMaterial(string groupName, D3DXCOLOR * ambient, D3DXCOLOR * diffuse)

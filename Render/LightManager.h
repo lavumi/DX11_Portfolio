@@ -41,6 +41,6 @@ private:
 
 	D3DXVECTOR3 up = D3DXVECTOR3(0, 1, 0);
 
-
+	float speed;
 	float anglex, angley;
 };

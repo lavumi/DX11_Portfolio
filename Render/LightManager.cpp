@@ -14,22 +14,22 @@ LightManager * LightManager::Get()
 void LightManager::Update()
 {
 	D3DXVECTOR3 position, forward;
-	Camera::Get()->GetPosition(&position, &forward);
+	//Camera::Get()->GetPosition(&position, &forward);
+	position = D3DXVECTOR3(128, 0,128);
 
-
-	angley -= (float)D3DX_PI / 180 / 10;
+	angley -= (float)D3DX_PI / 180 * speed;
 
 	lightData.lightDirection.x = cosf(angley);
 	lightData.lightDirection.y = sinf(angley);
 	
 
+	
 
 
-	D3DXVec3Normalize(&forward, &forward);
 	D3DXVec3Normalize(&lightData.lightDirection, &lightData.lightDirection);
 
 
-	D3DXMatrixLookAtLH(&lightData.lightView, &position, &(lightData.lightDirection + position), &up);
+	D3DXMatrixLookAtLH(&lightData.lightView, &(position - lightData.lightDirection * 300), &(position), &up);
 	D3DXMatrixOrthoLH(&lightData.lightProjection,500, 500, 0.1f, 500);
 	
 	D3DXMatrixTranspose(&lightData.lightView, &lightData.lightView);
@@ -40,8 +40,9 @@ LightManager::LightManager()
 {
 	lightData.lightDirection = D3DXVECTOR3(0.01f, -1, 0.01f);
 
-	anglex = angley = (float)D3DX_PI / 180 *90;
-//	UserInterface::Get()->AddSun(&lightData.lightDirection, nullptr);
+	anglex = angley = (float)D3DX_PI / 180 * -90;
+	speed = 0;
+	UserInterface::Get()->AddSun(&lightData.lightDirection, &speed);
 }
 
 LightManager::~LightManager()

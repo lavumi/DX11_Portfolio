@@ -1,11 +1,11 @@
 #pragma once
 
 class RenderTexture;
-class Grass 
+class GrassTexture 
 {
 public:
-	Grass();
-	~Grass();
+	GrassTexture();
+	~GrassTexture();
 
 	void DrawTexture();
 
@@ -13,8 +13,12 @@ public:
 	void Render();
 
 
+	
+
 	ID3D11ShaderResourceView* diffuse;
 	ID3D11ShaderResourceView* finalResult;
+	ID3D11ShaderResourceView* getGrassTexture();
+
 private:
 	wstring basePath;
 	vector<wstring> ShaderList;
@@ -25,7 +29,7 @@ private:
 	void RND_SRT();
 	void RND_SRT_Instancing();
 
-
+	void DrawGrassTexture();
 
 	void CreateShader(int);
 	void CreateBuffer();
@@ -37,6 +41,7 @@ private:
 	RenderTexture* directionalWarp;
 	RenderTexture* rndDraw;
 
+	RenderTexture* grassTexture;
 
 	int width;
 

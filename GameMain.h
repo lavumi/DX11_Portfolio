@@ -8,9 +8,10 @@ class Skydome;
 class Landscape;
 class Water;
 class Skyplane;
+class TerrainGrass;
 	
 
-class Grass;
+class GrassTexture;
 class MosaicTile;
 
 
@@ -58,7 +59,7 @@ private:
 
 	Frustum* frustum;
 
-	Grass* grass;
+	GrassTexture* grassTexture;
 	//MosaicTile* mosaicTile;
 	//RNDNoise* noise;
 
@@ -66,6 +67,7 @@ private:
 	Skyplane* cloud;
 	Landscape* landscape;
 	Water* lake;
+	TerrainGrass* grass;
 
 
 	TestCube* testcube;

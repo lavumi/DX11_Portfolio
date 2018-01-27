@@ -29,7 +29,7 @@ RenderTexture::RenderTexture(UINT width, UINT height)
 
 	textureDesc.MipLevels = 1;
 	textureDesc.ArraySize = 1;
-	textureDesc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+	textureDesc.Format = DXGI_FORMAT_R16G16B16A16_FLOAT;
 	textureDesc.SampleDesc.Count = 1;
 	textureDesc.Usage = D3D11_USAGE_DEFAULT;
 	textureDesc.BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
@@ -56,7 +56,7 @@ RenderTexture::RenderTexture(UINT width, UINT height)
 	D3D11_SHADER_RESOURCE_VIEW_DESC viewDesc;
 	ZeroMemory(&viewDesc, sizeof(D3D11_SHADER_RESOURCE_VIEW_DESC));
 	viewDesc.Format = textureDesc.Format;
-	viewDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+	viewDesc.ViewDimension = D3D_SRV_DIMENSION_TEXTURE2D;
 	viewDesc.Texture2D.MipLevels = 1;
 
 	hr = D3D::GetDevice()->CreateShaderResourceView(texture, &viewDesc, &resourceView);
@@ -83,6 +83,8 @@ RenderTexture::RenderTexture(UINT width, UINT height)
 	depthBufferDesc.MiscFlags = 0;
 
 	D3D::GetDevice()->CreateTexture2D(&depthBufferDesc, NULL, &depthStencilBuffer);
+
+
 
 	D3D11_DEPTH_STENCIL_VIEW_DESC depthStencilViewDesc;
 	ZeroMemory(&depthStencilViewDesc, sizeof(depthStencilViewDesc));
@@ -123,8 +125,6 @@ void RenderTexture::Clear(float r , float g , float b , float a )
 
 	D3DXCOLOR color = D3DXCOLOR(r, g, b, a);
 	D3D::GetDeviceContext()->ClearRenderTargetView(renderView, color);
-
-
 
 	D3D::GetDeviceContext()->ClearDepthStencilView(depthStencilView, D3D11_CLEAR_DEPTH, 1, 0);
 

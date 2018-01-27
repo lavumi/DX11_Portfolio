@@ -412,19 +412,19 @@ void D3D::CreateDefaultDepthView()
 /////////////////////////////////////////////////////////////
 void D3D::CreateBlenders()
 {
-	d3dBlendState = new ID3D11BlendState*[6];
+	d3dBlendState = new ID3D11BlendState*[7];
 
 
 	D3D11_BLEND_DESC omDesc;
 	ZeroMemory(&omDesc, sizeof(D3D11_BLEND_DESC));
 
-
+	
 	omDesc.RenderTarget[0].BlendEnable = true;
 	omDesc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
 	omDesc.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
 	omDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
-	omDesc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
-	omDesc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
+	omDesc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_SRC_ALPHA;
+	omDesc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_INV_SRC_ALPHA;
 	omDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
 	omDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
 
@@ -481,6 +481,17 @@ void D3D::CreateBlenders()
 	omDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
 
 	D3D::GetDevice()->CreateBlendState(&omDesc, &d3dBlendState[5]);
+
+	omDesc.AlphaToCoverageEnable = true;
+	omDesc.RenderTarget[0].BlendEnable = true;
+	omDesc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
+	omDesc.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
+	omDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
+	omDesc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_SRC_ALPHA;
+	omDesc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_INV_SRC_ALPHA;
+	omDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+	omDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+	D3D::GetDevice()->CreateBlendState(&omDesc, &d3dBlendState[6]);
 }
 
 
@@ -513,4 +524,10 @@ void D3D::SetBlender_AddBlend()
 void D3D::SetBlender_BlendFacter(const float factor)
 {
 	deviceContext->OMSetBlendState(d3dBlendState[4], &factor, 0xffffffff);
+}
+
+void D3D::SetBlender_alphaCoverage()
+{
+
+	deviceContext->OMSetBlendState(d3dBlendState[6], 0, 0xffffffff);
 }

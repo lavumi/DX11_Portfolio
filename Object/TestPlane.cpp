@@ -98,8 +98,8 @@ void TestPlane::CreateBuffer()
 {
 	HRESULT hr;
 
-	vertexCount =12;
-	indexCount = 18;
+	vertexCount =4;
+	indexCount = 6;
 
 	VertexTextureNormalTangent* vertexData = new VertexTextureNormalTangent[vertexCount];
 	int i = 0;
@@ -122,9 +122,7 @@ void TestPlane::CreateBuffer()
 
 	UINT* indexData = new UINT[indexCount]{
 		0, 3, 1, 2, 1, 3, 
-		4, 5, 7, 6, 7, 5,
-		8, 11, 9, 10, 9, 11
-};
+	};
 
 
 	for (UINT i = 0; i < vertexCount; i++) {

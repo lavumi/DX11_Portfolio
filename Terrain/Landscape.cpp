@@ -8,29 +8,16 @@ Landscape::Landscape()
 	:heightMapFile(L"./Terrain/heightmap.jpg")
 
 {
-	LoadHeightMap();
-	CreateVertexData();
-	CreateIndexData();
-	CreateNormalData();
-	CreateBuffer();
+	
 
 	D3DXMatrixIdentity(&world);
 	diffuseMap = 0;
 	normalMap = 0;
 	specularMap = 0;
 
-
-	quadTree = new QuadTree(width+1, height+1);
-	quadTree->CreateTree();
-
-
 	diffuseMap = new ID3D11ShaderResourceView*[3];
 
 	HRESULT hr = D3DX11CreateShaderResourceViewFromFile(D3D::GetDevice(), L"./Terrain/normal.jpg", nullptr, nullptr, &normalMap, nullptr);
-	
-
-
-
 	assert(SUCCEEDED(hr));
 	hr = D3DX11CreateShaderResourceViewFromFile(D3D::GetDevice(), L"./Terrain/underwater.jpg", nullptr, nullptr, &diffuseMap[1], nullptr);
 	assert(SUCCEEDED(hr));
@@ -48,6 +35,23 @@ Landscape::~Landscape()
 	
 	SAFE_RELEASE(indexBuffer);
 	SAFE_RELEASE(vertexBuffer);
+}
+
+void Landscape::Initialize()
+{
+	LoadHeightMap();
+	CreateVertexData();
+	CreateIndexData();
+	CreateNormalData();
+	CreateBuffer();
+
+	CheckGround();
+
+	quadTree = new QuadTree(width + 1, height + 1);
+	quadTree->CreateTree();
+
+
+
 }
 
 void Landscape::LoadHeightMap()
@@ -304,4 +308,17 @@ void Landscape::changeLOD(Frustum* frustum)
 	D3D::GetDeviceContext()->Unmap(indexBuffer, 0);
 	indexCount = indexDataTemp.size();
 
+}
+
+void Landscape::CheckGround()
+{
+	D3DXMATRIX position;
+	for(int i = 0;i<vertexCount;i++){
+		if (vertexData[i].normal.y >= 0.95f && vertexData[i].position.y > -7.7f && vertexData[i].position.y <5.0f) {
+			
+			D3DXMatrixTranslation(&position, vertexData[i].position.x, vertexData[i].position.y, vertexData[i].position.z);
+			grassGround.push_back(position);
+		}
+			
+	}
 }

@@ -5,7 +5,7 @@
 #include "./Render\RenderTexture.h"
 #include "./Render/Frustum.h"
 
-#include "./ProceduralTexture/Grass.h"
+#include "./ProceduralTexture/GrassTexture.h"
 #include "./ProceduralTexture/MosaicTile.h"
 #include "./ProceduralTexture/RNDNoise.h"
 
@@ -13,6 +13,7 @@
 #include "./Terrain/Skyplane.h"
 #include "./Terrain/Landscape.h"
 #include "./Terrain/Water.h"
+#include "./Terrain/TerrainGrass.h"
 
 
 #include "./Object/TestCube.h"
@@ -52,8 +53,9 @@ void GameMain::Initialize()
 	cloud = new Skyplane();
 	landscape = new Landscape();
 	lake = new Water();
+	grass = new TerrainGrass();
 
-	grass = new Grass();
+	grassTexture = new GrassTexture();
 	//mosaicTile = new MosaicTile();
 	//noise = new RNDNoise();
 
@@ -77,9 +79,12 @@ void GameMain::Initialize()
 
 
 
-	grass->DrawTexture();
-	landscape->SetTexture(grass->diffuse, nullptr, nullptr);
+	landscape->Initialize();
 
+
+	grassTexture->DrawTexture();
+	landscape->SetTexture(grassTexture->diffuse, nullptr, nullptr);
+	grass->setDiffuseMap(grassTexture->getGrassTexture());
 	LodOff = false;
 }
 
@@ -119,10 +124,10 @@ void GameMain::Update()
 
 
 	if (Keyboard::Get()->KeyUp(VK_SPACE)) {
-		//depthShadowTexture->SaveTexture(L"depthShadow.png");
+		depthShadowTexture->SaveTexture(L"depthShadow.png");
 		//shadowTexture->SaveTexture(L"shadow.png");
-		blurShadowTexture->SaveTexture(L"blur.png");
-		//	lakeRefractionTexture->SaveTexture(L"Mirror.png");
+		//blurShadowTexture->SaveTexture(L"blur.png");
+		//lakeRefractionTexture->SaveTexture(L"Mirror.png");
 		LodOff = !LodOff;
 	}
 	if (!LodOff)		landscape->changeLOD(frustum);
@@ -147,8 +152,8 @@ void GameMain::PreRender()
 		depthShadowTexture->SetTarget();
 		depthShadowTexture->Clear(0, 0, 0, 1);
 
-		testplane->Render();
-		depthShadowShader->Render(testplane->indexCount, testplane->world, view, projection);
+		//testplane->Render();
+		//depthShadowShader->Render(testplane->indexCount, testplane->world, view, projection);
 
 
 		testcube->Render();
@@ -284,6 +289,7 @@ void GameMain::PreRender()
 
 void GameMain::Render()
 {
+
 	D3DXMATRIX view, projection;
 
 
@@ -308,6 +314,8 @@ void GameMain::Render()
 	Rasterizer::Get()->SetOnCullMode();
 
 
+
+
 	testcube->Render();
 	for (int i = 0; i < 6; i++) {
 		normalMapShader->Render(testcube->indexCount, testcube->world[i], view, projection, testcube->diffuseMap, testcube->normalMap, testcube->heightMap, *blurShadowTexture->GetShadowResourceView());
@@ -326,6 +334,22 @@ void GameMain::Render()
 	lake->Render();
 	waterShader->Render(lake->indexCount, lake->world, view, projection, lake->getNormalTexture(), cloud->getPerlinMap(), *lakeReflectionTexture->GetShadowResourceView(), *lakeRefractionTexture->GetShadowResourceView());
 
+
+
+
+
+
+
+	D3D::Get()->SetBlender_alphaCoverage();
+
+	//vector<D3DXMATRIX> pos;
+	//landscape->GetGroundPos(pos);
+
+	//grass->Render();
+	//for (int i = 0; i < pos.size(); i++) {
+	//	textureShader->Render(grass->getIndexCount(), pos[i], view, projection, grass->getDiffuseMap());
+	//}
+	
 
 	//WATER REFLECTION OLD ver.
 	{

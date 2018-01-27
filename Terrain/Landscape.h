@@ -10,6 +10,9 @@ public:
 	~Landscape();
 
 
+	void Initialize();
+
+
 	void LoadHeightMap();
 	void CreateVertexData();
 	void CreateIndexData();
@@ -62,11 +65,12 @@ public:
 
 	 void changeLOD(Frustum* frustum);
 
-
-
+	 void GetGroundPos(vector<D3DXMATRIX>& grassGround) {
+		 grassGround = this->grassGround;
+	 }
 private:
 
-
+	void CheckGround();
 
 
 	//MaterialBuffer* materialBuffer;
@@ -74,6 +78,8 @@ private:
 	wstring heightMapFile;
 	BYTE* heightData;
 
+
+	vector<D3DXMATRIX> grassGround;
 
 
 

@@ -168,7 +168,7 @@
     <ClInclude Include="Object\OrthoWindowPlane.h" />
     <ClInclude Include="Object\TestCube.h" />
     <ClInclude Include="Object\TestPlane.h" />
-    <ClInclude Include="ProceduralTexture\Grass.h" />
+    <ClInclude Include="ProceduralTexture\GrassTexture.h" />
     <ClInclude Include="ProceduralTexture\MosaicTile.h" />
     <ClInclude Include="ProceduralTexture\RNDNoise.h" />
     <ClInclude Include="Render\Frustum.h" />
@@ -183,6 +183,7 @@
     <ClInclude Include="Shader\CameraBuffer.h" />
     <ClInclude Include="Shader\ColorShader.h" />
     <ClInclude Include="Shader\DepthShadowShader.h" />
+    <ClInclude Include="Shader\InstanceTextureShader.h" />
     <ClInclude Include="Shader\ShadowShader.h" />
     <ClInclude Include="Shader\SkyplaneShader.h" />
     <ClInclude Include="Shader\TextureShader.h" />
@@ -201,6 +202,7 @@
     <ClInclude Include="System\Mouse.h" />
     <ClInclude Include="System\TweakBar.h" />
     <ClInclude Include="System\Window.h" />
+    <ClInclude Include="Terrain\TerrainGrass.h" />
     <ClInclude Include="Terrain\Landscape.h" />
     <ClInclude Include="Terrain\QuadTree.h" />
     <ClInclude Include="Terrain\Skydome.h" />
@@ -216,7 +218,7 @@
     <ClCompile Include="Object\OrthoWindowPlane.cpp" />
     <ClCompile Include="Object\TestCube.cpp" />
     <ClCompile Include="Object\TestPlane.cpp" />
-    <ClCompile Include="ProceduralTexture\Grass.cpp" />
+    <ClCompile Include="ProceduralTexture\GrassTexture.cpp" />
     <ClCompile Include="ProceduralTexture\MosaicTile.cpp" />
     <ClCompile Include="ProceduralTexture\RNDNoise.cpp" />
     <ClCompile Include="Render\Frustum.cpp" />
@@ -230,6 +232,7 @@
     <ClCompile Include="Shader\BlurShader.cpp" />
     <ClCompile Include="Shader\ColorShader.cpp" />
     <ClCompile Include="Shader\DepthShadowShader.cpp" />
+    <ClCompile Include="Shader\InstanceTextureShader.cpp" />
     <ClCompile Include="Shader\ShadowShader.cpp" />
     <ClCompile Include="Shader\SkyplaneShader.cpp" />
     <ClCompile Include="Shader\TextureShader.cpp" />
@@ -244,6 +247,7 @@
     <ClCompile Include="System\Mouse.cpp" />
     <ClCompile Include="System\TweakBar.cpp" />
     <ClCompile Include="System\Window.cpp" />
+    <ClCompile Include="Terrain\TerrainGrass.cpp" />
     <ClCompile Include="Terrain\Landscape.cpp" />
     <ClCompile Include="Terrain\QuadTree.cpp" />
     <ClCompile Include="Terrain\Skydome.cpp" />
@@ -344,6 +348,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Shader\FX\WaterShader.fx">
+      <FileType>Document</FileType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shader\FX\InstanceTextureShader.fx">
       <FileType>Document</FileType>
     </None>
   </ItemGroup>

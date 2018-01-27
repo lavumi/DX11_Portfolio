@@ -1,15 +1,16 @@
 #include "../stdafx.h"
-#include "Grass.h"
+#include "GrassTexture.h"
 #include "../Render/RenderTexture.h"
 #include "../ProceduralTexture/RNDNoise.h"
 
 
-Grass::Grass()
+GrassTexture::GrassTexture()
 	:vertexBlob(nullptr), pixelBlob(nullptr), vertexShader(nullptr), pixelShader(nullptr)
 	,vertexBuffer(nullptr), indexBuffer(nullptr)
 	,grassSingle(nullptr)
 	, gradient(nullptr)
 	, directionalWarp(nullptr)
+	,grassTexture(nullptr)
 	, rndDraw(nullptr) , finalResult(NULL)
 	 {
 
@@ -34,7 +35,7 @@ Grass::Grass()
 	banding = 0.1f;
 	banding2 = 0.333f;
 
-	count = 500;
+	count = 400;
 	rotation = 180;
 	minSize = 0.3f;
 	maxSize = 0.5f;
@@ -49,11 +50,11 @@ Grass::Grass()
 	//	,&minSize ,&maxSize ,&color1, &color2);
 }	
 
-Grass::~Grass()
+GrassTexture::~GrassTexture()
 {
 
 	
-
+	SAFE_DELETE(grassTexture);
 	SAFE_DELETE(grassSingle);
 	SAFE_DELETE(gradient);
 	SAFE_DELETE(directionalWarp);
@@ -72,17 +73,19 @@ Grass::~Grass()
 
 }
 
-void Grass::DrawTexture()
+void GrassTexture::DrawTexture()
 {
 	SAFE_DELETE(grassSingle);
 	SAFE_DELETE(gradient);
 	SAFE_DELETE(directionalWarp);
 	SAFE_DELETE(rndDraw);
+	SAFE_DELETE(grassTexture);
+
 	grassSingle = new RenderTexture();
 	gradient = new RenderTexture();
-	directionalWarp = new RenderTexture();
+	directionalWarp = new RenderTexture(720, 720);
 	rndDraw = new RenderTexture(720, 720);
-
+	grassTexture = new RenderTexture(256, 256);
 
 	//기본 렌더링 셋팅
 	UINT stride = sizeof(VertexTexture);
@@ -99,10 +102,17 @@ void Grass::DrawTexture()
 	DirectionalWarp();
 	//RND_SRT();
 	RND_SRT_Instancing();
+	DrawGrassTexture();
 	D3D::Get()->SetDepthStencilState(D3D::DS_state::onState);
 	//최종 그릴 이미지
 	SetFinalResult(rndDraw);
 	
+
+	//grassSingle		->SaveTexture(L"grassSingle.png");
+	//gradient		->SaveTexture(L"gradient.png");
+	//directionalWarp ->SaveTexture(L"directionalWarp.png");
+	//rndDraw			->SaveTexture(L"rndDraw.png");
+	//grassTexture	->SaveTexture(L"grassTexture.png");
 	//SetFinalResult(directionalWarp);
 
 	//렌더링 타겟 되돌리기
@@ -111,7 +121,7 @@ void Grass::DrawTexture()
 
 }
 
-void Grass::Render()
+void GrassTexture::Render()
 {
 	D3D::Get()->SetBlender_Off();
 	CreateShader((int)ShaderList.size()-1);
@@ -143,6 +153,10 @@ void Grass::Render()
 	D3D::GetDeviceContext()->DrawIndexed(6, 0, 0);
 
 
+}
+ID3D11ShaderResourceView * GrassTexture::getGrassTexture()
+{
+	return *(grassTexture->GetShadowResourceView());
 }
 /*
 void Grass::Render2()
@@ -201,11 +215,11 @@ void Grass::Render3()
 }
 */
 
-void Grass::DrawGrassSingle()
+void GrassTexture::DrawGrassSingle()
 {
 
 	grassSingle->SetTarget();
-	grassSingle->Clear();
+	grassSingle->Clear(0,0,0,0);
 
 
 	struct remp {
@@ -248,12 +262,12 @@ void Grass::DrawGrassSingle()
 
 
 }
-void Grass::DirectionalWarp()
+void GrassTexture::DirectionalWarp()
 {
 
 	{
 		gradient->SetTarget();
-		gradient->Clear();
+		gradient->Clear(0, 0, 0, 0);
 
 		struct remp {
 			float banding;
@@ -290,6 +304,8 @@ void Grass::DirectionalWarp()
 		D3D::GetDeviceContext()->VSSetShader(vertexShader, NULL, 0);
 		D3D::GetDeviceContext()->PSSetShader(pixelShader, NULL, 0);
 
+
+
 		D3D::GetDeviceContext()->DrawIndexed(6, 0, 0);
 
 		SAFE_RELEASE(buffer);
@@ -301,7 +317,7 @@ void Grass::DirectionalWarp()
 
 
 	directionalWarp->SetTarget();
-	directionalWarp->Clear(0, 0, 0, 1);
+	directionalWarp->Clear(0, 0, 0, 0);
 
 
 	CreateShader(2);
@@ -315,13 +331,13 @@ void Grass::DirectionalWarp()
 
 
 
-
 	D3D::Get()->SetBlender_MaxBlend();
+	
 	D3D::GetDeviceContext()->DrawIndexed(6, 0, 0);
 
 
 }
-void Grass::RND_SRT()
+void GrassTexture::RND_SRT()
 {
 	rndDraw->SetTarget();
 	rndDraw->Clear(0, 0, 0, 1);
@@ -510,10 +526,10 @@ void Grass::RND_SRT()
 	SAFE_RELEASE(bufferColor);
 }
 
-void Grass::RND_SRT_Instancing()
+void GrassTexture::RND_SRT_Instancing()
 {
 	rndDraw->SetTarget();
-	rndDraw->Clear(0, 0, 0, 1);
+	rndDraw->Clear(0, 0, 0, 0);
 
 	if (maxSize <= minSize + 0.01f) {
 		maxSize = minSize + 0.01f;
@@ -652,11 +668,9 @@ void Grass::RND_SRT_Instancing()
 		InstanceData temp;
 		temp.scale = (float)(rand() % (int)((maxSize - minSize) * 100)) / 100 + minSize;
 		temp.rotation =  (float)D3DX_PI / 180 * (float)(rand() % (rotation + 1));
-		//D3DXMatrixScaling(&instances[i].scale, scaletemp, scaletemp, scaletemp);
-		//D3DXMatrixRotationZ(&instances[i].rotation,  D3DX_PI / 180* rotationtemp);
-		temp.position.x =(float)(rand() % 200) / 100 - 1.0f;
-		temp.position.y =(float)(rand() % 200) / 100 - 1.0f;
-		temp.position.z =(float)(500 - i) / 500;
+		temp.position.x = (float)(rand() % 200) / 100 - 1.0f;
+		temp.position.y = (float)(rand() % 200) / 100 - 1.0f;
+		temp.position.z = (float)(500 - i) / 500;
 		instances.push_back(temp);
 
 		{
@@ -804,6 +818,281 @@ void Grass::RND_SRT_Instancing()
 	SAFE_RELEASE(instanceBuffer);
 }
 
+void GrassTexture::DrawGrassTexture()
+{
+	grassTexture->SetTarget();
+	grassTexture->Clear(0, 0, 0, 0);
+
+	SAFE_RELEASE(vertexBlob);
+	SAFE_RELEASE(vertexShader);
+
+	SAFE_RELEASE(pixelBlob);
+	SAFE_RELEASE(pixelShader);
+
+	ID3D10Blob* error;
+	wstring filePath = basePath + L"randomSRTInstance.fx";
+	HRESULT hr = D3DX10CompileFromFile
+	(
+		filePath.c_str(), NULL, NULL, "VS", "vs_5_0"
+		, D3D10_SHADER_ENABLE_STRICTNESS, 0, NULL
+		, &vertexBlob, &error, NULL
+	);
+
+	if (FAILED(hr))
+	{
+		if (error != NULL)
+		{
+			string str = (const char *)error->GetBufferPointer();
+			MessageBoxA(NULL, str.c_str(), "Shader Error", MB_OK);
+		}
+		assert(false);
+	}
+
+	hr = D3D::GetDevice()->CreateVertexShader
+	(
+		vertexBlob->GetBufferPointer()
+		, vertexBlob->GetBufferSize()
+		, NULL
+		, &vertexShader
+	);
+	assert(SUCCEEDED(hr));
+
+
+	hr = D3DX10CompileFromFile
+	(
+		filePath.c_str(), NULL, NULL, "PS", "ps_5_0"
+		, D3D10_SHADER_ENABLE_STRICTNESS, 0, NULL
+		, &pixelBlob, &error, NULL
+	);
+	if (FAILED(hr))
+	{
+		if (error != NULL)
+		{
+			string str = (const char *)error->GetBufferPointer();
+			MessageBoxA(NULL, str.c_str(), "Shader Error", MB_OK);
+		}
+		assert(false);
+	}
+
+	hr = D3D::GetDevice()->CreatePixelShader
+	(
+		pixelBlob->GetBufferPointer()
+		, pixelBlob->GetBufferSize()
+		, NULL
+		, &pixelShader
+	);
+	assert(SUCCEEDED(hr));
+
+
+
+
+
+
+
+
+
+	SAFE_RELEASE(layout);
+	D3D11_INPUT_ELEMENT_DESC layoutdesc[] =
+	{
+		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		{ "INSTVECTOR",0, DXGI_FORMAT_R32G32B32_FLOAT, 1,0 , D3D11_INPUT_PER_INSTANCE_DATA, 1 },
+		{ "INSTVECTOR",1, DXGI_FORMAT_R32_FLOAT, 1,12 , D3D11_INPUT_PER_INSTANCE_DATA, 1 },
+		{ "INSTVECTOR",2, DXGI_FORMAT_R32_FLOAT, 1,16 , D3D11_INPUT_PER_INSTANCE_DATA, 1 },
+	};
+
+	hr = D3D::GetDevice()->CreateInputLayout
+	(
+		layoutdesc
+		, 5
+		, vertexBlob->GetBufferPointer()
+		, vertexBlob->GetBufferSize()
+		, &layout
+	);
+	assert(SUCCEEDED(hr));
+
+
+
+
+
+
+
+
+
+
+	//인스턴스 데이터 생성
+	struct InstanceData {
+		D3DXVECTOR3 position;
+		float scale;
+		float rotation;
+	};
+	ID3D11Buffer* instanceBuffer;
+
+
+	vector<InstanceData> instances;
+	//	instances = new InstanceData[count];
+
+
+
+
+
+
+	//데이터 입력
+	for (int i = 0; i < 40; i++) {
+		//랜덤값 셋팅
+		InstanceData temp;
+		temp.scale = (float)(rand() % (int)((maxSize - minSize) * 100)) / 100 + minSize;
+		temp.rotation = (float)D3DX_PI / 180 * (float)(rand() % (10 + 1));
+		temp.position.x =  -1.0f + (float)i / (float)40 *2;//(float)(rand() % 200) / 100;
+		temp.position.y = -0.0f;// (float)(rand() % 200) / 200;
+		temp.position.z = (float)(500 - i) / 500;
+		instances.push_back(temp);
+		{
+			bool InBorderX = false;
+			bool InBorderY = false;
+
+			D3DXVECTOR3 tempVector = temp.position;
+
+			float tempX = tempVector.x;
+			if (temp.position.x > 0.5f) {
+				tempX -= 2;
+			}
+			else if (temp.position.x < -0.5f) {
+				tempX += 2;
+			}
+			else
+				InBorderX = true;
+
+			float tempY = tempVector.y;
+			if (temp.position.y > 0.5f) {
+				tempY -= 2;
+			}
+			else if (temp.position.y < -0.5f) {
+				tempY += 2;
+			}
+			else
+				InBorderY = true;
+
+			if (!InBorderY && !InBorderX) {
+				temp.position = tempVector;
+				temp.position.x = tempX;
+				temp.position.y = tempY;
+				instances.push_back(temp);
+			}
+
+			if (!InBorderX) {
+				temp.position = tempVector;
+
+				temp.position.x = tempX;
+				instances.push_back(temp);
+			}
+
+			if (!InBorderY) {
+				temp.position = tempVector;
+				temp.position.y = tempY;
+				instances.push_back(temp);
+			}
+		}
+	}
+
+
+
+	UINT totalcount = (UINT)instances.size();
+	D3D11_BUFFER_DESC desc;
+	desc.Usage = D3D11_USAGE_DEFAULT;
+	desc.ByteWidth = sizeof(InstanceData) * totalcount;
+	desc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	desc.CPUAccessFlags = 0;
+	desc.MiscFlags = 0;
+	desc.StructureByteStride = 0;
+
+
+	D3D11_SUBRESOURCE_DATA data;
+	data.pSysMem = &instances[0];
+	data.SysMemPitch = 0;
+	data.SysMemSlicePitch = 0;
+
+
+
+	hr = D3D::GetDevice()->CreateBuffer(&desc, &data, &instanceBuffer);
+	assert(SUCCEEDED(hr));
+
+	//SAFE_DELETE_ARRAY(instances);
+
+
+	//색상 버퍼
+	ID3D11Buffer* bufferColor;
+
+	struct ColorBuffer {
+		D3DXCOLOR color1;
+		D3DXCOLOR color2;
+		float minScale;
+		float maxScale;
+		D3DXVECTOR2 padd;
+	}colorbuffer;
+
+	colorbuffer.color1 = color1;
+	colorbuffer.color2 = color2;
+	colorbuffer.minScale = minSize;
+	colorbuffer.maxScale = maxSize;
+
+	D3D11_SUBRESOURCE_DATA subResource = { 0 };
+	subResource.pSysMem = &colorbuffer;
+
+
+	desc = { 0 };
+	desc.Usage = D3D11_USAGE_DEFAULT;
+	desc.ByteWidth = sizeof(ColorBuffer);
+	desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	desc.CPUAccessFlags = 0;
+	desc.MiscFlags = 0;
+	desc.StructureByteStride = 0;
+
+
+
+	hr = D3D::GetDevice()->CreateBuffer(&desc, &subResource, &bufferColor);
+	assert(SUCCEEDED(hr));
+
+
+
+
+
+
+	UINT stride[2];
+	stride[0] = sizeof(VertexTexture);
+	stride[1] = sizeof(InstanceData);
+
+
+	UINT offset[2];
+	offset[0] = 0;
+	offset[1] = 0;
+
+	ID3D11Buffer* bufferPointers[2];
+	bufferPointers[0] = vertexBuffer;
+	bufferPointers[1] = instanceBuffer;
+
+
+
+
+	D3D::GetDeviceContext()->IASetVertexBuffers(0, 2, bufferPointers, stride, offset);
+	D3D::GetDeviceContext()->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R32_UINT, 0);
+	D3D::GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	D3D::GetDeviceContext()->IASetInputLayout(layout);
+	D3D::GetDeviceContext()->VSSetShader(vertexShader, NULL, 0);
+	D3D::GetDeviceContext()->PSSetShader(pixelShader, NULL, 0);
+	D3D::GetDeviceContext()->PSSetShaderResources(0, 1, directionalWarp->GetShadowResourceView());
+	D3D::GetDeviceContext()->PSSetConstantBuffers(0, 1, &bufferColor);
+
+
+
+	D3D::Get()->SetBlender_MaxBlend();
+
+	D3D::GetDeviceContext()->DrawIndexedInstanced(6, totalcount, 0, 0, 0);
+
+	SAFE_RELEASE(bufferColor);
+	SAFE_RELEASE(instanceBuffer);
+}
 
 
 
@@ -835,7 +1124,8 @@ void Grass::RND_SRT_Instancing()
 
 
 
-void Grass::CreateShader(int shaderIdx)
+
+void GrassTexture::CreateShader(int shaderIdx)
 {
 	SAFE_RELEASE(vertexBlob);
 	SAFE_RELEASE(vertexShader);
@@ -910,7 +1200,7 @@ void Grass::CreateShader(int shaderIdx)
 		assert(0);
 }
 
-void Grass::CreateBuffer()
+void GrassTexture::CreateBuffer()
 {
 	VertexTexture* rect = new VertexTexture[4];
 	float size = 720.0f / 1280.0f;
@@ -1013,7 +1303,7 @@ void Grass::CreateBuffer()
 //	Rasterizer::Get()->SetOnCullMode();
 //}
 
-void Grass::SetFinalResult(RenderTexture * renderTexture)
+void GrassTexture::SetFinalResult(RenderTexture * renderTexture)
 {
 	finalResult = *(renderTexture->GetShadowResourceView());
 	diffuse = *(renderTexture->GetShadowResourceView());

@@ -14,7 +14,7 @@ TestCube::TestCube()
 		D3DXMatrixTranslation(&world[i], 128 + 10 + 4*(i%3) , 0, 128 + 10 * (i/3));
 	}
 
-	D3DXMatrixTranslation(&world[0], 1, 0, 0);
+	
 
 	CreateBuffer();
 	
