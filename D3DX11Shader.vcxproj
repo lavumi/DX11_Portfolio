@@ -170,7 +170,7 @@
     <ClInclude Include="Object\TestPlane.h" />
     <ClInclude Include="ProceduralTexture\GrassTexture.h" />
     <ClInclude Include="ProceduralTexture\MosaicTile.h" />
-    <ClInclude Include="ProceduralTexture\RNDNoise.h" />
+    <ClInclude Include="ProceduralTexture\PerlinNoise.h" />
     <ClInclude Include="Render\Frustum.h" />
     <ClInclude Include="Render\LightManager.h" />
     <ClInclude Include="Render\Rasterizer.h" />
@@ -220,7 +220,7 @@
     <ClCompile Include="Object\TestPlane.cpp" />
     <ClCompile Include="ProceduralTexture\GrassTexture.cpp" />
     <ClCompile Include="ProceduralTexture\MosaicTile.cpp" />
-    <ClCompile Include="ProceduralTexture\RNDNoise.cpp" />
+    <ClCompile Include="ProceduralTexture\PerlinNoise.cpp" />
     <ClCompile Include="Render\Frustum.cpp" />
     <ClCompile Include="Render\LightManager.cpp" />
     <ClCompile Include="Render\Rasterizer.cpp" />

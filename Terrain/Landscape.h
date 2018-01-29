@@ -3,6 +3,7 @@
 
 class Frustum;
 class QuadTree;
+class TerrainGrass;
 class Landscape 
 {
 public:
@@ -100,4 +101,5 @@ private:
 
 
 	QuadTree* quadTree;
+	TerrainGrass* grass;
 };

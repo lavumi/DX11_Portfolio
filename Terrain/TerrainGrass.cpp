@@ -69,8 +69,8 @@ void TerrainGrass::CreateBuffer()
 	VertexTexture* vertexData = new VertexTexture[vertexCount];
 	int i = 0;
 	vertexData[i].position = D3DXVECTOR3(-1.0f, 0.0f, 0.0f);			vertexData[i++].uv = D3DXVECTOR2(0, 1);
-	vertexData[i].position = D3DXVECTOR3( 1.0f, 0.0f, 0.0f);			vertexData[i++].uv = D3DXVECTOR2(1, 1);
-	vertexData[i].position = D3DXVECTOR3( 1.0f,  1.0f, 0.0f);			vertexData[i++].uv = D3DXVECTOR2(1, 0);
+	vertexData[i].position = D3DXVECTOR3( 1.0f, 0.0f, 0.0f);			vertexData[i++].uv = D3DXVECTOR2(2, 1);
+	vertexData[i].position = D3DXVECTOR3( 1.0f,  1.0f, 0.0f);			vertexData[i++].uv = D3DXVECTOR2(2, 0);
 	vertexData[i].position = D3DXVECTOR3(-1.0f,  1.0f, 0.0f);			vertexData[i++].uv = D3DXVECTOR2(0, 0);
 
 	UINT* indexData = new UINT[indexCount]{

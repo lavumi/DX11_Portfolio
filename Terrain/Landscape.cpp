@@ -2,7 +2,7 @@
 #include "Landscape.h"
 #include "QuadTree.h"
 
-//#include "../ProceduralTexture/RNDNoise.h"
+//#include "../ProceduralTexture/PerlinNoise.h"
 
 Landscape::Landscape()
 	:heightMapFile(L"./Terrain/heightmap.jpg")
@@ -312,6 +312,10 @@ void Landscape::changeLOD(Frustum* frustum)
 
 void Landscape::CheckGround()
 {
+	//D3DXMatrixTranslation(&world, 0, 0, 0);
+	//grassGround.push_back(world);
+	//return;
+
 	D3DXMATRIX position, rotation, world;
 	for(int i = 0;i<vertexCount;i++){
 		if (vertexData[i].normal.y >= 0.95f && vertexData[i].position.y > -7.0f && vertexData[i].position.y <0.0f) {

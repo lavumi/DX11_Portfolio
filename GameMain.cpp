@@ -7,7 +7,7 @@
 
 #include "./ProceduralTexture/GrassTexture.h"
 #include "./ProceduralTexture/MosaicTile.h"
-#include "./ProceduralTexture/RNDNoise.h"
+#include "./ProceduralTexture/PerlinNoise.h"
 
 #include "./Terrain/Skydome.h"
 #include "./Terrain/Skyplane.h"
@@ -57,7 +57,7 @@ void GameMain::Initialize()
 
 	grassTexture = new GrassTexture();
 	//mosaicTile = new MosaicTile();
-	//noise = new RNDNoise();
+	noise = new PerlinNoise();
 
 
 
@@ -112,6 +112,7 @@ void GameMain::Destroy()
 	SAFE_DELETE(grass);
 
 	SAFE_DELETE(grassTexture);
+	SAFE_DELETE(noise);
 
 	SAFE_DELETE(shadowtestPlane);
 
@@ -158,11 +159,12 @@ void GameMain::Update()
 
 
 	if (Keyboard::Get()->KeyUp(VK_SPACE)) {
-		depthShadowTexture->SaveTexture(L"depthShadow.png");
+		//depthShadowTexture->SaveTexture(L"depthShadow.png");
 		//shadowTexture->SaveTexture(L"shadow.png");
 		//blurShadowTexture->SaveTexture(L"blur.png");
 		//lakeRefractionTexture->SaveTexture(L"Mirror.png");
 		LodOff = !LodOff;
+		noise->MakePerlinNoise();
 	}
 	if (!LodOff)		landscape->changeLOD(frustum);
 
@@ -175,7 +177,7 @@ void GameMain::Update()
 
 void GameMain::PreRender()
 {
-	//return;
+	return;
 	D3DXMATRIX view, projection;
 	D3DXMatrixIdentity(&view);
 	D3DXMatrixIdentity(&projection);
@@ -324,12 +326,19 @@ void GameMain::PreRender()
 void GameMain::Render()
 {
 	//D3D::Get()->SetBlender_alphaCoverage();
-	//grassTexture->Render();
+	noise->Render();
+	//return;
+	D3DXMATRIX world, view, projection;
+	//Camera::Get()->GetDefaultView(&view);
+	//D3D::Get()->GetOrthoProjection(&projection);
+	//
+	//
+	//shadowtestPlane->Render();
+	//textureShader->Render(shadowtestPlane->indexCount, shadowtestPlane->world, view, projection, *noise->GetPerlinNoise());
+	//
 	//return;
 
-
-	D3DXMATRIX view, projection;
-
+	return;
 
 	Camera::Get()->GetView(&view);
 	D3D::Get()->GetProjection(&projection);
@@ -378,11 +387,11 @@ void GameMain::Render()
 
 
 
-	D3D::Get()->SetBlender_alphaCoverage();
-	Rasterizer::Get()->SetOffCullMode();
-	grass->Render();
-	instanceShader->Render(grass->getIndexCount(), grass->getInstanceCount(), view, projection, grass->getDiffuseMap());
-	Rasterizer::Get()->SetOnCullMode();
+	//D3D::Get()->SetBlender_alphaCoverage();
+	//Rasterizer::Get()->SetOffCullMode();
+	//grass->Render();
+	//instanceShader->Render(grass->getIndexCount(), grass->getInstanceCount(), view, projection, grass->getDiffuseMap());
+	//Rasterizer::Get()->SetOnCullMode();
 
 
 	//WATER REFLECTION OLD ver.

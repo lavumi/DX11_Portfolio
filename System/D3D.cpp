@@ -528,6 +528,5 @@ void D3D::SetBlender_BlendFacter(const float factor)
 
 void D3D::SetBlender_alphaCoverage()
 {
-
 	deviceContext->OMSetBlendState(d3dBlendState[6], 0, 0xffffffff);
 }

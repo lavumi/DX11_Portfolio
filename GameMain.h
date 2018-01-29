@@ -13,6 +13,7 @@ class TerrainGrass;
 
 class GrassTexture;
 class MosaicTile;
+class PerlinNoise;
 
 
 class TestCube;
@@ -61,8 +62,9 @@ private:
 	Frustum* frustum;
 
 	GrassTexture* grassTexture;
+
 	//MosaicTile* mosaicTile;
-	//RNDNoise* noise;
+	PerlinNoise* noise;
 
 	Skydome* skydome;
 	Skyplane* cloud;

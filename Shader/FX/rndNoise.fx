@@ -1,3 +1,9 @@
+cbuffer rndSeed : register(b0)
+{
+    float4 seed;
+}
+
+
 
 struct VertexInput
 {
@@ -21,7 +27,6 @@ PixelInput VS(VertexInput input)
     
     return output;
 }
-
 float CosineLerp(float x, float y, float fractional)
 {
     float ft = 3.141592f * fractional;
@@ -30,12 +35,13 @@ float CosineLerp(float x, float y, float fractional)
     return x * (1.0f - f) + y * f;
 }
 
+
 //망함. 쓰지 말자
 float Noise(float2 uv)
 {
-   float result = frac(cos(dot(uv, float2(52.49024f, 11.23151f))) * 41214.3215);
+   float result = frac(cos(dot(uv, float2(132.472583f, 141.1326f))) * 41624.31315);
    
-    result = lerp(result + 0.4f, result - 0.6f, step(result * result, 0.5f));
+    result = lerp(result, result - 0.8f, step(result , 0.5f));
    
     return result;
 }
@@ -45,8 +51,20 @@ float Noise(float2 uv)
 
 float SmoothNoise(float x, float y)
 {
-    float corners = (Noise(float2(x - 1, y - 1)) + Noise(float2(x + 1, y + 1)) + Noise(float2(x + 1, y - 1)) + Noise(float2(x - 1, y + 1))) / 16.0f;
-    float sides =  (Noise(float2(x, y - 1)) + Noise(float2(x, y + 1)) + Noise(float2(x + 1, y)) + Noise(float2(x - 1, y))) / 8.0f;
+    float corners =     (
+    Noise(float2(x - 1, y - 1)) + 
+    Noise(float2(x + 1, y + 1)) + 
+    Noise(float2(x + 1, y - 1)) + 
+    Noise(float2(x - 1, y + 1))
+    ) / 16.0f;
+
+    float sides =  (
+    Noise(float2(x, y - 1)) + 
+    Noise(float2(x, y + 1)) + 
+    Noise(float2(x + 1, y)) + 
+    Noise(float2(x - 1, y))
+    ) / 8.0f;
+
     float center = Noise(float2(x, y)) / 4.0f;
 
     return corners + sides + center;
@@ -71,11 +89,11 @@ float LerpedNoise(float x, float y)
 
 float CreatePerlinNoise(float x, float y)
 {
-    float result =0.0f, amplitude =1.0f, frequency = 1.0f, persistance = 0.5f;
-
-    for (int i = 0; i < 4; i++)
+    float result =0.0f, amplitude =0.5f, frequency = 1.0f, persistance = 0.5f;
+    frequency *= 2;
+    for (int i = 0; i <8; i++)
     {
-        result += LerpedNoise(x * frequency, y * frequency) * amplitude;
+        result += LerpedNoise(x * frequency + frequency, y * frequency - frequency) * amplitude;
         frequency *= 2;
         amplitude *= persistance;
      }
@@ -86,7 +104,8 @@ float CreatePerlinNoise(float x, float y)
 
 float4 PS(PixelInput input) : SV_Target
 {
-    float index = CreatePerlinNoise(input.uv.x  , input.uv.y );
-    return float4(index * 0.172f, index * 0.117f, index*0.09f, 1);
+    float index = CreatePerlinNoise(input.uv.x +seed.x  , input.uv.y + seed.y );
+    return float4(index, index, index, 1);
+    float4(index * 0.172f, index * 0.117f, index*0.09f, 1);
 }
 

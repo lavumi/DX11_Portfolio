@@ -51,9 +51,6 @@
     <ClCompile Include="Render\RenderTexture.cpp">
       <Filter>Render</Filter>
     </ClCompile>
-    <ClCompile Include="ProceduralTexture\RNDNoise.cpp">
-      <Filter>ProceduralTexture</Filter>
-    </ClCompile>
     <ClCompile Include="ProceduralTexture\MosaicTile.cpp">
       <Filter>ProceduralTexture</Filter>
     </ClCompile>
@@ -129,6 +126,9 @@
     <ClCompile Include="Shader\InstanceTextureShader.cpp">
       <Filter>Shader</Filter>
     </ClCompile>
+    <ClCompile Include="ProceduralTexture\PerlinNoise.cpp">
+      <Filter>ProceduralTexture</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameMain.h" />
@@ -188,9 +188,6 @@
     </ClInclude>
     <ClInclude Include="Render\RenderTexture.h">
       <Filter>Render</Filter>
-    </ClInclude>
-    <ClInclude Include="ProceduralTexture\RNDNoise.h">
-      <Filter>ProceduralTexture</Filter>
     </ClInclude>
     <ClInclude Include="ProceduralTexture\MosaicTile.h">
       <Filter>ProceduralTexture</Filter>
@@ -266,6 +263,9 @@
     </ClInclude>
     <ClInclude Include="Terrain\Landscape.h">
       <Filter>Terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="ProceduralTexture\PerlinNoise.h">
+      <Filter>ProceduralTexture</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
