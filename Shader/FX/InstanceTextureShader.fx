@@ -16,7 +16,10 @@ struct VertexInput
 {
     float4 position : POSITION0;
     float2 uv : TEXCOORD0;
-
+    float4 world0 : INSTMATRIX0;
+    float4 world1 : INSTMATRIX1;
+    float4 world2 : INSTMATRIX2;
+    float4 world3 : INSTMATRIX3;
 };
 
 struct PixelInput
@@ -30,7 +33,10 @@ PixelInput VS(VertexInput input)
 {
     PixelInput output;
     input.position.w = 1;
-    output.position = mul(input.position, _world);
+
+    float4x4 world = float4x4(input.world0, input.world1, input.world2, input.world3);
+
+    output.position = mul(input.position, world);
     output.position = mul(output.position, _view);
     output.position = mul(output.position, _projection);
 

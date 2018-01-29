@@ -1,13 +1,14 @@
 #include "../stdafx.h"
 #include "TerrainGrass.h"
+#include "Landscape.h"
 
 TerrainGrass::TerrainGrass()
 {
 
-	CreateBuffer();
 
 
-	D3DXMatrixIdentity(&world);
+
+
 
 
 	HRESULT hr = D3DX11CreateShaderResourceViewFromFile(D3D::GetDevice(), L"./Terrain/grass.dds", nullptr, nullptr, &diffuse, nullptr);
@@ -22,21 +23,37 @@ TerrainGrass::~TerrainGrass()
 	SAFE_RELEASE(indexBuffer);
 }
 
+void TerrainGrass::Initialize(Landscape* land)
+{
+	this->land = land;
+	CreateInstanceData();
+	CreateBuffer();
+	
+}
+
 void TerrainGrass::Update()
 {
-	D3DXVECTOR3 position;
-	Camera::Get()->GetPosition(&position);
-	D3DXMatrixTranslation(&world, position.x, position.y, position.z);
 
 }
 
 void TerrainGrass::Render()
 {
 
-	UINT stride = sizeof(VertexTexture);
-	UINT offset = 0;
+	UINT stride[2];
+	stride[0] = sizeof(VertexTexture);
+	stride[1] = sizeof(D3DXMATRIX);
 
-	D3D::GetDeviceContext()->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
+
+	UINT offset[2];
+	offset[0] = 0;
+	offset[1] = 0;
+
+	ID3D11Buffer* bufferPointers[2];
+	bufferPointers[0] = vertexBuffer;
+	bufferPointers[1] = instanceBuffer;
+
+
+	D3D::GetDeviceContext()->IASetVertexBuffers(0, 2, bufferPointers, stride, offset);
 	D3D::GetDeviceContext()->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R32_UINT, 0);
 	D3D::GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
@@ -51,10 +68,10 @@ void TerrainGrass::CreateBuffer()
 	indexCount = 6;
 	VertexTexture* vertexData = new VertexTexture[vertexCount];
 	int i = 0;
-	vertexData[i].position = D3DXVECTOR3(0.0f, 0.0f, 0.0f);			vertexData[i++].uv = D3DXVECTOR2(0, 1);
-	vertexData[i].position = D3DXVECTOR3( 1.0f, 0.0f, 0.0f);			vertexData[i++].uv = D3DXVECTOR2(1, 1);
-	vertexData[i].position = D3DXVECTOR3( 1.0f,  1.0f, 0.0f);			vertexData[i++].uv = D3DXVECTOR2(1, 0);
-	vertexData[i].position = D3DXVECTOR3(0.0f,  1.0f, 0.0f);			vertexData[i++].uv = D3DXVECTOR2(0, 0);
+	vertexData[i].position = D3DXVECTOR3(-0.5f, 0.0f, 0.0f);			vertexData[i++].uv = D3DXVECTOR2(0, 1);
+	vertexData[i].position = D3DXVECTOR3( 0.5f, 0.0f, 0.0f);			vertexData[i++].uv = D3DXVECTOR2(1, 1);
+	vertexData[i].position = D3DXVECTOR3( 0.5f,  1.0f, 0.0f);			vertexData[i++].uv = D3DXVECTOR2(1, 0);
+	vertexData[i].position = D3DXVECTOR3(-0.5f,  1.0f, 0.0f);			vertexData[i++].uv = D3DXVECTOR2(0, 0);
 
 	UINT* indexData = new UINT[indexCount]{
 		0, 3, 1, 2, 1, 3,
@@ -94,4 +111,28 @@ void TerrainGrass::CreateBuffer()
 
 	SAFE_DELETE_ARRAY(vertexData);
 
+	ZeroMemory(&desc, sizeof(D3D11_BUFFER_DESC));
+	desc.Usage = D3D11_USAGE_DEFAULT;
+	desc.ByteWidth = sizeof(D3DXMATRIX) * instanceData.size();
+	desc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	desc.CPUAccessFlags = 0;
+	desc.MiscFlags = 0;
+	desc.StructureByteStride = 0;
+
+	ZeroMemory(&data, sizeof(D3D11_SUBRESOURCE_DATA));
+	data.pSysMem = &instanceData[0];
+	data.SysMemPitch = 0;
+	data.SysMemSlicePitch = 0;
+
+
+
+	hr = D3D::GetDevice()->CreateBuffer(&desc, &data, &instanceBuffer);
+	assert(SUCCEEDED(hr));
+
+
+}
+
+void TerrainGrass::CreateInstanceData()
+{
+	land->GetGroundPos(instanceData);
 }

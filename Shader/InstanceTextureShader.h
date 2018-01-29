@@ -8,15 +8,16 @@ public:
 
 
 	virtual void Update();
-	virtual void Render(UINT indexCount,
-		D3DXMATRIX world, D3DXMATRIX view, D3DXMATRIX projection, ID3D11ShaderResourceView* diffuse);
+	virtual void Render(UINT indexCount, UINT instanceCount,
+		D3DXMATRIX view, D3DXMATRIX projection, ID3D11ShaderResourceView* diffuse);
 
 
 
 private:
+
+	void CreateInputLayout();
 	void CreateBuffers();
-
-
+	
 
 
 

@@ -202,8 +202,8 @@
     <ClInclude Include="System\Mouse.h" />
     <ClInclude Include="System\TweakBar.h" />
     <ClInclude Include="System\Window.h" />
-    <ClInclude Include="Terrain\TerrainGrass.h" />
     <ClInclude Include="Terrain\Landscape.h" />
+    <ClInclude Include="Terrain\TerrainGrass.h" />
     <ClInclude Include="Terrain\QuadTree.h" />
     <ClInclude Include="Terrain\Skydome.h" />
     <ClInclude Include="Terrain\Skyplane.h" />

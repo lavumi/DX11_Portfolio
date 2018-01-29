@@ -36,6 +36,11 @@ void LightManager::Update()
 	D3DXMatrixTranspose(&lightData.lightProjection, &lightData.lightProjection);
 }
 
+void LightManager::Delete()
+{
+	SAFE_DELETE(instance);
+}
+
 LightManager::LightManager()
 {
 	lightData.lightDirection = D3DXVECTOR3(0.01f, -1, 0.01f);

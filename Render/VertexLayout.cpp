@@ -164,3 +164,5 @@ VertexTextureNormalTangent::VertexTextureNormalTangent(D3DXVECTOR3 position, D3D
 	this->uv = uv;
 	this->normal = normal;
 }
+
+

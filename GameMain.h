@@ -28,6 +28,7 @@ class TerrainShader;
 class ColorShader;
 class SkyplaneShader;
 class WaterShader;
+class InstanceTextureShader;
 
 class Frustum;
 
@@ -89,4 +90,5 @@ private:
 	ColorShader* colorShader;
 	SkyplaneShader* skyplaneShader;
 	WaterShader* waterShader;
+	InstanceTextureShader* instanceShader;
 };

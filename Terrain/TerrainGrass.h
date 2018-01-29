@@ -1,11 +1,13 @@
 #pragma once
 
-
+class Landscape;
 class TerrainGrass
 {
 public:
 	TerrainGrass();
 	~TerrainGrass();
+
+	void Initialize(Landscape* land);
 
 	void Update();
 	void Render();
@@ -24,20 +26,23 @@ public:
 	}
 
 
-	D3DXMATRIX getWorld() {
-		return world;
+	UINT getInstanceCount() {
+		return instanceData.size();
 	}
 	
 	
 private:
 	void CreateBuffer();
+	void CreateInstanceData();
 
 	ID3D11Buffer* vertexBuffer;
+	ID3D11Buffer* instanceBuffer;
 	ID3D11Buffer* indexBuffer;
 
 
 	UINT vertexCount;
 	UINT indexCount;
+
 	VertexTexture* vertexData;
 	UINT* indexData;
 
@@ -45,5 +50,8 @@ private:
 	
 	ID3D11ShaderResourceView* diffuse;
 
-	D3DXMATRIX world;
+	vector<D3DXMATRIX> instanceData;
+
+	Landscape* land;
+
 };

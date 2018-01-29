@@ -30,6 +30,7 @@
 #include "../Shader/ColorShader.h"
 #include "../Shader/WaterShader.h"
 #include "../Shader/SkyplaneShader.h"
+#include "../Shader/InstanceTextureShader.h"
 
 
 
@@ -37,23 +38,22 @@ bool GameMain::landscapeWireFrame = false;
 
 void GameMain::Initialize()
 {
-	depthShadowTexture = new RenderTexture(1280, 1280);
-	shadowTexture = new RenderTexture();
-	blurShadowTexture = new RenderTexture();
-	lakeReflectionTexture = new RenderTexture();
-	lakeRefractionTexture = new RenderTexture();
+	depthShadowTexture			= new RenderTexture(1280, 1280);
+	shadowTexture				= new RenderTexture();
+	blurShadowTexture			= new RenderTexture();
+	lakeReflectionTexture		 = new RenderTexture();
+	lakeRefractionTexture		= new RenderTexture();
 
 	UserInterface::Get();
 	LightManager::Get();
-	frustum = new Frustum();
-
-	testcube = new TestCube();
-	testplane = new Mirror();
-	skydome = new Skydome();
-	cloud = new Skyplane();
-	landscape = new Landscape();
-	lake = new Water();
-	grass = new TerrainGrass();
+	frustum			= new Frustum();
+	testcube		= new TestCube();
+	testplane		= new Mirror();
+	skydome			 = new Skydome();
+	cloud			= new Skyplane();
+	landscape		 = new Landscape();
+	lake			 = new Water();
+	grass			= new TerrainGrass();
 
 	grassTexture = new GrassTexture();
 	//mosaicTile = new MosaicTile();
@@ -61,25 +61,26 @@ void GameMain::Initialize()
 
 
 
-	shadowtestPlane = new OrthoWindowPlane();
+	shadowtestPlane			= new OrthoWindowPlane();
 
-
-	normalMapShader = new NormalMapShader();
-	depthShadowShader = new DepthShadowShader();
-	textureShader = new TextureShader();
-	skydomeShader = new SkydomeShader();
-	shadowShader = new ShadowShader();
-	blurShader = new BlurShader();
-	terrainShader = new TerrainShader();
-	colorShader = new ColorShader();
-	skyplaneShader = new SkyplaneShader();
-	waterShader = new WaterShader();
+	normalMapShader		 = new NormalMapShader();
+	depthShadowShader	 = new DepthShadowShader();
+	textureShader		= new TextureShader();
+	skydomeShader		 = new SkydomeShader();
+	shadowShader		 = new ShadowShader();
+	blurShader			= new BlurShader();
+	terrainShader		 = new TerrainShader();
+	colorShader			= new ColorShader();
+	skyplaneShader		 = new SkyplaneShader();
+	waterShader			 = new WaterShader();
+	instanceShader		 = new InstanceTextureShader();
 
 
 
 
 
 	landscape->Initialize();
+	grass->Initialize(landscape);
 
 
 	grassTexture->DrawTexture();
@@ -93,6 +94,39 @@ void GameMain::Destroy()
 	SAFE_DELETE(skydome);
 	SAFE_DELETE(landscape);
 	UserInterface::Delete();
+	
+	SAFE_DELETE(depthShadowTexture);
+	SAFE_DELETE(shadowTexture);
+	SAFE_DELETE(blurShadowTexture);
+	SAFE_DELETE(lakeReflectionTexture);
+	SAFE_DELETE(lakeRefractionTexture);
+
+	SAFE_DELETE(frustum);
+
+	SAFE_DELETE(testcube);
+	SAFE_DELETE(testplane);
+	SAFE_DELETE(skydome);
+	SAFE_DELETE(cloud);
+	SAFE_DELETE(landscape);
+	SAFE_DELETE(lake);
+	SAFE_DELETE(grass);
+
+	SAFE_DELETE(grassTexture);
+
+	SAFE_DELETE(shadowtestPlane);
+
+	SAFE_DELETE(normalMapShader);
+	SAFE_DELETE(depthShadowShader);
+	SAFE_DELETE(textureShader);
+	SAFE_DELETE(skydomeShader);
+	SAFE_DELETE(shadowShader);
+	SAFE_DELETE(blurShader);
+	SAFE_DELETE(terrainShader);
+	SAFE_DELETE(colorShader);
+	SAFE_DELETE(skyplaneShader);
+	SAFE_DELETE(waterShader);
+	SAFE_DELETE(instanceShader);
+
 }
 
 void GameMain::Update()
@@ -342,13 +376,10 @@ void GameMain::Render()
 
 	D3D::Get()->SetBlender_alphaCoverage();
 
-	//vector<D3DXMATRIX> pos;
-	//landscape->GetGroundPos(pos);
 
-	//grass->Render();
-	//for (int i = 0; i < pos.size(); i++) {
-	//	textureShader->Render(grass->getIndexCount(), pos[i], view, projection, grass->getDiffuseMap());
-	//}
+
+	grass->Render();
+	instanceShader->Render(grass->getIndexCount(), grass->getInstanceCount(), view, projection, grass->getDiffuseMap());
 	
 
 	//WATER REFLECTION OLD ver.

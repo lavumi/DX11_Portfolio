@@ -32,6 +32,8 @@ public:
 
 	void Update();
 
+	void Delete();
+
 private:
 	LightManager();
 	~LightManager();
