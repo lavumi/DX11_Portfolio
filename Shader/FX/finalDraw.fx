@@ -25,8 +25,8 @@ PixelInput VS(VertexInput input)
    float scaleFactor = 1;
    
   output.position.w = scaleFactor;
-  output.position.x -= scaleFactor/1.2;
-  output.position.y += scaleFactor/1.5;
+ //output.position.x -= scaleFactor/1.2;
+ //output.position.y += scaleFactor/1.5;
  
 
 

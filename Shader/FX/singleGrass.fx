@@ -51,7 +51,8 @@ float4 PS(PixelInput input) : SV_Target
     //둘 합치기
     float grass = lerp(circle, rect, step(0.5, originuv.y));
 
+    
 
-    return grass;
+    return float4(grass, grass, grass, 0);
 
 }

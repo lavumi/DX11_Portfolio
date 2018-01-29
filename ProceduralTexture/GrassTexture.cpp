@@ -81,8 +81,8 @@ void GrassTexture::DrawTexture()
 	SAFE_DELETE(rndDraw);
 	SAFE_DELETE(grassTexture);
 
-	grassSingle = new RenderTexture();
-	gradient = new RenderTexture();
+	grassSingle = new RenderTexture(720, 720);
+	gradient = new RenderTexture(720, 720);
 	directionalWarp = new RenderTexture(720, 720);
 	rndDraw = new RenderTexture(720, 720);
 	grassTexture = new RenderTexture(256, 256);
@@ -97,6 +97,9 @@ void GrassTexture::DrawTexture()
 
 	D3D::Get()->SetDepthStencilState(D3D::DS_state::offState);
 
+
+
+	//D3D::Get()->SetBlender_alphaCoverage();
 	//그리기
 	DrawGrassSingle();
 	DirectionalWarp();
@@ -110,9 +113,9 @@ void GrassTexture::DrawTexture()
 
 	//grassSingle		->SaveTexture(L"grassSingle.png");
 	//gradient		->SaveTexture(L"gradient.png");
-	//directionalWarp ->SaveTexture(L"directionalWarp.png");
+	directionalWarp ->SaveTexture(L"directionalWarp.png");
 	//rndDraw			->SaveTexture(L"rndDraw.png");
-	//grassTexture	->SaveTexture(L"grassTexture.png");
+	grassTexture	->SaveTexture(L"grassTexture.png");
 	//SetFinalResult(directionalWarp);
 
 	//렌더링 타겟 되돌리기
@@ -246,10 +249,11 @@ void GrassTexture::DrawGrassSingle()
 	HRESULT hr = D3D::GetDevice()->CreateBuffer(&desc, &subResource, &buffer);
 	assert(SUCCEEDED(hr));
 	
+
 	D3D::GetDeviceContext()->PSSetConstantBuffers(0, 1, &buffer);
+	
 
 	CreateShader(0);
-
 	D3D::GetDeviceContext()->IASetInputLayout(layout);
 	D3D::GetDeviceContext()->VSSetShader(vertexShader, NULL, 0);
 	D3D::GetDeviceContext()->PSSetShader(pixelShader, NULL, 0);
@@ -257,10 +261,7 @@ void GrassTexture::DrawGrassSingle()
 
 
 	D3D::GetDeviceContext()->DrawIndexed(6, 0, 0);
-
 	SAFE_RELEASE(buffer);
-
-
 }
 void GrassTexture::DirectionalWarp()
 {
@@ -303,7 +304,6 @@ void GrassTexture::DirectionalWarp()
 		CreateShader(1);
 		D3D::GetDeviceContext()->VSSetShader(vertexShader, NULL, 0);
 		D3D::GetDeviceContext()->PSSetShader(pixelShader, NULL, 0);
-
 
 
 		D3D::GetDeviceContext()->DrawIndexed(6, 0, 0);
@@ -1086,7 +1086,7 @@ void GrassTexture::DrawGrassTexture()
 
 
 
-	D3D::Get()->SetBlender_MaxBlend();
+//	D3D::Get()->SetBlender_MaxBlend();
 
 	D3D::GetDeviceContext()->DrawIndexedInstanced(6, totalcount, 0, 0, 0);
 

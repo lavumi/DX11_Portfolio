@@ -312,17 +312,25 @@ void Landscape::changeLOD(Frustum* frustum)
 
 void Landscape::CheckGround()
 {
-	D3DXMATRIX position, rotation;
+	D3DXMATRIX position, rotation, world;
 	for(int i = 0;i<vertexCount;i++){
-		if (vertexData[i].normal.y >= 0.95f && vertexData[i].position.y > -7.7f && vertexData[i].position.y <5.0f) {
+		if (vertexData[i].normal.y >= 0.95f && vertexData[i].position.y > -7.0f && vertexData[i].position.y <0.0f) {
 			
-			int rnd = (rand() % 360);
-
 			D3DXMatrixTranslation(&position, vertexData[i].position.x+0.5f, vertexData[i].position.y, vertexData[i].position.z+0.5f);
 
-			D3DXMatrixRotationY(&rotation, (float)D3DX_PI / 180 * rnd);
-			position = rotation * position;
-			grassGround.push_back(position);
+			D3DXMatrixRotationY(&rotation, (float)D3DX_PI / 180 *0);
+			world = rotation * position;
+			grassGround.push_back(world);
+
+
+			
+			D3DXMatrixRotationY(&rotation, (float)D3DX_PI / 180 * 120);
+			world = rotation * position;
+			grassGround.push_back(world);
+			
+			D3DXMatrixRotationY(&rotation, (float)D3DX_PI / 180 * 240);
+			world = rotation * position;
+			grassGround.push_back(world);
 		}
 			
 	}

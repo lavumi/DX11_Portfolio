@@ -77,7 +77,7 @@ float4 PS(PixelInput input) : SV_Target
     float4 colory = grass.g * _color2; //float4(grass.g * 0.88, grass.g * 0.87, grass.g * 0.6, 1);
     float4 result = lerp(colory, colorg, (input.RNDNNUM - _minScale + (_maxScale - _minScale)/3) / (_maxScale - _minScale));
     
-    result.a = 1;
+    //result.a *= 10;
     return result;
     
 }

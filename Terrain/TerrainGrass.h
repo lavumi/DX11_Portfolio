@@ -17,7 +17,7 @@ public:
 	}
 
 	 void setDiffuseMap(ID3D11ShaderResourceView* texture) {
-		// diffuse = texture;
+		 diffuse = texture;
 	}
 
 

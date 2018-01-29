@@ -175,7 +175,7 @@ void GameMain::Update()
 
 void GameMain::PreRender()
 {
-
+	//return;
 	D3DXMATRIX view, projection;
 	D3DXMatrixIdentity(&view);
 	D3DXMatrixIdentity(&projection);
@@ -323,6 +323,10 @@ void GameMain::PreRender()
 
 void GameMain::Render()
 {
+	//D3D::Get()->SetBlender_alphaCoverage();
+	//grassTexture->Render();
+	//return;
+
 
 	D3DXMATRIX view, projection;
 
@@ -375,12 +379,11 @@ void GameMain::Render()
 
 
 	D3D::Get()->SetBlender_alphaCoverage();
-
-
-
+	Rasterizer::Get()->SetOffCullMode();
 	grass->Render();
 	instanceShader->Render(grass->getIndexCount(), grass->getInstanceCount(), view, projection, grass->getDiffuseMap());
-	
+	Rasterizer::Get()->SetOnCullMode();
+
 
 	//WATER REFLECTION OLD ver.
 	{
