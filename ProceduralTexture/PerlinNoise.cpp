@@ -79,7 +79,7 @@ void PerlinNoise::MakePerlinNoise() {
 
 	D3D::Get()->SetDefaultRenderView();
 	//CreateShader();
-	//rndNoise->SaveTexture(L"Test.png");
+	rndNoise->SaveTexture(L"Test.png");
 }
 void PerlinNoise::Render()
 {
