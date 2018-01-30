@@ -35,11 +35,11 @@ PerlinNoise::~PerlinNoise()
 	SAFE_RELEASE(indexBuffer);
 
 
-	SAFE_RELEASE(seedBuffer);
+	SAFE_RELEASE(colorBuffer);
 
 }
 
-void PerlinNoise::MakePerlinNoise() {
+void PerlinNoise::MakePerlinNoise(float r, float g, float b) {
 
 	rndNoise->SetTarget();
 	rndNoise->Clear(0, 0, 0, 0);
@@ -56,17 +56,21 @@ void PerlinNoise::MakePerlinNoise() {
 
 
 	//시드 세팅
-	seed.x = (float)rand()/532;
-	seed.y = (float)rand() / 242;
+	color.r = r;
+	color.g = g;
+	color.b = b;
+
+	color.a = (float)rand()/532;
+
 	D3D11_MAPPED_SUBRESOURCE subResource;
 	HRESULT hr = D3D::GetDeviceContext()->Map
 	(
-		seedBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &subResource
+		colorBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &subResource
 	);
-	memcpy(subResource.pData, &seed, sizeof(D3DXVECTOR4));
-	D3D::GetDeviceContext()->Unmap(seedBuffer, 0);
+	memcpy(subResource.pData, &color, sizeof(D3DXCOLOR));
+	D3D::GetDeviceContext()->Unmap(colorBuffer, 0);
 	
-	D3D::GetDeviceContext()->PSSetConstantBuffers(0, 1, &seedBuffer);
+	D3D::GetDeviceContext()->PSSetConstantBuffers(0, 1, &colorBuffer);
 
 
 
@@ -79,7 +83,7 @@ void PerlinNoise::MakePerlinNoise() {
 
 	D3D::Get()->SetDefaultRenderView();
 	//CreateShader();
-	rndNoise->SaveTexture(L"Test.png");
+	rndNoise->SaveTexture(L"PerlinNoise.png");
 }
 void PerlinNoise::Render()
 {
@@ -332,6 +336,6 @@ void PerlinNoise::CreateBuffer()
 	desc.MiscFlags = 0;
 	desc.StructureByteStride = 0;
 
-	hr = D3D::GetDevice()->CreateBuffer(&desc, NULL, &seedBuffer);
+	hr = D3D::GetDevice()->CreateBuffer(&desc, NULL, &colorBuffer);
 	assert(SUCCEEDED(hr));
 }

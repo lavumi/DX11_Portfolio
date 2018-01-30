@@ -8,7 +8,7 @@ public:
 	PerlinNoise();
 	~PerlinNoise();
 
-	void MakePerlinNoise();
+	void MakePerlinNoise(float r = 1, float g = 1, float b = 1);
 	void Render();
 
 	ID3D11ShaderResourceView** GetPerlinNoise();
@@ -16,8 +16,8 @@ public:
 	RenderTexture* rndNoise;
 private:
 
-	D3DXVECTOR4 seed;
-	ID3D11Buffer*		seedBuffer;
+	D3DXCOLOR color;
+	ID3D11Buffer*		colorBuffer;
 
 	void CreateShader(wstring file);
 	void CreateBuffer();

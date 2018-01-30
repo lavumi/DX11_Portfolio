@@ -1,6 +1,6 @@
 cbuffer rndSeed : register(b0)
 {
-    float4 seed;
+    float4 color;
 }
 
 
@@ -39,8 +39,8 @@ float CosineLerp(float x, float y, float fractional)
 
 float Noise(float2 uv)
 {
-  // float result = frac(cos(dot(uv, float2(132.472583f, 141.1326f))) * 41624.31315);
-    float result = cos(dot(uv, float2(3, 5)));
+   float result = frac(cos(dot(uv, float2(132.472583f, 141.1326f))) * 41624.31315);
+   // float result = cos(dot(uv, float2(3, 5)));
 
    
     return result;
@@ -98,16 +98,29 @@ float CreatePerlinNoise(float x, float y)
         amplitude *= persistance;
      }
 
+    result -= 0.1f;
     return result;
 }
 
 
 float4 PS(PixelInput input) : SV_Target
 {
-    float index = CreatePerlinNoise(input.uv.x +seed.x  , input.uv.y + seed.y );
+    float2 uv = input.uv;
+  //uv -= 0.5f;
+  //uv = abs(uv);
+
+    float index = CreatePerlinNoise(uv.x +color.a  , uv.y + color.a );
 
    // index = LerpedNoise(input.uv.x, input.uv.y);
-    return float4(index, index, index, 1);
+    float4 result =  float4(index * color.r, index* color.g, index* color.b, 1);
+
+    
+
+
+    return result;
+
     float4(index * 0.172f, index * 0.117f, index*0.09f, 1);
+   
+
 }
 

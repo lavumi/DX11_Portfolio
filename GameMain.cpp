@@ -75,13 +75,10 @@ void GameMain::Initialize()
 	waterShader			 = new WaterShader();
 	instanceShader		 = new InstanceTextureShader();
 
-
-
-
-
+	
 	landscape->Initialize();
 	grass->Initialize(landscape);
-
+	cloud->Initialize();
 
 	grassTexture->DrawTexture();
 	landscape->SetTexture(grassTexture->diffuse, nullptr, nullptr);
@@ -177,7 +174,7 @@ void GameMain::Update()
 
 void GameMain::PreRender()
 {
-	return;
+	//return;
 	D3DXMATRIX view, projection;
 	D3DXMatrixIdentity(&view);
 	D3DXMatrixIdentity(&projection);
@@ -325,8 +322,8 @@ void GameMain::PreRender()
 
 void GameMain::Render()
 {
-	//D3D::Get()->SetBlender_alphaCoverage();
-	noise->Render();
+
+	//noise->Render();
 	//return;
 	D3DXMATRIX world, view, projection;
 	//Camera::Get()->GetDefaultView(&view);
@@ -338,7 +335,7 @@ void GameMain::Render()
 	//
 	//return;
 
-	return;
+	//return;
 
 	Camera::Get()->GetView(&view);
 	D3D::Get()->GetProjection(&projection);

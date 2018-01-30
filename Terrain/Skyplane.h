@@ -1,14 +1,17 @@
 #pragma once
 
-
-class Skyplane
-{
+class PerlinNoise;
+class Skyplane{
 public:
 	Skyplane();
 	~Skyplane();
 
+
+	void Initialize();
 	void Update();
 	void Render();
+
+	void MakeCloudPerlin();
 
 	UINT getIndexCount() {
 		return indexCount;
@@ -47,6 +50,9 @@ private:
 
 	
 	ID3D11ShaderResourceView* diffuse;
+
+
+	PerlinNoise* perlinNoise;
 	ID3D11ShaderResourceView* perlin;
 	D3DXMATRIX world;
 };

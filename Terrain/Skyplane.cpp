@@ -1,5 +1,6 @@
 #include "../stdafx.h"
 #include "Skyplane.h"
+#include "../ProceduralTexture/PerlinNoise.h"
 
 Skyplane::Skyplane()
 {
@@ -10,20 +11,11 @@ Skyplane::Skyplane()
 	skyPlaneBottom = -0.3f;
 
 
-	CreateVertexData();
-	CreateIndexData();
-	CreateBuffer();
 
 
-	D3DXMatrixIdentity(&world);
-
-	HRESULT hr = D3DX11CreateShaderResourceViewFromFile(D3D::GetDevice(), L"./Terrain/cloud001.dds", nullptr, nullptr, &diffuse, nullptr);
-
-	assert(SUCCEEDED(hr));
-
-	hr = D3DX11CreateShaderResourceViewFromFile(D3D::GetDevice(), L"./Terrain/perturb001.dds", nullptr, nullptr, &perlin, nullptr);
-
-	assert(SUCCEEDED(hr));
+	//hr = D3DX11CreateShaderResourceViewFromFile(D3D::GetDevice(), L"./Terrain/perturb001.dds", nullptr, nullptr, &perlin, nullptr);
+	//
+	//assert(SUCCEEDED(hr));
 }
 
 Skyplane::~Skyplane()
@@ -32,6 +24,23 @@ Skyplane::~Skyplane()
 
 	SAFE_RELEASE(vertexBuffer);
 	SAFE_RELEASE(indexBuffer);
+}
+
+void Skyplane::Initialize()
+{
+	CreateVertexData();
+	CreateIndexData();
+	CreateBuffer();
+
+	perlinNoise = new PerlinNoise();
+
+
+	HRESULT hr = D3DX11CreateShaderResourceViewFromFile(D3D::GetDevice(), L"./Terrain/cloud001.dds", nullptr, nullptr, &diffuse, nullptr);
+
+	assert(SUCCEEDED(hr));
+
+	MakeCloudPerlin();
+
 }
 
 void Skyplane::Update()
@@ -52,6 +61,15 @@ void Skyplane::Render()
 	D3D::GetDeviceContext()->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R32_UINT, 0);
 	D3D::GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
+}
+
+void Skyplane::MakeCloudPerlin()
+{
+	perlinNoise->MakePerlinNoise();
+
+	perlin = *perlinNoise->GetPerlinNoise();
+
+	D3DXMatrixIdentity(&world);
 }
 
 void Skyplane::CreateVertexData()
