@@ -52,19 +52,31 @@ float4 PS(PixelInput input) : SV_Target
 {
 
     float4 perturbValue;
-    float4 cloudColor;
+    float4 cloudColor, cloudColor2;
 
     float2 uv = input.uv*2;
 
-    uv.x = uv.x + _translation;
-    perturbValue = _perlin.Sample(samp[0], uv);
-    perturbValue *= _scale;
-    uv += perturbValue.xy  + _translation;
+   uv.x = uv.x + _translation;
+
+    float2 moveUV = uv;
+    moveUV -= 0.5f;
+    moveUV = abs(moveUV);
+    perturbValue = _perlin.Sample(samp[0], moveUV);
+   perturbValue *= _scale;
+   uv += perturbValue.xy + _translation;
 
 
-    cloudColor = _map.Sample(samp[0], uv);
+    //cloudColor = _map.Sample(samp[0], uv);
+    cloudColor = _perlin.Sample(samp[0], uv);
+
+
+
+
+    cloudColor = lerp(cloudColor, 0, (cloudColor - 0.3f) / 0.1f);
+
+
+
 
 
     return cloudColor;
-
 }

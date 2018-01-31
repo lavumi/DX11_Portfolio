@@ -15,13 +15,10 @@ PerlinNoise::PerlinNoise()
 	
 	CreateShader(L"rndNoise.fx");
 
-	rndNoise = new RenderTexture(256,256);
+	rndNoise = new RenderTexture(1024,1024);
 
 
-
-
-	
-	//MakePerlinNoise();
+	MakePerlinNoise();
 }
 
 PerlinNoise::~PerlinNoise()
@@ -29,9 +26,9 @@ PerlinNoise::~PerlinNoise()
 	SAFE_RELEASE(vertexShader);
 	SAFE_RELEASE(pixelShader);
 	SAFE_RELEASE(layout);
-	//SAFE_RELEASE(vertexShaderfinal);
-	//SAFE_RELEASE(pixelShaderfinal);
-	//SAFE_RELEASE(layoutfinal);
+	SAFE_RELEASE(vertexShaderfinal);
+	SAFE_RELEASE(pixelShaderfinal);
+	SAFE_RELEASE(layoutfinal);
 	SAFE_RELEASE(vertexBlob);
 	SAFE_RELEASE(pixelBlob);
 	SAFE_RELEASE(vertexBuffer);
@@ -41,10 +38,6 @@ PerlinNoise::~PerlinNoise()
 	SAFE_RELEASE(colorBuffer);
 
 }
-
-
-
-
 
 void PerlinNoise::MakePerlinNoise(float r, float g, float b) {
 
@@ -64,9 +57,11 @@ void PerlinNoise::MakePerlinNoise(float r, float g, float b) {
 
 	//시드 세팅
 	color.r = r;
-	color.b = b;
 	color.g = g;
-	color.a = (float)rand() / 242;
+	color.b = b;
+
+	color.a = (float)rand()/532;
+
 	D3D11_MAPPED_SUBRESOURCE subResource;
 	HRESULT hr = D3D::GetDeviceContext()->Map
 	(
@@ -78,31 +73,6 @@ void PerlinNoise::MakePerlinNoise(float r, float g, float b) {
 	D3D::GetDeviceContext()->PSSetConstantBuffers(0, 1, &colorBuffer);
 
 
-	//float* perlinNoise = new float[32 * 32];
-	//for (int i = 0; i < 32; i++) {
-	//	for (int j = 0; j < 32; j++) {
-	//		perlinNoise[j + i * 32] = 1;// (float)(j + i * 32) / 255.0f;
-	//	}
-	//}
-
-	//ID3D11Buffer* textureBuffer;
-	//D3D11_BUFFER_DESC desc;
-	//D3D11_SUBRESOURCE_DATA data;
-
-	//desc.Usage = D3D11_USAGE_DYNAMIC;
-	//desc.ByteWidth = sizeof(float) * 32 * 32;
-	//desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-	//desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-	//desc.MiscFlags = 0;
-	//desc.StructureByteStride = 0;
-
-	//ZeroMemory(&data, sizeof(D3D11_SUBRESOURCE_DATA));
-	//data.pSysMem = perlinNoise;
-
-	//hr = D3D::GetDevice()->CreateBuffer(&desc, &data, &textureBuffer);
-	//assert(SUCCEEDED(hr));
-
-
 
 	D3D::GetDeviceContext()->IASetInputLayout(layout);
 	D3D::GetDeviceContext()->VSSetShader(vertexShader, NULL, 0);
@@ -112,12 +82,9 @@ void PerlinNoise::MakePerlinNoise(float r, float g, float b) {
 	D3D::GetDeviceContext()->DrawIndexed(6, 0, 0);
 
 	D3D::Get()->SetDefaultRenderView();
-
-
 	//CreateShader();
-	rndNoise->SaveTexture(L"seamlessPerlin.png");
+	rndNoise->SaveTexture(L"PerlinNoise.png");
 }
-
 void PerlinNoise::Render()
 {
 	D3D::Get()->SetBlender_Off();
@@ -146,7 +113,6 @@ void PerlinNoise::Render()
 	
 	D3D::GetDeviceContext()->DrawIndexed(6, 0, 0);
 }
-
 ID3D11ShaderResourceView** PerlinNoise::GetPerlinNoise()
 {
 		return rndNoise->GetShadowResourceView();
@@ -231,7 +197,6 @@ void PerlinNoise::CreateShader(wstring file)
 
 
 
-	
 	file = L"finalDraw.fx";
 
 	SAFE_RELEASE(vertexBlob);
@@ -307,7 +272,6 @@ void PerlinNoise::CreateShader(wstring file)
 	);
 	if (!SUCCEEDED(hr))
 		assert(0);
-		
 }
 
 void PerlinNoise::CreateBuffer()
@@ -363,7 +327,7 @@ void PerlinNoise::CreateBuffer()
 
 
 
-	//colorBuffer
+	//seedBuffer
 //	D3D11_BUFFER_DESC desc;
 	desc.Usage = D3D11_USAGE_DYNAMIC;
 	desc.ByteWidth = sizeof(D3DXVECTOR4);
@@ -375,4 +339,3 @@ void PerlinNoise::CreateBuffer()
 	hr = D3D::GetDevice()->CreateBuffer(&desc, NULL, &colorBuffer);
 	assert(SUCCEEDED(hr));
 }
-

@@ -13,17 +13,9 @@ Skyplane::Skyplane()
 
 
 
-	HRESULT hr = D3DX11CreateShaderResourceViewFromFile(D3D::GetDevice(), L"./Terrain/cloud001.dds", nullptr, nullptr, &diffuse, nullptr);
-
-	assert(SUCCEEDED(hr));
-
 	//hr = D3DX11CreateShaderResourceViewFromFile(D3D::GetDevice(), L"./Terrain/perturb001.dds", nullptr, nullptr, &perlin, nullptr);
 	//
 	//assert(SUCCEEDED(hr));
-
-	
-	
-
 }
 
 Skyplane::~Skyplane()
@@ -36,16 +28,19 @@ Skyplane::~Skyplane()
 
 void Skyplane::Initialize()
 {
-	noise = new PerlinNoise();
-
 	CreateVertexData();
 	CreateIndexData();
 	CreateBuffer();
 
+	perlinNoise = new PerlinNoise();
 
-	D3DXMatrixIdentity(&world);
-	noise->MakePerlinNoise();
-	perlin = *noise->GetPerlinNoise();
+
+	HRESULT hr = D3DX11CreateShaderResourceViewFromFile(D3D::GetDevice(), L"./Terrain/cloud001.dds", nullptr, nullptr, &diffuse, nullptr);
+
+	assert(SUCCEEDED(hr));
+
+	MakeCloudPerlin();
+
 }
 
 void Skyplane::Update()
@@ -59,7 +54,6 @@ void Skyplane::Update()
 void Skyplane::Render()
 {
 
-	
 	UINT stride = sizeof(VertexTexture);
 	UINT offset = 0;
 
@@ -67,6 +61,15 @@ void Skyplane::Render()
 	D3D::GetDeviceContext()->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R32_UINT, 0);
 	D3D::GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
+}
+
+void Skyplane::MakeCloudPerlin()
+{
+	perlinNoise->MakePerlinNoise();
+
+	perlin = *perlinNoise->GetPerlinNoise();
+
+	D3DXMatrixIdentity(&world);
 }
 
 void Skyplane::CreateVertexData()

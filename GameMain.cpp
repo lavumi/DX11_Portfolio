@@ -75,15 +75,10 @@ void GameMain::Initialize()
 	waterShader			 = new WaterShader();
 	instanceShader		 = new InstanceTextureShader();
 
-
-
-
-
+	
 	landscape->Initialize();
 	grass->Initialize(landscape);
 	cloud->Initialize();
-	noise->MakePerlinNoise();
-
 
 	grassTexture->DrawTexture();
 	landscape->SetTexture(grassTexture->diffuse, nullptr, nullptr);
@@ -114,7 +109,7 @@ void GameMain::Destroy()
 	SAFE_DELETE(grass);
 
 	SAFE_DELETE(grassTexture);
-	//SAFE_DELETE(noise);
+	SAFE_DELETE(noise);
 
 	SAFE_DELETE(shadowtestPlane);
 
@@ -168,8 +163,7 @@ void GameMain::Update()
 		LodOff = !LodOff;
 		noise->MakePerlinNoise();
 	}
-	
-	// if (!LodOff)		landscape->changeLOD(frustum);
+	if (!LodOff)		landscape->changeLOD(frustum);
 
 
 	if (Keyboard::Get()->KeyUp('P')) {
@@ -180,13 +174,6 @@ void GameMain::Update()
 
 void GameMain::PreRender()
 {
-	//static UINT framecount = 0;
-	//if (framecount < 15) {
-	//	framecount++;
-		return;
-	//}
-	//framecount = 0;
-	
 	//return;
 	D3DXMATRIX view, projection;
 	D3DXMatrixIdentity(&view);
@@ -335,9 +322,9 @@ void GameMain::PreRender()
 
 void GameMain::Render()
 {
-	D3D::Get()->SetBlender_alphaCoverage();
-	noise->Render();
-	return;
+
+	//noise->Render();
+	//return;
 	D3DXMATRIX world, view, projection;
 	//Camera::Get()->GetDefaultView(&view);
 	//D3D::Get()->GetOrthoProjection(&projection);
@@ -345,7 +332,10 @@ void GameMain::Render()
 	//
 	//shadowtestPlane->Render();
 	//textureShader->Render(shadowtestPlane->indexCount, shadowtestPlane->world, view, projection, *noise->GetPerlinNoise());
+	//
+	//return;
 
+	//return;
 
 	Camera::Get()->GetView(&view);
 	D3D::Get()->GetProjection(&projection);
@@ -369,7 +359,7 @@ void GameMain::Render()
 
 
 
-	
+
 	testcube->Render();
 	for (int i = 0; i < 6; i++) {
 		normalMapShader->Render(testcube->indexCount, testcube->world[i], view, projection, testcube->diffuseMap, testcube->normalMap, testcube->heightMap, *blurShadowTexture->GetShadowResourceView());

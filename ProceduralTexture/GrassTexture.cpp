@@ -341,6 +341,7 @@ void GrassTexture::DirectionalWarp()
 //이제 안씀
 void GrassTexture::RND_SRT()
 {
+	HRESULT hr;
 	rndDraw->SetTarget();
 	rndDraw->Clear(0, 0, 0, 1);
 
@@ -351,6 +352,21 @@ void GrassTexture::RND_SRT()
 
 	//지면 그리기
 	CreateShader(4);
+
+
+	D3D11_SUBRESOURCE_DATA subResource = { 0 };
+	subResource.pSysMem = D3DXCOLOR(0.172f, 0.117f, 0.09f, 0.235f);
+
+	D3D11_BUFFER_DESC desc;
+	ZeroMemory(&desc, sizeof(D3D11_BUFFER_DESC));
+	desc.ByteWidth = sizeof(D3DXCOLOR);
+
+	ID3D11Buffer* groundColorbuffer;
+	hr = D3D::GetDevice()->CreateBuffer(&desc, &subResource, &groundColorbuffer);
+	assert(SUCCEEDED(hr));
+	D3D::GetDeviceContext()->PSSetConstantBuffers(0, 1, &groundColorbuffer);
+
+
 	D3D::GetDeviceContext()->VSSetShader(vertexShader, NULL, 0);
 	D3D::GetDeviceContext()->PSSetShader(pixelShader, NULL, 0);
 
@@ -379,7 +395,7 @@ void GrassTexture::RND_SRT()
 		D3DXMATRIX scale, rotation, translation;
 	}rndmatrix;
 
-	D3D11_BUFFER_DESC desc;
+	ZeroMemory(&desc, sizeof(D3D11_BUFFER_DESC));
 	desc.Usage = D3D11_USAGE_DYNAMIC;
 	desc.ByteWidth = sizeof(RndMatrix);
 	desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
@@ -388,7 +404,7 @@ void GrassTexture::RND_SRT()
 	desc.StructureByteStride = 0;
 
 	ID3D11Buffer* buffer;
-	HRESULT hr = D3D::GetDevice()->CreateBuffer(&desc, NULL, &buffer);
+	hr = D3D::GetDevice()->CreateBuffer(&desc, NULL, &buffer);
 	assert(SUCCEEDED(hr));
 
 
@@ -406,7 +422,8 @@ void GrassTexture::RND_SRT()
 	colorbuffer.minScale = minSize;
 	colorbuffer.maxScale = maxSize;
 
-	D3D11_SUBRESOURCE_DATA subResource = { 0 };
+
+	ZeroMemory(&subResource, sizeof(D3D11_SUBRESOURCE_DATA));
 	subResource.pSysMem = &colorbuffer;
 
 	desc.ByteWidth = sizeof(ColorBuffer);
