@@ -60,9 +60,10 @@ float4 PS(PixelInput input) : SV_Target
     perturbValue = _perlin.Sample(samp[0], uv);
     perturbValue *= _scale;
     uv += perturbValue.xy  + _translation;
+
+
     cloudColor = _map.Sample(samp[0], uv);
 
-      
 
     return cloudColor;
 

@@ -1,5 +1,6 @@
 #include "../stdafx.h"
 #include "Skyplane.h"
+#include "../ProceduralTexture/PerlinNoise.h"
 
 Skyplane::Skyplane()
 {
@@ -10,20 +11,19 @@ Skyplane::Skyplane()
 	skyPlaneBottom = -0.3f;
 
 
-	CreateVertexData();
-	CreateIndexData();
-	CreateBuffer();
 
-
-	D3DXMatrixIdentity(&world);
 
 	HRESULT hr = D3DX11CreateShaderResourceViewFromFile(D3D::GetDevice(), L"./Terrain/cloud001.dds", nullptr, nullptr, &diffuse, nullptr);
 
 	assert(SUCCEEDED(hr));
 
-	hr = D3DX11CreateShaderResourceViewFromFile(D3D::GetDevice(), L"./Terrain/perturb001.dds", nullptr, nullptr, &perlin, nullptr);
+	//hr = D3DX11CreateShaderResourceViewFromFile(D3D::GetDevice(), L"./Terrain/perturb001.dds", nullptr, nullptr, &perlin, nullptr);
+	//
+	//assert(SUCCEEDED(hr));
 
-	assert(SUCCEEDED(hr));
+	
+	
+
 }
 
 Skyplane::~Skyplane()
@@ -32,6 +32,20 @@ Skyplane::~Skyplane()
 
 	SAFE_RELEASE(vertexBuffer);
 	SAFE_RELEASE(indexBuffer);
+}
+
+void Skyplane::Initialize()
+{
+	noise = new PerlinNoise();
+
+	CreateVertexData();
+	CreateIndexData();
+	CreateBuffer();
+
+
+	D3DXMatrixIdentity(&world);
+	noise->MakePerlinNoise();
+	perlin = *noise->GetPerlinNoise();
 }
 
 void Skyplane::Update()
@@ -45,6 +59,7 @@ void Skyplane::Update()
 void Skyplane::Render()
 {
 
+	
 	UINT stride = sizeof(VertexTexture);
 	UINT offset = 0;
 

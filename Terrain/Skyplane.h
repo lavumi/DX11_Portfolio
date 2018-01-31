@@ -1,12 +1,14 @@
 #pragma once
 
-
+class PerlinNoise;
 class Skyplane
 {
 public:
 	Skyplane();
 	~Skyplane();
 
+
+	void Initialize();
 	void Update();
 	void Render();
 
@@ -49,4 +51,7 @@ private:
 	ID3D11ShaderResourceView* diffuse;
 	ID3D11ShaderResourceView* perlin;
 	D3DXMATRIX world;
+
+
+	PerlinNoise* noise;
 };

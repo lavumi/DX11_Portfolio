@@ -25,7 +25,7 @@ void SkyplaneShader::Update()
 
 void SkyplaneShader::Render(UINT indexCount, D3DXMATRIX world, D3DXMATRIX view, D3DXMATRIX projection, ID3D11ShaderResourceView* diffuse, ID3D11ShaderResourceView* perlin)
 {
-	data.translation += speed;
+	data.translation += speed / 4;
 	if (data.translation >= 1.0f) {
 		data.translation -= 1.0f;
 	}

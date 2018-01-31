@@ -97,9 +97,10 @@ void GrassTexture::DrawTexture()
 
 	D3D::Get()->SetDepthStencilState(D3D::DS_state::offState);
 
-
+	//D3D::Get()->SetBlender_Linear();
 
 	//D3D::Get()->SetBlender_alphaCoverage();
+	//D3D::Get()->SetBlender_None();
 	//그리기
 	DrawGrassSingle();
 	DirectionalWarp();
@@ -113,9 +114,9 @@ void GrassTexture::DrawTexture()
 
 	//grassSingle		->SaveTexture(L"grassSingle.png");
 	//gradient		->SaveTexture(L"gradient.png");
-	directionalWarp ->SaveTexture(L"directionalWarp.png");
+	//directionalWarp ->SaveTexture(L"directionalWarp.png");
 	//rndDraw			->SaveTexture(L"rndDraw.png");
-	grassTexture	->SaveTexture(L"grassTexture.png");
+	//grassTexture	->SaveTexture(L"grassTexture.png");
 	//SetFinalResult(directionalWarp);
 
 	//렌더링 타겟 되돌리기
@@ -222,7 +223,7 @@ void GrassTexture::DrawGrassSingle()
 {
 
 	grassSingle->SetTarget();
-	grassSingle->Clear(0,0,0,0);
+	grassSingle->Clear(0,0,0,1);
 
 
 	struct remp {
@@ -337,6 +338,7 @@ void GrassTexture::DirectionalWarp()
 
 
 }
+//이제 안씀
 void GrassTexture::RND_SRT()
 {
 	rndDraw->SetTarget();
@@ -528,6 +530,7 @@ void GrassTexture::RND_SRT()
 
 void GrassTexture::RND_SRT_Instancing()
 {
+	HRESULT hr;
 	rndDraw->SetTarget();
 	rndDraw->Clear(0, 0, 0, 0);
 
@@ -538,14 +541,40 @@ void GrassTexture::RND_SRT_Instancing()
 
 	//지면 그리기
 	CreateShader(4);
+
+	D3DXCOLOR color = D3DXCOLOR(0.172f*0.5f, 0.117f*0.5f, 0.09f*0.5f, 1);
+	color.a = rand() / 523;
+
+	D3D11_BUFFER_DESC desc;
+	desc.Usage = D3D11_USAGE_DEFAULT;
+	desc.ByteWidth = sizeof(D3DXCOLOR);
+	desc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	desc.CPUAccessFlags = 0;
+	desc.MiscFlags = 0;
+	desc.StructureByteStride = 0;
+
+
+	D3D11_SUBRESOURCE_DATA data;
+	data.pSysMem = &color;
+	data.SysMemPitch = 0;
+	data.SysMemSlicePitch = 0;
+
+
+	ID3D11Buffer* groundColorBuffer;
+	hr = D3D::GetDevice()->CreateBuffer(&desc, &data, &groundColorBuffer);
+	assert(SUCCEEDED(hr));
+
+
+	D3D::GetDeviceContext()->PSSetConstantBuffers(0, 1, &groundColorBuffer);
 	D3D::GetDeviceContext()->VSSetShader(vertexShader, NULL, 0);
 	D3D::GetDeviceContext()->PSSetShader(pixelShader, NULL, 0);
 
 	D3D::GetDeviceContext()->DrawIndexed(6, 0, 0);
 
+	SAFE_RELEASE(groundColorBuffer);
 
 
-
+	
 	////////////////////////////////////////////////////////////////////
 
 	//쉐이더 만들기
@@ -559,7 +588,7 @@ void GrassTexture::RND_SRT_Instancing()
 
 	ID3D10Blob* error;
 	wstring filePath = basePath + L"randomSRTInstance.fx";
-	HRESULT hr = D3DX10CompileFromFile
+	hr = D3DX10CompileFromFile
 	(
 		filePath.c_str(), NULL, NULL, "VS", "vs_5_0"
 		, D3D10_SHADER_ENABLE_STRICTNESS, 0, NULL
@@ -724,7 +753,7 @@ void GrassTexture::RND_SRT_Instancing()
 
 
 	UINT totalcount = (UINT)instances.size();
-	D3D11_BUFFER_DESC desc;
+	//D3D11_BUFFER_DESC desc;
 	desc.Usage = D3D11_USAGE_DEFAULT;
 	desc.ByteWidth = sizeof(InstanceData) * totalcount;
 	desc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
@@ -733,7 +762,7 @@ void GrassTexture::RND_SRT_Instancing()
 	desc.StructureByteStride = 0;
 
 
-	D3D11_SUBRESOURCE_DATA data;
+	//D3D11_SUBRESOURCE_DATA data;
 	data.pSysMem = &instances[0];
 	data.SysMemPitch = 0;
 	data.SysMemSlicePitch = 0;
@@ -812,6 +841,9 @@ void GrassTexture::RND_SRT_Instancing()
 
 
 
+
+
+	D3D::Get()->SetBlender_AddBlend();
 	D3D::GetDeviceContext()->DrawIndexedInstanced(6, totalcount, 0, 0, 0);
 	
 	SAFE_RELEASE(bufferColor);

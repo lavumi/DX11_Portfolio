@@ -1,8 +1,19 @@
+
+
+
+
 cbuffer rndSeed : register(b0)
 {
-    float4 seed;
+    float3 color;
+    float seed;
 }
 
+
+cbuffer rndfloat : register(b1)
+{
+    float rnd[32*32];
+    
+}
 
 
 struct VertexInput
@@ -39,10 +50,11 @@ float CosineLerp(float x, float y, float fractional)
 //망함. 쓰지 말자
 float Noise(float2 uv)
 {
-   float result = frac(cos(dot(uv, float2(132.472583f, 141.1326f))) * 41624.31315);
+    float result = frac(cos(dot(uv, float2(132.472583f, 141.1326f))) * 41624.31315);
    
+    //float result = frac(cos(dot(uv, float2(3.2f, 1)))*4.2f);
     result = lerp(result, result - 0.8f, step(result , 0.5f));
-   
+  
     return result;
 }
 
@@ -93,7 +105,7 @@ float CreatePerlinNoise(float x, float y)
     frequency *= 2;
     for (int i = 0; i <8; i++)
     {
-        result += LerpedNoise(x * frequency + frequency, y * frequency - frequency) * amplitude;
+        result += LerpedNoise(x * frequency - frequency, y * frequency - frequency) * amplitude;
         frequency *= 2;
         amplitude *= persistance;
      }
@@ -104,8 +116,15 @@ float CreatePerlinNoise(float x, float y)
 
 float4 PS(PixelInput input) : SV_Target
 {
-    float index = CreatePerlinNoise(input.uv.x +seed.x  , input.uv.y + seed.y );
-    return float4(index, index, index, 1);
+    float2 uv = input.uv;
+    //uv -= 0.5f;
+    //uv = abs(uv);
+
+
+
+
+    float index = CreatePerlinNoise(uv.x + seed, uv.y - seed);
+    return   float4(index * color.r, index * color.g, index * color.b, 1);
     float4(index * 0.172f, index * 0.117f, index*0.09f, 1);
 }
 

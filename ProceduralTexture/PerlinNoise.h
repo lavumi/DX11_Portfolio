@@ -6,9 +6,11 @@ class PerlinNoise
 {
 public:
 	PerlinNoise();
+
 	~PerlinNoise();
 
-	void MakePerlinNoise();
+
+	void MakePerlinNoise(float r = 1, float g = 1, float b = 1);
 	void Render();
 
 	ID3D11ShaderResourceView** GetPerlinNoise();
@@ -16,8 +18,9 @@ public:
 	RenderTexture* rndNoise;
 private:
 
-	D3DXVECTOR4 seed;
-	ID3D11Buffer*		seedBuffer;
+	D3DXCOLOR color;
+	ID3D11Buffer* colorBuffer;
+
 
 	void CreateShader(wstring file);
 	void CreateBuffer();
@@ -26,9 +29,12 @@ private:
 	ID3D11VertexShader* vertexShader;
 	ID3D11PixelShader*	pixelShader;
 	ID3D11InputLayout*	layout;
+
+	//임시 출력용 
 	ID3D11VertexShader* vertexShaderfinal;
 	ID3D11PixelShader*	pixelShaderfinal;
 	ID3D11InputLayout*	layoutfinal;
+
 	ID3D10Blob*			vertexBlob;
 	ID3D10Blob*			pixelBlob;
 	ID3D11Buffer*		vertexBuffer;
@@ -37,4 +43,9 @@ private:
 	wstring basePath;
 
 	ID3D11ShaderResourceView* finalResult;
+
+
+
+
+
 };

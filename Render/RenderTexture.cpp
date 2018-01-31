@@ -21,7 +21,7 @@ RenderTexture::RenderTexture(UINT width, UINT height)
 		this->height = height;
 
 
-
+	
 
 	D3D11_TEXTURE2D_DESC textureDesc = { 0 };
 	textureDesc.Width = this->width;
