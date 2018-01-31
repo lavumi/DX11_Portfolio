@@ -323,7 +323,7 @@ void GameMain::PreRender()
 
 void GameMain::Render()
 {
-
+	D3D::Get()->SetBlender_Off();
 	noise->Render();
 	return;
 	D3DXMATRIX world, view, projection;

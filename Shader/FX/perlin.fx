@@ -73,29 +73,32 @@ float Noise(float2 uv)
 float LerpedNoise(float x, float y, float seed,float freq)
 {
 
-    float int_x = floor(x), frac_x = frac(x);
-    float int_y = floor(y), frac_y = frac(y);
+   float int_x = floor(x), frac_x = frac(x);
+   float int_y = floor(y), frac_y = frac(y);
 
-    int max = 3 * freq -1;
+    float maxX = (2 + seed) * freq - 1;
+    float maxY = (2 - seed) * freq - 1;
 
     float p1, p2, p3, p4;
 
+    p1 = p2 = p3 = p4 = 0;
     float next_x, next_y;
 
-    if ((int) int_x == max)
+
+    if (int_x == maxX)
     {
-        next_x = freq * (seed*2+1);
+        next_x = freq * (seed+1);
     }
     else
         next_x = int_x + 1;
 
-    if ((int) int_y == max)
+    if (int_y == maxY)
     {
-        next_y = freq * (1-seed*2);
+
+        next_y = freq * (1-seed);
     }
     else
         next_y = int_y + 1;
-// = lerp(freq, int_x+1, step((int) int_x, max));
 
 
 
@@ -108,22 +111,19 @@ float LerpedNoise(float x, float y, float seed,float freq)
     p1 = CosineLerp(p1, p2, frac_x);
     p3 = CosineLerp(p3, p4, frac_x);
 
-
-
-   return Noise(float2(int_x, int_y));
    return CosineLerp(p1, p3, frac_y);
 }
 
 float CreatePerlinNoise(float x, float y, float seed)
 {
-    //x += seed;
-    //y += seed;
+    x += seed;
+    y -= seed;
     float result =0.0f, amplitude =0.5f, frequency = 1.0f, persistance = 0.5f;
-    frequency *= 1;
+    frequency *= 2;
 
-    for (int i = 0; i <1; i++)
+    for (int i = 0; i <8; i++)
     {
-        result += LerpedNoise((x + seed + 1) * frequency , (y - seed + 1) * frequency , seed, frequency) * amplitude;
+        result += LerpedNoise((x +  1) * frequency , (y  + 1) * frequency , seed, frequency) * amplitude;
         frequency *= 2;
         amplitude *= persistance;
      }
@@ -134,11 +134,10 @@ float CreatePerlinNoise(float x, float y, float seed)
 
 float4 PS(PixelInput input) : SV_Target
 {
+ 
+
     float2 uv = input.uv;
-    //uv -= 0.5f;
-    //uv = abs(uv);
-    float rndSeed =0;
-    ceil(color.a);
+    float rndSeed =  ceil(color.a);
     float index = CreatePerlinNoise(uv.x, uv.y , rndSeed);
 
     // index = LerpedNoise(input.uv.x, input.uv.y);

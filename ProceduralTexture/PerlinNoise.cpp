@@ -17,6 +17,7 @@ PerlinNoise::PerlinNoise()
 
 	rndNoise = new RenderTexture(1024,1024);
 
+	renderReady = false;
 
 	//MakePerlinNoise();
 }
@@ -87,11 +88,18 @@ void PerlinNoise::MakePerlinNoise(float r, float g, float b) {
 }
 void PerlinNoise::Render()
 {
-	D3D::Get()->SetBlender_Off();
+	if (!renderReady) {
+		ReadyToRender();
+		renderReady = true;
+	}
+		
+
+
+	//D3D::Get()->SetBlender_Off();
 	UINT stride = sizeof(VertexTexture);
 	UINT offset = 0;
 
-	D3D::GetDeviceContext()->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
+	D3D::GetDeviceContext()->IASetVertexBuffers(0, 1, &vertexBufferfinal, &stride, &offset);
 	D3D::GetDeviceContext()->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R32_UINT, 0);
 	D3D::GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	//여기까지 모델에서
@@ -112,6 +120,131 @@ void PerlinNoise::Render()
 	
 	
 	D3D::GetDeviceContext()->DrawIndexed(6, 0, 0);
+}
+void PerlinNoise::ReadyToRender()
+{
+	//화면 그리기용 버텍스버퍼
+	VertexTexture* rect = new VertexTexture[4];
+
+	rect[0].position = D3DXVECTOR3(-1, -1, 0);
+	rect[1].position = D3DXVECTOR3(-1, 1, 0);
+	rect[2].position = D3DXVECTOR3(1, -1, 0);
+	rect[3].position = D3DXVECTOR3(1, 1, 0);
+
+	rect[0].uv = D3DXVECTOR2(0, 2);
+	rect[1].uv = D3DXVECTOR2(0, 0);
+	rect[2].uv = D3DXVECTOR2(2, 2);
+	rect[3].uv = D3DXVECTOR2(2, 0);
+
+
+
+
+	D3D11_BUFFER_DESC desc;
+	D3D11_SUBRESOURCE_DATA data;
+
+
+
+	ZeroMemory(&desc, sizeof(D3D11_BUFFER_DESC));
+	desc.Usage = D3D11_USAGE_DEFAULT;
+	desc.ByteWidth = sizeof(VertexTexture) * 4;
+	desc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+
+	ZeroMemory(&data, sizeof(D3D11_SUBRESOURCE_DATA));
+	data.pSysMem = rect;
+
+
+
+	HRESULT hr = D3D::GetDevice()->CreateBuffer(&desc, &data, &vertexBufferfinal);
+	assert(SUCCEEDED(hr));
+
+
+
+
+	SAFE_DELETE_ARRAY(rect);
+
+
+
+
+
+
+
+
+	//쉐이더 만들고
+	wstring file = L"finalDraw.fx";
+
+	SAFE_RELEASE(vertexBlob);
+	//SAFE_RELEASE(vertexShader);
+
+	SAFE_RELEASE(pixelBlob);
+	//SAFE_RELEASE(pixelShader);
+	ID3D10Blob* error;
+	hr = D3DX10CompileFromFile
+	(
+		(basePath + file).c_str(), NULL, NULL, "VS", "vs_5_0"
+		, D3D10_SHADER_ENABLE_STRICTNESS, 0, NULL
+		, &vertexBlob, &error, NULL
+	);
+
+	if (FAILED(hr))
+	{
+		if (error != NULL)
+		{
+			string str = (const char *)error->GetBufferPointer();
+			MessageBoxA(NULL, str.c_str(), "Shader Error", MB_OK);
+		}
+		assert(false);
+	}
+
+	hr = D3D::GetDevice()->CreateVertexShader
+	(
+		vertexBlob->GetBufferPointer()
+		, vertexBlob->GetBufferSize()
+		, NULL
+		, &vertexShaderfinal
+	);
+	assert(SUCCEEDED(hr));
+
+	hr = D3DX10CompileFromFile
+	(
+		(basePath + file).c_str(), NULL, NULL, "PS", "ps_5_0"
+		, D3D10_SHADER_ENABLE_STRICTNESS, 0, NULL
+		, &pixelBlob, &error, NULL
+	);
+
+	if (FAILED(hr))
+	{
+		if (error != NULL)
+		{
+			string str = (const char *)error->GetBufferPointer();
+			MessageBoxA(NULL, str.c_str(), "Shader Error", MB_OK);
+		}
+		assert(false);
+	}
+
+	hr = D3D::GetDevice()->CreatePixelShader
+	(
+		pixelBlob->GetBufferPointer()
+		, pixelBlob->GetBufferSize()
+		, NULL
+		, &pixelShaderfinal
+	);
+	assert(SUCCEEDED(hr));
+
+
+
+
+
+	//레이아웃 만들고
+	hr = D3D::GetDevice()->CreateInputLayout
+	(
+		VertexTexture::desc
+		, VertexTexture::count
+		, vertexBlob->GetBufferPointer()
+		, vertexBlob->GetBufferSize()
+		, &layoutfinal
+	);
+	if (!SUCCEEDED(hr))
+		assert(0);
 }
 ID3D11ShaderResourceView** PerlinNoise::GetPerlinNoise()
 {
@@ -197,81 +330,7 @@ void PerlinNoise::CreateShader(wstring file)
 
 
 
-	file = L"finalDraw.fx";
-
-	SAFE_RELEASE(vertexBlob);
-	//SAFE_RELEASE(vertexShader);
-
-	SAFE_RELEASE(pixelBlob);
-	//SAFE_RELEASE(pixelShader);
-	error;
-	hr = D3DX10CompileFromFile
-	(
-		(basePath + file).c_str(), NULL, NULL, "VS", "vs_5_0"
-		, D3D10_SHADER_ENABLE_STRICTNESS, 0, NULL
-		, &vertexBlob, &error, NULL
-	);
-
-	if (FAILED(hr))
-	{
-		if (error != NULL)
-		{
-			string str = (const char *)error->GetBufferPointer();
-			MessageBoxA(NULL, str.c_str(), "Shader Error", MB_OK);
-		}
-		assert(false);
-	}
-
-	hr = D3D::GetDevice()->CreateVertexShader
-	(
-		vertexBlob->GetBufferPointer()
-		, vertexBlob->GetBufferSize()
-		, NULL
-		, &vertexShaderfinal
-	);
-	assert(SUCCEEDED(hr));
-
-	hr = D3DX10CompileFromFile
-	(
-		(basePath + file).c_str(), NULL, NULL, "PS", "ps_5_0"
-		, D3D10_SHADER_ENABLE_STRICTNESS, 0, NULL
-		, &pixelBlob, &error, NULL
-	);
-
-	if (FAILED(hr))
-	{
-		if (error != NULL)
-		{
-			string str = (const char *)error->GetBufferPointer();
-			MessageBoxA(NULL, str.c_str(), "Shader Error", MB_OK);
-		}
-		assert(false);
-	}
-
-	hr = D3D::GetDevice()->CreatePixelShader
-	(
-		pixelBlob->GetBufferPointer()
-		, pixelBlob->GetBufferSize()
-		, NULL
-		, &pixelShaderfinal
-	);
-	assert(SUCCEEDED(hr));
-
-
-
-
-
-
-	hr = D3D::GetDevice()->CreateInputLayout
-	(
-		VertexTexture::desc
-		, VertexTexture::count
-		, vertexBlob->GetBufferPointer()
-		, vertexBlob->GetBufferSize()
-		, &layoutfinal
-	);
-	if (!SUCCEEDED(hr))
-		assert(0);
+	
 }
 
 void PerlinNoise::CreateBuffer()
@@ -284,10 +343,10 @@ void PerlinNoise::CreateBuffer()
 	rect[2].position = D3DXVECTOR3(1, -1,  0);
 	rect[3].position = D3DXVECTOR3(1, 1,   0);
 
-	rect[0].uv = D3DXVECTOR2(0, 2);
+	rect[0].uv = D3DXVECTOR2(0, 1);
 	rect[1].uv = D3DXVECTOR2(0, 0);
-	rect[2].uv = D3DXVECTOR2(2, 2);
-	rect[3].uv = D3DXVECTOR2(2, 0);
+	rect[2].uv = D3DXVECTOR2(1, 1);
+	rect[3].uv = D3DXVECTOR2(1, 0);
 
 	UINT* index = new UINT[6]{0,1,2,2,1,3};
 
@@ -308,6 +367,12 @@ void PerlinNoise::CreateBuffer()
 
 	HRESULT hr = D3D::GetDevice()->CreateBuffer(&desc, &data, &vertexBuffer);
 	assert(SUCCEEDED(hr));
+
+
+
+
+
+
 
 
 	//2. Index Buffer
