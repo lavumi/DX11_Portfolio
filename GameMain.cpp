@@ -79,6 +79,7 @@ void GameMain::Initialize()
 	landscape->Initialize();
 	grass->Initialize(landscape);
 	cloud->Initialize();
+	noise->MakePerlinNoise();
 
 	grassTexture->DrawTexture();
 	landscape->SetTexture(grassTexture->diffuse, nullptr, nullptr);
@@ -174,7 +175,7 @@ void GameMain::Update()
 
 void GameMain::PreRender()
 {
-	//return;
+	return;
 	D3DXMATRIX view, projection;
 	D3DXMatrixIdentity(&view);
 	D3DXMatrixIdentity(&projection);
@@ -323,8 +324,8 @@ void GameMain::PreRender()
 void GameMain::Render()
 {
 
-	//noise->Render();
-	//return;
+	noise->Render();
+	return;
 	D3DXMATRIX world, view, projection;
 	//Camera::Get()->GetDefaultView(&view);
 	//D3D::Get()->GetOrthoProjection(&projection);

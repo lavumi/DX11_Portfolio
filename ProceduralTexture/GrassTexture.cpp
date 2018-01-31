@@ -20,7 +20,7 @@ GrassTexture::GrassTexture()
 	ShaderList.push_back(L"midPointGrad.fx");
 	ShaderList.push_back(L"directionalWarp.fx");
 	ShaderList.push_back(L"randomSRT.fx");
-	ShaderList.push_back(L"rndNoise.fx");
+	ShaderList.push_back(L"perlin.fx");
 	ShaderList.push_back(L"randomSRTInstance.fx");
 	ShaderList.push_back(L"finalDraw.fx");
 	

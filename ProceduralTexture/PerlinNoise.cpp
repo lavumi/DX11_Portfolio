@@ -13,12 +13,12 @@ PerlinNoise::PerlinNoise()
 	basePath = L"./Shader/FX/";
 	CreateBuffer();
 	
-	CreateShader(L"rndNoise.fx");
+	CreateShader(L"perlin.fx");
 
 	rndNoise = new RenderTexture(1024,1024);
 
 
-	MakePerlinNoise();
+	//MakePerlinNoise();
 }
 
 PerlinNoise::~PerlinNoise()
@@ -60,7 +60,7 @@ void PerlinNoise::MakePerlinNoise(float r, float g, float b) {
 	color.g = g;
 	color.b = b;
 
-	color.a = (float)rand()/532;
+	color.a = (float)rand()/256;
 
 	D3D11_MAPPED_SUBRESOURCE subResource;
 	HRESULT hr = D3D::GetDeviceContext()->Map
@@ -83,7 +83,7 @@ void PerlinNoise::MakePerlinNoise(float r, float g, float b) {
 
 	D3D::Get()->SetDefaultRenderView();
 	//CreateShader();
-	rndNoise->SaveTexture(L"PerlinNoise.png");
+	//rndNoise->SaveTexture(L"PerlinNoise.png");
 }
 void PerlinNoise::Render()
 {
@@ -284,10 +284,10 @@ void PerlinNoise::CreateBuffer()
 	rect[2].position = D3DXVECTOR3(1, -1,  0);
 	rect[3].position = D3DXVECTOR3(1, 1,   0);
 
-	rect[0].uv = D3DXVECTOR2(0, 1);
+	rect[0].uv = D3DXVECTOR2(0, 2);
 	rect[1].uv = D3DXVECTOR2(0, 0);
-	rect[2].uv = D3DXVECTOR2(1, 1);
-	rect[3].uv = D3DXVECTOR2(1, 0);
+	rect[2].uv = D3DXVECTOR2(2, 2);
+	rect[3].uv = D3DXVECTOR2(2, 0);
 
 	UINT* index = new UINT[6]{0,1,2,2,1,3};
 

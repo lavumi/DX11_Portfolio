@@ -23,7 +23,7 @@ MosaicTile::MosaicTile()
 	ShaderList.push_back(L"CreateTangentMap.fx");
 	ShaderList.push_back(L"SquarePattern.fx");
 	ShaderList.push_back(L"DrawPatternInTile.fx");
-	ShaderList.push_back(L"rndNoise.fx");
+	ShaderList.push_back(L"perlin.fx");
 	ShaderList.push_back(L"finalDraw.fx");
 
 

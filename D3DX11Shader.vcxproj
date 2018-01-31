@@ -288,7 +288,7 @@
     <None Include="Shader\FX\randomSRTInstance.fx">
       <FileType>Document</FileType>
     </None>
-    <None Include="Shader\FX\rndNoise.fx">
+    <None Include="Shader\FX\perlin.fx">
       <FileType>Document</FileType>
     </None>
     <None Include="Shader\FX\singleGrass.fx">

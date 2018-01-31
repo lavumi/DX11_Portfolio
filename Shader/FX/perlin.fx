@@ -70,34 +70,63 @@ float Noise(float2 uv)
 //    return corners + sides + center;
 //}
 
-float LerpedNoise(float x, float y)
+float LerpedNoise(float x, float y, float seed,float freq)
 {
 
     float int_x = floor(x), frac_x = frac(x);
     float int_y = floor(y), frac_y = frac(y);
 
-    float p1 = Noise(float2(int_x,       int_y));//SmoothNoise(int_x,       int_y);
-    float p2 = Noise(float2(int_x + 1,   int_y));//SmoothNoise(int_x + 1,   int_y);
-    float p3 = Noise(float2(int_x,       int_y+1));//SmoothNoise(int_x,       int_y + 1);
-    float p4 = Noise(float2(int_x + 1,   int_y+1)); //SmoothNoise(int_x + 1,   int_y + 1);
+    int max = 3 * freq -1;
+
+    float p1, p2, p3, p4;
+
+    float next_x, next_y;
+
+    if ((int) int_x == max)
+    {
+        next_x = freq * (seed*2+1);
+    }
+    else
+        next_x = int_x + 1;
+
+    if ((int) int_y == max)
+    {
+        next_y = freq * (1-seed*2);
+    }
+    else
+        next_y = int_y + 1;
+// = lerp(freq, int_x+1, step((int) int_x, max));
+
+
+
+    p1 = Noise(float2(int_x, int_y)); //SmoothNoise(int_x,       int_y);
+    p2 = Noise(float2(next_x, int_y)); //SmoothNoise(int_x + 1,   int_y);
+    p3 = Noise(float2(int_x, next_y)); //SmoothNoise(int_x,       int_y + 1);
+    p4 = Noise(float2(next_x, next_y)); //SmoothNoise(int_x + 1,   int_y + 1);
+
 
     p1 = CosineLerp(p1, p2, frac_x);
-    p2 = CosineLerp(p3, p4, frac_x);
+    p3 = CosineLerp(p3, p4, frac_x);
 
-    return CosineLerp(p1, p2, frac_y);
+
+
+   return Noise(float2(int_x, int_y));
+   return CosineLerp(p1, p3, frac_y);
 }
 
-float CreatePerlinNoise(float x, float y)
+float CreatePerlinNoise(float x, float y, float seed)
 {
+    //x += seed;
+    //y += seed;
     float result =0.0f, amplitude =0.5f, frequency = 1.0f, persistance = 0.5f;
-    frequency *= 2;
-    for (int i = 0; i <8; i++)
+    frequency *= 1;
+
+    for (int i = 0; i <1; i++)
     {
-        result += LerpedNoise(x * frequency + frequency, y * frequency - frequency)*amplitude ;
+        result += LerpedNoise((x + seed + 1) * frequency , (y - seed + 1) * frequency , seed, frequency) * amplitude;
         frequency *= 2;
         amplitude *= persistance;
      }
-
     result -= 0.1f;
     return result;
 }
@@ -106,16 +135,14 @@ float CreatePerlinNoise(float x, float y)
 float4 PS(PixelInput input) : SV_Target
 {
     float2 uv = input.uv;
-  //uv -= 0.5f;
-  //uv = abs(uv);
+    //uv -= 0.5f;
+    //uv = abs(uv);
+    float rndSeed =0;
+    ceil(color.a);
+    float index = CreatePerlinNoise(uv.x, uv.y , rndSeed);
 
-    float index = CreatePerlinNoise(uv.x +color.a  , uv.y + color.a );
-
-   // index = LerpedNoise(input.uv.x, input.uv.y);
-    float4 result =  float4(index * color.r, index* color.g, index* color.b, 1);
-
-    
-
+    // index = LerpedNoise(input.uv.x, input.uv.y);
+    float4 result =  float4(index * color.r, index* color.g, index * color.b, 1);
 
     return result;
 

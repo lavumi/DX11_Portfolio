@@ -328,9 +328,6 @@
     <None Include="Shader\FX\randomSRTInstance.fx">
       <Filter>Shader\FX</Filter>
     </None>
-    <None Include="Shader\FX\rndNoise.fx">
-      <Filter>Shader\FX</Filter>
-    </None>
     <None Include="Shader\FX\singleGrass.fx">
       <Filter>Shader\FX</Filter>
     </None>
@@ -371,6 +368,9 @@
       <Filter>Shader\FX</Filter>
     </None>
     <None Include="Shader\FX\InstanceTextureShader.fx">
+      <Filter>Shader\FX</Filter>
+    </None>
+    <None Include="Shader\FX\perlin.fx">
       <Filter>Shader\FX</Filter>
     </None>
   </ItemGroup>
