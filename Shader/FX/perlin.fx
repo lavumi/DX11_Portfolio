@@ -85,22 +85,9 @@ float LerpedNoise(float x, float y, float seed,float freq)
     float next_x, next_y;
 
 
-    if (int_x == maxX)
-    {
-        next_x = freq * (seed+1);
-    }
-    else
-        next_x = int_x + 1;
 
-    if (int_y == maxY)
-    {
-
-        next_y = freq * (1-seed);
-    }
-    else
-        next_y = int_y + 1;
-
-
+    next_x = lerp(int_x + 1, freq * (seed + 1), step(maxX, int_x));
+    next_y = lerp(int_y + 1, freq * (1 - seed), step(maxY, int_y));
 
     p1 = Noise(float2(int_x, int_y)); //SmoothNoise(int_x,       int_y);
     p2 = Noise(float2(next_x, int_y)); //SmoothNoise(int_x + 1,   int_y);
