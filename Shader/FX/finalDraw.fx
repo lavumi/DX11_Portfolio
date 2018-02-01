@@ -25,7 +25,7 @@ PixelInput VS(VertexInput input)
    float scaleFactor = 1;
    
   output.position.w = scaleFactor;
-    output.position.x /= 2;
+ //   output.position.x /= 2;
  //output.position.x -= scaleFactor/1.2;
  //output.position.y += scaleFactor/1.5;
  
@@ -38,6 +38,14 @@ PixelInput VS(VertexInput input)
 float4 PS(PixelInput input) : SV_Target
 {
     float4 result = _map.Sample(samp, input.uv);
+    
+
+    //wood
+    //result = result * 5;
+    //result -= floor(result);
+
+    //cloud
+    //result = lerp(result, 0, (result - 0.3)/0.05);
     return result;
 
 }

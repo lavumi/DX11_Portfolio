@@ -86,13 +86,27 @@ public:
 
 
 	//Blender
-	void SetBlender_Linear();
-	void SetBlender_MaxBlend();
-	void SetBlender_Off();
-	void SetBlender_None();
-	void SetBlender_AddBlend();
-	void SetBlender_BlendFacter(float factor);
-	void SetBlender_alphaCoverage();
+
+	enum BL_state {
+		Linear,
+		Off,
+		Max,
+		
+		None,
+		BlendFacter,
+		Add,
+		
+		AlphaCoverage,
+	};
+
+	void SetBlender(BL_state, float factor = 0);
+	//void SetBlender_Linear();
+	//void SetBlender_MaxBlend();
+	//void SetBlender_Off();
+	//void SetBlender_None();
+	//void SetBlender_AddBlend();
+	//void SetBlender_BlendFacter(float factor);
+	//void SetBlender_alphaCoverage();
 
 	void ClearDepthStencil(UINT clearFlag, float depth, UINT8 stencil);
 

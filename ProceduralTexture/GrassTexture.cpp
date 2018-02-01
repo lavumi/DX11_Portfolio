@@ -127,7 +127,7 @@ void GrassTexture::DrawTexture()
 
 void GrassTexture::Render()
 {
-	D3D::Get()->SetBlender_Off();
+	D3D::Get()->SetBlender(D3D::BL_state::Off);
 	CreateShader((int)ShaderList.size()-1);
 	UINT stride = sizeof(VertexTexture);
 	UINT offset = 0;
@@ -332,7 +332,7 @@ void GrassTexture::DirectionalWarp()
 
 
 
-	D3D::Get()->SetBlender_MaxBlend();
+	D3D::Get()->SetBlender(D3D::BL_state::Max);
 	
 	D3D::GetDeviceContext()->DrawIndexed(6, 0, 0);
 
@@ -860,7 +860,7 @@ void GrassTexture::RND_SRT_Instancing()
 
 
 
-	D3D::Get()->SetBlender_AddBlend();
+	D3D::Get()->SetBlender(D3D::BL_state::Max);
 	D3D::GetDeviceContext()->DrawIndexedInstanced(6, totalcount, 0, 0, 0);
 	
 	SAFE_RELEASE(bufferColor);

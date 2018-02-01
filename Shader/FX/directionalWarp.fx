@@ -37,7 +37,11 @@ float4 PS(PixelInput input) : SV_Target
    
 
     float4 result = _map.Sample(samp, uv);
-    result.a = result.g;
+    if(result.g>0.001)
+        result.a = 1;
+    else
+        result.a = 0;
+   // result.a = result.g;
     result.rgb -= input.uv.y;
     
     return result;

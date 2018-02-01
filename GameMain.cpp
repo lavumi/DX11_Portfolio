@@ -175,7 +175,7 @@ void GameMain::Update()
 
 void GameMain::PreRender()
 {
-	return;
+	//return;
 	D3DXMATRIX view, projection;
 	D3DXMatrixIdentity(&view);
 	D3DXMatrixIdentity(&projection);
@@ -267,10 +267,10 @@ void GameMain::PreRender()
 
 			skydome->Render();
 			skydomeShader->Render(skydome->getIndexCount(), world, view, projection);
-			D3D::Get()->SetBlender_AddBlend();
+			D3D::Get()->SetBlender(D3D::BL_state::Add);
 			cloud->Render();
 			skyplaneShader->Render(cloud->getIndexCount(), world, view, projection, cloud->getDiffuseMap(), cloud->getPerlinMap());
-			D3D::Get()->SetBlender_Off();
+			D3D::Get()->SetBlender(D3D::BL_state::Off);
 		}
 		D3D::Get()->SetDepthStencilState(D3D::DS_state::onState);
 		Rasterizer::Get()->SetFrontCullMode();
@@ -323,9 +323,9 @@ void GameMain::PreRender()
 
 void GameMain::Render()
 {
-	D3D::Get()->SetBlender_Off();
-	noise->Render();
-	return;
+	//D3D::Get()->SetBlender_Off();
+	//grassTexture->Render();
+	//return;
 	D3DXMATRIX world, view, projection;
 	//Camera::Get()->GetDefaultView(&view);
 	//D3D::Get()->GetOrthoProjection(&projection);
@@ -350,10 +350,10 @@ void GameMain::Render()
 
 
 
-		D3D::Get()->SetBlender_AddBlend();
+		D3D::Get()->SetBlender(D3D::BL_state::Add);
 		cloud->Render();
 		skyplaneShader->Render(cloud->getIndexCount(), cloud->getWorld(), view, projection, cloud->getDiffuseMap(), cloud->getPerlinMap());
-		D3D::Get()->SetBlender_Off();
+		D3D::Get()->SetBlender(D3D::BL_state::Off);
 	}
 	D3D::Get()->SetDepthStencilState(D3D::DS_state::onState);
 	Rasterizer::Get()->SetOnCullMode();
@@ -458,7 +458,7 @@ void GameMain::Render()
 		*/
 	}
 
-	D3D::Get()->SetBlender_Off();
+	D3D::Get()->SetBlender(D3D::BL_state::Off);
 	Rasterizer::Get()->SetOnCullMode();
 	D3D::Get()->SetDepthStencilState(D3D::DS_state::onState);
 }

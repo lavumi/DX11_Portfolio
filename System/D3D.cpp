@@ -496,37 +496,43 @@ void D3D::CreateBlenders()
 
 
 
-void D3D::SetBlender_Linear()
+void D3D::SetBlender(BL_state state, float factor)
 {
-	deviceContext->OMSetBlendState(d3dBlendState[0], 0, 0xffffffff);
+	deviceContext->OMSetBlendState(d3dBlendState[(int)state], &factor, 0xffffffff);
 }
 
-void D3D::SetBlender_MaxBlend()
-{
-	deviceContext->OMSetBlendState(d3dBlendState[2], 0, 0xffffffff);
-}
+//void D3D::SetBlender_Linear()
+//{
+//	deviceContext->OMSetBlendState(d3dBlendState[0], 0, 0xffffffff);
+//}
+//
+//void D3D::SetBlender_MaxBlend()
+//{
+//	deviceContext->OMSetBlendState(d3dBlendState[2], 0, 0xffffffff);
+//}
+//
+//void D3D::SetBlender_Off()
+//{
+//	deviceContext->OMSetBlendState(d3dBlendState[1], 0, 0xffffffff);
+//}
+//
+//void D3D::SetBlender_None()
+//{
+//	deviceContext->OMSetBlendState(d3dBlendState[3], 0, 0xffffffff);
+//}
+//
+//void D3D::SetBlender_AddBlend()
+//{
+//	deviceContext->OMSetBlendState(d3dBlendState[5], 0, 0xffffffff);
+//}
+//
 
-void D3D::SetBlender_Off()
-{
-	deviceContext->OMSetBlendState(d3dBlendState[1], 0, 0xffffffff);
-}
-
-void D3D::SetBlender_None()
-{
-	deviceContext->OMSetBlendState(d3dBlendState[3], 0, 0xffffffff);
-}
-
-void D3D::SetBlender_AddBlend()
-{
-	deviceContext->OMSetBlendState(d3dBlendState[5], 0, 0xffffffff);
-}
-
-void D3D::SetBlender_BlendFacter(const float factor)
-{
-	deviceContext->OMSetBlendState(d3dBlendState[4], &factor, 0xffffffff);
-}
-
-void D3D::SetBlender_alphaCoverage()
-{
-	deviceContext->OMSetBlendState(d3dBlendState[6], 0, 0xffffffff);
-}
+//void D3D::SetBlender_BlendFacter(const float factor)
+//{
+//	deviceContext->OMSetBlendState(d3dBlendState[4], &factor, 0xffffffff);
+//}
+//
+//void D3D::SetBlender_alphaCoverage()
+//{
+//	deviceContext->OMSetBlendState(d3dBlendState[6], 0, 0xffffffff);
+//}

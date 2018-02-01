@@ -9,7 +9,9 @@ PerlinNoise::PerlinNoise()
 	, vertexShader(nullptr), pixelShader(nullptr)
 	, vertexBuffer(nullptr), indexBuffer(nullptr)
 {
-
+	vertexShaderfinal = nullptr;
+	pixelShaderfinal = nullptr;
+	layoutfinal = nullptr;
 	basePath = L"./Shader/FX/";
 	CreateBuffer();
 	
