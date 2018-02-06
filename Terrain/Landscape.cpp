@@ -325,8 +325,6 @@ void Landscape::CheckGround()
 			D3DXMatrixRotationY(&rotation, (float)D3DX_PI / 180 *0);
 			world = rotation * position;
 			grassGround.push_back(world);
-
-
 			
 			D3DXMatrixRotationY(&rotation, (float)D3DX_PI / 180 * 120);
 			world = rotation * position;

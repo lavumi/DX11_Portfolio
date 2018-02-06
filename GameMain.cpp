@@ -14,6 +14,7 @@
 #include "./Terrain/Landscape.h"
 #include "./Terrain/Water.h"
 #include "./Terrain/TerrainGrass.h"
+#include "./Terrain/Cloud.h"
 
 
 #include "./Object/TestCube.h"
@@ -54,10 +55,11 @@ void GameMain::Initialize()
 	landscape		 = new Landscape();
 	lake			 = new Water();
 	grass			= new TerrainGrass();
+	volumeCloud = new Cloud();
 
 	grassTexture = new GrassTexture();
 	//mosaicTile = new MosaicTile();
-	noise = new PerlinNoise();
+	noise = new PerlinNoise(true);
 
 
 
@@ -80,6 +82,7 @@ void GameMain::Initialize()
 	grass->Initialize(landscape);
 	cloud->Initialize();
 	noise->MakePerlinNoise();
+	volumeCloud->Initialize();
 
 	grassTexture->DrawTexture();
 	landscape->SetTexture(grassTexture->diffuse, nullptr, nullptr);
@@ -108,6 +111,7 @@ void GameMain::Destroy()
 	SAFE_DELETE(landscape);
 	SAFE_DELETE(lake);
 	SAFE_DELETE(grass);
+	SAFE_DELETE(volumeCloud);
 
 	SAFE_DELETE(grassTexture);
 	SAFE_DELETE(noise);
@@ -148,7 +152,7 @@ void GameMain::Update()
 	skydome->Update();
 	landscape->Update();
 	cloud->Update();
-
+	volumeCloud->Update();
 
 	testcube->Update();
 
@@ -324,7 +328,7 @@ void GameMain::PreRender()
 void GameMain::Render()
 {
 	//D3D::Get()->SetBlender_Off();
-	//grassTexture->Render();
+	//noise->Render();
 	//return;
 	D3DXMATRIX world, view, projection;
 	//Camera::Get()->GetDefaultView(&view);
@@ -349,7 +353,8 @@ void GameMain::Render()
 		skydomeShader->Render(skydome->getIndexCount(), skydome->getWorld(), view, projection);
 
 
-
+		//volumeCloud->Render();
+		//colorShader->Render(volumeCloud->getIndexCount(), volumeCloud->getWorld(), view, projection, D3DXCOLOR(1, 1, 0, 1));
 		D3D::Get()->SetBlender(D3D::BL_state::Add);
 		cloud->Render();
 		skyplaneShader->Render(cloud->getIndexCount(), cloud->getWorld(), view, projection, cloud->getDiffuseMap(), cloud->getPerlinMap());
@@ -357,6 +362,7 @@ void GameMain::Render()
 	}
 	D3D::Get()->SetDepthStencilState(D3D::DS_state::onState);
 	Rasterizer::Get()->SetOnCullMode();
+
 
 
 

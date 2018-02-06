@@ -91,11 +91,9 @@ public:
 		Linear,
 		Off,
 		Max,
-		
 		None,
 		BlendFacter,
 		Add,
-		
 		AlphaCoverage,
 	};
 

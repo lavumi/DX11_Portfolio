@@ -202,6 +202,7 @@
     <ClInclude Include="System\Mouse.h" />
     <ClInclude Include="System\TweakBar.h" />
     <ClInclude Include="System\Window.h" />
+    <ClInclude Include="Terrain\Cloud.h" />
     <ClInclude Include="Terrain\Landscape.h" />
     <ClInclude Include="Terrain\TerrainGrass.h" />
     <ClInclude Include="Terrain\QuadTree.h" />
@@ -247,6 +248,7 @@
     <ClCompile Include="System\Mouse.cpp" />
     <ClCompile Include="System\TweakBar.cpp" />
     <ClCompile Include="System\Window.cpp" />
+    <ClCompile Include="Terrain\Cloud.cpp" />
     <ClCompile Include="Terrain\TerrainGrass.cpp" />
     <ClCompile Include="Terrain\Landscape.cpp" />
     <ClCompile Include="Terrain\QuadTree.cpp" />
@@ -353,6 +355,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Shader\FX\InstanceTextureShader.fx">
+      <FileType>Document</FileType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shader\FX\3dPerlin.fx">
       <FileType>Document</FileType>
     </None>
   </ItemGroup>

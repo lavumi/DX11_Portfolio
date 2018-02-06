@@ -104,6 +104,22 @@ PixelInput VS(VertexInput input)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 Texture2D _map[3] : register(t10);
 
 Texture2D _lightMap : register(t1);
@@ -122,7 +138,8 @@ cbuffer Material : register(b0)
 
 float4 PS(PixelInput input) : SV_TARGET
 {
-
+    //float ddx = fwidth(input.worldPosition.z);
+    //return ddx;
 
     float2 uv = input.uv;
 
@@ -165,6 +182,11 @@ float4 PS(PixelInput input) : SV_TARGET
 
     diffuseMap.a = input.clip;
 
-    return intensity*diffuseMap;
+
+
+
+ 
+
+    return intensity * diffuseMap;
 }
 

@@ -4,7 +4,7 @@
 
 #include "../Object/OrthoWindowPlane.h"
 
-PerlinNoise::PerlinNoise()
+PerlinNoise::PerlinNoise(bool cube)
 	:vertexBlob(nullptr), pixelBlob(nullptr)
 	, vertexShader(nullptr), pixelShader(nullptr)
 	, vertexBuffer(nullptr), indexBuffer(nullptr)
@@ -14,8 +14,10 @@ PerlinNoise::PerlinNoise()
 	layoutfinal = nullptr;
 	basePath = L"./Shader/FX/";
 	CreateBuffer();
-	
-	CreateShader(L"perlin.fx");
+	if (cube) 
+		CreateShader(L"3dPerlin.fx");
+	else
+		CreateShader(L"perlin.fx");
 
 	rndNoise = new RenderTexture(1024,1024);
 
@@ -86,7 +88,7 @@ void PerlinNoise::MakePerlinNoise(float r, float g, float b) {
 
 	D3D::Get()->SetDefaultRenderView();
 	//CreateShader();
-	//rndNoise->SaveTexture(L"PerlinNoise.png");
+	rndNoise->SaveTexture(L"PerlinNoise.png");
 }
 void PerlinNoise::Render()
 {
@@ -133,10 +135,10 @@ void PerlinNoise::ReadyToRender()
 	rect[2].position = D3DXVECTOR3(1, -1, 0);
 	rect[3].position = D3DXVECTOR3(1, 1, 0);
 
-	rect[0].uv = D3DXVECTOR2(0, 2);
+	rect[0].uv = D3DXVECTOR2(0, 1);
 	rect[1].uv = D3DXVECTOR2(0, 0);
-	rect[2].uv = D3DXVECTOR2(2, 2);
-	rect[3].uv = D3DXVECTOR2(2, 0);
+	rect[2].uv = D3DXVECTOR2(1, 1);
+	rect[3].uv = D3DXVECTOR2(1, 0);
 
 
 
