@@ -8,7 +8,7 @@ public:
 
 
 	virtual void Update();
-	virtual void Render(UINT indexCount, D3DXMATRIX world, D3DXMATRIX view, D3DXMATRIX projection);
+	void Render(UINT indexCount, D3DXMATRIX world, D3DXMATRIX view, D3DXMATRIX projection, D3DXVECTOR3 lightDir);
 
 
 

@@ -59,7 +59,7 @@ void GameMain::Initialize()
 
 	grassTexture = new GrassTexture();
 	//mosaicTile = new MosaicTile();
-	noise = new PerlinNoise(true);
+	noise = new PerlinNoise();
 
 
 
@@ -247,7 +247,7 @@ void GameMain::PreRender()
 		//반사된 세계는 현실 세계에 대해 뒤집혀있으므로 컬모드가 반대다
 		Rasterizer::Get()->SetFrontCullMode();
 
-
+		D3DXPLANE waterPlane = lake->getwaterPlane();
 		//반사된 뷰, 프로젝션 받기
 		Camera::Get()->GetMirrorView(&view);
 		D3D::Get()->GetProjection(&projection);
@@ -267,10 +267,12 @@ void GameMain::PreRender()
 			D3DXMatrixTranslation(&world, camPos.x, camPos.y, camPos.z);
 
 
-			
+			D3DXVECTOR3 lightDir;
+			LightManager::Get()->GetLightDirection(&lightDir);
+
 
 			skydome->Render();
-			skydomeShader->Render(skydome->getIndexCount(), world, view, projection);
+			skydomeShader->Render(skydome->getIndexCount(), world, view, projection, lightDir);
 			D3D::Get()->SetBlender(D3D::BL_state::Add);
 			cloud->Render();
 			skyplaneShader->Render(cloud->getIndexCount(), world, view, projection, cloud->getDiffuseMap(), cloud->getPerlinMap());
@@ -286,9 +288,6 @@ void GameMain::PreRender()
 
 		if (landscapeWireFrame)
 			Rasterizer::Get()->SetWireframe();
-
-		D3DXPLANE waterPlane = lake->getwaterPlane();
-
 
 		landscape->Render();
 		terrainShader->Render(landscape->getIndexCount(), landscape->getWorld(), view, projection, landscape->getDiffuseMap(), landscape->getNormalMap(), *blurShadowTexture->GetShadowResourceView(), waterPlane);
@@ -345,12 +344,16 @@ void GameMain::Render()
 	Camera::Get()->GetView(&view);
 	D3D::Get()->GetProjection(&projection);
 
-
 	D3D::Get()->SetDepthStencilState(D3D::DS_state::offState);
 	Rasterizer::Get()->SetOffCullMode();
 	{
+
+		D3DXVECTOR3 lightDir;
+
+		LightManager::Get()->GetLightDirection(&lightDir);
+
 		skydome->Render();
-		skydomeShader->Render(skydome->getIndexCount(), skydome->getWorld(), view, projection);
+		skydomeShader->Render(skydome->getIndexCount(), skydome->getWorld(), view, projection, lightDir);
 
 
 		//volumeCloud->Render();
