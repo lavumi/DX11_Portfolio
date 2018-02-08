@@ -129,8 +129,11 @@
     <ClCompile Include="ProceduralTexture\PerlinNoise.cpp">
       <Filter>ProceduralTexture</Filter>
     </ClCompile>
-    <ClCompile Include="ProceduralTexture\IslandHeightMap.cpp">
-      <Filter>ProceduralTexture</Filter>
+    <ClCompile Include="Terrain\Cloud.cpp">
+      <Filter>Terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader\RainShader.cpp">
+      <Filter>Shader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -270,8 +273,11 @@
     <ClInclude Include="ProceduralTexture\PerlinNoise.h">
       <Filter>ProceduralTexture</Filter>
     </ClInclude>
-    <ClInclude Include="ProceduralTexture\IslandHeightMap.h">
-      <Filter>ProceduralTexture</Filter>
+    <ClInclude Include="Terrain\Cloud.h">
+      <Filter>Terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader\RainShader.h">
+      <Filter>Shader</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -377,6 +383,12 @@
       <Filter>Shader\FX</Filter>
     </None>
     <None Include="Shader\FX\perlin.fx">
+      <Filter>Shader\FX</Filter>
+    </None>
+    <None Include="Shader\FX\3dPerlin.fx">
+      <Filter>Shader\FX</Filter>
+    </None>
+    <None Include="Shader\FX\RainShader.fx">
       <Filter>Shader\FX</Filter>
     </None>
   </ItemGroup>

@@ -25,7 +25,6 @@ cbuffer ExtraBuffer : register(b3)
 {
     matrix _inverseWorld;
     float shadowBias;
-
 }
 
 
@@ -231,6 +230,8 @@ float4 PS(PixelInput input) : SV_TARGET
     float shadowValue = _lightMap.Sample(samp[1], projectTexCoord).g;
     shadowValue *= 0.3;
     intensity *= shadowValue;
+
+
 
     return  intensity * diffuseMap;
 }

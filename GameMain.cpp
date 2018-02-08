@@ -14,6 +14,7 @@
 #include "./Terrain/Landscape.h"
 #include "./Terrain/Water.h"
 #include "./Terrain/TerrainGrass.h"
+#include "./Terrain/Cloud.h"
 
 
 #include "./Object/TestCube.h"
@@ -31,6 +32,7 @@
 #include "../Shader/WaterShader.h"
 #include "../Shader/SkyplaneShader.h"
 #include "../Shader/InstanceTextureShader.h"
+#include "../Shader/RainShader.h"
 
 
 
@@ -54,6 +56,7 @@ void GameMain::Initialize()
 	landscape		 = new Landscape();
 	lake			 = new Water();
 	grass			= new TerrainGrass();
+	volumeCloud = new Cloud();
 
 	grassTexture = new GrassTexture();
 	//mosaicTile = new MosaicTile();
@@ -74,12 +77,15 @@ void GameMain::Initialize()
 	skyplaneShader		 = new SkyplaneShader();
 	waterShader			 = new WaterShader();
 	instanceShader		 = new InstanceTextureShader();
+	rainShader				= new RainShader();
+
 
 	
 	landscape->Initialize();
 	grass->Initialize(landscape);
 	cloud->Initialize();
 	noise->MakePerlinNoise();
+	volumeCloud->Initialize();
 
 	grassTexture->DrawTexture();
 	landscape->SetTexture(grassTexture->diffuse, nullptr, nullptr);
@@ -108,6 +114,7 @@ void GameMain::Destroy()
 	SAFE_DELETE(landscape);
 	SAFE_DELETE(lake);
 	SAFE_DELETE(grass);
+	SAFE_DELETE(volumeCloud);
 
 	SAFE_DELETE(grassTexture);
 	SAFE_DELETE(noise);
@@ -125,11 +132,13 @@ void GameMain::Destroy()
 	SAFE_DELETE(skyplaneShader);
 	SAFE_DELETE(waterShader);
 	SAFE_DELETE(instanceShader);
+	SAFE_DELETE(rainShader);
 
 }
 
 void GameMain::Update()
 {
+	
 	ControlCamera();
 
 
@@ -148,7 +157,7 @@ void GameMain::Update()
 	skydome->Update();
 	landscape->Update();
 	cloud->Update();
-
+	volumeCloud->Update();
 
 	testcube->Update();
 
@@ -161,8 +170,9 @@ void GameMain::Update()
 		//shadowTexture->SaveTexture(L"shadow.png");
 		//blurShadowTexture->SaveTexture(L"blur.png");
 		//lakeRefractionTexture->SaveTexture(L"Mirror.png");
-		LodOff = !LodOff;
-		noise->MakePerlinNoise();
+		//LodOff = !LodOff;
+		//noise->MakePerlinNoise();
+		D3D::Get()->TestMultiTexture(0);
 	}
 	if (!LodOff)		landscape->changeLOD(frustum);
 
@@ -175,7 +185,7 @@ void GameMain::Update()
 
 void GameMain::PreRender()
 {
-	//return;
+
 	D3DXMATRIX view, projection;
 	D3DXMatrixIdentity(&view);
 	D3DXMatrixIdentity(&projection);
@@ -243,7 +253,7 @@ void GameMain::PreRender()
 		//반사된 세계는 현실 세계에 대해 뒤집혀있으므로 컬모드가 반대다
 		Rasterizer::Get()->SetFrontCullMode();
 
-
+		D3DXPLANE waterPlane = lake->getwaterPlane();
 		//반사된 뷰, 프로젝션 받기
 		Camera::Get()->GetMirrorView(&view);
 		D3D::Get()->GetProjection(&projection);
@@ -263,9 +273,12 @@ void GameMain::PreRender()
 			D3DXMatrixTranslation(&world, camPos.x, camPos.y, camPos.z);
 		
 
-			//빛 방향 반사시켜줘야하는데... 
+			D3DXVECTOR3 lightDir;
+			LightManager::Get()->GetLightDirection(&lightDir);
+
+
 			skydome->Render();
-			skydomeShader->Render(skydome->getIndexCount(), world, view, projection);
+			skydomeShader->Render(skydome->getIndexCount(), world, view, projection, lightDir);
 			D3D::Get()->SetBlender(D3D::BL_state::Add);
 			cloud->Render();
 			skyplaneShader->Render(cloud->getIndexCount(), world, view, projection, cloud->getDiffuseMap(), cloud->getPerlinMap());
@@ -281,9 +294,6 @@ void GameMain::PreRender()
 
 		if (landscapeWireFrame)
 			Rasterizer::Get()->SetWireframe();
-
-		D3DXPLANE waterPlane = lake->getwaterPlane();
-
 
 		landscape->Render();
 		terrainShader->Render(landscape->getIndexCount(), landscape->getWorld(), view, projection, landscape->getDiffuseMap(), landscape->getNormalMap(), *blurShadowTexture->GetShadowResourceView(), waterPlane);
@@ -322,10 +332,14 @@ void GameMain::PreRender()
 
 void GameMain::Render()
 {
-	//D3D::Get()->SetBlender(D3D::BL_state::Off);
-	//noise->Render();
+	//D3D::Get()->SetBlender_Off();
+	//grassTexture->Render();
 	//return;
 	D3DXMATRIX world, view, projection;
+
+
+
+
 	//Camera::Get()->GetDefaultView(&view);
 	//D3D::Get()->GetOrthoProjection(&projection);
 	//
@@ -340,15 +354,20 @@ void GameMain::Render()
 	Camera::Get()->GetView(&view);
 	D3D::Get()->GetProjection(&projection);
 
-
 	D3D::Get()->SetDepthStencilState(D3D::DS_state::offState);
 	Rasterizer::Get()->SetOffCullMode();
 	{
+
+		D3DXVECTOR3 lightDir;
+
+		LightManager::Get()->GetLightDirection(&lightDir);
+
 		skydome->Render();
-		skydomeShader->Render(skydome->getIndexCount(), skydome->getWorld(), view, projection);
+		skydomeShader->Render(skydome->getIndexCount(), skydome->getWorld(), view, projection, lightDir);
 
 
-
+		//volumeCloud->Render();
+		//colorShader->Render(volumeCloud->getIndexCount(), volumeCloud->getWorld(), view, projection, D3DXCOLOR(1, 1, 0, 1));
 		D3D::Get()->SetBlender(D3D::BL_state::Add);
 		cloud->Render();
 		skyplaneShader->Render(cloud->getIndexCount(), cloud->getWorld(), view, projection, cloud->getDiffuseMap(), cloud->getPerlinMap());
@@ -356,6 +375,7 @@ void GameMain::Render()
 	}
 	D3D::Get()->SetDepthStencilState(D3D::DS_state::onState);
 	Rasterizer::Get()->SetOnCullMode();
+
 
 
 
@@ -376,8 +396,23 @@ void GameMain::Render()
 
 
 	lake->Render();
-	waterShader->Render(lake->indexCount, lake->world, view, projection, lake->getNormalTexture(), cloud->getPerlinMap(), *lakeReflectionTexture->GetShadowResourceView(), *lakeRefractionTexture->GetShadowResourceView());
+	waterShader->Render(lake->indexCount, lake->world, view, projection, 
+		lake->getNormalTexture(), cloud->getPerlinMap(), 
+		*lakeReflectionTexture->GetShadowResourceView(), 
+		*lakeRefractionTexture->GetShadowResourceView());
 
+
+
+	//Rain Rendering
+	Camera::Get()->GetDefaultView(&view);
+	D3D::Get()->GetOrthoProjection(&projection);
+
+	D3D::Get()->SetBlender(D3D::BL_state::Off);
+	shadowtestPlane->Render();
+	// 
+	textureShader->Render(shadowtestPlane->indexCount, shadowtestPlane->world, view, projection, *D3D::Get()->GetBackBufferSubRenderTexture(0));
+
+	//rainShader->Render(shadowtestPlane->indexCount, shadowtestPlane->world, view, projection, *D3D::Get()->GetBackBufferSubRenderTexture(0), D3DXCOLOR(0, 1, 1, 1));
 
 
 

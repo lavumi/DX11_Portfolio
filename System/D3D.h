@@ -91,11 +91,9 @@ public:
 		Linear,
 		Off,
 		Max,
-		
 		None,
 		BlendFacter,
 		Add,
-		
 		AlphaCoverage,
 	};
 
@@ -111,6 +109,10 @@ public:
 	void ClearDepthStencil(UINT clearFlag, float depth, UINT8 stencil);
 
 
+
+	ID3D11ShaderResourceView** GetBackBufferSubRenderTexture(int);
+
+	void TestMultiTexture(int);
 
 private:
 	D3D();
@@ -173,8 +175,10 @@ private:
 
 	ID3D11Texture2D* defaultDepthTexture;
 	ID3D11DepthStencilView* defaultDepthView;
-	ID3D11RenderTargetView* defaultRenderView;
+	ID3D11RenderTargetView* defaultRenderView[2];
+	ID3D11Texture2D* subRenderTexture[1];
 
+	ID3D11ShaderResourceView* subRenderShaderResource[1];
 
 	ID3D11DepthStencilState** depthstencilstate;
 

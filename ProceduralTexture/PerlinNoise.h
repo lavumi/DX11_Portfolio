@@ -5,7 +5,7 @@ class OrthoWindowPlane;
 class PerlinNoise
 {
 public:
-	PerlinNoise();
+	PerlinNoise(bool cube = false);
 	~PerlinNoise();
 
 	void MakePerlinNoise(float r = 1, float g = 1, float b = 1);

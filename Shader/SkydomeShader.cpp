@@ -22,7 +22,7 @@ void SkydomeShader::Update()
 
 }
 
-void SkydomeShader::Render(UINT indexCount, D3DXMATRIX world,D3DXMATRIX view, D3DXMATRIX projection )
+void SkydomeShader::Render(UINT indexCount, D3DXMATRIX world,D3DXMATRIX view, D3DXMATRIX projection, D3DXVECTOR3 lightDir)
 {
 	D3DXVECTOR3 lightDir;
 
@@ -43,6 +43,9 @@ void SkydomeShader::Render(UINT indexCount, D3DXMATRIX world,D3DXMATRIX view, D3
 
 
 
+	
+
+	//LightManager::Get()->GetLightDirection(&lightDir);
 	ZeroMemory(&subResource, sizeof(D3D11_MAPPED_SUBRESOURCE));
 	D3D::GetDeviceContext()->Map
 	(

@@ -49,7 +49,7 @@ struct PixelInput
     float3 normal : NORMAL0;
     float3 viewDir : TEXCOORD3;
 
-    float options : TEXCOORD4;
+    //float options : TEXCOORD4;
     float4 viewPosition : TEXCOORD5;
 
 
@@ -90,28 +90,19 @@ PixelInput VS(VertexInput input)
 
     output.viewPosition = output.position;
 
-
     output.viewPosition = mul(output.viewPosition, _view);
     output.viewPosition = mul(output.viewPosition, _projection);
-
 
     output.position = mul(output.position, _mirrorview);
     output.position = mul(output.position, _mirrorprojection);
 
-
-   
-   
-
     output.uv = input.uv;
     output.normal = normalize(mul(input.normal, tbnMatrix));
 
-
-    output.options = options.x;
-
+    //output.options = options.x;
    
 
     return output;
-
 }
 
 
@@ -219,7 +210,7 @@ float4 PS(PixelInput input) : SV_TARGET
    shadowValue *= 0.3;
    
    
- //intensity *= shadowValue;
+    //intensity *= shadowValue;
     diffuseMap *= intensity;
 
     diffuseMap.a = 0.5f;

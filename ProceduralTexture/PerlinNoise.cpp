@@ -4,7 +4,7 @@
 
 #include "../Object/OrthoWindowPlane.h"
 
-PerlinNoise::PerlinNoise()
+PerlinNoise::PerlinNoise(bool cube)
 	:vertexBlob(nullptr), pixelBlob(nullptr)
 	, vertexShader(nullptr), pixelShader(nullptr)
 	, vertexBuffer(nullptr), indexBuffer(nullptr)
@@ -14,8 +14,10 @@ PerlinNoise::PerlinNoise()
 	layoutfinal = nullptr;
 	basePath = L"./Shader/FX/";
 	CreateBuffer();
-	
-	CreateShader(L"perlin.fx");
+	if (cube) 
+		CreateShader(L"3dPerlin.fx");
+	else
+		CreateShader(L"perlin.fx");
 
 	rndNoise = new RenderTexture(1024,1024);
 
@@ -86,7 +88,7 @@ void PerlinNoise::MakePerlinNoise(float r, float g, float b) {
 
 	D3D::Get()->SetDefaultRenderView();
 	//CreateShader();
-	//rndNoise->SaveTexture(L"PerlinNoise.png");
+	rndNoise->SaveTexture(L"PerlinNoise.png");
 }
 void PerlinNoise::Render()
 {

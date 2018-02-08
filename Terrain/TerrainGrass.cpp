@@ -21,6 +21,7 @@ TerrainGrass::~TerrainGrass()
 
 	SAFE_RELEASE(vertexBuffer);
 	SAFE_RELEASE(indexBuffer);
+	SAFE_RELEASE(instanceBuffer);
 }
 
 void TerrainGrass::Initialize(Landscape* land)
@@ -110,6 +111,7 @@ void TerrainGrass::CreateBuffer()
 
 
 	SAFE_DELETE_ARRAY(vertexData);
+	SAFE_DELETE_ARRAY(indexData);
 
 	ZeroMemory(&desc, sizeof(D3D11_BUFFER_DESC));
 	desc.Usage = D3D11_USAGE_DEFAULT;

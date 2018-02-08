@@ -9,6 +9,7 @@ class Landscape;
 class Water;
 class Skyplane;
 class TerrainGrass;
+class Cloud;
 	
 
 class GrassTexture;
@@ -30,6 +31,7 @@ class ColorShader;
 class SkyplaneShader;
 class WaterShader;
 class InstanceTextureShader;
+class RainShader;
 
 class Frustum;
 
@@ -59,6 +61,8 @@ private:
 	RenderTexture* lakeReflectionTexture;
 	RenderTexture* lakeRefractionTexture;
 
+	RenderTexture* rainTexture;
+
 	Frustum* frustum;
 
 	GrassTexture* grassTexture;
@@ -71,6 +75,7 @@ private:
 	Landscape* landscape;
 	Water* lake;
 	TerrainGrass* grass;
+	Cloud* volumeCloud;
 
 
 	TestCube* testcube;
@@ -93,4 +98,5 @@ private:
 	SkyplaneShader* skyplaneShader;
 	WaterShader* waterShader;
 	InstanceTextureShader* instanceShader;
+	RainShader* rainShader;
 };

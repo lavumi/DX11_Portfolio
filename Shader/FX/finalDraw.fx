@@ -22,10 +22,10 @@ PixelInput VS(VertexInput input)
     
     output = input;
 
-   float scaleFactor = 1;
+   float scaleFactor = 1.3;
    
   output.position.w = scaleFactor;
-  output.position.x /= 2;
+    output.position.x /= 2;
  //output.position.x -= scaleFactor/1.2;
  //output.position.y += scaleFactor/1.5;
  

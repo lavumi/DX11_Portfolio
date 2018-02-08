@@ -37,9 +37,9 @@ float CosineLerp(float x, float y, float fractional)
 
 
 
-float Noise(float2 uv)
+float Noise(float3 uv)
 {
-   float result = frac(cos(dot(uv, float2(132.472583f, 141.1326f))) * 41624.31315);
+   float result = frac(cos(dot(uv, float3(132.472583f, 141.1326f, 421.6938f))) * 41624.31315);
    // float result = cos(dot(uv, float2(3, 5)));
 
    
@@ -70,39 +70,53 @@ float Noise(float2 uv)
 //    return corners + sides + center;
 //}
 
-float LerpedNoise(float x, float y, float seed,float freq)
+float LerpedNoise(float x, float y, float z, float seed,float freq)
 {
 
    float int_x = floor(x), frac_x = frac(x);
    float int_y = floor(y), frac_y = frac(y);
+   float int_z = floor(z), frac_z = frac(z);
 
     float maxX = (2 + seed) * freq - 1;
     float maxY = (2 - seed) * freq - 1;
+    float maxZ = (2 - seed) * freq - 1;
 
-    float p1, p2, p3, p4;
+    float p1, p2, p3, p4, p5, p6, p7, p8;
 
-    p1 = p2 = p3 = p4 = 0;
-    float next_x, next_y;
-
-
-
-    next_x = lerp(int_x + 1, freq * (seed + 1), step(maxX, int_x));
-    next_y = lerp(int_y + 1, freq * (1 - seed), step(maxY, int_y));
+    p1 = p2 = p3 = p4 = p5 = p6 = p7 = p8 = 0;
+    float next_x, next_y, next_z;
 
 
-    p1 = Noise(float2(int_x, int_y)); //SmoothNoise(int_x,       int_y);
-    p2 = Noise(float2(next_x, int_y)); //SmoothNoise(int_x + 1,   int_y);
-    p3 = Noise(float2(int_x, next_y)); //SmoothNoise(int_x,       int_y + 1);
-    p4 = Noise(float2(next_x, next_y)); //SmoothNoise(int_x + 1,   int_y + 1);
 
+    next_x = int_x + 1;
+    next_y = int_y + 1;
+    next_z = int_z + 1;
+
+    p1 = Noise(float3(int_x, int_y, int_z)); //SmoothNoise(int_x,       int_y);
+    p2 = Noise(float3(next_x, int_y, int_z)); //SmoothNoise(int_x + 1,   int_y);
+    p3 = Noise(float3(int_x, next_y, int_z)); //SmoothNoise(int_x,       int_y + 1);
+    p4 = Noise(float3(next_x, next_y, int_z)); //SmoothNoise(int_x + 1,   int_y + 1);
+
+    p5 = Noise(float3(int_x, int_y, next_z)); //SmoothNoise(int_x,       int_y);
+    p6 = Noise(float3(next_x, int_y, next_z)); //SmoothNoise(int_x + 1,   int_y);
+    p7 = Noise(float3(int_x, next_y, next_z)); //SmoothNoise(int_x,       int_y + 1);
+    p8 = Noise(float3(next_x, next_y, next_z)); //SmoothNoise(int_x + 1,   int_y + 1);
 
     p1 = CosineLerp(p1, p2, frac_x);
     p3 = CosineLerp(p3, p4, frac_x);
 
-   return CosineLerp(p1, p3, frac_y);
+    p5 = CosineLerp(p5, p6, frac_x);
+    p7 = CosineLerp(p7, p8, frac_x);
+
+
+
+    p1 = CosineLerp(p1, p3, frac_y);
+    p5 = CosineLerp(p5, p7, frac_y);
+
+    return CosineLerp(p1, p5, frac_z);
 }
 
-float CreatePerlinNoise(float x, float y, float seed)
+float CreatePerlinNoise(float x, float y, float z, float seed)
 {
     x += seed;
     y -= seed;
@@ -111,7 +125,7 @@ float CreatePerlinNoise(float x, float y, float seed)
 
     for (int i = 0; i <8; i++)
     {
-        result += LerpedNoise((x +  1) * frequency , (y  + 1) * frequency , seed, frequency) * amplitude;
+        result += LerpedNoise((x + 1) * frequency, (y + 1) * frequency, (z + 1) * frequency,     seed, frequency) * amplitude;
         frequency *= 2;
         amplitude *= persistance;
      }
@@ -126,7 +140,16 @@ float4 PS(PixelInput input) : SV_Target
 
     float2 uv = input.uv;
     float rndSeed =  ceil(color.a);
-    float index = CreatePerlinNoise(uv.x, uv.y , rndSeed);
+
+    float x, y, z;
+
+    x = frac(input.uv.x * 4);
+    y = frac(input.uv.y * 4);
+
+    z = (floor(input.uv.x * 4) + floor(input.uv.y * 4)*4) / 16;
+   // z = 1;
+
+    float index = CreatePerlinNoise(x, y ,z, rndSeed);
 
     // index = LerpedNoise(input.uv.x, input.uv.y);
     float4 result =  float4(index * color.r, index* color.g, index * color.b, 1);
