@@ -435,7 +435,7 @@ void GameMain::Render()
 	//	D3DX11_IFF_PNG,
 	//	L"MultiRenderTarget_1.png"
 	//);
-	//assert(SUCCEEDED(hr));
+	assert(SUCCEEDED(hr));
 
 
 	SAFE_RELEASE(depthSRV);
