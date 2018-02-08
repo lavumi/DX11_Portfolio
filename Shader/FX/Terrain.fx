@@ -73,6 +73,8 @@ PixelInput VS(VertexInput input)
     output.position = mul(output.position, _view);
     output.position = mul(output.position, _projection);
    
+    //output.position /= output.position.w;
+
     output.viewPosition = output.position;
 
     output.uv = input.uv;
@@ -136,10 +138,19 @@ cbuffer Material : register(b0)
    
 };
 
-float4 PS(PixelInput input) : SV_TARGET
+
+struct PixelOutput
+{
+    float4 albedo : SV_TARGET0;
+    float4 depthMap : SV_TARGET1;
+};
+
+PixelOutput PS(PixelInput input)
 {
     //float ddx = fwidth(input.worldPosition.z);
     //return ddx;
+    PixelOutput output;
+
 
     float2 uv = input.uv;
 
@@ -187,6 +198,10 @@ float4 PS(PixelInput input) : SV_TARGET
 
  
 
-    return intensity * diffuseMap;
+    output.albedo = intensity * diffuseMap;
+
+    float3 depthValue = input.position.w / 1000;
+    output.depthMap = float4(depthValue, 1);
+    return output;
 }
 

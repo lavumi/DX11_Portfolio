@@ -23,7 +23,8 @@ void D3D::Delete()
 
 void D3D::BeginScene()
 {
-	deviceContext->ClearRenderTargetView(defaultRenderView, d3dInfo.clearColor);
+	deviceContext->ClearRenderTargetView(defaultRenderView[0], d3dInfo.clearColor);
+	deviceContext->ClearRenderTargetView(defaultRenderView[1], D3DXCOLOR(0,0,0,0));
 	deviceContext->ClearDepthStencilView(defaultDepthView, D3D11_CLEAR_DEPTH, 1, 0);
 }
 
@@ -35,6 +36,24 @@ void D3D::EndScene()
 		swapChain->Present(0, 0);
 }
 	
+ID3D11ShaderResourceView** D3D::GetBackBufferSubRenderTexture(int index)
+{
+	return &subRenderShaderResource[index];
+}
+
+void D3D::TestMultiTexture(int index)
+{
+	HRESULT hr = D3DX11SaveTextureToFile(
+		D3D::GetDeviceContext(),
+		subRenderTexture[index],
+		D3DX11_IFF_PNG,
+		L"MultiRenderTarget_1.png"
+	);
+	assert(SUCCEEDED(hr));
+
+	
+}
+
 D3D::D3D()
 {
 	version = D3D_FEATURE_LEVEL_11_0;
@@ -90,7 +109,17 @@ D3D::~D3D()
 	SAFE_RELEASE(deviceContext);
 	SAFE_RELEASE(device);
 	SAFE_RELEASE(swapChain);
+	SAFE_RELEASE(defaultDepthTexture);
+	SAFE_RELEASE(defaultDepthView);
+	SAFE_RELEASE(defaultRenderView[0]);
+	for (int i = 0; i < 1; i++) {
+		SAFE_RELEASE(defaultRenderView[i+1]);
+		SAFE_RELEASE(subRenderTexture[i]);
+	}
 
+	//TODO
+	//SAFE_RELEASE(d3dBlendState);
+	//SAFE_RELEASE(depthstencilstate);
 }
 
 void D3D::CreateAdapter()
@@ -210,7 +239,7 @@ void D3D::CreateSwapChain()
 
 void D3D::SetDefaultRenderView()
 {
-	deviceContext->OMSetRenderTargets(1, &defaultRenderView, defaultDepthView);
+	deviceContext->OMSetRenderTargets(2, defaultRenderView, defaultDepthView);
 	deviceContext->RSSetViewports(1, &viewport);
 	SetProjection(&defaultProjection);
 }
@@ -218,7 +247,7 @@ void D3D::SetDefaultRenderView()
 
 
 
-
+	
 void D3D::ClearDepthStencil(UINT clearFlag, float depth, UINT8 stencil)
 {
 	deviceContext->ClearDepthStencilView(defaultDepthView, clearFlag, depth, stencil);
@@ -381,9 +410,57 @@ void D3D::CreateDefaultRenderTarget()
 	HRESULT hr = swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void **)&backbufferPointer);
 	assert(SUCCEEDED(hr));
 
-	hr = device->CreateRenderTargetView(backbufferPointer, NULL, &defaultRenderView);
+	hr = device->CreateRenderTargetView(backbufferPointer, NULL, &defaultRenderView[0]);
+	assert(SUCCEEDED(hr));
+
+
+
+
+
+	D3D11_TEXTURE2D_DESC textureDesc = { 0 };
+	textureDesc.Width = d3dInfo.screenWidth;
+	textureDesc.Height = d3dInfo.screenHeight;
+
+	textureDesc.MipLevels = 1;
+	textureDesc.ArraySize = 1;
+	textureDesc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+	textureDesc.SampleDesc.Count = 1;
+	textureDesc.Usage = D3D11_USAGE_DEFAULT;
+	textureDesc.BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
+	textureDesc.CPUAccessFlags = 0;
+	textureDesc.MiscFlags = 0;
+
+
+
+
+
+	hr = D3D::GetDevice()->CreateTexture2D(&textureDesc, NULL, &subRenderTexture[0]);
+	assert(SUCCEEDED(hr));
+
+
+
+
+
+	hr = device->CreateRenderTargetView(subRenderTexture[0], NULL, &defaultRenderView[1]);
 	assert(SUCCEEDED(hr));
 	SAFE_RELEASE(backbufferPointer);
+
+
+
+
+
+	D3D11_SHADER_RESOURCE_VIEW_DESC viewDesc;
+	ZeroMemory(&viewDesc, sizeof(D3D11_SHADER_RESOURCE_VIEW_DESC));
+	viewDesc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+	viewDesc.ViewDimension = D3D_SRV_DIMENSION_TEXTURE2D;
+	viewDesc.Texture2D.MipLevels = 1;
+
+	hr = D3D::GetDevice()->CreateShaderResourceView(subRenderTexture[0], &viewDesc, &subRenderShaderResource[0]);
+	assert(SUCCEEDED(hr));
+
+
+
+
 }
 
 void D3D::CreateDefaultDepthView()

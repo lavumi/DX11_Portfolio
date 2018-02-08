@@ -32,6 +32,7 @@
 #include "../Shader/WaterShader.h"
 #include "../Shader/SkyplaneShader.h"
 #include "../Shader/InstanceTextureShader.h"
+#include "../Shader/RainShader.h"
 
 
 
@@ -76,6 +77,8 @@ void GameMain::Initialize()
 	skyplaneShader		 = new SkyplaneShader();
 	waterShader			 = new WaterShader();
 	instanceShader		 = new InstanceTextureShader();
+	rainShader				= new RainShader();
+
 
 	
 	landscape->Initialize();
@@ -129,11 +132,13 @@ void GameMain::Destroy()
 	SAFE_DELETE(skyplaneShader);
 	SAFE_DELETE(waterShader);
 	SAFE_DELETE(instanceShader);
+	SAFE_DELETE(rainShader);
 
 }
 
 void GameMain::Update()
 {
+	
 	ControlCamera();
 
 
@@ -165,8 +170,9 @@ void GameMain::Update()
 		//shadowTexture->SaveTexture(L"shadow.png");
 		//blurShadowTexture->SaveTexture(L"blur.png");
 		//lakeRefractionTexture->SaveTexture(L"Mirror.png");
-		LodOff = !LodOff;
-		noise->MakePerlinNoise();
+		//LodOff = !LodOff;
+		//noise->MakePerlinNoise();
+		D3D::Get()->TestMultiTexture(0);
 	}
 	if (!LodOff)		landscape->changeLOD(frustum);
 
@@ -179,7 +185,7 @@ void GameMain::Update()
 
 void GameMain::PreRender()
 {
-	//return;
+
 	D3DXMATRIX view, projection;
 	D3DXMatrixIdentity(&view);
 	D3DXMatrixIdentity(&projection);
@@ -326,10 +332,16 @@ void GameMain::PreRender()
 
 void GameMain::Render()
 {
+
+
 	//D3D::Get()->SetBlender_Off();
 	//noise->Render();
 	//return;
 	D3DXMATRIX world, view, projection;
+
+
+
+
 	//Camera::Get()->GetDefaultView(&view);
 	//D3D::Get()->GetOrthoProjection(&projection);
 	//
@@ -386,8 +398,23 @@ void GameMain::Render()
 
 
 	lake->Render();
-	waterShader->Render(lake->indexCount, lake->world, view, projection, lake->getNormalTexture(), cloud->getPerlinMap(), *lakeReflectionTexture->GetShadowResourceView(), *lakeRefractionTexture->GetShadowResourceView());
+	waterShader->Render(lake->indexCount, lake->world, view, projection, 
+		lake->getNormalTexture(), cloud->getPerlinMap(), 
+		*lakeReflectionTexture->GetShadowResourceView(), 
+		*lakeRefractionTexture->GetShadowResourceView());
 
+
+
+	//Rain Rendering
+	Camera::Get()->GetDefaultView(&view);
+	D3D::Get()->GetOrthoProjection(&projection);
+
+	D3D::Get()->SetBlender(D3D::BL_state::Off);
+	shadowtestPlane->Render();
+	// 
+	textureShader->Render(shadowtestPlane->indexCount, shadowtestPlane->world, view, projection, *D3D::Get()->GetBackBufferSubRenderTexture(0));
+
+	//rainShader->Render(shadowtestPlane->indexCount, shadowtestPlane->world, view, projection, *D3D::Get()->GetBackBufferSubRenderTexture(0), D3DXCOLOR(0, 1, 1, 1));
 
 
 

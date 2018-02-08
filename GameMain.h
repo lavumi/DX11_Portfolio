@@ -31,6 +31,7 @@ class ColorShader;
 class SkyplaneShader;
 class WaterShader;
 class InstanceTextureShader;
+class RainShader;
 
 class Frustum;
 
@@ -59,6 +60,8 @@ private:
 
 	RenderTexture* lakeReflectionTexture;
 	RenderTexture* lakeRefractionTexture;
+
+	RenderTexture* rainTexture;
 
 	Frustum* frustum;
 
@@ -95,4 +98,5 @@ private:
 	SkyplaneShader* skyplaneShader;
 	WaterShader* waterShader;
 	InstanceTextureShader* instanceShader;
+	RainShader* rainShader;
 };

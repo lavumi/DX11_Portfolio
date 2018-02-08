@@ -132,6 +132,9 @@
     <ClCompile Include="Terrain\Cloud.cpp">
       <Filter>Terrain</Filter>
     </ClCompile>
+    <ClCompile Include="Shader\RainShader.cpp">
+      <Filter>Shader</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameMain.h" />
@@ -273,6 +276,9 @@
     <ClInclude Include="Terrain\Cloud.h">
       <Filter>Terrain</Filter>
     </ClInclude>
+    <ClInclude Include="Shader\RainShader.h">
+      <Filter>Shader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="System">
@@ -380,6 +386,9 @@
       <Filter>Shader\FX</Filter>
     </None>
     <None Include="Shader\FX\3dPerlin.fx">
+      <Filter>Shader\FX</Filter>
+    </None>
+    <None Include="Shader\FX\RainShader.fx">
       <Filter>Shader\FX</Filter>
     </None>
   </ItemGroup>
