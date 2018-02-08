@@ -25,7 +25,7 @@ PixelInput VS(VertexInput input)
    float scaleFactor = 1;
    
   output.position.w = scaleFactor;
- //   output.position.x /= 2;
+  output.position.x /= 2;
  //output.position.x -= scaleFactor/1.2;
  //output.position.y += scaleFactor/1.5;
  
@@ -46,6 +46,25 @@ float4 PS(PixelInput input) : SV_Target
 
     //cloud
     //result = lerp(result, 0, (result - 0.3)/0.05);
+
+
+
+    //Map
+  //float4 color = 0;
+  //if(result.g < 0.3f)
+  //    color = float4(0, 0.5, 1, 1);
+  //else if (result.g < 0.4f)
+  //    color = float4(51.0, 255.0, 153.0, 1) / 255.0;
+  //else if (result.g < 0.5f)
+  //    color = float4(0, 151.0, 0, 1) / 255.0;
+  //else if (result.g < 0.6f)
+  //    color = float4(102.0, 51.0, 0, 1) / 255.0;
+  //else if (result.g < 0.7f)
+  //    color = float4(51.0, 25, 0, 1)/255.0;
+  //else 
+  //    color = float4(0, 1, 1, 1);
+
+    
     return result;
 
 }

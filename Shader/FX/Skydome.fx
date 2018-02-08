@@ -51,11 +51,6 @@ PixelInput VS(VertexInput input)
 
 
 
-cbuffer ColorBuffer : register(b0)
-{
-    float4 _center;
-    float4 _apex;
-};
 
 
 
@@ -75,7 +70,7 @@ float4 PS(PixelInput input) : SV_TARGET
     float scatteredLight = abs(vertexGroundCos);
 
     //r 빛은 산란이 거의 되지 않고 다 직접 광으로 들어온다.
-    lightRGB.r = lightVertexCos * lightVertexCos * lightVertexCos * lightVertexCos * lightVertexCos;
+    lightRGB.r = pow(lightVertexCos, 5); // * lightVertexCos * lightVertexCos * lightVertexCos * lightVertexCos;
     //파란 빛은 사실상 거의 산란된 빛들
     //지금 파란 빛은 페이크가 심함. 수정을 해줘야 할듯
     //산란되는 양을 고정시키고 빛의 각도에 따라 파란빛을 추가시킴
@@ -83,13 +78,11 @@ float4 PS(PixelInput input) : SV_TARGET
     lightRGB.g = (lightRGB.r + lightRGB.b) / 2;
 
        
-
-
-
+      
+    lightRGB = saturate(lightRGB);
 
     float4 result = float4(lightRGB, 1); //lerp(_center, _apex, height);
-
-    
+      
     
     return result;
 }

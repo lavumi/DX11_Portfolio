@@ -133,10 +133,10 @@ void PerlinNoise::ReadyToRender()
 	rect[2].position = D3DXVECTOR3(1, -1, 0);
 	rect[3].position = D3DXVECTOR3(1, 1, 0);
 
-	rect[0].uv = D3DXVECTOR2(0, 2);
+	rect[0].uv = D3DXVECTOR2(0, 1);
 	rect[1].uv = D3DXVECTOR2(0, 0);
-	rect[2].uv = D3DXVECTOR2(2, 2);
-	rect[3].uv = D3DXVECTOR2(2, 0);
+	rect[2].uv = D3DXVECTOR2(1, 1);
+	rect[3].uv = D3DXVECTOR2(1, 0);
 
 
 

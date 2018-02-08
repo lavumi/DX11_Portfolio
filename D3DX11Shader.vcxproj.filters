@@ -129,6 +129,9 @@
     <ClCompile Include="ProceduralTexture\PerlinNoise.cpp">
       <Filter>ProceduralTexture</Filter>
     </ClCompile>
+    <ClCompile Include="ProceduralTexture\IslandHeightMap.cpp">
+      <Filter>ProceduralTexture</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameMain.h" />
@@ -265,6 +268,9 @@
       <Filter>Terrain</Filter>
     </ClInclude>
     <ClInclude Include="ProceduralTexture\PerlinNoise.h">
+      <Filter>ProceduralTexture</Filter>
+    </ClInclude>
+    <ClInclude Include="ProceduralTexture\IslandHeightMap.h">
       <Filter>ProceduralTexture</Filter>
     </ClInclude>
   </ItemGroup>

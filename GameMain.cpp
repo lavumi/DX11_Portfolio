@@ -261,10 +261,9 @@ void GameMain::PreRender()
 			Camera::Get()->GetPosition(&camPos);
 			camPos.y = -camPos.y + (lake->GetWaterHeigh() * 2.0f);
 			D3DXMatrixTranslation(&world, camPos.x, camPos.y, camPos.z);
+		
 
-
-			
-
+			//빛 방향 반사시켜줘야하는데... 
 			skydome->Render();
 			skydomeShader->Render(skydome->getIndexCount(), world, view, projection);
 			D3D::Get()->SetBlender(D3D::BL_state::Add);
@@ -323,8 +322,8 @@ void GameMain::PreRender()
 
 void GameMain::Render()
 {
-	//D3D::Get()->SetBlender_Off();
-	//grassTexture->Render();
+	//D3D::Get()->SetBlender(D3D::BL_state::Off);
+	//noise->Render();
 	//return;
 	D3DXMATRIX world, view, projection;
 	//Camera::Get()->GetDefaultView(&view);
