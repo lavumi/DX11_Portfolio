@@ -24,14 +24,7 @@ void SkydomeShader::Update()
 
 void SkydomeShader::Render(UINT indexCount, D3DXMATRIX world,D3DXMATRIX view, D3DXMATRIX projection, D3DXVECTOR3 lightDir)
 {
-	D3DXVECTOR3 lightDir;
-
-	LightManager::Get()->GetLightDirection(&lightDir);
-
 	float lightCos = -D3DXVec3Dot(&lightDir, &D3DXVECTOR3(0, 1, 0));
-
-
-
 
 	SetMatrix(world, view, projection);
 

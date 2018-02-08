@@ -112,6 +112,8 @@ public:
 
 	ID3D11ShaderResourceView** GetBackBufferSubRenderTexture(int);
 
+	ID3D11Texture2D* GetBackBufferSubRenderTexture2D(int);
+
 	void TestMultiTexture(int);
 
 private:

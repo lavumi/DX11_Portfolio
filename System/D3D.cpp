@@ -24,7 +24,7 @@ void D3D::Delete()
 void D3D::BeginScene()
 {
 	deviceContext->ClearRenderTargetView(defaultRenderView[0], d3dInfo.clearColor);
-	deviceContext->ClearRenderTargetView(defaultRenderView[1], D3DXCOLOR(0,0,0,0));
+	deviceContext->ClearRenderTargetView(defaultRenderView[1], D3DXCOLOR(1,1,1,1));
 	deviceContext->ClearDepthStencilView(defaultDepthView, D3D11_CLEAR_DEPTH, 1, 0);
 }
 
@@ -39,6 +39,12 @@ void D3D::EndScene()
 ID3D11ShaderResourceView** D3D::GetBackBufferSubRenderTexture(int index)
 {
 	return &subRenderShaderResource[index];
+}
+
+ID3D11Texture2D * D3D::GetBackBufferSubRenderTexture2D(int index)
+{
+
+	return subRenderTexture[index];
 }
 
 void D3D::TestMultiTexture(int index)
@@ -455,7 +461,7 @@ void D3D::CreateDefaultRenderTarget()
 	viewDesc.ViewDimension = D3D_SRV_DIMENSION_TEXTURE2D;
 	viewDesc.Texture2D.MipLevels = 1;
 
-	hr = D3D::GetDevice()->CreateShaderResourceView(subRenderTexture[0], &viewDesc, &subRenderShaderResource[0]);
+	hr = D3D::GetDevice()->CreateShaderResourceView(subRenderTexture[0],NULL, &subRenderShaderResource[0]);
 	assert(SUCCEEDED(hr));
 
 
