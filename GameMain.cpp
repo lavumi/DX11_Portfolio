@@ -415,8 +415,7 @@ void GameMain::Render()
 	//rainShader->Render(shadowtestPlane->indexCount, shadowtestPlane->world, view, projection, *D3D::Get()->GetBackBufferSubRenderTexture(0), D3DXCOLOR(0, 1, 1, 1));
 
 
-
-
+	//testing test
 
 
 	//D3D::Get()->SetBlender_alphaCoverage();
