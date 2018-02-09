@@ -4,8 +4,6 @@
 RenderTexture::RenderTexture(UINT width, UINT height)
 	:resourceView(NULL), renderView(NULL), texture(NULL)
 {
-
-
 	D3DInfo info;
 	D3D::GetInfo(&info);
 
@@ -21,7 +19,27 @@ RenderTexture::RenderTexture(UINT width, UINT height)
 		this->height = height;
 
 
-	
+}
+
+RenderTexture::~RenderTexture()
+{
+	for (UINT i = 0; i < subRT_count; i++){
+		SAFE_RELEASE(resourceView[i]);
+		SAFE_RELEASE(renderView[i]);
+		SAFE_RELEASE(texture[i]);
+	}
+}
+
+
+void RenderTexture::Initialize(UINT count)
+{
+	assert(count >= 1);
+	subRT_count = count;
+	HRESULT hr;
+	texture = new ID3D11Texture2D*[count];
+	renderView = new ID3D11RenderTargetView*[count];
+	resourceView = new ID3D11ShaderResourceView*[count];
+
 
 	D3D11_TEXTURE2D_DESC textureDesc = { 0 };
 	textureDesc.Width = this->width;
@@ -37,11 +55,11 @@ RenderTexture::RenderTexture(UINT width, UINT height)
 	textureDesc.MiscFlags = 0;
 
 
+	for (UINT i = 0; i < subRT_count; i++) {
+		hr = D3D::GetDevice()->CreateTexture2D(&textureDesc, NULL, &texture[i]);
+		assert(SUCCEEDED(hr));
+	}
 
-
-	
-	HRESULT hr = D3D::GetDevice()->CreateTexture2D(&textureDesc, NULL, &texture);
-	assert(SUCCEEDED(hr));
 
 	D3D11_RENDER_TARGET_VIEW_DESC renderDesc;
 	ZeroMemory(&renderDesc, sizeof(D3D11_RENDER_TARGET_VIEW_DESC));
@@ -49,8 +67,10 @@ RenderTexture::RenderTexture(UINT width, UINT height)
 	renderDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
 	renderDesc.Texture2D.MipSlice = 0;
 
-	hr = D3D::GetDevice()->CreateRenderTargetView(texture, &renderDesc, &renderView);
-	assert(SUCCEEDED(hr));
+	for (UINT i = 0; i < subRT_count; i++) {
+		hr = D3D::GetDevice()->CreateRenderTargetView(texture[i], &renderDesc, &renderView[i]);
+		assert(SUCCEEDED(hr));
+	}
 
 
 	D3D11_SHADER_RESOURCE_VIEW_DESC viewDesc;
@@ -59,9 +79,10 @@ RenderTexture::RenderTexture(UINT width, UINT height)
 	viewDesc.ViewDimension = D3D_SRV_DIMENSION_TEXTURE2D;
 	viewDesc.Texture2D.MipLevels = 1;
 
-	hr = D3D::GetDevice()->CreateShaderResourceView(texture, &viewDesc, &resourceView);
-	assert(SUCCEEDED(hr));
-
+	for (UINT i = 0; i < subRT_count; i++) {
+		hr = D3D::GetDevice()->CreateShaderResourceView(texture[i], &viewDesc, &resourceView[i]);
+		assert(SUCCEEDED(hr));
+	}
 
 
 	D3D11_TEXTURE2D_DESC depthBufferDesc;
@@ -70,7 +91,7 @@ RenderTexture::RenderTexture(UINT width, UINT height)
 	ZeroMemory(&depthBufferDesc, sizeof(depthBufferDesc));
 
 	// Set up the description of the depth buffer.
-	depthBufferDesc.Width =  this->width;
+	depthBufferDesc.Width = this->width;
 	depthBufferDesc.Height = this->height;
 	depthBufferDesc.MipLevels = 1;
 	depthBufferDesc.ArraySize = 1;
@@ -97,7 +118,7 @@ RenderTexture::RenderTexture(UINT width, UINT height)
 
 
 
-	viewport.Width =  (float)this->width;
+	viewport.Width = (float)this->width;
 	viewport.Height = (float)this->height;
 	viewport.MinDepth = 0.0f;
 	viewport.MaxDepth = 1.0f;
@@ -110,22 +131,15 @@ RenderTexture::RenderTexture(UINT width, UINT height)
 		(float)this->width, (float)this->height,
 		Camera::screenNear, Camera::screenDepth
 	);
-
-}
-
-RenderTexture::~RenderTexture()
-{
-	SAFE_RELEASE(resourceView);
-	SAFE_RELEASE(renderView);
-	SAFE_RELEASE(texture);
 }
 
 void RenderTexture::Clear(float r , float g , float b , float a )
 {
 
 	D3DXCOLOR color = D3DXCOLOR(r, g, b, a);
-	D3D::GetDeviceContext()->ClearRenderTargetView(renderView, color);
-
+	for (UINT i = 0; i < subRT_count; i++) {
+		D3D::GetDeviceContext()->ClearRenderTargetView(renderView[i], color);
+	}
 	D3D::GetDeviceContext()->ClearDepthStencilView(depthStencilView, D3D11_CLEAR_DEPTH, 1, 0);
 
 }
@@ -133,7 +147,8 @@ void RenderTexture::Clear(float r , float g , float b , float a )
 void RenderTexture::SetTarget(bool ortho)
 {
 
-	D3D::GetDeviceContext()->OMSetRenderTargets(1,		&renderView, depthStencilView);
+	D3D::GetDeviceContext()->OMSetRenderTargets(subRT_count, renderView, depthStencilView);
+
 	D3D::GetDeviceContext()->RSSetViewports(1, &viewport);
 	if(ortho)
 		D3D::Get()->SetProjection(&orthoMatrix);
@@ -142,11 +157,11 @@ void RenderTexture::SetTarget(bool ortho)
 		
 }
 
-void RenderTexture::SaveTexture(wstring fileName)
+void RenderTexture::SaveTexture(wstring fileName, UINT i)
 {
 	HRESULT hr = D3DX11SaveTextureToFile(
 		D3D::GetDeviceContext(),
-		texture,
+		texture[i],
 		D3DX11_IFF_PNG,
 		fileName.c_str()
 	);

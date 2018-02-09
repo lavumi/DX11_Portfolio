@@ -49,7 +49,7 @@ cbuffer time : register(b0)
 float rain(float2 uv_input, float scale)
 {
     float2 uv = uv_input;
-    uv.y -= time.a /scale * 5;
+    uv.y -= time.a /scale * 4;
     uv *= scale*3;
     float2 uv_int = ceil(uv);
     uv = frac(uv);
@@ -58,7 +58,7 @@ float rain(float2 uv_input, float scale)
     uv.x *= 100 / 4;
     uv.x += sin(uv_int.x * uv_int.y + uv_int.x)*scale*3;
 
-    float circle = lerp(0, 1, (0.2 - (uv.x * uv.x + uv.y * uv.y)));
+    float circle = lerp(0, 1, (0.3 - (uv.x * uv.x + uv.y * uv.y)));
     circle = saturate(circle);
 
     return circle * 0.5;
@@ -67,18 +67,18 @@ float rain(float2 uv_input, float scale)
 float4 PS(PixelInput input) : SV_Target0
 {
     float4 mapdist = _map.Sample(samp[0], input.uv);
-    return mapdist;
+  
 
     float2 uv = input.uv;
     float c = 0;
    // c += rain(uv, 5.);
 
-    mapdist *= 15;
+    mapdist.r *= 10;
 
-    for (float i = 0; i < 4; i++)
+    for (float i = 1; i < mapdist.r; i++)
     {
-        c += rain(uv, i * 5 + 1);
+        c += rain(uv, i * 2 + 1);
     }
 
-
+    return float4(c, c, c, c);
 }

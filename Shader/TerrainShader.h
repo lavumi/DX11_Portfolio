@@ -28,6 +28,7 @@ public:
 	ID3D11Buffer* MaterialBuffer;
 	ID3D11Buffer* ExtraBuffer;
 	ID3D11Buffer* clipPlaneBuffer;
+	ID3D11Buffer* cameraSpaceBuffer;
 
 	struct MaterialData {
 		D3DXCOLOR ambient;

@@ -21,6 +21,7 @@ PerlinNoise::PerlinNoise(bool cube)
 
 	rndNoise = new RenderTexture(1024,1024);
 
+	rndNoise->Initialize();
 	renderReady = false;
 
 	//MakePerlinNoise();

@@ -6,11 +6,7 @@ cbuffer MatrixBuffer : register(b0)
 
 };
 
-cbuffer Camera : register(b1)
-{
-    float3 _cameraPosition;
-    float _paddd;
-}
+
 
 cbuffer LightBuffer : register(b2)
 {
@@ -19,7 +15,10 @@ cbuffer LightBuffer : register(b2)
     float3 _lightDir;
     float _baseLight;
 };
-
+cbuffer ExtraBuffer : register(b3)
+{
+    matrix worldInverseTransposeMatrix;
+}
 
 cbuffer ReflectionPlane : register(b11)
 {
@@ -27,10 +26,7 @@ cbuffer ReflectionPlane : register(b11)
 };
 
 
-cbuffer ExtraBuffer : register(b3)
-{
-    matrix worldInverseTransposeMatrix;
-}
+
 
 struct VertexInput
 {
@@ -139,10 +135,17 @@ cbuffer Material : register(b0)
 };
 
 
+cbuffer cameraSpace : register(b1)
+{
+    matrix cameraSpace;
+   
+};
+
 struct PixelOutput
 {
     float4 albedo : SV_TARGET0;
     float4 depthMap : SV_TARGET1;
+    float4 viewSpaceVector : SV_TARGET2;
 };
 
 PixelOutput PS(PixelInput input)
@@ -200,8 +203,13 @@ PixelOutput PS(PixelInput input)
 
     output.albedo = intensity * diffuseMap;
 
-    float3 depthValue = input.position.w / 1000;
+    float3 depthValue = input.position.w / 300;
     output.depthMap = float4(depthValue, 1);
+
+
+    output.viewSpaceVector.rgb = mul(input.worldNormal, (float3x3) cameraSpace);
+
+    output.viewSpaceVector.a = 1;
     return output;
 }
 

@@ -23,7 +23,8 @@ void SkyplaneShader::Update()
 
 }
 
-void SkyplaneShader::Render(UINT indexCount, D3DXMATRIX world, D3DXMATRIX view, D3DXMATRIX projection, ID3D11ShaderResourceView* diffuse, ID3D11ShaderResourceView* perlin)
+void SkyplaneShader::Render(UINT indexCount, D3DXMATRIX world, D3DXMATRIX view, D3DXMATRIX projection, 
+	ID3D11ShaderResourceView* perlin)
 {
 	data.translation += speed / 4;
 	if (data.translation >= 1.0f) {
@@ -57,8 +58,7 @@ void SkyplaneShader::Render(UINT indexCount, D3DXMATRIX world, D3DXMATRIX view, 
 
 
 	D3D::GetDeviceContext()->PSSetConstantBuffers(0, 1, &skyplaneBuffer);
-	D3D::GetDeviceContext()->PSSetShaderResources(0, 1, &diffuse);
-	D3D::GetDeviceContext()->PSSetShaderResources(1, 1, &perlin);
+	D3D::GetDeviceContext()->PSSetShaderResources(0, 1, &perlin);
 
 	D3D::GetDeviceContext()->DrawIndexed(indexCount, 0, 0);
 }

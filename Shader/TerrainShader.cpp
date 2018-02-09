@@ -83,6 +83,19 @@ void TerrainShader::Render(UINT indexCount, D3DXMATRIX world, D3DXMATRIX view, D
 
 
 
+	ZeroMemory(&subResource, sizeof(D3D11_MAPPED_SUBRESOURCE));
+	D3D::GetDeviceContext()->Map
+	(
+		cameraSpaceBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &subResource
+	);
+
+	memcpy(subResource.pData, view*projection, sizeof(D3DXMATRIX));
+
+	D3D::GetDeviceContext()->Unmap(cameraSpaceBuffer, 0);
+	 
+
+
+
 
 
 	D3DXVECTOR4 clipPlaneData = D3DXVECTOR4(clipPlane.a, clipPlane.b, clipPlane.c, clipPlane.d);
@@ -102,14 +115,20 @@ void TerrainShader::Render(UINT indexCount, D3DXMATRIX world, D3DXMATRIX view, D
 	D3D::GetDeviceContext()->PSSetShaderResources(10, 3, diffuseMap);
 	D3D::GetDeviceContext()->PSSetShaderResources(1, 1, &lightMap);
 	D3D::GetDeviceContext()->PSSetShaderResources(2, 1, &normalMap);
+	
+
+	
 
 
-	D3D::GetDeviceContext()->PSSetConstantBuffers(0, 1, &MaterialBuffer);
 
+	
 	D3D::GetDeviceContext()->VSSetConstantBuffers(2, 1, &LightBuffer);
 	D3D::GetDeviceContext()->VSSetConstantBuffers(3, 1, &ExtraBuffer);
 	D3D::GetDeviceContext()->VSSetConstantBuffers(11, 1, &clipPlaneBuffer);
 
+
+	D3D::GetDeviceContext()->PSSetConstantBuffers(0, 1, &MaterialBuffer);
+	D3D::GetDeviceContext()->PSSetConstantBuffers(1, 1, &cameraSpaceBuffer);
 
 
 	D3D::GetDeviceContext()->IASetInputLayout(layout);
@@ -177,5 +196,17 @@ void TerrainShader::CreateBuffers()
 	desc.StructureByteStride = 0;
 
 	hr = D3D::GetDevice()->CreateBuffer(&desc, NULL, &clipPlaneBuffer);
+	assert(SUCCEEDED(hr));
+
+
+	ZeroMemory(&desc, sizeof(D3D11_BUFFER_DESC));
+	desc.Usage = D3D11_USAGE_DYNAMIC;
+	desc.ByteWidth = sizeof(D3DXMATRIX);
+	desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	desc.MiscFlags = 0;
+	desc.StructureByteStride = 0;
+
+	hr = D3D::GetDevice()->CreateBuffer(&desc, NULL, &cameraSpaceBuffer);
 	assert(SUCCEEDED(hr));
 }

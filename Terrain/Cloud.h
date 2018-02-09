@@ -17,10 +17,6 @@ public:
 		return indexCount;
 	}
 
-	ID3D11ShaderResourceView* getDiffuseMap() {
-		return diffuse;
-	}
-
 	ID3D11ShaderResourceView* getPerlinMap() {
 		return perlin;
 	}
@@ -46,8 +42,6 @@ private:
 
 
 
-	
-	ID3D11ShaderResourceView* diffuse;
 
 
 	PerlinNoise* perlinNoise;

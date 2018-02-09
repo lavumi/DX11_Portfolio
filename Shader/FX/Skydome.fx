@@ -54,7 +54,7 @@ PixelInput VS(VertexInput input)
 
 
 
-float4 PS(PixelInput input) : SV_TARGET
+float4 PS(PixelInput input) : SV_TARGET0
 {
     float height = saturate(input.wPosition.y);
     float3 lightPos = normalize(input.lightPos);

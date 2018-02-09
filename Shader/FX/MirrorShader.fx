@@ -140,7 +140,7 @@ float4 PStest(PixelInput input) : SV_TARGET
     return float4(input.viewDir, 1);
 }
 
-float4 PS(PixelInput input) : SV_TARGET
+float4 PS(PixelInput input) : SV_TARGET0
 {
 
     //≥Î∏ª∏ ¿« layer 

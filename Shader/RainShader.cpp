@@ -46,7 +46,7 @@ void RainShader::Render(UINT indexCount, D3DXMATRIX world, D3DXMATRIX view, D3DX
 	D3D::GetDeviceContext()->Unmap(colorBuffer, 0);
 
 
-	D3D::GetDeviceContext()->PSSetShaderResources(0, 1, D3D::Get()->GetBackBufferSubRenderTexture(0));
+	D3D::GetDeviceContext()->PSSetShaderResources(0, 1, &depthMap);
 
 	if (Keyboard::Get()->KeyUp(VK_SPACE)) {
 		D3D::Get()->TestMultiTexture(0);
@@ -55,6 +55,8 @@ void RainShader::Render(UINT indexCount, D3DXMATRIX world, D3DXMATRIX view, D3DX
 	D3D::GetDeviceContext()->VSSetShader(vertexShader, NULL, 0);
 	D3D::GetDeviceContext()->PSSetShader(pixelShader, NULL, 0);
 	D3D::GetDeviceContext()->PSSetConstantBuffers(0, 1, &colorBuffer);
+
+
 
 
 	D3D::GetDeviceContext()->DrawIndexed(indexCount, 0, 0);

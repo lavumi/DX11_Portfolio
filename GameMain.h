@@ -62,6 +62,8 @@ private:
 	RenderTexture* lakeRefractionTexture;
 
 	RenderTexture* rainTexture;
+	RenderTexture* mainRendering;
+	RenderTexture* postRendering;
 
 	Frustum* frustum;
 
@@ -83,7 +85,7 @@ private:
 
 
 
-	OrthoWindowPlane* shadowtestPlane;
+	OrthoWindowPlane* orthoWindow;
 
 
 
@@ -99,4 +101,10 @@ private:
 	WaterShader* waterShader;
 	InstanceTextureShader* instanceShader;
 	RainShader* rainShader;
+
+
+
+
+
+	int testvalue = 0;
 };

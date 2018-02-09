@@ -42,17 +42,17 @@ cbuffer SkyBuffer : register(b0)
     float _scale;
 };
 
-Texture2D _map : register(t0);
-Texture2D _perlin : register(t1);
+
+Texture2D _perlin : register(t0);
 
 SamplerState samp[3];
 
 
-float4 PS(PixelInput input) : SV_Target
+float4 PS(PixelInput input) : SV_Target0
 {
 
     float4 perturbValue;
-    float4 cloudColor, cloudColor2;
+    float4 cloudColor;
 
     float2 uv = input.uv*2;
 
@@ -75,7 +75,7 @@ float4 PS(PixelInput input) : SV_Target
     cloudColor = lerp(cloudColor, 0, (cloudColor - 0.3f) / 0.1f);
 
 
-
+    cloudColor = saturate(cloudColor);
 
 
     return cloudColor;

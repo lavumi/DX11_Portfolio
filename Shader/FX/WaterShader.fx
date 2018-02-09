@@ -41,14 +41,15 @@ struct VertexInput
 struct PixelInput
 {
     float4 position : SV_POSITION;
+
+    float3 normal : NORMAL0;
     float2 uv : TEXCOORD0;
     float3 halfVector : TEXCOORD1;
     float3 lightDir : TEXCOORD2;
-    float3 normal : NORMAL0;
     float3 viewDir : TEXCOORD3;
     float4 viewPosition : TEXCOORD5;
   
-    float4 TestValue : TEXCOORD6;
+    float4 worldPosition : TEXCOORD6;
 };
 
 
@@ -82,7 +83,7 @@ PixelInput VS(VertexInput input)
     output.lightDir = normalize(mul(-_lightDir, tbnMatrix));
 
 
-    output.TestValue = float4(input.tangent, 1);
+
 
     output.viewDir = viewDir;
    
@@ -134,9 +135,14 @@ cbuffer water : register(b1)
     float padding;
 }
 
+struct PixelOutput
+{
+    float4 albedo : SV_TARGET0;
+    float4 depthMap : SV_TARGET1;
+    float4 viewSpaceVector : SV_TARGET2;
+};
 
-
-float4 PS(PixelInput input) : SV_TARGET
+PixelOutput PS(PixelInput input) : SV_TARGET0
 {
 
     //반사, 굴절된 이미지의 Texcoord 세팅
@@ -226,7 +232,13 @@ float4 PS(PixelInput input) : SV_TARGET
     float4 diffuse = lerp(refraction, reflection, blendFactor);
             
 
-    return diffuse * intensity;
+
+    PixelOutput output;
+    output.albedo = diffuse * intensity;
+    float3 depthValue = input.position.w / 300;
+    output.depthMap = float4(depthValue, 1);
+
+    return output;
 }
 
 

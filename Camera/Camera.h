@@ -19,6 +19,10 @@ public:
 			*forward = this->forward;
 	}
 
+
+	void GetCameraSpaceMatrix(D3DXMATRIX& matrix);
+
+
 	void UpdateRotationMatrix();
 	//void UpdateProjectionMatrix();
 	//void UpdateProjection2Orth();
@@ -86,6 +90,9 @@ private:
 	D3DXMATRIX rotation;
 
 	D3DXMATRIX defaultView;
+
+
+	D3DXMATRIX cameraSpace;
 
 	float translationSpeed;
 	float rotationSpeed;

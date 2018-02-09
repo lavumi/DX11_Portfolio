@@ -531,7 +531,7 @@ void D3D::CreateBlenders()
 	D3D::GetDevice()->CreateBlendState(&omDesc, &d3dBlendState[2]);
 
 
-
+	//None
 	omDesc.RenderTarget[0].SrcBlend = D3D11_BLEND_ZERO;
 	omDesc.RenderTarget[0].DestBlend = D3D11_BLEND_ONE;
 	omDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
@@ -543,7 +543,7 @@ void D3D::CreateBlenders()
 	D3D::GetDevice()->CreateBlendState(&omDesc, &d3dBlendState[3]);
 
 
-
+	//blendFactor
 	omDesc.RenderTarget[0].SrcBlend = D3D11_BLEND_BLEND_FACTOR;
 	omDesc.RenderTarget[0].DestBlend = D3D11_BLEND_INV_BLEND_FACTOR;
 	omDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
@@ -555,6 +555,8 @@ void D3D::CreateBlenders()
 	D3D::GetDevice()->CreateBlendState(&omDesc, &d3dBlendState[4]);
 
 
+
+	//ADD
 	omDesc.RenderTarget[0].SrcBlend = D3D11_BLEND_ONE;
 	omDesc.RenderTarget[0].DestBlend = D3D11_BLEND_ONE;
 	omDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
@@ -565,6 +567,7 @@ void D3D::CreateBlenders()
 
 	D3D::GetDevice()->CreateBlendState(&omDesc, &d3dBlendState[5]);
 
+	//alphatoCoverage
 	omDesc.AlphaToCoverageEnable = true;
 	omDesc.RenderTarget[0].BlendEnable = true;
 	omDesc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;

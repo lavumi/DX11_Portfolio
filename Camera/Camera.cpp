@@ -44,6 +44,24 @@ void Camera::Delete()
 }
 
 
+void Camera::GetCameraSpaceMatrix(D3DXMATRIX & matrix)
+{
+	D3DXMatrixIdentity(&cameraSpace);
+	cameraSpace._11 = right.x;
+	cameraSpace._12 = right.y;
+	cameraSpace._13 = right.z;
+
+	cameraSpace._21 = forward.x;
+	cameraSpace._22 = forward.y;
+	cameraSpace._23 = forward.z;
+
+	cameraSpace._31 = up.x;
+	cameraSpace._32 = up.y;
+	cameraSpace._33 = up.z;
+
+	matrix = cameraSpace;
+}
+
 void Camera::UpdateRotationMatrix()
 {
 	D3DXMATRIX x, y;

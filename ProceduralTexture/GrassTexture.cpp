@@ -81,11 +81,23 @@ void GrassTexture::DrawTexture()
 	SAFE_DELETE(rndDraw);
 	SAFE_DELETE(grassTexture);
 
-	grassSingle = new RenderTexture(720, 720);
-	gradient = new RenderTexture(720, 720);
-	directionalWarp = new RenderTexture(720, 720);
-	rndDraw = new RenderTexture(720, 720);
-	grassTexture = new RenderTexture(256, 256);
+	grassSingle			= new RenderTexture(720, 720);
+	gradient			= new RenderTexture(720, 720);
+	directionalWarp		= new RenderTexture(720, 720);
+	rndDraw				= new RenderTexture(720, 720);
+	grassTexture		= new RenderTexture(256, 256);
+
+
+	grassSingle			 ->Initialize();
+		gradient		 ->Initialize();
+		directionalWarp	 ->Initialize();
+		rndDraw			 ->Initialize();
+		grassTexture	 ->Initialize();
+
+
+
+
+
 
 	//기본 렌더링 셋팅
 	UINT stride = sizeof(VertexTexture);
