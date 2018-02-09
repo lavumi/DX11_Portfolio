@@ -407,11 +407,38 @@ void GameMain::Render()
 	Camera::Get()->GetDefaultView(&view);
 	D3D::Get()->GetOrthoProjection(&projection);
 
-	D3D::Get()->SetBlender(D3D::BL_state::Off);
+
 	shadowtestPlane->Render();
 	// 
-	textureShader->Render(shadowtestPlane->indexCount, shadowtestPlane->world, view, projection, *D3D::Get()->GetBackBufferSubRenderTexture(0));
 
+
+	ID3D11Texture2D* depthTexture;
+
+	depthTexture = D3D::Get()->GetBackBufferSubRenderTexture2D(0);
+	ID3D11ShaderResourceView* depthSRV;
+
+	D3D11_SHADER_RESOURCE_VIEW_DESC viewDesc;
+	ZeroMemory(&viewDesc, sizeof(D3D11_SHADER_RESOURCE_VIEW_DESC));
+	viewDesc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+	viewDesc.ViewDimension = D3D_SRV_DIMENSION_TEXTURE2D;
+	viewDesc.Texture2D.MipLevels = 1;
+
+	HRESULT hr = D3D::GetDevice()->CreateShaderResourceView(depthTexture, &viewDesc, &depthSRV);
+	assert(SUCCEEDED(hr));
+
+	D3D::Get()->SetBlender(D3D::BL_state::Off);
+	textureShader->Render(shadowtestPlane->indexCount, shadowtestPlane->world, view, projection, depthSRV);
+
+	//hr = D3DX11SaveTextureToFile(
+	//	D3D::GetDeviceContext(),
+	//	depthTexture,
+	//	D3DX11_IFF_PNG,
+	//	L"MultiRenderTarget_1.png"
+	//);
+	assert(SUCCEEDED(hr));
+
+
+	SAFE_RELEASE(depthSRV);
 	//rainShader->Render(shadowtestPlane->indexCount, shadowtestPlane->world, view, projection, *D3D::Get()->GetBackBufferSubRenderTexture(0), D3DXCOLOR(0, 1, 1, 1));
 
 
