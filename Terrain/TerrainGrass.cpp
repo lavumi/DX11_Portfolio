@@ -7,12 +7,6 @@ TerrainGrass::TerrainGrass()
 
 
 
-
-
-
-
-	HRESULT hr = D3DX11CreateShaderResourceViewFromFile(D3D::GetDevice(), L"./Terrain/grass.dds", nullptr, nullptr, &diffuse, nullptr);
-	assert(SUCCEEDED(hr));
 }
 
 TerrainGrass::~TerrainGrass()

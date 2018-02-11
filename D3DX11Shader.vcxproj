@@ -206,6 +206,7 @@
     <ClInclude Include="System\Window.h" />
     <ClInclude Include="Terrain\Cloud.h" />
     <ClInclude Include="Terrain\Landscape.h" />
+    <ClInclude Include="Terrain\RainCone.h" />
     <ClInclude Include="Terrain\TerrainGrass.h" />
     <ClInclude Include="Terrain\QuadTree.h" />
     <ClInclude Include="Terrain\Skydome.h" />
@@ -253,6 +254,7 @@
     <ClCompile Include="System\TweakBar.cpp" />
     <ClCompile Include="System\Window.cpp" />
     <ClCompile Include="Terrain\Cloud.cpp" />
+    <ClCompile Include="Terrain\RainCone.cpp" />
     <ClCompile Include="Terrain\TerrainGrass.cpp" />
     <ClCompile Include="Terrain\Landscape.cpp" />
     <ClCompile Include="Terrain\QuadTree.cpp" />

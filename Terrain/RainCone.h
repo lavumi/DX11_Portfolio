@@ -1,10 +1,10 @@
 #pragma once
 
 class PerlinNoise;
-class Skyplane{
+class RainCone{
 public:
-	Skyplane();
-	~Skyplane();
+	RainCone();
+	~RainCone();
 
 
 	void Initialize();
@@ -18,10 +18,6 @@ public:
 	}
 
 
-
-	ID3D11ShaderResourceView* getPerlinMap() {
-		return perlin;
-	}
 
 	D3DXMATRIX getWorld() {
 		return world;
@@ -42,12 +38,11 @@ private:
 	VertexTexture* vertexData;
 	vector<UINT> indexData;
 
+	
+	ID3D11ShaderResourceView* diffuse;
 
-	UINT skyPlaneResolution;
-	float skyPlaneWidth, skyPlaneTop, skyPlaneBottom;
 
-	PerlinNoise* perlinNoise;
-	ID3D11ShaderResourceView* perlin;
+
 	D3DXMATRIX world;
-
+	float radius;
 };

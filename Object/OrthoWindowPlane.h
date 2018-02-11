@@ -11,9 +11,13 @@ public:
 	void Render();
 
 
-	UINT indexCount;
-	D3DXMATRIX world;
 
+	UINT GetIndexCount() {
+		return indexCount;
+	}
+	D3DXMATRIX GetWorld() {
+		return world;
+	}
 
 
 private:
@@ -45,5 +49,7 @@ private:
 	float rotSpeed = 0.00f;
 
 
+	UINT indexCount;
+	D3DXMATRIX world;
 
 };

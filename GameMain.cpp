@@ -15,6 +15,7 @@
 #include "./Terrain/Water.h"
 #include "./Terrain/TerrainGrass.h"
 #include "./Terrain/Cloud.h"
+#include "./Terrain/RainCone.h"
 
 
 #include "./Object/TestCube.h"
@@ -59,7 +60,8 @@ void GameMain::Initialize()
 	landscape = new Landscape();
 	lake = new Water();
 	grass = new TerrainGrass();
-	volumeCloud = new Cloud();
+	//volumeCloud = new Cloud();
+	rainCone = new RainCone();
 
 	grassTexture = new GrassTexture();
 	//mosaicTile = new MosaicTile();
@@ -102,7 +104,9 @@ void GameMain::Initialize()
 	grass->Initialize(landscape);
 	cloud->Initialize();
 	noise->MakePerlinNoise();
-	volumeCloud->Initialize();
+	//volumeCloud->Initialize();
+	rainCone->Initialize();
+
 
 	grassTexture->DrawTexture();
 	landscape->SetTexture(grassTexture->diffuse, nullptr, nullptr);
@@ -133,7 +137,8 @@ void GameMain::Destroy()
 	SAFE_DELETE(landscape);
 	SAFE_DELETE(lake);
 	SAFE_DELETE(grass);
-	SAFE_DELETE(volumeCloud);
+	//SAFE_DELETE(volumeCloud);
+	SAFE_DELETE(rainCone);
 
 	SAFE_DELETE(grassTexture);
 	SAFE_DELETE(noise);
@@ -176,7 +181,8 @@ void GameMain::Update()
 	skydome->Update();
 	landscape->Update();
 	cloud->Update();
-	volumeCloud->Update();
+	rainCone->Update();
+	//volumeCloud->Update();
 
 	testcube->Update();
 
@@ -208,7 +214,7 @@ void GameMain::Update()
 
 void GameMain::PreRender()
 {
-
+	
 	D3DXMATRIX world, view, projection;
 	D3DXMatrixIdentity(&view);
 	D3DXMatrixIdentity(&projection);
@@ -264,7 +270,7 @@ void GameMain::PreRender()
 		D3D::Get()->GetOrthoProjection(&projection);
 
 		orthoWindow->Render();
-		blurShader->Render(orthoWindow->indexCount, orthoWindow->world, view, projection, *shadowTexture->GetShadowResourceView());
+		blurShader->Render(orthoWindow->GetIndexCount(),orthoWindow->GetWorld(), view, projection, *shadowTexture->GetShadowResourceView());
 	}
 
 	//호수의 반사평면 그리기
@@ -356,7 +362,7 @@ void GameMain::PreRender()
 	{
 
 		mainRendering->SetTarget();
-		mainRendering->Clear();
+		mainRendering->Clear(0,0,0,1);
 
 		Camera::Get()->GetView(&view);
 		D3D::Get()->GetProjection(&projection);
@@ -376,6 +382,10 @@ void GameMain::PreRender()
 			D3D::Get()->SetBlender(D3D::BL_state::Add);
 			cloud->Render();
 			skyplaneShader->Render(cloud->getIndexCount(), cloud->getWorld(), view, projection, cloud->getPerlinMap());
+
+			rainCone->Render();
+			rainShader->Render(rainCone->getIndexCount(), rainCone->getWorld(), view, projection,
+				*mainRendering->GetShadowResourceView(1), D3DXCOLOR(1, 1, 1, 1));
 			D3D::Get()->SetBlender(D3D::BL_state::Off);
 		}
 		D3D::Get()->SetDepthStencilState(D3D::DS_state::onState);
@@ -383,6 +393,7 @@ void GameMain::PreRender()
 
 
 
+		
 		testcube->Render();
 		for (int i = 0; i < 6; i++) {
 			normalMapShader->Render(testcube->indexCount, testcube->world[i], view, projection, testcube->diffuseMap, testcube->normalMap, testcube->heightMap, *blurShadowTexture->GetShadowResourceView());
@@ -399,43 +410,19 @@ void GameMain::PreRender()
 			lake->getNormalTexture(), cloud->getPerlinMap(),
 			*lakeReflectionTexture->GetShadowResourceView(),
 			*lakeRefractionTexture->GetShadowResourceView());
-	}
-	//비 렌더링 합성
-	{
-		postRendering->SetTarget();
-		postRendering->Clear(0,1,0,1);
-
-
-		Camera::Get()->GetDefaultView(&view);
-		D3D::Get()->GetOrthoProjection(&projection);
-
-		orthoWindow->Render();
 
 
 
-		//D3D::Get()->SetBlender((D3D::BL_state)testvalue);
 
-
-		
-		textureShader->Render(orthoWindow->indexCount, orthoWindow->world, view, projection,
-			*mainRendering->GetShadowResourceView(0));
-
-
+		D3D::Get()->SetDepthStencilState(D3D::DS_state::offState);
 		D3D::Get()->SetBlender(D3D::BL_state::Add);
-		D3DXMATRIX world;
-		world = orthoWindow->world;
-
-		D3DXMATRIX trans;
-		D3DXMatrixTranslation(&trans, 0, 0, -0.1f);
-
-		world *= trans;
-		rainShader->Render(orthoWindow->indexCount, world, view, projection, 
-			*mainRendering->GetShadowResourceView(1), D3DXCOLOR(1, 1, 1, 1));
-
-
-
-	
-		
+		{
+			rainCone->Render();
+			rainShader->Render(rainCone->getIndexCount(), rainCone->getWorld(), view, projection,
+				*mainRendering->GetShadowResourceView(1), D3DXCOLOR(1, 1, 1, 1));
+		}
+		D3D::Get()->SetBlender(D3D::BL_state::Off);
+		D3D::Get()->SetDepthStencilState(D3D::DS_state::onState);
 	}
 }
 
@@ -444,12 +431,11 @@ void GameMain::Render()
 	D3DXMATRIX world, view, projection;
 
 
-	
 	Camera::Get()->GetDefaultView(&view);
 	D3D::Get()->GetOrthoProjection(&projection);
 	D3D::Get()->SetBlender(D3D::BL_state::Off);
 	orthoWindow->Render();
-	textureShader->Render(orthoWindow->indexCount, orthoWindow->world, view, projection, *postRendering->GetShadowResourceView(0));
+	textureShader->Render(orthoWindow->GetIndexCount(), orthoWindow->GetWorld(), view, projection, *mainRendering->GetShadowResourceView(0));
 
 	
 

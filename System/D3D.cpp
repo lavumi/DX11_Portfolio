@@ -316,7 +316,7 @@ void D3D::CreateDepthStencil()
 	deviceContext->OMSetDepthStencilState(depthstencilstate[0], 1);
 
 
-	//스카이 
+	//뎁스 off
 	desc.DepthEnable = true;
 	desc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ZERO;
 	desc.DepthFunc = D3D11_COMPARISON_ALWAYS;

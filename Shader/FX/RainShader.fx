@@ -66,19 +66,21 @@ float rain(float2 uv_input, float scale)
 
 float4 PS(PixelInput input) : SV_Target0
 {
-    float4 mapdist = _map.Sample(samp[0], input.uv);
+    float2 uv = input.uv;
+    uv = frac(uv);
+    float4 mapdist = _map.Sample(samp[0], uv);
   
 
-    float2 uv = input.uv;
+    
     float c = 0;
    // c += rain(uv, 5.);
 
     mapdist.r *= 10;
 
-    for (float i = 1; i < mapdist.r; i++)
+    for (float i = 1; i <4; i++)
     {
         c += rain(uv, i * 2 + 1);
     }
 
-    return float4(c, c, c, c);
+    return c;
 }

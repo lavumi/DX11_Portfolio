@@ -10,6 +10,7 @@ class Water;
 class Skyplane;
 class TerrainGrass;
 class Cloud;
+class RainCone;
 	
 
 class GrassTexture;
@@ -77,7 +78,8 @@ private:
 	Landscape* landscape;
 	Water* lake;
 	TerrainGrass* grass;
-	Cloud* volumeCloud;
+	//Cloud* volumeCloud;
+	RainCone* rainCone;
 
 
 	TestCube* testcube;

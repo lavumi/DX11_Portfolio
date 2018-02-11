@@ -35,10 +35,6 @@ void Skyplane::Initialize()
 	perlinNoise = new PerlinNoise();
 
 
-	HRESULT hr = D3DX11CreateShaderResourceViewFromFile(D3D::GetDevice(), L"./Terrain/cloud001.dds", nullptr, nullptr, &diffuse, nullptr);
-
-	assert(SUCCEEDED(hr));
-
 	MakeCloudPerlin();
 
 }
