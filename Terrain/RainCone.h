@@ -35,7 +35,7 @@ private:
 
 	UINT vertexCount;
 	UINT indexCount;
-	VertexTexture* vertexData;
+	VertexTexture3* vertexData;
 	vector<UINT> indexData;
 
 	

@@ -30,6 +30,13 @@ D3D11_INPUT_ELEMENT_DESC VertexTexture::desc[] =
 };
 UINT VertexTexture::count = 2;
 
+D3D11_INPUT_ELEMENT_DESC VertexTexture3::desc[] =
+{
+	{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+	{ "TEXCOORD", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+};
+UINT VertexTexture3::count = 2;
+
 D3D11_INPUT_ELEMENT_DESC VertexTextureNormal::desc[] =
 {
 	{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
@@ -117,6 +124,21 @@ VertexTexture::VertexTexture(D3DXVECTOR3 position, D3DXVECTOR2 uv)
 
 //////////////////////////////////////////////////////////
 
+
+VertexTexture3::VertexTexture3()
+{
+	position = D3DXVECTOR3(0, 0, 0);
+	uvq = D3DXVECTOR3(0, 0,0);
+}
+
+VertexTexture3::VertexTexture3(D3DXVECTOR3 position, D3DXVECTOR3 uvq)
+{
+	this->position = position;
+	this->uvq = uvq;
+}
+
+//////////////////////////////////////////////////////////
+
 VertexTextureNormal::VertexTextureNormal()
 {
 	position = D3DXVECTOR3(0, 0, 0);
@@ -148,6 +170,12 @@ VertexColorTextureNormal::VertexColorTextureNormal(D3DXVECTOR3 position, D3DXCOL
 	this->uv = uv;
 	this->normal = normal;
 }
+
+
+
+//////////////////////////////////////////////////////////
+
+
 
 VertexTextureNormalTangent::VertexTextureNormalTangent()
 {

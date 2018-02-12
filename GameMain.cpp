@@ -418,6 +418,8 @@ void GameMain::PreRender()
 		D3D::Get()->SetBlender(D3D::BL_state::Add);
 		{
 			rainCone->Render();
+			//colorShader->Render(rainCone->getIndexCount(), rainCone->getWorld(), view, projection,
+			//	D3DXCOLOR(1, 1, 1, 1));
 			rainShader->Render(rainCone->getIndexCount(), rainCone->getWorld(), view, projection,
 				*mainRendering->GetShadowResourceView(1), D3DXCOLOR(1, 1, 1, 1));
 		}
@@ -435,6 +437,7 @@ void GameMain::Render()
 	D3D::Get()->GetOrthoProjection(&projection);
 	D3D::Get()->SetBlender(D3D::BL_state::Off);
 	orthoWindow->Render();
+	
 	textureShader->Render(orthoWindow->GetIndexCount(), orthoWindow->GetWorld(), view, projection, *mainRendering->GetShadowResourceView(0));
 
 	

@@ -49,8 +49,9 @@ cbuffer time : register(b0)
 float rain(float2 uv_input, float scale)
 {
     float2 uv = uv_input;
-    uv.y -= time.a /scale * 4;
+    uv.y -= time.a /scale;
     uv *= scale*3;
+    uv *= 5;
     float2 uv_int = ceil(uv);
     uv = frac(uv);
     

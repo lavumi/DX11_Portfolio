@@ -64,6 +64,25 @@ struct VertexTexture
 
 ////////////////////////////////////
 
+
+struct VertexTexture3
+{
+	VertexTexture3();
+	VertexTexture3
+	(
+		D3DXVECTOR3 position
+		, D3DXVECTOR3 uvq
+	);
+
+	D3DXVECTOR3 position;
+	D3DXVECTOR3 uvq;
+
+	static D3D11_INPUT_ELEMENT_DESC desc[];
+	static UINT count;
+};
+
+////////////////////////////////////
+
 struct VertexTextureNormal
 {
 	VertexTextureNormal();
