@@ -70,21 +70,56 @@ void RainCone::CreateVertexData()
 	int i = 0;
 	
 	float topwidth, bottomwidth;
-	topwidth = 8;
+	topwidth = 4;
 	bottomwidth = 8;
 
-	float trapezoiddegree1, trapezoiddegree2;
 
-	trapezoiddegree1 = (topwidth + bottomwidth) / bottomwidth;
-	trapezoiddegree2 = (topwidth + bottomwidth) / topwidth;
-																																		
-	vertexData[i].position = D3DXVECTOR3( -1 * bottomwidth / 2, -4.0f, 0.1f);		vertexData[i++].uvq = D3DXVECTOR3(0,				1, trapezoiddegree2);
-	vertexData[i].position = D3DXVECTOR3(bottomwidth / 2, -4.0f, 0.1f);				vertexData[i++].uvq = D3DXVECTOR3(trapezoiddegree2, 1,	trapezoiddegree2);
-	vertexData[i].position = D3DXVECTOR3(topwidth / 2 , 4.0f, 0.1f);				vertexData[i++].uvq = D3DXVECTOR3(trapezoiddegree1, 0,					trapezoiddegree1);
-	vertexData[i].position = D3DXVECTOR3(topwidth / 2 *-1, 4.0f, 0.1f);				vertexData[i++].uvq = D3DXVECTOR3(0,				0,					trapezoiddegree1);
+
+
+	vertexData[i++].position = D3DXVECTOR3(-4,		-4.0f, 0.1f);
+	vertexData[i++].position = D3DXVECTOR3(8,				-16.0f, 0.1f);
+	vertexData[i++].position = D3DXVECTOR3(5,				7.0f, 0.1f);
+	vertexData[i++].position = D3DXVECTOR3(-7,			4.0f, 0.1f);
+
+
+	D3DXVECTOR3 ac, bd, ad;
+
+	ac = vertexData[2].position - vertexData[0].position;
+	bd = vertexData[3].position - vertexData[1].position;
+	ad = vertexData[3].position - vertexData[0].position;
+
+	float trapezoid[4];
+
+	//D3DXVec3Normalize(&ac, &ac);
+	//D3DXVec3Normalize(&bd ,&bd);
+
+	trapezoid[0] = (bd.x * ad.y - bd.y * ad.x) / (bd.x * ac.y - ac.x * bd.y);
+	trapezoid[1] = (ac.x * ad.y - ad.x * ac.y) / (ac.x * bd.y - bd.x * ac.y);
+
+
+	trapezoid[2] = 1 - trapezoid[0];
+	trapezoid[3] = 1 - trapezoid[1];
+
+
+	trapezoid[0] = 1 / trapezoid[0];
+	trapezoid[1] = 1 / trapezoid[1];
+	trapezoid[2] = 1 / trapezoid[2];
+	trapezoid[3] = 1 / trapezoid[3];
+
+	i = 0;
+	vertexData[i++].uvq = D3DXVECTOR3(0, trapezoid[2], trapezoid[2]);
+	vertexData[i++].uvq = D3DXVECTOR3(trapezoid[1], trapezoid[1], trapezoid[1]);
+	vertexData[i++].uvq = D3DXVECTOR3(trapezoid[0], 0, trapezoid[0]);
+	vertexData[i++].uvq = D3DXVECTOR3(0, 0, trapezoid[3]);
+
 	
 	
+	
+
+
+
 	return;
+
 	vertexCount = 4 * 17 * 3;  
 
 	vertexData = new VertexTexture3[vertexCount];

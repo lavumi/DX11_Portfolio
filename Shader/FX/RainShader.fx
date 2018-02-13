@@ -68,7 +68,7 @@ float rain(float2 uv_input, float scale)
 float4 PS(PixelInput input) : SV_Target0
 {
     float2 uv = input.uvq.xy;
-    uv.x/= input.uvq.z;
+    uv.xy/= input.uvq.z;
 
    // uv = frac(uv);
 
