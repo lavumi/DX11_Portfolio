@@ -10,14 +10,14 @@ cbuffer MatrixBuffer : register(b0)
 struct VertexInput
 {
     float4 position : POSITION0;
-    float2 uv : TEXCOORD0;
+    float3 uvq : TEXCOORD0;
 
 };
 
 struct PixelInput
 {
     float4 position : SV_POSITION;
-    float2 uv : TEXCOORD0;
+    float3 uvq : TEXCOORD0;
 
 };
 
@@ -29,7 +29,7 @@ PixelInput VS(VertexInput input)
     output.position = mul(output.position, _view);
     output.position = mul(output.position, _projection);
 
-    output.uv = input.uv;
+    output.uvq = input.uvq;
 
 
     return output;
@@ -67,8 +67,11 @@ float rain(float2 uv_input, float scale)
 
 float4 PS(PixelInput input) : SV_Target0
 {
-    float2 uv = input.uv;
-    uv = frac(uv);
+    float2 uv = input.uvq.xy;
+    uv.x/= input.uvq.z;
+
+   // uv = frac(uv);
+
     float4 mapdist = _map.Sample(samp[0], uv);
   
 
@@ -83,5 +86,5 @@ float4 PS(PixelInput input) : SV_Target0
         c += rain(uv, i * 2 + 1);
     }
 
-    return c;
+    return mapdist;
 }

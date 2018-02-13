@@ -22,7 +22,7 @@ public:
 	D3DXMATRIX getWorld() {
 		return world;
 	}
-	
+	ID3D11ShaderResourceView* diffuse;
 	
 private:
 	void CreateVertexData();
@@ -39,7 +39,7 @@ private:
 	vector<UINT> indexData;
 
 	
-	ID3D11ShaderResourceView* diffuse;
+
 
 
 

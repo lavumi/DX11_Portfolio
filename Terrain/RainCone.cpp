@@ -9,9 +9,9 @@ RainCone::RainCone()
 
 	
 
-	//hr = D3DX11CreateShaderResourceViewFromFile(D3D::GetDevice(), L"./Terrain/perturb001.dds", nullptr, nullptr, &perlin, nullptr);
-	//
-	//assert(SUCCEEDED(hr));
+	HRESULT hr = D3DX11CreateShaderResourceViewFromFile(D3D::GetDevice(), L"./Terrain/UV_mapper.jpg", nullptr, nullptr, &diffuse, nullptr);
+	
+	assert(SUCCEEDED(hr));
 }
 
 RainCone::~RainCone()
@@ -25,14 +25,12 @@ RainCone::~RainCone()
 void RainCone::Initialize()
 {
 	radius = 1;
+
 	CreateVertexData();
 	CreateIndexData();
 	CreateBuffer();
 
-
 	D3DXMatrixIdentity(&world);
-
-	
 
 }
 
@@ -40,7 +38,7 @@ void RainCone::Update()
 {
 	D3DXVECTOR3 position;
 	Camera::Get()->GetPosition(&position);
-	D3DXMatrixTranslation(&world, position.x, position.y, position.z);
+	//D3DXMatrixTranslation(&world, position.x, position.y, position.z);
 
 }
 
@@ -66,98 +64,93 @@ void RainCone::MakeCloudPerlin()
 
 void RainCone::CreateVertexData()
 {
-
-	//vertexCount = 4 * 4 * 7;
-	//
-	//vertexData = new VertexTexture3[vertexCount];
-   //
-	//for (int i = 0; i < 7; i++) { //7층 구조
-	//	for (int j = 0; j < 4; j++) { //원을 4개로 나눈것
-	//		for (int k = 0; k < 4; k++) { //4분원 내의 점
-	//			float stage = (float)i - 3;
-	//			float currentRadius = radius * (1 - stage*stage/9);
-	//
-	//			vertexData[i * 4 * 4 + j * 4 + k].position.x = currentRadius * sinf(3.141592f / 8 * (4 * j + k));
-	//			vertexData[i * 4 * 4 + j * 4 + k].position.z = currentRadius * cosf(3.141592f / 8 * (4 * j + k));
-	//			vertexData[i * 4 * 4 + j * 4 + k].position.y = stage *2;
-	//			vertexData[i * 4 * 4 + j * 4 + k].uvq = D3DXVECTOR3(((float)k)/4,-(float)i/6,);
-	//		}
-	//	}
-	//}
-
-	vertexCount = 4 * 16 * 6;  //사각형, 16개, 6층
+	vertexCount = 4;
+	vertexData = new VertexTexture3[vertexCount];
 	
+	int i = 0;
+	
+	float topwidth, bottomwidth;
+	topwidth = 8;
+	bottomwidth = 8;
+
+	float trapezoiddegree1, trapezoiddegree2;
+
+	trapezoiddegree1 = (topwidth + bottomwidth) / bottomwidth;
+	trapezoiddegree2 = (topwidth + bottomwidth) / topwidth;
+																																		
+	vertexData[i].position = D3DXVECTOR3( -1 * bottomwidth / 2, -4.0f, 0.1f);		vertexData[i++].uvq = D3DXVECTOR3(0,				1, trapezoiddegree2);
+	vertexData[i].position = D3DXVECTOR3(bottomwidth / 2, -4.0f, 0.1f);				vertexData[i++].uvq = D3DXVECTOR3(trapezoiddegree2, 1,	trapezoiddegree2);
+	vertexData[i].position = D3DXVECTOR3(topwidth / 2 , 4.0f, 0.1f);				vertexData[i++].uvq = D3DXVECTOR3(trapezoiddegree1, 0,					trapezoiddegree1);
+	vertexData[i].position = D3DXVECTOR3(topwidth / 2 *-1, 4.0f, 0.1f);				vertexData[i++].uvq = D3DXVECTOR3(0,				0,					trapezoiddegree1);
+	
+	
+	return;
+	vertexCount = 4 * 17 * 3;  
+
 	vertexData = new VertexTexture3[vertexCount];
 
 	int index = 0;
 	for (int i = 0; i < 6; i++) {
-		for (int j = 0; j < 16; j++) {
-			float stage = (float)i - 3;
-			float currentRadius = radius * (1 - stage*stage/9);
+		float stage = (float)i - 3;
+		float currentRadius = radius * (1 - stage * stage / 9 + 0.01f);
+	
+	
+		float stage2 = (float)i - 3 + 1;
+		float currentRadius2 = radius * (1 - stage2 * stage2 / 9+0.01f);
+	
+	
+		float trapezoidDegree = (currentRadius + currentRadius2) / currentRadius2;
+		float trapezoidDegree2 = (currentRadius + currentRadius2) / currentRadius;
+		for (int j = 0; j < 17; j++) {
+	
 			vertexData[index].position.x = currentRadius * sinf(3.141592f / 8 * j);
 			vertexData[index].position.z = currentRadius * cosf(3.141592f / 8 * j);
 			vertexData[index].position.y = stage *2;
-			vertexData[index].uvq = D3DXVECTOR3(((float)j)/4,-(float)i/6,1);
-
+			vertexData[index].uvq = D3DXVECTOR3(
+				(float)j / 4 * trapezoidDegree, 
+				stage*-1 * trapezoidDegree, 
+				trapezoidDegree);
+	
 			index++;
-			stage = (float)i - 3 + 1;
-			currentRadius = radius * (1 - stage * stage / 9);
-			vertexData[index].position.x = currentRadius * sinf(3.141592f / 8 * j);
-			vertexData[index].position.z = currentRadius * cosf(3.141592f / 8 * j);
-			vertexData[index].position.y = stage * 2;
-			vertexData[index].uvq = D3DXVECTOR3(((float)j) / 4, -(float)i / 6, 1);
+						
+			vertexData[index].position.x = currentRadius2 * sinf(3.141592f / 8 * j);
+			vertexData[index].position.z = currentRadius2 * cosf(3.141592f / 8 * j);
+			vertexData[index].position.y = stage2 * 2;
+			vertexData[index].uvq = D3DXVECTOR3(
+		
+			(float)j / 4 * trapezoidDegree2, 
+			stage2  * -1 * trapezoidDegree2, 
+			trapezoidDegree2);
+	
 			index++;
 		}
 	}
-
-
+	
+	vertexData[0].uvq;
+	vertexData[2].uvq;
+	if (vertexCount != index)
+		assert(0);
 
 }
 
 void RainCone::CreateIndexData()
 {
-	//indexCount = 6 * 4 * 4 * 6;
-	//for (int i = 0; i < 6; i++) {
-	//	for (int j = 0; j < 4; j++) {
-	//		for (int k = 0; k < 4; k++) {
-	//			UINT startIndex = i * 4 * 4 + j * 4 + k;
-	//
-	//			indexData.push_back(startIndex);
-	//			indexData.push_back(startIndex + 16);
-	//		/*	if(j *k == 9){
-	//				indexData.push_back(startIndex + 1);
-	//				indexData.push_back(startIndex -15);
-	//			}
-	//			else {
-	//				indexData.push_back(startIndex + 17);
-	//				indexData.push_back(startIndex + 1);					
-	//			}*/
-	//			if(j *k == 9){
-	//				indexData.push_back(startIndex -15);
-	//			
-	//				indexData.push_back(startIndex -15);
-	//				indexData.push_back(startIndex + 16);
-	//				indexData.push_back(startIndex + 1);
-	//			}
-	//			else {
-	//				indexData.push_back(startIndex + 1);
-	//			
-	//				indexData.push_back(startIndex + 1);
-	//				indexData.push_back(startIndex + 16);
-	//				indexData.push_back(startIndex + 17);
-	//			}
-	//
-	//		}
-	//	}
-	//}
-
-
+	indexCount = 6;
+	
+	indexData.push_back(0);
+	indexData.push_back(3);
+	indexData.push_back(1);
+	indexData.push_back(2);
+	indexData.push_back(1);
+	indexData.push_back(3);
+	
+	return;
 
 	indexCount = 16 * 6 * 6;
 
 	for (int i = 0; i < 6; i++) {
 		for (int j = 0; j < 16; j++) {
-			UINT startIndex = i * 32 + j * 2;
+			UINT startIndex = i * 34 + j * 2;
 			indexData.push_back(startIndex);
 			indexData.push_back(startIndex+1);
 			indexData.push_back(startIndex+2);

@@ -415,13 +415,13 @@ void GameMain::PreRender()
 
 
 		D3D::Get()->SetDepthStencilState(D3D::DS_state::offState);
-		D3D::Get()->SetBlender(D3D::BL_state::Add);
+		D3D::Get()->SetBlender(D3D::BL_state::Off);
 		{
 			rainCone->Render();
 			//colorShader->Render(rainCone->getIndexCount(), rainCone->getWorld(), view, projection,
 			//	D3DXCOLOR(1, 1, 1, 1));
 			rainShader->Render(rainCone->getIndexCount(), rainCone->getWorld(), view, projection,
-				*mainRendering->GetShadowResourceView(1), D3DXCOLOR(1, 1, 1, 1));
+				rainCone->diffuse, D3DXCOLOR(1, 1, 1, 1));
 		}
 		D3D::Get()->SetBlender(D3D::BL_state::Off);
 		D3D::Get()->SetDepthStencilState(D3D::DS_state::onState);
@@ -433,6 +433,15 @@ void GameMain::Render()
 	D3DXMATRIX world, view, projection;
 
 
+	Camera::Get()->GetView(&view);
+	D3D::Get()->GetProjection(&projection);
+
+	rainCone->Render();
+	//colorShader->Render(rainCone->getIndexCount(), rainCone->getWorld(), view, projection,
+	//	D3DXCOLOR(1, 1, 1, 1));
+	rainShader->Render(rainCone->getIndexCount(), rainCone->getWorld(), view, projection,
+		rainCone->diffuse, D3DXCOLOR(1, 1, 1, 1));
+	return;
 	Camera::Get()->GetDefaultView(&view);
 	D3D::Get()->GetOrthoProjection(&projection);
 	D3D::Get()->SetBlender(D3D::BL_state::Off);

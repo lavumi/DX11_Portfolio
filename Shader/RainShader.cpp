@@ -3,7 +3,7 @@
 RainShader::RainShader()
 	:Shader(L"./Shader/FX/RainShader.fx")
 {
-	CreateInputLayout(VertexTexture::desc, VertexTexture::count);
+	CreateInputLayout(VertexTexture3::desc, VertexTexture3::count);
 
 	CreateBuffers();
 }
