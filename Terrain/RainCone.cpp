@@ -69,17 +69,11 @@ void RainCone::CreateVertexData()
 	
 	int i = 0;
 	
-	float topwidth, bottomwidth;
-	topwidth = 4;
-	bottomwidth = 8;
 
-
-
-
-	vertexData[i++].position = D3DXVECTOR3(-4,		-4.0f, 0.1f);
-	vertexData[i++].position = D3DXVECTOR3(8,				-16.0f, 0.1f);
-	vertexData[i++].position = D3DXVECTOR3(5,				7.0f, 0.1f);
-	vertexData[i++].position = D3DXVECTOR3(-7,			4.0f, 0.1f);
+	vertexData[i++].position = D3DXVECTOR3(-4 , -5.0f, 0.1f);
+	vertexData[i++].position = D3DXVECTOR3(7 , -9.0f, 0.1f);
+	vertexData[i++].position = D3DXVECTOR3(11 , 5.0f, 0.1f);
+	vertexData[i++].position = D3DXVECTOR3(-6 , 11.0f, 0.1f);
 
 
 	D3DXVECTOR3 ac, bd, ad;
@@ -90,31 +84,26 @@ void RainCone::CreateVertexData()
 
 	float trapezoid[4];
 
-	//D3DXVec3Normalize(&ac, &ac);
-	//D3DXVec3Normalize(&bd ,&bd);
+	i = 0;
 
-	trapezoid[0] = (bd.x * ad.y - bd.y * ad.x) / (bd.x * ac.y - ac.x * bd.y);
-	trapezoid[1] = (ac.x * ad.y - ad.x * ac.y) / (ac.x * bd.y - bd.x * ac.y);
+	trapezoid[0] = (bd.x * ad.y - bd.y * ad.x) / (bd.x * ac.y - ac.x * bd.y); // alpha
+	trapezoid[1] = (ac.x * ad.y - ad.x * ac.y) / (ac.x * bd.y - bd.x * ac.y); // beta
 
 
 	trapezoid[2] = 1 - trapezoid[0];
 	trapezoid[3] = 1 - trapezoid[1];
 
 
-	trapezoid[0] = 1 / trapezoid[0];
-	trapezoid[1] = 1 / trapezoid[1];
-	trapezoid[2] = 1 / trapezoid[2];
-	trapezoid[3] = 1 / trapezoid[3];
+	trapezoid[0] = 1 / trapezoid[0];		  //깊이값에 역수를 취해 uv에 곱해준다
+	trapezoid[1] = 1 / trapezoid[1];		  //깊이값에 역수를 취해 uv에 곱해준다
+	trapezoid[2] = 1 / trapezoid[2];		  //깊이값에 역수를 취해 uv에 곱해준다
+	trapezoid[3] = 1 / trapezoid[3];		  //깊이값에 역수를 취해 uv에 곱해준다
 
-	i = 0;
-	vertexData[i++].uvq = D3DXVECTOR3(0, trapezoid[2], trapezoid[2]);
+
+	vertexData[i++].uvq = D3DXVECTOR3(0, trapezoid[2], trapezoid[2]); // 그리고 uv와 같이 그 점에 대한 깊이값도 같이 넣어줌 ( 깊이도 보정해주어야 하기 때문)
 	vertexData[i++].uvq = D3DXVECTOR3(trapezoid[1], trapezoid[1], trapezoid[1]);
 	vertexData[i++].uvq = D3DXVECTOR3(trapezoid[0], 0, trapezoid[0]);
 	vertexData[i++].uvq = D3DXVECTOR3(0, 0, trapezoid[3]);
-
-	
-	
-	
 
 
 
@@ -170,7 +159,7 @@ void RainCone::CreateVertexData()
 
 void RainCone::CreateIndexData()
 {
-	indexCount = 6;
+	indexCount = 18;
 	
 	indexData.push_back(0);
 	indexData.push_back(3);
@@ -178,7 +167,8 @@ void RainCone::CreateIndexData()
 	indexData.push_back(2);
 	indexData.push_back(1);
 	indexData.push_back(3);
-	
+
+
 	return;
 
 	indexCount = 16 * 6 * 6;

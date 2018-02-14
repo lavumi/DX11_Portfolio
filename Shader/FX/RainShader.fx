@@ -68,9 +68,7 @@ float rain(float2 uv_input, float scale)
 float4 PS(PixelInput input) : SV_Target0
 {
     float2 uv = input.uvq.xy;
-    uv.xy/= input.uvq.z;
-
-   // uv = frac(uv);
+    uv.xy/= input.uvq.z; // 다시 원래 텍스쳐 uv로 되돌리기 위해 나눠준다
 
     float4 mapdist = _map.Sample(samp[0], uv);
   
