@@ -360,7 +360,6 @@ void GameMain::PreRender()
 
 	//메인 장면 렌더링(2번 텍스쳐에는 터레인의  깊이값 저장한다)
 	{
-
 		mainRendering->SetTarget();
 		mainRendering->Clear(0,0,0,1);
 
@@ -370,14 +369,11 @@ void GameMain::PreRender()
 		D3D::Get()->SetDepthStencilState(D3D::DS_state::offState);
 		Rasterizer::Get()->SetOffCullMode();
 		{
-		
 			D3DXVECTOR3 lightDir;
-			
 			LightManager::Get()->GetLightDirection(&lightDir);
 			
 			skydome->Render();
 			skydomeShader->Render(skydome->getIndexCount(), skydome->getWorld(), view, projection, lightDir);
-		
 		
 			D3D::Get()->SetBlender(D3D::BL_state::Add);
 			cloud->Render();
@@ -415,7 +411,7 @@ void GameMain::PreRender()
 
 
 		D3D::Get()->SetDepthStencilState(D3D::DS_state::offState);
-		D3D::Get()->SetBlender(D3D::BL_state::Off);
+		D3D::Get()->SetBlender(D3D::BL_state::Add);
 		{
 			rainCone->Render();
 			//colorShader->Render(rainCone->getIndexCount(), rainCone->getWorld(), view, projection,
@@ -433,15 +429,6 @@ void GameMain::Render()
 	D3DXMATRIX world, view, projection;
 
 
-	Camera::Get()->GetView(&view);
-	D3D::Get()->GetProjection(&projection);
-
-	rainCone->Render();
-	//colorShader->Render(rainCone->getIndexCount(), rainCone->getWorld(), view, projection,
-	//	D3DXCOLOR(1, 1, 1, 1));
-	rainShader->Render(rainCone->getIndexCount(), rainCone->getWorld(), view, projection,
-		rainCone->diffuse, D3DXCOLOR(1, 1, 1, 1));
-	return;
 	Camera::Get()->GetDefaultView(&view);
 	D3D::Get()->GetOrthoProjection(&projection);
 	D3D::Get()->SetBlender(D3D::BL_state::Off);

@@ -57,8 +57,6 @@ void RainShader::Render(UINT indexCount, D3DXMATRIX world, D3DXMATRIX view, D3DX
 	D3D::GetDeviceContext()->PSSetConstantBuffers(0, 1, &colorBuffer);
 
 
-
-
 	D3D::GetDeviceContext()->DrawIndexed(indexCount, 0, 0);
 }
 
