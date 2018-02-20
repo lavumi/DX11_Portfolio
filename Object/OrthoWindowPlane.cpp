@@ -10,7 +10,7 @@ OrthoWindowPlane::OrthoWindowPlane()
 	D3DXMatrixIdentity(&world);
 
 	CreateBuffer();
-
+	D3DXMatrixTranslation(&translation, 0, 0, 0.1f);
 }
 
 OrthoWindowPlane::~OrthoWindowPlane()
@@ -33,7 +33,7 @@ void OrthoWindowPlane::Update()
 
 void OrthoWindowPlane::Render()
 {
-
+	D3DXMatrixIdentity(&world);
 
 	UINT stride = sizeof(VertexTexture);
 	UINT offset = 0;
@@ -42,6 +42,12 @@ void OrthoWindowPlane::Render()
 	D3D::GetDeviceContext()->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R32_UINT, 0);
 	D3D::GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
+}
+
+D3DXMATRIX OrthoWindowPlane::GetWorld()
+{
+	world *= translation;
+	return world;
 }
 
 

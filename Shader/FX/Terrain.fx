@@ -203,7 +203,7 @@ PixelOutput PS(PixelInput input)
 
     output.albedo = intensity * diffuseMap;
 
-    float3 depthValue = input.position.w / 300;
+    float3 depthValue =  input.position.w / 300;
     output.depthMap = float4(depthValue, 1);
 
 

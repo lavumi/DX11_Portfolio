@@ -45,7 +45,7 @@ LightManager::LightManager()
 {
 	lightData.lightDirection = D3DXVECTOR3(0.01f, -1, 0.01f);
 
-	anglex = angley = (float)D3DX_PI / 180 * 90;
+	anglex = angley = (float)D3DX_PI / 180 * -45;
 	speed = 0;
 	UserInterface::Get()->AddSun(&lightData.lightDirection, &speed);
 }

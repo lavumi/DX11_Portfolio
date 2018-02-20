@@ -15,9 +15,7 @@ public:
 	UINT GetIndexCount() {
 		return indexCount;
 	}
-	D3DXMATRIX GetWorld() {
-		return world;
-	}
+	D3DXMATRIX GetWorld();
 
 
 private:
@@ -39,10 +37,6 @@ private:
 
 	UINT vertexCount;
 
-
-
-	// , world2, world3, world4, world5;
-	D3DXMATRIX Rworld;// , Rworld2, Rworld3, Rworld4, Rworld5;
 	ID3D11Buffer* worldBuffer;
 
 
@@ -50,6 +44,6 @@ private:
 
 
 	UINT indexCount;
-	D3DXMATRIX world;
+	D3DXMATRIX world, translation;
 
 };

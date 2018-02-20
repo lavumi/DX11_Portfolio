@@ -19,6 +19,8 @@ struct PixelInput
     float4 position : SV_POSITION;
     float3 uvq : TEXCOORD0;
 
+    float4 projPosition : TEXCOORD1;
+
 };
 
 PixelInput VS(VertexInput input)
@@ -29,6 +31,7 @@ PixelInput VS(VertexInput input)
     output.position = mul(output.position, _view);
     output.position = mul(output.position, _projection);
 
+    output.projPosition = output.position;
     output.uvq = input.uvq;
 
 
@@ -70,16 +73,22 @@ float4 PS(PixelInput input) : SV_Target0
     float2 uv = input.uvq.xy;
     uv.x/= input.uvq.z; // 다시 원래 텍스쳐 uv로 되돌리기 위해 나눠준다
 
-    //float4 mapdist = _map.Sample(samp[0], uv);
-  
+    float2 uv_depthmap;
+    uv_depthmap = input.projPosition.xy / input.projPosition.w / 2.0f + 0.5f;
+    uv_depthmap.y *= -1;
 
-    
+    float mapdist = 1;
+    mapdist =  _map.Sample(samp[0], uv_depthmap).r;
+    //return mapdist;
+
+
     float c = 0;
    // c += rain(uv, 5.);
 
-  //  mapdist.r *= 10;
+   mapdist *= 10;
+    
 
-    for (float i = 1; i <4; i++)
+    for (float i = 1; i <mapdist; i++)
     {
         c += rain(uv, i * 2 + 1);
     }
