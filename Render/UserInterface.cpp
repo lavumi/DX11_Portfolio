@@ -91,6 +91,11 @@ void UserInterface::AddMaterialData(D3DXCOLOR *ambient, D3DXCOLOR *diffuse, D3DX
 	TwAddVarRW(bar, "shininess", TW_TYPE_FLOAT, shininess, "min=1 max=90 step=5 group='Material'");
 }
 
+void UserInterface::AddRainParameter(float * data)
+{
+	TwAddVarRW(bar, "RainData", TW_TYPE_FLOAT, data, "min=1 max=50 step=1 group='Rain'");
+}
+
 void UserInterface::AddPattern(float * width, float * count, D3DXCOLOR* color1, D3DXCOLOR* color2)
 {
 	TwAddVarRW(bar, "PatternCount", TW_TYPE_FLOAT, count, "min=1 max=14 step=1 group='Pattern'");

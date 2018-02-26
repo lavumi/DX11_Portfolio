@@ -28,7 +28,8 @@ void SkydomeShader::Render(UINT indexCount, D3DXMATRIX world,D3DXMATRIX view, D3
 
 	SetMatrix(world, view, projection);
 
-	D3D::GetDeviceContext()->VSSetConstantBuffers(0, 1, &wvpBuffer);
+	D3D::GetDeviceContext()->VSSetConstantBuffers(10, 1, &wBuffer);
+	D3D::GetDeviceContext()->VSSetConstantBuffers(11, 1, &vpBuffer);
 
 
 	D3D11_MAPPED_SUBRESOURCE subResource = { 0 };

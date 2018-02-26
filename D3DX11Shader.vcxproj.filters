@@ -135,7 +135,6 @@
     <ClCompile Include="Shader\RainShader.cpp">
       <Filter>Shader</Filter>
     </ClCompile>
-    <ClCompile Include="ProceduralTexture\IslandHeightMap.cpp" />
     <ClCompile Include="Terrain\RainCone.cpp">
       <Filter>Terrain</Filter>
     </ClCompile>
@@ -283,7 +282,6 @@
     <ClInclude Include="Shader\RainShader.h">
       <Filter>Shader</Filter>
     </ClInclude>
-    <ClInclude Include="ProceduralTexture\IslandHeightMap.h" />
     <ClInclude Include="Terrain\RainCone.h">
       <Filter>Terrain</Filter>
     </ClInclude>

@@ -16,7 +16,7 @@ public:
 private:
 	void CreateBuffers();
 
-
+	float Data;
 	ID3D11Buffer* colorBuffer;
 
 

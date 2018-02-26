@@ -7,6 +7,7 @@ TerrainShader::TerrainShader()
 
 	CreateBuffers();
 
+	CreateGeometryShader();
 	//UserInterface::AddParallexBias(&parallexData.scale, &parallexData.layer);
 
 	material.ambient = D3DXCOLOR(0.5f, 0.5f, 0.5f, 1.0f);
@@ -33,7 +34,8 @@ void TerrainShader::Render(UINT indexCount, D3DXMATRIX world, D3DXMATRIX view, D
 {
 	SetMatrix(world, view, projection);
 
-	D3D::GetDeviceContext()->VSSetConstantBuffers(0, 1, &wvpBuffer);
+	D3D::GetDeviceContext()->VSSetConstantBuffers(10, 1, &wBuffer);
+	D3D::GetDeviceContext()->GSSetConstantBuffers(0, 1, &vpBuffer);
 
 
 	D3D11_MAPPED_SUBRESOURCE subResource = { 0 };
@@ -135,6 +137,7 @@ void TerrainShader::Render(UINT indexCount, D3DXMATRIX world, D3DXMATRIX view, D
 	D3D::GetDeviceContext()->VSSetShader(vertexShader, NULL, 0);
 	D3D::GetDeviceContext()->PSSetShader(pixelShader, NULL, 0);
 
+	D3D::GetDeviceContext()->GSSetShader(geoShader, NULL, 0);
 
 
 
@@ -143,7 +146,7 @@ void TerrainShader::Render(UINT indexCount, D3DXMATRIX world, D3DXMATRIX view, D
 
 	D3D::GetDeviceContext()->DrawIndexed(indexCount, 0, 0);
 	Sampler::Get()->SetDefault();
-
+	D3D::GetDeviceContext()->GSSetShader(NULL, NULL, 0);
 }
 
 void TerrainShader::CreateBuffers()

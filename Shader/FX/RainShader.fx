@@ -1,6 +1,11 @@
-cbuffer MatrixBuffer : register(b0)
+cbuffer MatrixBuffer : register(b10)
 {
     matrix _world;
+
+
+};
+cbuffer MatrixBuffer : register(b11)
+{
     matrix _view;
     matrix _projection;
 
@@ -81,10 +86,10 @@ float4 PS(PixelInput input) : SV_Target0
     mapdist =  _map.Sample(samp[0], uv_depthmap).r;
     //return mapdist;
 
-
+    uv.x += time.r/10;
     float c = 0;
    // c += rain(uv, 5.);
-
+   // mapdist += sin(time)/10;
    mapdist *= 10;
     
 

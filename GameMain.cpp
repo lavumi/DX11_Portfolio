@@ -198,15 +198,15 @@ void GameMain::Update()
 		//shadowTexture->SaveTexture(L"shadow.png");
 		//blurShadowTexture->SaveTexture(L"blur.png");
 		//lakeRefractionTexture->SaveTexture(L"Mirror.png");
-		mainRendering->SaveTexture(L"main.png",1);
+		//mainRendering->SaveTexture(L"main.png",1);
 		LodOff = !LodOff;
-		testvalue++;
-		if (testvalue == 7)
-			testvalue = 0;
+		//testvalue++;
+		//if (testvalue == 7)
+		//	testvalue = 0;
 		//noise->MakePerlinNoise();
 		//D3D::Get()->TestMultiTexture(0);
 	}
-	//if (!LodOff)		landscape->changeLOD(frustum);
+	if (!LodOff)		landscape->changeLOD(frustum);
 
 
 	if (Keyboard::Get()->KeyUp('P')) {
@@ -398,11 +398,12 @@ void GameMain::PreRender()
 			normalMapShader->Render(testcube->indexCount, testcube->world[i], view, projection, testcube->diffuseMap, testcube->normalMap, testcube->heightMap, *blurShadowTexture->GetShadowResourceView());
 		}
 		
+		//Rasterizer::Get()->SetWireframe();
 		landscape->Render();
 		terrainShader->Render(landscape->getIndexCount(), landscape->getWorld(), view, projection, landscape->getDiffuseMap(), landscape->getNormalMap(), *blurShadowTexture->GetShadowResourceView(), lake->getwaterPlane());
+		//Rasterizer::Get()->SetSolid();
 		
-		
-		
+		//return;
 		
 		lake->Render();
 		waterShader->Render(lake->indexCount, lake->world, view, projection,
@@ -415,42 +416,42 @@ void GameMain::PreRender()
 
 
 	}
-	{
-		rainTexture->SetTarget();
-		rainTexture->Clear();
+	//{
+	//	rainTexture->SetTarget();
+	//	rainTexture->Clear();
+	//
+	//	D3D::Get()->SetDepthStencilState(D3D::DS_state::offState);
+	//	D3D::Get()->SetBlender(D3D::BL_state::Off);
+	//	//D3D::Get()->SetBlender(D3D::BL_state::Add);
+	//	{
+	//		rainCone->Render();
+	//		//colorShader->Render(rainCone->getIndexCount(), rainCone->getWorld(), view, projection,
+	//		//	D3DXCOLOR(1, 1, 1, 1));
+	//		rainShader->Render(rainCone->getIndexCount(), rainCone->getWorld(), view, projection,
+	//			*mainRendering->GetShadowResourceView(1), D3DXCOLOR(1, 1, 1, 1));
+	//	}
+	//	D3D::Get()->SetBlender(D3D::BL_state::Off);
+	//	D3D::Get()->SetDepthStencilState(D3D::DS_state::onState);
+	//}
 
-		D3D::Get()->SetDepthStencilState(D3D::DS_state::offState);
-		D3D::Get()->SetBlender(D3D::BL_state::Off);
-		//D3D::Get()->SetBlender(D3D::BL_state::Add);
-		{
-			rainCone->Render();
-			//colorShader->Render(rainCone->getIndexCount(), rainCone->getWorld(), view, projection,
-			//	D3DXCOLOR(1, 1, 1, 1));
-			rainShader->Render(rainCone->getIndexCount(), rainCone->getWorld(), view, projection,
-				*mainRendering->GetShadowResourceView(1), D3DXCOLOR(1, 1, 1, 1));
-		}
-		D3D::Get()->SetBlender(D3D::BL_state::Off);
-		D3D::Get()->SetDepthStencilState(D3D::DS_state::onState);
-	}
-
-	{
-		postRendering->SetTarget();
-		postRendering->Clear(0,0,0,1);
-
-		Camera::Get()->GetDefaultView(&view);
-		D3D::Get()->GetOrthoProjection(&projection);
-		D3D::Get()->SetBlender(D3D::BL_state::Off);
-		orthoWindow->Render();
-
-		textureShader->Render(orthoWindow->GetIndexCount(), orthoWindow->GetWorld(), view, projection, *mainRendering->GetShadowResourceView(0));
-
-		D3D::Get()->SetDepthStencilState(D3D::DS_state::offState);
-		D3D::Get()->SetBlender(D3D::BL_state::Add);
-		textureShader->Render(orthoWindow->GetIndexCount(), orthoWindow->GetWorld(), view, projection, *rainTexture->GetShadowResourceView(0));
-		D3D::Get()->SetBlender(D3D::BL_state::Off);
-		D3D::Get()->SetDepthStencilState(D3D::DS_state::onState);
-
-	}
+	//{
+	//	postRendering->SetTarget();
+	//	postRendering->Clear(0,0,0,1);
+	//
+	//	Camera::Get()->GetDefaultView(&view);
+	//	D3D::Get()->GetOrthoProjection(&projection);
+	//	D3D::Get()->SetBlender(D3D::BL_state::Off);
+	//	orthoWindow->Render();
+	//
+	//	textureShader->Render(orthoWindow->GetIndexCount(), orthoWindow->GetWorld(), view, projection, *mainRendering->GetShadowResourceView(0));
+	//
+	//	D3D::Get()->SetDepthStencilState(D3D::DS_state::offState);
+	//	D3D::Get()->SetBlender(D3D::BL_state::Add);
+	//	textureShader->Render(orthoWindow->GetIndexCount(), orthoWindow->GetWorld(), view, projection, *rainTexture->GetShadowResourceView(0));
+	//	D3D::Get()->SetBlender(D3D::BL_state::Off);
+	//	D3D::Get()->SetDepthStencilState(D3D::DS_state::onState);
+	//
+	//}
 }
 
 void GameMain::Render()
@@ -463,12 +464,12 @@ void GameMain::Render()
 	D3D::Get()->SetBlender(D3D::BL_state::Off);
 	orthoWindow->Render();
 	
-	textureShader->Render(orthoWindow->GetIndexCount(), orthoWindow->GetWorld(), view, projection, *postRendering->GetShadowResourceView(0));
+	textureShader->Render(orthoWindow->GetIndexCount(), orthoWindow->GetWorld(), view, projection, *mainRendering->GetShadowResourceView(0));
 
 	
 
 
-		//WATER REFLECTION OLD ver.
+	//WATER REFLECTION OLD ver.
 	{
 		/*
 		//스텐실 버퍼 삭제

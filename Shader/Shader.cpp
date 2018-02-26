@@ -14,22 +14,32 @@ void Shader::SetMatrix(D3DXMATRIX& world, D3DXMATRIX& view, D3DXMATRIX& projecti
 {
 	D3D11_MAPPED_SUBRESOURCE subResource = { 0 };
 
-	wvpData.world = world;
-	wvpData.view = view;
-	wvpData.projection = projection;
+	wData.world = world;
+	vpData.view = view;
+	vpData.projection = projection;
 
-	D3DXMatrixTranspose(&wvpData.world, &wvpData.world);
-	D3DXMatrixTranspose(&wvpData.view, &wvpData.view);
-	D3DXMatrixTranspose(&wvpData.projection, &wvpData.projection);
+	D3DXMatrixTranspose(&wData.world, &wData.world);
+	D3DXMatrixTranspose(&vpData.view, &vpData.view);
+	D3DXMatrixTranspose(&vpData.projection, &vpData.projection);
 
 	ZeroMemory(&subResource, sizeof(D3D11_MAPPED_SUBRESOURCE));
 	D3D::GetDeviceContext()->Map
 	(
-		wvpBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &subResource
+		wBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &subResource
 	);
 
-	memcpy(subResource.pData, &wvpData, sizeof(WVP));
-	D3D::GetDeviceContext()->Unmap(wvpBuffer, 0);
+	memcpy(subResource.pData, &wData, sizeof(WorldMatrix));
+	D3D::GetDeviceContext()->Unmap(wBuffer, 0);
+
+
+	ZeroMemory(&subResource, sizeof(D3D11_MAPPED_SUBRESOURCE));
+	D3D::GetDeviceContext()->Map
+	(
+		vpBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &subResource
+	);
+
+	memcpy(subResource.pData, &vpData, sizeof(ViewProjectionMatrix));
+	D3D::GetDeviceContext()->Unmap(vpBuffer, 0);
 }
 
 Shader::Shader(wstring shaderFile)
@@ -38,6 +48,8 @@ Shader::Shader(wstring shaderFile)
 	CreateVertexShader();
 	CreatePixelShader();
 	CreateMATRIXBuffer();
+	geoBlob = 0;
+	geoShader = 0;
 }
 
 Shader::~Shader()
@@ -48,10 +60,14 @@ Shader::~Shader()
 
 	SAFE_RELEASE(vertexBlob);
 	SAFE_RELEASE(vertexShader);
-	SAFE_RELEASE(wvpBuffer);
+	SAFE_RELEASE(wBuffer);
+	SAFE_RELEASE(vpBuffer);
 
 	SAFE_RELEASE(pixelBlob);
 	SAFE_RELEASE(pixelShader);
+
+	SAFE_RELEASE(geoBlob);
+	SAFE_RELEASE(geoShader);
 }
 
 void Shader::CreateInputLayout(D3D11_INPUT_ELEMENT_DESC * desc, UINT count)
@@ -76,13 +92,24 @@ void Shader::CreateMATRIXBuffer()
 
 	ZeroMemory(&desc, sizeof(D3D11_BUFFER_DESC));
 	desc.Usage = D3D11_USAGE_DYNAMIC;
-	desc.ByteWidth = sizeof(WVP);
+	desc.ByteWidth = sizeof(WorldMatrix);
 	desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 	desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 	desc.MiscFlags = 0;
 	desc.StructureByteStride = 0;
 
-	hr = D3D::GetDevice()->CreateBuffer(&desc, NULL, &wvpBuffer);
+	hr = D3D::GetDevice()->CreateBuffer(&desc, NULL, &wBuffer);
+	assert(SUCCEEDED(hr));
+
+	ZeroMemory(&desc, sizeof(D3D11_BUFFER_DESC));
+	desc.Usage = D3D11_USAGE_DYNAMIC;
+	desc.ByteWidth = sizeof(ViewProjectionMatrix);
+	desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	desc.MiscFlags = 0;
+	desc.StructureByteStride = 0;
+
+	hr = D3D::GetDevice()->CreateBuffer(&desc, NULL, &vpBuffer);
 	assert(SUCCEEDED(hr));
 
 }
@@ -126,6 +153,29 @@ void Shader::CreatePixelShader()
 		, pixelBlob->GetBufferSize()
 		, NULL
 		, &pixelShader
+	);
+	assert(SUCCEEDED(hr));
+}
+
+
+
+void Shader::CreateGeometryShader()
+{
+	ID3D10Blob* error;
+	HRESULT hr = D3DX10CompileFromFile
+	(
+		shaderFile.c_str(), NULL, NULL, "GS", "gs_5_0"
+		, D3D10_SHADER_ENABLE_STRICTNESS, 0, NULL
+		, &geoBlob, &error, NULL
+	);
+	CheckShaderError(hr, error);
+
+	hr = D3D::GetDevice()->CreateGeometryShader
+	(
+		geoBlob->GetBufferPointer()
+		, geoBlob->GetBufferSize()
+		, NULL
+		, &geoShader
 	);
 	assert(SUCCEEDED(hr));
 }

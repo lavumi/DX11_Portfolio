@@ -18,6 +18,7 @@ public:
 	static void AddParallexBias(float* biasX, float* biasY);
 	static void AddMaterialData(D3DXCOLOR *ambient, D3DXCOLOR *diffuse, D3DXCOLOR *specular, float *shininess, float* drawTexture);
 
+	static void AddRainParameter(float* data);
 
 	static void AddPattern(float * width, float * count, D3DXCOLOR* color1, D3DXCOLOR* color2);
 private:

@@ -26,7 +26,8 @@ void TextureShader::Render(UINT indexCount, D3DXMATRIX world, D3DXMATRIX view, D
 
 	SetMatrix(world, view, projection);
 
-	D3D::GetDeviceContext()->VSSetConstantBuffers(0, 1, &wvpBuffer);
+	D3D::GetDeviceContext()->VSSetConstantBuffers(10, 1, &wBuffer);
+	D3D::GetDeviceContext()->VSSetConstantBuffers(11, 1, &vpBuffer);
 
 	if(diffuse != nullptr)
 		D3D::GetDeviceContext()->PSSetShaderResources(0, 1, &diffuse);

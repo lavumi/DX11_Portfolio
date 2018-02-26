@@ -6,6 +6,8 @@ RainShader::RainShader()
 	CreateInputLayout(VertexTexture3::desc, VertexTexture3::count);
 
 	CreateBuffers();
+	Data = 10;
+	UserInterface::AddRainParameter(&Data);
 }
 
 RainShader::~RainShader()
@@ -30,9 +32,11 @@ void RainShader::Render(UINT indexCount, D3DXMATRIX world, D3DXMATRIX view, D3DX
 
 	D3DXCOLOR inputData = color;
 
+
 	inputData.a = timer;
 
-	D3D::GetDeviceContext()->VSSetConstantBuffers(0, 1, &wvpBuffer);
+	D3D::GetDeviceContext()->VSSetConstantBuffers(10, 1, &wBuffer);
+	D3D::GetDeviceContext()->VSSetConstantBuffers(11, 1, &vpBuffer);
 
 	D3D11_MAPPED_SUBRESOURCE subResource;
 	ZeroMemory(&subResource, sizeof(D3D11_MAPPED_SUBRESOURCE));

@@ -1,10 +1,16 @@
-cbuffer CameraBuffer : register(b0)
+cbuffer MatrixBuffer : register(b10)
 {
     matrix _world;
+
+
+};
+cbuffer MatrixBuffer : register(b11)
+{
     matrix _view;
     matrix _projection;
 
 };
+
 
 
 

@@ -22,7 +22,8 @@ void DepthShadowShader::Render(UINT indexCount, D3DXMATRIX world, D3DXMATRIX vie
 {
 	SetMatrix(world, view, projection);
 
-	D3D::GetDeviceContext()->VSSetConstantBuffers(0, 1, &wvpBuffer);
+	D3D::GetDeviceContext()->VSSetConstantBuffers(10, 1, &wBuffer);
+	D3D::GetDeviceContext()->VSSetConstantBuffers(11, 1, &vpBuffer);
 
 	D3D::GetDeviceContext()->IASetInputLayout(layout);
 	D3D::GetDeviceContext()->VSSetShader(vertexShader, NULL, 0);

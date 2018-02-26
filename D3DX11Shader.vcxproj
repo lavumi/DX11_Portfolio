@@ -169,7 +169,6 @@
     <ClInclude Include="Object\TestCube.h" />
     <ClInclude Include="Object\TestPlane.h" />
     <ClInclude Include="ProceduralTexture\GrassTexture.h" />
-    <ClInclude Include="ProceduralTexture\IslandHeightMap.h" />
     <ClInclude Include="ProceduralTexture\MosaicTile.h" />
     <ClInclude Include="ProceduralTexture\PerlinNoise.h" />
     <ClInclude Include="Render\Frustum.h" />
@@ -223,7 +222,6 @@
     <ClCompile Include="Object\TestCube.cpp" />
     <ClCompile Include="Object\TestPlane.cpp" />
     <ClCompile Include="ProceduralTexture\GrassTexture.cpp" />
-    <ClCompile Include="ProceduralTexture\IslandHeightMap.cpp" />
     <ClCompile Include="ProceduralTexture\MosaicTile.cpp" />
     <ClCompile Include="ProceduralTexture\PerlinNoise.cpp" />
     <ClCompile Include="Render\Frustum.cpp" />
