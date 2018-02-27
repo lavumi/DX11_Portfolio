@@ -138,6 +138,9 @@
     <ClCompile Include="Terrain\RainCone.cpp">
       <Filter>Terrain</Filter>
     </ClCompile>
+    <ClCompile Include="Shader\GrassShader.cpp">
+      <Filter>Shader</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameMain.h" />
@@ -285,6 +288,9 @@
     <ClInclude Include="Terrain\RainCone.h">
       <Filter>Terrain</Filter>
     </ClInclude>
+    <ClInclude Include="Shader\GrassShader.h">
+      <Filter>Shader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="System">
@@ -395,6 +401,9 @@
       <Filter>Shader\FX</Filter>
     </None>
     <None Include="Shader\FX\RainShader.fx">
+      <Filter>Shader\FX</Filter>
+    </None>
+    <None Include="Shader\FX\GrassShader.fx">
       <Filter>Shader\FX</Filter>
     </None>
   </ItemGroup>

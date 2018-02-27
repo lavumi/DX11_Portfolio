@@ -183,6 +183,7 @@
     <ClInclude Include="Shader\CameraBuffer.h" />
     <ClInclude Include="Shader\ColorShader.h" />
     <ClInclude Include="Shader\DepthShadowShader.h" />
+    <ClInclude Include="Shader\GrassShader.h" />
     <ClInclude Include="Shader\InstanceTextureShader.h" />
     <ClInclude Include="Shader\RainShader.h" />
     <ClInclude Include="Shader\ShadowShader.h" />
@@ -235,6 +236,7 @@
     <ClCompile Include="Shader\BlurShader.cpp" />
     <ClCompile Include="Shader\ColorShader.cpp" />
     <ClCompile Include="Shader\DepthShadowShader.cpp" />
+    <ClCompile Include="Shader\GrassShader.cpp" />
     <ClCompile Include="Shader\InstanceTextureShader.cpp" />
     <ClCompile Include="Shader\RainShader.cpp" />
     <ClCompile Include="Shader\ShadowShader.cpp" />
@@ -369,6 +371,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Shader\FX\RainShader.fx">
+      <FileType>Document</FileType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shader\FX\GrassShader.fx">
       <FileType>Document</FileType>
     </None>
   </ItemGroup>

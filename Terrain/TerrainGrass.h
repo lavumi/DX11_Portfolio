@@ -12,9 +12,9 @@ public:
 	void Update();
 	void Render();
 
-	UINT getIndexCount() {
-		return indexCount;
-	}
+	//UINT getIndexCount() {
+	//	return indexCount;
+	//}
 
 	 void setDiffuseMap(ID3D11ShaderResourceView* texture) {
 		// diffuse = texture;
@@ -33,20 +33,16 @@ public:
 	
 private:
 	void CreateBuffer();
+	void CreateBufferTemp();
 	void CreateInstanceData();
 
 	ID3D11Buffer* vertexBuffer;
 	ID3D11Buffer* instanceBuffer;
-	ID3D11Buffer* indexBuffer;
 
 
 	UINT vertexCount;
-	UINT indexCount;
 
 	VertexTexture* vertexData;
-	UINT* indexData;
-
-
 	
 	ID3D11ShaderResourceView* diffuse;
 

@@ -32,7 +32,7 @@
 #include "../Shader/ColorShader.h"
 #include "../Shader/WaterShader.h"
 #include "../Shader/SkyplaneShader.h"
-#include "../Shader/InstanceTextureShader.h"
+#include "../Shader/GrassShader.h"
 #include "../Shader/RainShader.h"
 
 
@@ -72,19 +72,23 @@ void GameMain::Initialize()
 
 	orthoWindow = new OrthoWindowPlane();
 
-	normalMapShader = new NormalMapShader();
-	depthShadowShader = new DepthShadowShader();
+
 	textureShader = new TextureShader();
-	skydomeShader = new SkydomeShader();
-	shadowShader = new ShadowShader();
-	blurShader = new BlurShader();
-	terrainShader = new TerrainShader();
 	colorShader = new ColorShader();
+	blurShader = new BlurShader();
+
+	normalMapShader = new NormalMapShader();
+	
+	depthShadowShader = new DepthShadowShader();
+	shadowShader = new ShadowShader();
+
+	skydomeShader = new SkydomeShader();
+	terrainShader = new TerrainShader();
 	skyplaneShader = new SkyplaneShader();
 	waterShader = new WaterShader();
-	instanceShader = new InstanceTextureShader();
+	//instanceShader = new GrassShader();
 	rainShader = new RainShader();
-
+	grassShader = new GrassShader();
 
 
 
@@ -412,7 +416,8 @@ void GameMain::PreRender()
 			*lakeRefractionTexture->GetShadowResourceView());
 
 
-
+		grass->Render();
+		grassShader->Render(grass->getInstanceCount(), view, projection);
 
 
 	}

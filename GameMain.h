@@ -33,6 +33,7 @@ class SkyplaneShader;
 class WaterShader;
 class InstanceTextureShader;
 class RainShader;
+class GrassShader;
 
 class Frustum;
 
@@ -103,7 +104,7 @@ private:
 	WaterShader* waterShader;
 	InstanceTextureShader* instanceShader;
 	RainShader* rainShader;
-
+	GrassShader* grassShader;
 
 
 
