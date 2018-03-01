@@ -141,6 +141,48 @@
     <ClCompile Include="Shader\GrassShader.cpp">
       <Filter>Shader</Filter>
     </ClCompile>
+    <ClCompile Include="Model\Model.cpp">
+      <Filter>Model</Filter>
+    </ClCompile>
+    <ClCompile Include="Model\ModelAnimation.cpp">
+      <Filter>Model</Filter>
+    </ClCompile>
+    <ClCompile Include="Model\ModelAnimationController.cpp">
+      <Filter>Model</Filter>
+    </ClCompile>
+    <ClCompile Include="Model\ModelAnimationKeyFrames.cpp">
+      <Filter>Model</Filter>
+    </ClCompile>
+    <ClCompile Include="Model\ModelBoneWeights.cpp">
+      <Filter>Model</Filter>
+    </ClCompile>
+    <ClCompile Include="Model\ModelMaterial.cpp">
+      <Filter>Model</Filter>
+    </ClCompile>
+    <ClCompile Include="Model\ModelPart.cpp">
+      <Filter>Model</Filter>
+    </ClCompile>
+    <ClCompile Include="Model\ModelScene.cpp">
+      <Filter>Model</Filter>
+    </ClCompile>
+    <ClCompile Include="Model\ModelSkeleton.cpp">
+      <Filter>Model</Filter>
+    </ClCompile>
+    <ClCompile Include="Model\ModelSkeletonBone.cpp">
+      <Filter>Model</Filter>
+    </ClCompile>
+    <ClCompile Include="Utility\BinaryFile.cpp">
+      <Filter>Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="Utility\String.cpp">
+      <Filter>Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader\FBXModelShader.cpp">
+      <Filter>Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\Character.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameMain.h" />
@@ -291,6 +333,64 @@
     <ClInclude Include="Shader\GrassShader.h">
       <Filter>Shader</Filter>
     </ClInclude>
+    <ClInclude Include="Model\Model.h">
+      <Filter>Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Model\ModelAnimation.h">
+      <Filter>Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Model\ModelAnimationController.h">
+      <Filter>Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Model\ModelAnimationKeyFrames.h">
+      <Filter>Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Model\ModelBoneWeights.h">
+      <Filter>Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Model\ModelBuffer.h">
+      <Filter>Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Model\ModelEnums.h">
+      <Filter>Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Model\ModelMaterial.h">
+      <Filter>Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Model\ModelPart.h">
+      <Filter>Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Model\ModelScene.h">
+      <Filter>Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Model\ModelSkeleton.h">
+      <Filter>Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Model\ModelSkeletonBone.h">
+      <Filter>Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Model\ModelUtility.h">
+      <Filter>Model</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="Utility\BinaryFile.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Utility\BinaryInputOutputHandler.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Utility\String.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader\FBXModelShader.h">
+      <Filter>Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\Character.h">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera\iFallowCamera.h">
+      <Filter>Camera</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="System">
@@ -311,14 +411,20 @@
     <Filter Include="ProceduralTexture">
       <UniqueIdentifier>{073f2afb-1241-4f9a-a8a1-c98ee22134b1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Shader\FX">
-      <UniqueIdentifier>{caf5405c-847a-4e3d-85bb-567eb1844735}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Object">
       <UniqueIdentifier>{a63c572a-ace9-47d6-99b9-2989996ca2c5}</UniqueIdentifier>
     </Filter>
     <Filter Include="Terrain">
       <UniqueIdentifier>{f735152f-a932-4153-86a6-c07d550df435}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Model">
+      <UniqueIdentifier>{fe90afe0-7796-45fd-9626-0ea7aefdb044}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utility">
+      <UniqueIdentifier>{396c9709-56b0-4eb0-a69d-18929b6e0ff7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="FX">
+      <UniqueIdentifier>{caf5405c-847a-4e3d-85bb-567eb1844735}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -326,85 +432,90 @@
       <Filter>Mesh</Filter>
     </None>
     <None Include="Shader\FX\BaseTile.fx">
-      <Filter>Shader\FX</Filter>
+      <Filter>FX</Filter>
     </None>
     <None Include="Shader\FX\CreateTangentMap.fx">
-      <Filter>Shader\FX</Filter>
+      <Filter>FX</Filter>
     </None>
     <None Include="Shader\FX\directionalWarp.fx">
-      <Filter>Shader\FX</Filter>
+      <Filter>FX</Filter>
     </None>
     <None Include="Shader\FX\DrawPatternInTile.fx">
-      <Filter>Shader\FX</Filter>
+      <Filter>FX</Filter>
     </None>
     <None Include="Shader\FX\finalDraw.fx">
-      <Filter>Shader\FX</Filter>
+      <Filter>FX</Filter>
     </None>
     <None Include="Shader\FX\midPointGrad.fx">
-      <Filter>Shader\FX</Filter>
+      <Filter>FX</Filter>
     </None>
     <None Include="Shader\FX\NormalMap.fx">
-      <Filter>Shader\FX</Filter>
+      <Filter>FX</Filter>
     </None>
     <None Include="Shader\FX\randomSRT.fx">
-      <Filter>Shader\FX</Filter>
+      <Filter>FX</Filter>
     </None>
     <None Include="Shader\FX\randomSRTInstance.fx">
-      <Filter>Shader\FX</Filter>
+      <Filter>FX</Filter>
     </None>
     <None Include="Shader\FX\singleGrass.fx">
-      <Filter>Shader\FX</Filter>
+      <Filter>FX</Filter>
     </None>
     <None Include="Shader\FX\SquarePattern.fx">
-      <Filter>Shader\FX</Filter>
+      <Filter>FX</Filter>
     </None>
     <None Include="Shader\FX\UIShader.fx">
-      <Filter>Shader\FX</Filter>
+      <Filter>FX</Filter>
     </None>
     <None Include="Shader\FX\Skydome.fx">
-      <Filter>Shader\FX</Filter>
+      <Filter>FX</Filter>
     </None>
     <None Include="Shader\FX\LightDepthShader.fx">
-      <Filter>Shader\FX</Filter>
+      <Filter>FX</Filter>
     </None>
     <None Include="Shader\FX\Shadow.fx">
-      <Filter>Shader\FX</Filter>
+      <Filter>FX</Filter>
     </None>
     <None Include="Shader\FX\BlurShader.fx">
-      <Filter>Shader\FX</Filter>
+      <Filter>FX</Filter>
     </None>
     <None Include="Shader\FX\MirrorShader.fx">
-      <Filter>Shader\FX</Filter>
+      <Filter>FX</Filter>
     </None>
     <None Include="Shader\FX\TextureShader.fx">
-      <Filter>Shader\FX</Filter>
+      <Filter>FX</Filter>
     </None>
     <None Include="Shader\FX\ColorShader.fx">
-      <Filter>Shader\FX</Filter>
+      <Filter>FX</Filter>
     </None>
     <None Include="Shader\FX\SkyplaneShader.fx">
-      <Filter>Shader\FX</Filter>
+      <Filter>FX</Filter>
     </None>
     <None Include="Shader\FX\WaterShader.fx">
-      <Filter>Shader\FX</Filter>
+      <Filter>FX</Filter>
     </None>
     <None Include="Shader\FX\Terrain.fx">
-      <Filter>Shader\FX</Filter>
+      <Filter>FX</Filter>
     </None>
     <None Include="Shader\FX\InstanceTextureShader.fx">
-      <Filter>Shader\FX</Filter>
+      <Filter>FX</Filter>
     </None>
     <None Include="Shader\FX\perlin.fx">
-      <Filter>Shader\FX</Filter>
+      <Filter>FX</Filter>
     </None>
     <None Include="Shader\FX\3dPerlin.fx">
-      <Filter>Shader\FX</Filter>
+      <Filter>FX</Filter>
     </None>
     <None Include="Shader\FX\RainShader.fx">
-      <Filter>Shader\FX</Filter>
+      <Filter>FX</Filter>
     </None>
     <None Include="Shader\FX\GrassShader.fx">
-      <Filter>Shader\FX</Filter>
+      <Filter>FX</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Shader\FX\FBXModelShader.fx">
+      <Filter>FX</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

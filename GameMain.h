@@ -11,7 +11,7 @@ class Skyplane;
 class TerrainGrass;
 class Cloud;
 class RainCone;
-	
+
 
 class GrassTexture;
 class MosaicTile;
@@ -35,11 +35,18 @@ class InstanceTextureShader;
 class RainShader;
 class GrassShader;
 
+class FBXModelShader;
+
 class Frustum;
 
 class OrthoWindowPlane;
+
+
+
+
+class Character;
 class GameMain : public Window
-{   
+{
 public:
 	void Initialize();
 	void Destroy();
@@ -106,8 +113,10 @@ private:
 	RainShader* rainShader;
 	GrassShader* grassShader;
 
+	FBXModelShader* fbxShader;
 
 
+	Character* player;
 
 	int testvalue = 0;
 };

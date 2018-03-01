@@ -21,6 +21,7 @@
 #include "./Object/TestCube.h"
 #include "./Object/Mirror.h"
 #include "./Object/OrthoWindowPlane.h"
+#include "../Object/Character.h"
 
 #include "../Shader/NormalMapShader.h"
 #include "../Shader/DepthShadowShader.h"
@@ -32,8 +33,12 @@
 #include "../Shader/ColorShader.h"
 #include "../Shader/WaterShader.h"
 #include "../Shader/SkyplaneShader.h"
-#include "../Shader/GrassShader.h"
+#include "../Shader/InstanceTextureShader.h"
 #include "../Shader/RainShader.h"
+#include "../Shader/FBXModelShader.h"
+#include "../Shader/GrassShader.h"
+
+
 
 
 
@@ -50,7 +55,7 @@ void GameMain::Initialize()
 	postRendering = new RenderTexture();
 	rainTexture = new RenderTexture();
 
-
+	Camera::Get();
 	UserInterface::Get();
 	LightManager::Get();
 	frustum = new Frustum();
@@ -72,28 +77,24 @@ void GameMain::Initialize()
 
 	orthoWindow = new OrthoWindowPlane();
 
-
-	textureShader = new TextureShader();
-	colorShader = new ColorShader();
-	blurShader = new BlurShader();
-
 	normalMapShader = new NormalMapShader();
-	
 	depthShadowShader = new DepthShadowShader();
-	shadowShader = new ShadowShader();
-
+	textureShader = new TextureShader();
 	skydomeShader = new SkydomeShader();
+	shadowShader = new ShadowShader();
+	blurShader = new BlurShader();
 	terrainShader = new TerrainShader();
+	colorShader = new ColorShader();
 	skyplaneShader = new SkyplaneShader();
 	waterShader = new WaterShader();
-	//instanceShader = new GrassShader();
+	instanceShader = new InstanceTextureShader();
 	rainShader = new RainShader();
 	grassShader = new GrassShader();
 
+	fbxShader = new FBXModelShader();
 
 
-
-
+	player = new Character();
 
 
 	depthShadowTexture->Initialize();
@@ -114,10 +115,21 @@ void GameMain::Initialize()
 	rainCone->Initialize();
 
 
+	player->Initialize(fbxShader, landscape);
+
+
+
+
+
 	grassTexture->DrawTexture();
 	landscape->SetTexture(grassTexture->diffuse, nullptr, nullptr);
 	grass->setDiffuseMap(grassTexture->getGrassTexture());
 	LodOff = false;
+
+
+
+
+
 }
 
 void GameMain::Destroy()
@@ -162,15 +174,20 @@ void GameMain::Destroy()
 	SAFE_DELETE(colorShader);
 	SAFE_DELETE(skyplaneShader);
 	SAFE_DELETE(waterShader);
-	SAFE_DELETE(instanceShader);
+	//	SAFE_DELETE(instanceShader);
 	SAFE_DELETE(rainShader);
 
+	SAFE_DELETE(player);
 }
 
 void GameMain::Update()
 {
 
 	ControlCamera();
+	player->Update();
+
+	Camera::Get()->Update();
+
 
 
 	LightManager::Get()->Update();;
@@ -194,6 +211,7 @@ void GameMain::Update()
 	testcube->Update();
 
 
+	//player->Move(0.5f, 0.5f);
 
 
 
@@ -209,8 +227,19 @@ void GameMain::Update()
 		//	testvalue = 0;
 		//noise->MakePerlinNoise();
 		//D3D::Get()->TestMultiTexture(0);
+
+
 	}
-	if (!LodOff)		landscape->changeLOD(frustum);
+	if (!LodOff) {
+		Camera::Get()->SetFallowCamera(nullptr);
+
+	}
+	else
+	{
+		player->SetCamera(Camera::Get());
+	}
+
+	landscape->changeLOD(frustum);
 
 
 	if (Keyboard::Get()->KeyUp('P')) {
@@ -221,7 +250,7 @@ void GameMain::Update()
 
 void GameMain::PreRender()
 {
-	
+
 	D3DXMATRIX world, view, projection;
 	D3DXMatrixIdentity(&view);
 	D3DXMatrixIdentity(&projection);
@@ -277,7 +306,7 @@ void GameMain::PreRender()
 		D3D::Get()->GetOrthoProjection(&projection);
 
 		orthoWindow->Render();
-		blurShader->Render(orthoWindow->GetIndexCount(),orthoWindow->GetWorld(), view, projection, *shadowTexture->GetShadowResourceView());
+		blurShader->Render(orthoWindow->GetIndexCount(), orthoWindow->GetWorld(), view, projection, *shadowTexture->GetShadowResourceView());
 	}
 
 	//호수의 반사평면 그리기
@@ -378,10 +407,10 @@ void GameMain::PreRender()
 		{
 			D3DXVECTOR3 lightDir;
 			LightManager::Get()->GetLightDirection(&lightDir);
-			
+
 			skydome->Render();
 			skydomeShader->Render(skydome->getIndexCount(), skydome->getWorld(), view, projection, lightDir);
-		
+
 			D3D::Get()->SetBlender(D3D::BL_state::Add);
 			cloud->Render();
 			skyplaneShader->Render(cloud->getIndexCount(), cloud->getWorld(), view, projection, cloud->getPerlinMap());
@@ -396,19 +425,18 @@ void GameMain::PreRender()
 
 
 
-		
+
 		testcube->Render();
 		for (int i = 0; i < 6; i++) {
 			normalMapShader->Render(testcube->indexCount, testcube->world[i], view, projection, testcube->diffuseMap, testcube->normalMap, testcube->heightMap, *blurShadowTexture->GetShadowResourceView());
 		}
-		
+
 		//Rasterizer::Get()->SetWireframe();
 		landscape->Render();
 		terrainShader->Render(landscape->getIndexCount(), landscape->getWorld(), view, projection, landscape->getDiffuseMap(), landscape->getNormalMap(), *blurShadowTexture->GetShadowResourceView(), lake->getwaterPlane());
 		//Rasterizer::Get()->SetSolid();
-		
-		//return;
-		
+
+
 		lake->Render();
 		waterShader->Render(lake->indexCount, lake->world, view, projection,
 			lake->getNormalTexture(), cloud->getPerlinMap(),
@@ -417,9 +445,10 @@ void GameMain::PreRender()
 
 
 		grass->Render();
-		grassShader->Render(grass->getInstanceCount(), view, projection);
+		grassShader->Render(grass->getInstanceCount(), view, projection, *noise->GetPerlinNoise());
 
 
+		player->Render();
 	}
 	//{
 	//	rainTexture->SetTarget();
@@ -438,7 +467,6 @@ void GameMain::PreRender()
 	//	D3D::Get()->SetBlender(D3D::BL_state::Off);
 	//	D3D::Get()->SetDepthStencilState(D3D::DS_state::onState);
 	//}
-
 	//{
 	//	postRendering->SetTarget();
 	//	postRendering->Clear(0,0,0,1);
@@ -468,99 +496,143 @@ void GameMain::Render()
 	D3D::Get()->GetOrthoProjection(&projection);
 	D3D::Get()->SetBlender(D3D::BL_state::Off);
 	orthoWindow->Render();
-	
+
 	textureShader->Render(orthoWindow->GetIndexCount(), orthoWindow->GetWorld(), view, projection, *mainRendering->GetShadowResourceView(0));
 
-	
 
 
+	/*
 	//WATER REFLECTION OLD ver.
 	{
-		/*
-		//스텐실 버퍼 삭제
-		//1.스텐실 버퍼를 초기화 한 후 그 위에다 거울면을 그린다(깊이 버퍼는 남겨 있기에 적절히 z버퍼로 가려짐)
-		D3D::Get()->ClearDepthStencil(D3D11_CLEAR_STENCIL,0, 0);
 
-		//그려야 할 곳(물)을 스텐실 버퍼에 기록
-		D3D::Get()->SetDepthStencilState(D3D::DS_state::mirrorPlaneRenderState);
-		D3D::Get()->SetBlender_Linear();
-		lake->Render();
-		//colorShader->Render(lake->indexCount, lake->world, view, projection, D3DXCOLOR(0, 1, 0, 1));
-		waterShader->Render(lake->indexCount, lake->world, view, projection, nullptr, lake->getNormalTexture(), cloud->getPerlinMap());
-		//호수 모양만 스텐실 버퍼가 기록되어있음
+	//스텐실 버퍼 삭제
+	//1.스텐실 버퍼를 초기화 한 후 그 위에다 거울면을 그린다(깊이 버퍼는 남겨 있기에 적절히 z버퍼로 가려짐)
+	D3D::Get()->ClearDepthStencil(D3D11_CLEAR_STENCIL,0, 0);
 
-
-		//깊이버퍼를 삭제하여 다시 호수 위에 그릴수 있게 만듬
-		D3D::Get()->ClearDepthStencil(D3D11_CLEAR_DEPTH, 1, 0);
+	//그려야 할 곳(물)을 스텐실 버퍼에 기록
+	D3D::Get()->SetDepthStencilState(D3D::DS_state::mirrorPlaneRenderState);
+	D3D::Get()->SetBlender_Linear();
+	lake->Render();
+	//colorShader->Render(lake->indexCount, lake->world, view, projection, D3DXCOLOR(0, 1, 0, 1));
+	waterShader->Render(lake->indexCount, lake->world, view, projection, nullptr, lake->getNormalTexture(), cloud->getPerlinMap());
+	//호수 모양만 스텐실 버퍼가 기록되어있음
 
 
-		//반사된 세계는 현실 세계에 대해 뒤집혀있으므로 컬모드가 반대다
-		Rasterizer::Get()->SetFrontCullMode();
+	//깊이버퍼를 삭제하여 다시 호수 위에 그릴수 있게 만듬
+	D3D::Get()->ClearDepthStencil(D3D11_CLEAR_DEPTH, 1, 0);
 
 
-		//반사된 뷰, 프로젝션 받기
-		Camera::Get()->GetMirrorView(&view);
-		D3D::Get()->GetProjection(&projection);
+	//반사된 세계는 현실 세계에 대해 뒤집혀있으므로 컬모드가 반대다
+	Rasterizer::Get()->SetFrontCullMode();
 
 
-		//호수면에만 그리도록 뎁스 스텐실 변경해준다
-		D3D::Get()->SetDepthStencilState(D3D::DS_state::mirrorSkyplaneState);
+	//반사된 뷰, 프로젝션 받기
+	Camera::Get()->GetMirrorView(&view);
+	D3D::Get()->GetProjection(&projection);
 
 
-
-		//스카이뷰를 그릴때 카메라 위치도 다시 셋팅해줘야 한다.
-		D3DXMATRIX world;
-		D3DXVECTOR3 camPos;
-		Camera::Get()->GetPosition(&camPos);
-
-		camPos.y = -camPos.y + (lake->GetWaterHeigh() * 2.0f);
-
-		D3DXMatrixTranslation(&world, camPos.x, camPos.y, camPos.z);
-
-
-		cloud->Render();
-		skyplaneShader->Render(cloud->getIndexCount(), world, view, projection, cloud->getDiffuseMap(), cloud->getPerlinMap());
+	//호수면에만 그리도록 뎁스 스텐실 변경해준다
+	D3D::Get()->SetDepthStencilState(D3D::DS_state::mirrorSkyplaneState);
 
 
 
-		//물과의 색상혼합을 해줌
-		D3D::Get()->SetBlender_AddBlend();
+	//스카이뷰를 그릴때 카메라 위치도 다시 셋팅해줘야 한다.
+	D3DXMATRIX world;
+	D3DXVECTOR3 camPos;
+	Camera::Get()->GetPosition(&camPos);
 
-		D3D::Get()->SetDepthStencilState(D3D::DS_state::mirrorObjectRenderState);
-		testcube->Render();
-		for (int i = 0; i < 6; i++) {
-		normalMapShader->Render(testcube->indexCount, testcube->world[i], view, projection, testcube->diffuseMap, testcube->normalMap, testcube->heightMap, *blurShadowTexture->GetShadowResourceView());
-		}
+	camPos.y = -camPos.y + (lake->GetWaterHeigh() * 2.0f);
 
-
-		landscape->Render();
-		terrainShader->Render(landscape->getIndexCount(), landscape->getWorld(), view, projection, landscape->getDiffuseMap(), landscape->getNormalMap(), *blurShadowTexture->GetShadowResourceView());
+	D3DXMatrixTranslation(&world, camPos.x, camPos.y, camPos.z);
 
 
-		*/
+	cloud->Render();
+	skyplaneShader->Render(cloud->getIndexCount(), world, view, projection, cloud->getDiffuseMap(), cloud->getPerlinMap());
+
+
+
+	//물과의 색상혼합을 해줌
+	D3D::Get()->SetBlender_AddBlend();
+
+	D3D::Get()->SetDepthStencilState(D3D::DS_state::mirrorObjectRenderState);
+	testcube->Render();
+	for (int i = 0; i < 6; i++) {
+	normalMapShader->Render(testcube->indexCount, testcube->world[i], view, projection, testcube->diffuseMap, testcube->normalMap, testcube->heightMap, *blurShadowTexture->GetShadowResourceView());
 	}
 
+
+	landscape->Render();
+	terrainShader->Render(landscape->getIndexCount(), landscape->getWorld(), view, projection, landscape->getDiffuseMap(), landscape->getNormalMap(), *blurShadowTexture->GetShadowResourceView());
+
+
+
+	}
+	*/
 	D3D::Get()->SetBlender(D3D::BL_state::Off);
 	Rasterizer::Get()->SetOnCullMode();
 	D3D::Get()->SetDepthStencilState(D3D::DS_state::onState);
 }
 
+//void GameMain::ControlCamera()
+//{
+//	if (Keyboard::Get()->KeyPress('W'))
+//		Camera::Get()->MoveForward();
+//	else if (Keyboard::Get()->KeyPress('S'))
+//		Camera::Get()->MoveBackward();
+//
+//	if (Keyboard::Get()->KeyPress('A'))
+//		Camera::Get()->MoveLeft();
+//	else if (Keyboard::Get()->KeyPress('D'))
+//		Camera::Get()->MoveRight();
+//
+//	if (Keyboard::Get()->KeyPress('E'))
+//		Camera::Get()->MoveUp();
+//	else if (Keyboard::Get()->KeyPress('Q'))
+//		Camera::Get()->MoveDown();
+//
+//	if (Mouse::Get()->ButtonPress(1))
+//	{
+//		D3DXVECTOR3 move = Mouse::Get()->GetMoveValue();
+//
+//		Camera::Get()->Rotate(D3DXVECTOR2(move.y, move.x));
+//	}
+//}
+
 void GameMain::ControlCamera()
 {
-	if (Keyboard::Get()->KeyPress('W'))
-		Camera::Get()->MoveForward();
-	else if (Keyboard::Get()->KeyPress('S'))
-		Camera::Get()->MoveBackward();
+	if (Camera::Get()->Fallowing()) {
+		if (Keyboard::Get()->KeyPress('W'))
+			player->Move(0, 0.2f);
+		else if (Keyboard::Get()->KeyPress('S'))
+			player->Move(0, -0.2f);
 
-	if (Keyboard::Get()->KeyPress('A'))
-		Camera::Get()->MoveLeft();
-	else if (Keyboard::Get()->KeyPress('D'))
-		Camera::Get()->MoveRight();
+		if (Keyboard::Get()->KeyPress('A'))
+			player->Move(-0.2f, 0);
+		else if (Keyboard::Get()->KeyPress('D'))
+			player->Move(0.2f, 0);
+	}
+	else {
+		if (Keyboard::Get()->KeyPress('W'))
+			Camera::Get()->MoveForward();
+		else if (Keyboard::Get()->KeyPress('S'))
+			Camera::Get()->MoveBackward();
 
-	if (Keyboard::Get()->KeyPress('E'))
-		Camera::Get()->MoveUp();
-	else if (Keyboard::Get()->KeyPress('Q'))
-		Camera::Get()->MoveDown();
+		if (Keyboard::Get()->KeyPress('A'))
+			Camera::Get()->MoveLeft();
+		else if (Keyboard::Get()->KeyPress('D'))
+			Camera::Get()->MoveRight();
+
+		if (Keyboard::Get()->KeyPress('E'))
+			Camera::Get()->MoveUp();
+		else if (Keyboard::Get()->KeyPress('Q'))
+			Camera::Get()->MoveDown();
+	}
+
+
+
+
+
+
 
 	if (Mouse::Get()->ButtonPress(1))
 	{
@@ -569,4 +641,3 @@ void GameMain::ControlCamera()
 		Camera::Get()->Rotate(D3DXVECTOR2(move.y, move.x));
 	}
 }
-

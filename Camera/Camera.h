@@ -1,5 +1,6 @@
 #pragma once
 
+class iFallowCamera;
 class Camera
 {
 public:
@@ -23,12 +24,19 @@ public:
 	void GetCameraSpaceMatrix(D3DXMATRIX& matrix);
 
 
+	void SetFallowCamera(iFallowCamera* target);
+
 	void UpdateRotationMatrix();
 	//void UpdateProjectionMatrix();
 	//void UpdateProjection2Orth();
 	void UpdateViewMatrix();
-	//void Update();
+	
+	
+	void Update();
 
+
+
+	//Camera Control
 	void Move(D3DXVECTOR3 translation);
 	void MoveUp();
 	void MoveDown();
@@ -44,6 +52,8 @@ public:
 	void RotateRight();
 
 
+	
+
 	void GetView(D3DXMATRIX* view)
 	{
 		memcpy(view, this->view, sizeof(D3DXMATRIX));
@@ -56,15 +66,6 @@ public:
 	void GetDefaultView(D3DXMATRIX* view) {
 		memcpy(view, this->defaultView, sizeof(D3DXMATRIX));
 	}
-	//void GetProjection(D3DXMATRIX* projection)
-	//{
-	//	memcpy(projection, this->projection, sizeof(D3DXMATRIX));
-	//}
-	//
-	//void GetOrthProjection(D3DXMATRIX* projection)
-	//{
-	//	memcpy(projection, this->orthoProjection, sizeof(D3DXMATRIX));
-	//}
 
 
 	void GetRay(D3DXVECTOR3* origin, D3DXVECTOR3* direction, D3DXMATRIX projection);
@@ -74,6 +75,12 @@ public:
 
 	float fieldOfView; //시야각
 
+	bool Fallowing() {
+		if (targetpos == nullptr)
+			return false;
+		else
+			return true;
+	}
 private:
 	static Camera* instance;
 
@@ -98,9 +105,12 @@ private:
 	float rotationSpeed;
 
 
-	//D3D11_VIEWPORT viewport;
-	//
-	//float screenAspect; //화면비율
-	//D3DXMATRIX projection;
-	//D3DXMATRIX orthoProjection;
+
+	//FallowCamera
+	D3DXVECTOR3* targetpos;
+	float targetDistance;
+	float angle_pie, angle_theta;
+
 };
+
+

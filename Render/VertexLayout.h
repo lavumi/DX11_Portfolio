@@ -143,3 +143,26 @@ struct VertexTextureNormalTangent
 	static UINT count;
 };
 
+struct VertexTextureNormalTangentBlend
+{
+	VertexTextureNormalTangentBlend();
+	VertexTextureNormalTangentBlend
+	(
+		D3DXVECTOR3 position
+		, D3DXVECTOR2 uv
+		, D3DXVECTOR3 normal
+		, D3DXVECTOR3 tangent
+		, D3DXVECTOR4 blendIndices
+		, D3DXVECTOR4 blendWeights
+	);
+
+	D3DXVECTOR3 position;
+	D3DXVECTOR2 uv;
+	D3DXVECTOR3 normal;
+	D3DXVECTOR3 tangent;
+	D3DXVECTOR4 blendIndices;
+	D3DXVECTOR4 blendWeights;
+
+	static D3D11_INPUT_ELEMENT_DESC desc[];
+	static UINT count;
+};

@@ -36,6 +36,13 @@ using namespace std;
 #pragma comment(lib, "d3dcompiler.lib")
 
 
+#define FBXSDK_SHARED
+#include <fbxsdk.h>
+#pragma comment(lib, "libfbxsdk.lib")
+using namespace fbxsdk;
+
+
+
 #define SAFE_RELEASE(p) { if (p) { (p)->Release(); (p)=NULL; } }
 #define SAFE_DELETE(p) { if (p) { delete (p); (p)=NULL; } }
 #define SAFE_DELETE_ARRAY(p) { if (p) { delete[] (p); (p)=NULL; } }
@@ -52,16 +59,15 @@ using namespace std;
 #include "./Render/Texture.h"
 #include "./Render/Rasterizer.h"
 #include "./Render/Sampler.h"
-//#include "./Render/DepthStencil.h"
 #include "./Render/VertexLayout.h"
 #include "./Render/UserInterface.h"
-//#include "./Render/Blender.h"
 #include "./Render/LightManager.h"
 
 #include "./Camera/Camera.h"
 
 
-
+#include "./Utility/String.h"
+#include "./Utility/BinaryFile.h"
 
 
 #define QWE assert(SUCCEEDED(hr));

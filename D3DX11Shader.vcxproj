@@ -97,7 +97,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>./Library</AdditionalIncludeDirectories>
-      <CallingConvention>StdCall</CallingConvention>
+      <CallingConvention>Cdecl</CallingConvention>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -161,9 +161,24 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Camera\Camera.h" />
+    <ClInclude Include="Camera\iFallowCamera.h" />
     <ClInclude Include="GameMain.h" />
     <ClInclude Include="Mesh\Mesh.h" />
     <ClInclude Include="Mesh\ObjectMesh.h" />
+    <ClInclude Include="Model\Model.h" />
+    <ClInclude Include="Model\ModelAnimation.h" />
+    <ClInclude Include="Model\ModelAnimationController.h" />
+    <ClInclude Include="Model\ModelAnimationKeyFrames.h" />
+    <ClInclude Include="Model\ModelBoneWeights.h" />
+    <ClInclude Include="Model\ModelBuffer.h" />
+    <ClInclude Include="Model\ModelEnums.h" />
+    <ClInclude Include="Model\ModelMaterial.h" />
+    <ClInclude Include="Model\ModelPart.h" />
+    <ClInclude Include="Model\ModelScene.h" />
+    <ClInclude Include="Model\ModelSkeleton.h" />
+    <ClInclude Include="Model\ModelSkeletonBone.h" />
+    <ClInclude Include="Model\ModelUtility.h" />
+    <ClInclude Include="Object\Character.h" />
     <ClInclude Include="Object\Mirror.h" />
     <ClInclude Include="Object\OrthoWindowPlane.h" />
     <ClInclude Include="Object\TestCube.h" />
@@ -183,6 +198,7 @@
     <ClInclude Include="Shader\CameraBuffer.h" />
     <ClInclude Include="Shader\ColorShader.h" />
     <ClInclude Include="Shader\DepthShadowShader.h" />
+    <ClInclude Include="Shader\FBXModelShader.h" />
     <ClInclude Include="Shader\GrassShader.h" />
     <ClInclude Include="Shader\InstanceTextureShader.h" />
     <ClInclude Include="Shader\RainShader.h" />
@@ -198,6 +214,7 @@
     <ClInclude Include="Shader\WorldBuffer.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
     </ClInclude>
+    <ClInclude Include="stdafx.h" />
     <ClInclude Include="System\D3D.h" />
     <ClInclude Include="System\Frames.h" />
     <ClInclude Include="System\Keyboard.h" />
@@ -212,12 +229,26 @@
     <ClInclude Include="Terrain\Skydome.h" />
     <ClInclude Include="Terrain\Skyplane.h" />
     <ClInclude Include="Terrain\Water.h" />
+    <ClInclude Include="Utility\BinaryFile.h" />
+    <ClInclude Include="Utility\BinaryInputOutputHandler.h" />
+    <ClInclude Include="Utility\String.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera\Camera.cpp" />
     <ClCompile Include="GameMain.cpp" />
     <ClCompile Include="Mesh\Mesh.cpp" />
     <ClCompile Include="Mesh\ObjectMesh.cpp" />
+    <ClCompile Include="Model\Model.cpp" />
+    <ClCompile Include="Model\ModelAnimation.cpp" />
+    <ClCompile Include="Model\ModelAnimationController.cpp" />
+    <ClCompile Include="Model\ModelAnimationKeyFrames.cpp" />
+    <ClCompile Include="Model\ModelBoneWeights.cpp" />
+    <ClCompile Include="Model\ModelMaterial.cpp" />
+    <ClCompile Include="Model\ModelPart.cpp" />
+    <ClCompile Include="Model\ModelScene.cpp" />
+    <ClCompile Include="Model\ModelSkeleton.cpp" />
+    <ClCompile Include="Model\ModelSkeletonBone.cpp" />
+    <ClCompile Include="Object\Character.cpp" />
     <ClCompile Include="Object\Mirror.cpp" />
     <ClCompile Include="Object\OrthoWindowPlane.cpp" />
     <ClCompile Include="Object\TestCube.cpp" />
@@ -236,6 +267,7 @@
     <ClCompile Include="Shader\BlurShader.cpp" />
     <ClCompile Include="Shader\ColorShader.cpp" />
     <ClCompile Include="Shader\DepthShadowShader.cpp" />
+    <ClCompile Include="Shader\FBXModelShader.cpp" />
     <ClCompile Include="Shader\GrassShader.cpp" />
     <ClCompile Include="Shader\InstanceTextureShader.cpp" />
     <ClCompile Include="Shader\RainShader.cpp" />
@@ -261,6 +293,8 @@
     <ClCompile Include="Terrain\Skydome.cpp" />
     <ClCompile Include="Terrain\Skyplane.cpp" />
     <ClCompile Include="Terrain\Water.cpp" />
+    <ClCompile Include="Utility\BinaryFile.cpp" />
+    <ClCompile Include="Utility\String.cpp" />
     <ClCompile Include="WinMain.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -376,6 +410,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Shader\FX\GrassShader.fx">
+      <FileType>Document</FileType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shader\FX\FBXModelShader.fx">
       <FileType>Document</FileType>
     </None>
   </ItemGroup>

@@ -1,6 +1,7 @@
 #include "../stdafx.h"
 #include "Camera.h"
 
+#include "iFallowCamera.h"
 Camera* Camera::instance = NULL;
 
 const float Camera::screenNear = 0.1f;
@@ -11,6 +12,7 @@ Camera::Camera()
 	, forward(0, 128, 0), right(0, 0, 0), up(0, 0, 0)
 	, rotate(0, 0)
 	, translationSpeed(18.0f), rotationSpeed(1.5f)
+	, targetpos(nullptr), angle_pie(3.141592f/8*3), angle_theta(3.141592f/2), targetDistance(8)
 {
 	D3DXMatrixIdentity(&view);
 
@@ -60,6 +62,18 @@ void Camera::GetCameraSpaceMatrix(D3DXMATRIX & matrix)
 	cameraSpace._33 = up.z;
 
 	matrix = cameraSpace;
+}
+
+void Camera::SetFallowCamera(iFallowCamera * target)
+{
+	if (target != nullptr) {
+		target->GetPosition(targetpos);
+		forward= D3DXVECTOR3(0, 0, 1);
+		right= D3DXVECTOR3(1, 0, 0);
+		up= D3DXVECTOR3(0, 1, 0); 
+	}
+	else
+		targetpos = nullptr;
 }
 
 void Camera::UpdateRotationMatrix()
@@ -112,6 +126,21 @@ void Camera::UpdateViewMatrix()
 
 }
 
+void Camera::Update()
+{
+	if (targetpos != nullptr) {
+		D3DXVECTOR3 cameraChildPos;
+		cameraChildPos.x = targetDistance * sinf(angle_pie) * cosf(angle_theta);
+		cameraChildPos.z = -targetDistance * sinf(angle_pie) * sinf(angle_theta) ;
+		cameraChildPos.y = targetDistance * cosf(angle_pie)+2;
+		position = *targetpos + cameraChildPos;
+
+		forward = - cameraChildPos;
+		UpdateViewMatrix();
+	}
+
+}
+
 void Camera::Move(D3DXVECTOR3 translation)
 {
 	position += translation * Frames::TimeElapsed();
@@ -150,11 +179,19 @@ void Camera::MoveBackward()
 
 void Camera::Rotate(D3DXVECTOR2 rotate)
 {
-	this->rotate.x += rotate.x * Frames::TimeElapsed() * rotationSpeed;
-	this->rotate.y += rotate.y * Frames::TimeElapsed() * rotationSpeed;
+	if (targetpos != nullptr) {
+		angle_theta += rotate.y	* 3.141592f / 45 * Frames::TimeElapsed();
+		angle_pie -= rotate.x	* 3.141592f / 15 * Frames::TimeElapsed();
+	}
+	else {
+		this->rotate.x += rotate.x * Frames::TimeElapsed() * rotationSpeed;
+		this->rotate.y += rotate.y * Frames::TimeElapsed() * rotationSpeed;
+		
+		UpdateRotationMatrix();
+		UpdateViewMatrix();
+	}
 
-	UpdateRotationMatrix();
-	UpdateViewMatrix();
+
 }
 
 void Camera::RotateUp()
