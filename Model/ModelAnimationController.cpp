@@ -97,6 +97,7 @@ void ModelAnimationController::SetCurrentAnimation(int index)
 	}
 	
 	Stop();
+	Play();
 }
 
 UINT ModelAnimationController::GetAnimationCount()
@@ -217,4 +218,16 @@ void ModelAnimationController::Update()
 		// 현재 Frame와 다음 Frame 사이에서 어느 정도 시간이 경과되었는지를 나타냄
 		keyFrameFactor = frameTimer / secPerFrame;
 	}
+}
+
+void ModelAnimationController::DeleteMixamoAni()
+{
+	auto iter = animations.begin();
+	for (UINT i = 0; i < animations.size(); i++) {
+		if (iter->first == L"mixamo.com") {
+			SAFE_DELETE(iter->second);
+			animations.erase(iter);
+		}
+	}
+
 }

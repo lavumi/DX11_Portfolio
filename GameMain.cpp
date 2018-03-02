@@ -125,7 +125,7 @@ void GameMain::Initialize()
 	landscape->SetTexture(grassTexture->diffuse, nullptr, nullptr);
 	grass->setDiffuseMap(grassTexture->getGrassTexture());
 	LodOff = false;
-
+	
 
 
 
@@ -213,7 +213,7 @@ void GameMain::Update()
 
 	//player->Move(0.5f, 0.5f);
 
-
+	static int i = 0;
 
 	if (Keyboard::Get()->KeyUp(VK_SPACE)) {
 		//depthShadowTexture->SaveTexture(L"depthShadow.png");
@@ -228,18 +228,23 @@ void GameMain::Update()
 		//noise->MakePerlinNoise();
 		//D3D::Get()->TestMultiTexture(0);
 
-
+		Camera::Get()->SetFallowCamera(nullptr);
+		i++;
+		if (i > 2)
+			i = 0;
+		player->SetAni(i);
 	}
 	if (!LodOff) {
-		Camera::Get()->SetFallowCamera(nullptr);
+		landscape->changeLOD(frustum);
+		//Camera::Get()->SetFallowCamera(nullptr);
 
 	}
 	else
 	{
-		player->SetCamera(Camera::Get());
+		//player->SetCamera(Camera::Get());
 	}
 
-	landscape->changeLOD(frustum);
+	
 
 
 	if (Keyboard::Get()->KeyUp('P')) {
@@ -444,8 +449,8 @@ void GameMain::PreRender()
 			*lakeRefractionTexture->GetShadowResourceView());
 
 
-		grass->Render();
-		grassShader->Render(grass->getInstanceCount(), view, projection, *noise->GetPerlinNoise());
+		//grass->Render();
+		//grassShader->Render(grass->getInstanceCount(), view, projection, *noise->GetPerlinNoise());
 
 
 		player->Render();

@@ -14,14 +14,19 @@ Character::Character()
 
 Character::~Character()
 {
+	SAFE_DELETE(model);
 }
 
 void Character::Initialize(FBXModelShader* shader, Landscape* land)
 {
 
-	//modelScene->LoadFbx(L"/Contents/Models/Sword And Shield Idle.fbx");
-	//modelScene->SaveBinary(L"./Contents/Models/", L"PaladinIdle");
-	model->LoadBinary(L"./Contents/Models/", L"PaladinIdle");
+	model->LoadFbx(L"/Contents/Models/Sword And Shield Idle.fbx");
+	model->LoadAniFbx(L"/contents/Models/jump.fbx", L"jump");
+	//model->SaveBinary(L"./Contents/Models/", L"PaladinIdle");
+	//model->LoadBinary(L"./Contents/Models/", L"PaladinIdle");
+
+
+
 	this->land = land;
 	this->shader = shader;
 	position = D3DXVECTOR3(140, 0, 110);
@@ -55,6 +60,11 @@ void Character::Update()
 void Character::Render()
 {
 	model->Render(shader);
+}
+
+void Character::SetAni(int index)
+{
+	model->SetAni(index);
 }
 
 void Character::SetCamera(Camera * camera)

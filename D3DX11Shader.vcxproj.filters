@@ -81,9 +81,6 @@
     <ClCompile Include="Object\OrthoWindowPlane.cpp">
       <Filter>Object</Filter>
     </ClCompile>
-    <ClCompile Include="Render\Frustum.cpp">
-      <Filter>Render</Filter>
-    </ClCompile>
     <ClCompile Include="Shader\BlurShader.cpp">
       <Filter>Shader</Filter>
     </ClCompile>
@@ -182,6 +179,9 @@
     </ClCompile>
     <ClCompile Include="Object\Character.cpp">
       <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Render\Frustum.cpp">
+      <Filter>Render</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -512,10 +512,8 @@
     <None Include="Shader\FX\GrassShader.fx">
       <Filter>FX</Filter>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <FxCompile Include="Shader\FX\FBXModelShader.fx">
+    <None Include="Shader\FX\FBXModelShader.fx">
       <Filter>FX</Filter>
-    </FxCompile>
+    </None>
   </ItemGroup>
 </Project>

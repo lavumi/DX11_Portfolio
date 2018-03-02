@@ -27,6 +27,8 @@ ModelScene::ModelScene()
 	
 	modelBuffer = new ModelBuffer();
 	animationController = new ModelAnimationController();
+
+	D3DXMatrixScaling(&scaleBias, 0.01f, 0.01f, 0.01f);
 }
 
 ModelScene::~ModelScene()
@@ -41,6 +43,11 @@ ModelScene::~ModelScene()
 	
 	if (scene != NULL)scene->Destroy();
 	if (manager != NULL)manager->Destroy();
+}
+
+void ModelScene::SetAni(int index)
+{
+	animationController->SetCurrentAnimation(index);
 }
 
 /****************************************************************************************************
@@ -76,6 +83,39 @@ void ModelScene::LoadFbx(wstring filePath)
 	converter = new FbxGeometryConverter(manager);
 	{
 		ProcessScene();
+	}
+	SAFE_DELETE(converter);
+
+	importer->Destroy();
+}
+
+void ModelScene::LoadAniFbx(wstring filePath, wstring aniName)
+{
+	this->filePath = filePath;
+
+	manager = FbxManager::Create();
+	assert(manager != NULL);
+
+	scene = FbxScene::Create(manager, "");
+	assert(scene != NULL);
+
+	string tempFile = String::WStringToString(filePath);
+
+	//SDK의 버전을 얻어온다.
+	int sdkMajor, sdkMinor, sdkRevision;
+	FbxManager::GetFileFormatVersion(sdkMajor, sdkMinor, sdkRevision);
+
+	//임포터 생성
+	importer = FbxImporter::Create(manager, "");
+	bool status = importer->Initialize(tempFile.c_str(), -1, NULL);
+	assert(status == true);
+
+	status = importer->Import(scene);
+	assert(status == true);
+
+	converter = new FbxGeometryConverter(manager);
+	{
+		ProcessAnimations(aniName);
 	}
 	SAFE_DELETE(converter);
 
@@ -175,6 +215,7 @@ void ModelScene::ProcessScene()
 	ProcessNode(scene->GetRootNode(), FbxNodeAttribute::eSkeleton);
 	ProcessNode(scene->GetRootNode(), FbxNodeAttribute::eMesh);
 	ProcessAnimations();
+	
 }
 
 /****************************************************************************************************
@@ -339,7 +380,7 @@ void ModelScene::ProcessMesh(FbxNode * node)
 	D3DXMATRIX temp = GetAbsoluteTransformFromCurrentTake(node, FbxTime(0));
 	model->SetAnimationTransform(temp);
 	// Mesh의 GeobetrixOffset을 추가(대부분의 경우 Identity Matrix)
-	model->SetGeometricOffset(GetGeometricOffset(node));
+	model->SetGeometricOffset(scaleBias * GetGeometricOffset(node));
 
 	model->CreateData();
 	model->CreateBuffer();
@@ -351,7 +392,7 @@ void ModelScene::ProcessMesh(FbxNode * node)
 @brief
 Animation 정보를 로드하여 ModelAnimationController Class 에 저장
 ****************************************************************************************************/
-void ModelScene::ProcessAnimations()
+void ModelScene::ProcessAnimations(wstring aniName)
 {
 	FbxNode* rootNode = scene->GetRootNode();
 	if (rootNode == NULL) return;
@@ -370,7 +411,11 @@ void ModelScene::ProcessAnimations()
 	for (UINT i = 0; i < animationCount; i++)
 	{
 		FbxTakeInfo* animationInfo = importer->GetTakeInfo(i);
-		wstring animationName = String::StringToWString(animationInfo->mImportName.Buffer());
+		wstring animationName;
+		if (aniName == L"")
+			animationName = String::StringToWString(animationInfo->mImportName.Buffer());
+		else
+			animationName = aniName;
 
 		// FbxTimeSpan: 구간 시간을 저장하는 Class
 		FbxTimeSpan span = animationInfo->mLocalTimeSpan;

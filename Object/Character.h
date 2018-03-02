@@ -18,6 +18,8 @@ public:
 	void Update();
 	void Render();
 
+
+	void SetAni(int index);
 	void SetCamera(Camera* camera);
 	void GetPosition(D3DXVECTOR3*& pos);
 private:

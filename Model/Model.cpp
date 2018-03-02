@@ -14,13 +14,13 @@
 Model::Model(ModelScene* modelScene)
 	:modelScene(modelScene)
 {
-	D3DXMatrixScaling(&scale, 0.01f, 0.01f, 0.01f);
+	//
 }
 
 Model::Model(ModelScene* modelScene, wstring name)
 	: modelScene(modelScene), name(name)
 {
-	D3DXMatrixScaling(&scale, 0.01f, 0.01f, 0.01f);
+	
 	D3DXMatrixIdentity(&absoluteTransform);
 	D3DXMatrixIdentity(&matGeometricOffset);
 	D3DXMatrixIdentity(&matAnimationTransform);
@@ -28,6 +28,7 @@ Model::Model(ModelScene* modelScene, wstring name)
 
 Model::Model(const Model & otherModel)
 {
+
 	modelScene = otherModel.modelScene;
 
 	name = otherModel.name;
@@ -168,11 +169,6 @@ void Model::Import(BinaryReader * br)
 	absoluteTransform = br->Matrix();
 	matGeometricOffset = br->Matrix();
 	matAnimationTransform = br->Matrix();
-
-
-	
-	
-	matGeometricOffset = scale *matGeometricOffset;
 
 
 	UINT partsCount = br->UInt();

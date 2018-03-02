@@ -28,7 +28,10 @@ public:
 	void Render(FBXModelShader* shader);
 
 
+	void SetAni(int);
+
 	void LoadFbx(wstring filePath);
+	void LoadAniFbx(wstring filePath, wstring aniName);
 	void SaveBinary(wstring filePath, wstring fileName);
 	void LoadBinary(wstring filePath, wstring fileName);
 
@@ -38,7 +41,7 @@ private:
 	void ProcessNode(FbxNode* node, FbxNodeAttribute::EType attribute);
 	void ProcessSkeleton(FbxNode* node);
 	void ProcessMesh(FbxNode* node);
-	void ProcessAnimations();
+	void ProcessAnimations(wstring aniName = L"");
 	void ProcessAnimation(FbxNode* node, wstring takeName, float frameRate, float start, float stop);
 
 	void ProcessBoneWeights(FbxMesh* mesh, vector<ModelBoneWeights>& meshBoneWeights);
@@ -97,4 +100,8 @@ private:
 
 	ModelBuffer* modelBuffer;
 	ModelAnimationController* animationController;
+
+
+
+	D3DXMATRIX scaleBias;
 };

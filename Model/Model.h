@@ -62,6 +62,5 @@ private:
 	map<wstring, ModelAnimationKeyFrames*> animationKeyFrames;
 
 
-	D3DXMATRIX scale;
 
 };

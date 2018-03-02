@@ -47,6 +47,8 @@ public:
 	void Stop();
 
 	void Update();
+
+	void DeleteMixamoAni();
 private:
 	AnimationMode animationMode; /// 재생 모드
 	ModelAnimation* currentAnimation; /// 현재 Animation

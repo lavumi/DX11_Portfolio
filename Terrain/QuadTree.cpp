@@ -35,6 +35,7 @@ void QuadTree::CreateTree()
 void QuadTree::setIndexByLOD(vector<UINT>& indexData, Frustum* frustum)
 {
 	Camera::Get()->GetPosition(&cameraPos);
+	//ClearLOD(head);
 	Scan(indexData, head, frustum);
 }
 
@@ -46,6 +47,8 @@ void QuadTree::Scan(vector<UINT>& indexData, Node * node, Frustum* frustum)
 	bool  _isVisible =  frustum->CheckSphere(node->center, node->radius);
 	if (!_isVisible)
 		return;
+
+
 	if (node->subNodes[0] != 0) {
 		for (UINT i = 0; i < 4; i++) {
 				Scan(indexData, node->subNodes[i], frustum);
@@ -424,6 +427,7 @@ void QuadTree::SetNode(Node* node, UINT startX_Idx, UINT startY_Idx, UINT width,
 	node->center = D3DXVECTOR3((float)(startX_Idx + width / 2), 0, (float)(startY_Idx + height / 2));
 	node->radius = (float)max(width, height)*1.2f;
 
+	node->LOD = 0;
 	//node->endX = startX_Idx + width - 1;
 	//node->endY = startY_Idx + height - 1;
 
@@ -474,7 +478,7 @@ void QuadTree::ClearLOD(Node * node)
 		}
 	}
 	else {
-		node->LOD = -1;
+		node->LOD = 0;
 	}
 }
 
