@@ -214,7 +214,7 @@ void ModelScene::ProcessScene()
 	ProcessMaterial();
 	ProcessNode(scene->GetRootNode(), FbxNodeAttribute::eSkeleton);
 	ProcessNode(scene->GetRootNode(), FbxNodeAttribute::eMesh);
-	ProcessAnimations();
+	//ProcessAnimations();
 	
 }
 

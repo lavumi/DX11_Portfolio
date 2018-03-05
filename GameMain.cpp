@@ -230,7 +230,7 @@ void GameMain::Update()
 
 		Camera::Get()->SetFallowCamera(nullptr);
 		i++;
-		if (i > 2)
+		if (i > 3)
 			i = 0;
 		player->SetAni(i);
 	}
@@ -281,7 +281,7 @@ void GameMain::PreRender()
 
 	}
 	//기록된 depth를 바탕으로 그림자 연산
-	//TODO 여기서 텍스쳐를 여러개 쓰고 각 텍스쳐별로 bias를 따로 설정해주어야 한다.
+	//TODO 여기서 텍스쳐를 여러개 쓰고 각 텍스쳐별로 bias를 따로 설정해주어야 한다. ( cascade shadow)
 	{
 		shadowTexture->SetTarget();
 		shadowTexture->Clear();
@@ -632,11 +632,6 @@ void GameMain::ControlCamera()
 		else if (Keyboard::Get()->KeyPress('Q'))
 			Camera::Get()->MoveDown();
 	}
-
-
-
-
-
 
 
 	if (Mouse::Get()->ButtonPress(1))

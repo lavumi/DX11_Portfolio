@@ -20,10 +20,17 @@ Character::~Character()
 void Character::Initialize(FBXModelShader* shader, Landscape* land)
 {
 
-	model->LoadFbx(L"/Contents/Models/Sword And Shield Idle.fbx");
-	model->LoadAniFbx(L"/contents/Models/jump.fbx", L"jump");
-	//model->SaveBinary(L"./Contents/Models/", L"PaladinIdle");
-	//model->LoadBinary(L"./Contents/Models/", L"PaladinIdle");
+	//model->LoadFbx(L"/Contents/Models/Sword And Shield Idle.fbx");
+	//
+	//
+	//model->LoadAniFbx(L"/contents/Models/idle.fbx", L"idle");
+	//model->LoadAniFbx(L"/contents/Models/walk.fbx", L"walk");
+	//model->LoadAniFbx(L"/contents/Models/slash.fbx", L"slash");
+	//model->LoadAniFbx(L"/contents/Models/death.fbx", L"death");
+	//
+	//
+	//model->SaveBinary(L"./Contents/Models/", L"Paladin");
+	model->LoadBinary(L"./Contents/Models/", L"Paladin");
 
 
 
