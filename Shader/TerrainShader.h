@@ -2,6 +2,7 @@
 
 #include "Shader.h"
 
+class TerrainBuffer;
 class TerrainShader : public Shader {
 public:
 	TerrainShader();
@@ -18,6 +19,9 @@ public:
 
 
 
+
+
+	TerrainBuffer* buffer;
 
 
 

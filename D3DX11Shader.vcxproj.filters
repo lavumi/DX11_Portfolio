@@ -216,9 +216,6 @@
     <ClInclude Include="Render\UserInterface.h">
       <Filter>Render</Filter>
     </ClInclude>
-    <ClInclude Include="Shader\ShaderBuffer.h">
-      <Filter>Shader</Filter>
-    </ClInclude>
     <ClInclude Include="Shader\Shader.h">
       <Filter>Shader</Filter>
     </ClInclude>
@@ -391,6 +388,12 @@
     <ClInclude Include="Camera\iFallowCamera.h">
       <Filter>Camera</Filter>
     </ClInclude>
+    <ClInclude Include="Shader\ShaderBuffer.h">
+      <Filter>Shader\Buffers</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader\TerrainBuffer.h">
+      <Filter>Shader\Buffers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="System">
@@ -425,6 +428,9 @@
     </Filter>
     <Filter Include="FX">
       <UniqueIdentifier>{caf5405c-847a-4e3d-85bb-567eb1844735}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shader\Buffers">
+      <UniqueIdentifier>{55de613b-74c9-4327-9e91-08230fb6ad24}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -515,5 +521,10 @@
     <None Include="Shader\FX\FBXModelShader.fx">
       <Filter>FX</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Shader\FX\TerrainShader.fx">
+      <Filter>FX</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

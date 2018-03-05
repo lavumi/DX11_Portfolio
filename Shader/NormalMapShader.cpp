@@ -45,7 +45,6 @@ void NormalMapShader::Render(UINT indexCount, D3DXMATRIX world, D3DXMATRIX view,
 	D3DXMatrixInverse(&invWorld, nullptr, &world);
 
 	D3DXMatrixTranspose(&extraData.invTransWorld, &invWorld);
-	extraData.shadowBias = 0.0001f;
 
 
 	ZeroMemory(&subResource, sizeof(D3D11_MAPPED_SUBRESOURCE));

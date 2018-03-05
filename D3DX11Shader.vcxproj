@@ -204,6 +204,7 @@
     <ClInclude Include="Shader\RainShader.h" />
     <ClInclude Include="Shader\ShadowShader.h" />
     <ClInclude Include="Shader\SkyplaneShader.h" />
+    <ClInclude Include="Shader\TerrainBuffer.h" />
     <ClInclude Include="Shader\TextureShader.h" />
     <ClInclude Include="Shader\NormalMapShader.h" />
     <ClInclude Include="Shader\Shader.h" />
@@ -417,6 +418,9 @@
     <None Include="Shader\FX\FBXModelShader.fx">
       <FileType>Document</FileType>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Shader\FX\TerrainShader.fx" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

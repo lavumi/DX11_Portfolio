@@ -2,6 +2,8 @@
 #include "Character.h"
 
 #include "../Model/ModelScene.h"
+#include "../Model/ModelAnimation.h"
+
 #include "../Terrain/Landscape.h"
 #include "../Camera/Camera.h"
 Character::Character()
@@ -28,8 +30,10 @@ void Character::Initialize(FBXModelShader* shader, Landscape* land)
 	//model->LoadAniFbx(L"/contents/Models/slash.fbx", L"slash");
 	//model->LoadAniFbx(L"/contents/Models/death.fbx", L"death");
 	//
+	//model->GetAnimation(L"walk")->SetRootType(RootType::RootType_FirstFrame);
 	//
 	//model->SaveBinary(L"./Contents/Models/", L"Paladin");
+
 	model->LoadBinary(L"./Contents/Models/", L"Paladin");
 
 

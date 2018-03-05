@@ -233,17 +233,6 @@ void GS(triangle PixelInput input[3], inout TriangleStream<PixelInput> TriStream
 
 
 
-
-
-
-
-
-
-
-
-
-
-
 Texture2D _map[3] : register(t10);
 
 Texture2D _lightMap : register(t1);
@@ -263,7 +252,7 @@ cbuffer Material : register(b0)
 
 cbuffer cameraSpace : register(b1)
 {
-    matrix cameraSpace;
+ //   matrix cameraSpace;
    
 };
 
@@ -334,9 +323,9 @@ PixelOut PS(PixelInput input)
     output.depthMap = float4(depthValue, 1);
 
 
-    output.viewSpaceVector.rgb = mul(input.worldNormal, (float3x3) cameraSpace);
-
-    output.viewSpaceVector.a = 1;
+   //output.viewSpaceVector.rgb = mul(input.worldNormal, (float3x3) cameraSpace);
+   //
+   //output.viewSpaceVector.a = 1;
     return output;
 }
 
