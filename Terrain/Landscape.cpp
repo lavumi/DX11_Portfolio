@@ -317,7 +317,7 @@ void Landscape::CheckGround()
 	//return;
 
 	D3DXMATRIX position, rotation, world;
-	for(int i = 0;i<vertexCount;i++){
+	for(UINT i = 0;i<vertexCount;i++){
 		if (vertexData[i].normal.y >= 0.95f && vertexData[i].position.y > -7.0f && vertexData[i].position.y <0.0f) {
 			
 			D3DXMatrixTranslation(&position, vertexData[i].position.x+0.5f, vertexData[i].position.y, vertexData[i].position.z+0.5f);

@@ -17,7 +17,7 @@ Water::Water()
 	CreateBuffer();
 
 	HRESULT hr = D3DX11CreateShaderResourceViewFromFile(D3D::GetDevice(), L"./Terrain/water_normal.jpg", nullptr, nullptr, &normal, nullptr);
-	assert(SUCCEEDED(hr));
+	assert(SUCCEEDED(hr)); 
 
 }
 

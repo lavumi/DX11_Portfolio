@@ -1,45 +1,69 @@
 #include "WaterShader.h"
+#include "WaterBuffer.h"
 
 WaterShader::WaterShader() 
 	:Shader(L"./Shader/FX/WaterShader.fx")
 {
 	CreateInputLayout(VertexTextureNormalTangent::desc, VertexTextureNormalTangent::count);
 
-	CreateBuffers();
-
-
-
-	material.ambient = D3DXCOLOR(0.5f, 0.5f, 0.5f, 1.0f);
-	material.diffuse = D3DXCOLOR(0.7f, 0.7f, 0.7f, 1.0f);
-	material.specular = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
-	material.shininess = 200;
-	material.globalAmbient = D3DXCOLOR(0.3f, 0.3f, 0.3f, 1.0f);
-
-
-	angle = 90;
-	speed = 0.001f;
-
-	waterData.translation = 0;
-	waterData.scale = 20;
-	waterData.angle =  (float)D3DX_PI / 180 * angle;
-
-
-	UserInterface::AddWave(&speed, &waterData.scale, &angle);
+	buffer = new WaterBuffer();
+	//CreateBuffers();
+	//
+	//
+	//
+	//material.ambient = D3DXCOLOR(0.5f, 0.5f, 0.5f, 1.0f);
+	//material.diffuse = D3DXCOLOR(0.7f, 0.7f, 0.7f, 1.0f);
+	//material.specular = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+	//material.shininess = 200;
+	//material.globalAmbient = D3DXCOLOR(0.3f, 0.3f, 0.3f, 1.0f);
+	//
+	//
+	//angle = 90;
+	//speed = 0.001f;
+	//
+	//waterData.translation = 0;
+	//waterData.scale = 20;
+	//waterData.angle =  (float)D3DX_PI / 180 * angle;
+	//
+	//
+	//UserInterface::AddWave(&speed, &waterData.scale, &angle);
 }
 
 
 WaterShader::~WaterShader()
 {
-	SAFE_RELEASE(LightBuffer);
-	SAFE_RELEASE(ExtraBuffer);
-	SAFE_RELEASE(MaterialBuffer);
+
+	SAFE_DELETE(buffer);
+	//SAFE_RELEASE(LightBuffer);
+	//SAFE_RELEASE(ExtraBuffer);
+	//SAFE_RELEASE(MaterialBuffer);
 }
 
 void WaterShader::Update()
 {
 
 }
+void WaterShader::Render(UINT indexCount, D3DXMATRIX world, 
+	ID3D11ShaderResourceView * normalMap, ID3D11ShaderResourceView* perlin, ID3D11ShaderResourceView * reflectionTexture, ID3D11ShaderResourceView * refractionTexture)
+{
+	buffer->SetWorld(world);
+	buffer->SetBuffers();
 
+	D3D::GetDeviceContext()->PSSetShaderResources(1, 1, &normalMap);
+	D3D::GetDeviceContext()->PSSetShaderResources(2, 1, &perlin);
+	D3D::GetDeviceContext()->PSSetShaderResources(3, 1, &reflectionTexture);
+	D3D::GetDeviceContext()->PSSetShaderResources(4, 1, &refractionTexture);
+
+	D3D::GetDeviceContext()->IASetInputLayout(layout);
+	D3D::GetDeviceContext()->VSSetShader(vertexShader, NULL, 0);
+	D3D::GetDeviceContext()->PSSetShader(pixelShader, NULL, 0);
+
+
+	D3D::GetDeviceContext()->DrawIndexed(indexCount, 0, 0);
+	Sampler::Get()->SetDefault();
+}
+
+/*
 void WaterShader::Render(UINT indexCount, D3DXMATRIX world, D3DXMATRIX view, D3DXMATRIX projection,
 	ID3D11ShaderResourceView * normalMap, ID3D11ShaderResourceView* perlin, ID3D11ShaderResourceView * reflectionTexture, ID3D11ShaderResourceView * refractionTexture)
 {
@@ -53,8 +77,7 @@ void WaterShader::Render(UINT indexCount, D3DXMATRIX world, D3DXMATRIX view, D3D
 	D3DXMatrixInverse(&invWorld, nullptr, &world);
 
 	D3DXMatrixTranspose(&extraData.invTransWorld, &invWorld);
-	extraData.shadowBias = 0.0001f;
-
+	
 
 	ZeroMemory(&subResource, sizeof(D3D11_MAPPED_SUBRESOURCE));
 	D3D::GetDeviceContext()->Map
@@ -217,3 +240,4 @@ void WaterShader::CreateBuffers()
 	assert(SUCCEEDED(hr));
 
 }
+*/

@@ -1,6 +1,5 @@
 #pragma once
 
-#include "CameraBuffer.h"
 #include "WorldBuffer.h"
 
 class Shader

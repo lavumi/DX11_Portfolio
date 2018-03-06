@@ -41,7 +41,7 @@ class Frustum;
 
 class OrthoWindowPlane;
 
-
+class VPBuffer;
 
 
 class Character;
@@ -115,7 +115,7 @@ private:
 
 	FBXModelShader* fbxShader;
 
-
+	VPBuffer* vpBuffer;
 	Character* player;
 
 	int testvalue = 0;

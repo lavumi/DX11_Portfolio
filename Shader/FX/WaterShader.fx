@@ -1,38 +1,21 @@
-cbuffer MatrixBuffer : register(b10)
+
+cbuffer MatrixBuffer : register(b12)
+{
+    matrix _viewXprojection;
+};
+
+cbuffer MatrixBuffer : register(b13)
 {
     matrix _world;
-
-
-};
-cbuffer MatrixBuffer : register(b11)
-{
-    matrix _view;
-    matrix _projection;
-
 };
 
 
-cbuffer Camera : register(b1)
+cbuffer VSBuffer : register(b0)
 {
-    float3 _cameraPosition;
-    float _paddd;
-}
-
-
-cbuffer LightBuffer : register(b2)
-{
-    matrix _lightView;
-    matrix _lightProjection;
-    float3 _lightDir;
-    float _baseLight;
-};
-
-cbuffer ExtraBuffer : register(b3)
-{
+    float4 _cameraPosition;
     matrix worldInverseTransposeMatrix;
-    float shadowBias;
-
-}
+    float3 _lightDir;
+};
 
 
 
@@ -71,7 +54,7 @@ PixelInput VS(VertexInput input)
     output.position = mul(input.position, _world);
 
 
-    float3 viewDir = _cameraPosition - output.position.xyz;
+    float3 viewDir = _cameraPosition.xyz - output.position.xyz;
 
     float3 halfVector =  normalize(normalize(-_lightDir) + normalize(viewDir));
 
@@ -93,8 +76,8 @@ PixelInput VS(VertexInput input)
 
     output.viewDir = viewDir;
    
-    output.position = mul(output.position, _view);
-    output.position = mul(output.position, _projection);
+    output.position = mul(output.position, _viewXprojection);
+
    
     output.viewPosition = output.position;
 
@@ -123,22 +106,22 @@ Texture2D _refractionMap : register(t4);
 SamplerState samp[3];
 
 
-cbuffer Material : register(b0)
+cbuffer PSBuffer : register(b0)
 {
     float4 ambient;
     float4 diffuse;
     float4 specular;
     float4 globalAmbient;
     float shininess;
-    
+    float _translation;
+    float _scale;
+    float _angle;
+
 };
 
 cbuffer water : register(b1)
 {
-    float _translation;
-    float _scale;
-    float _angle;
-    float padding;
+
 }
 
 struct PixelOutput
@@ -176,8 +159,8 @@ PixelOutput PS(PixelInput input) : SV_TARGET0
     temp_uv2.x -= _translation * cos(_angle);
     temp_uv2.y += _translation * sin(_angle);
     
+
     //노말맵 각도 회전
-    
     temp_uv -= _scale/2;
 
     float2 uv;

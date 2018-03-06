@@ -15,6 +15,8 @@ public:
 	}
 
 	void SetBuffers() {
+
+		Update();
 		if(VS_Buffer !=0)
 			D3D::GetDeviceContext()->VSSetConstantBuffers(0, 1, &VS_Buffer);
 
@@ -23,13 +25,21 @@ public:
 
 		if (PS_Buffer != 0)
 			D3D::GetDeviceContext()->PSSetConstantBuffers(0, 1, &PS_Buffer);
+
+		D3D::GetDeviceContext()->VSSetConstantBuffers(13, 1, &worldBuffer);
+
 	}
 
+	virtual void SetWorld(D3DXMATRIX world) {
+		this->world = world;
+		D3DXMatrixTranspose(&this->world, &this->world);
+		UpdateWorld();
+	}
 	virtual void Update() = 0;
 
 protected:
 	ShaderBuffer(UINT dataSize)
-		:VS_Buffer(0), GS_Buffer(0), PS_Buffer(0)
+		:VS_Buffer(0), GS_Buffer(0), PS_Buffer(0), buffer(0)
 	{
 		desc.Usage = D3D11_USAGE_DYNAMIC;
 		desc.ByteWidth = dataSize;
@@ -43,7 +53,7 @@ protected:
 	}
 
 	ShaderBuffer(UINT vs_dataSize, UINT gs_dataSize, UINT ps_dataSize)
-		:VS_Buffer(0), GS_Buffer(0), PS_Buffer(0)
+		:VS_Buffer(0), GS_Buffer(0), PS_Buffer(0), buffer(0)
 	{
 		if (vs_dataSize != 0) {
 			desc.Usage = D3D11_USAGE_DYNAMIC;
@@ -99,6 +109,7 @@ protected:
 
 	}
 
+
 	void UpdateBuffer(void* data, UINT dataSize)
 	{
 		D3D11_MAPPED_SUBRESOURCE subResource;
@@ -113,7 +124,7 @@ protected:
 		D3D::GetDeviceContext()->Unmap(buffer, 0);
 	}
 
-	void UpdateWorld(D3DXMATRIX& data) {
+	void UpdateWorld() {
 		D3D11_MAPPED_SUBRESOURCE subResource;
 
 		HRESULT hr = D3D::GetDeviceContext()->Map
@@ -121,13 +132,15 @@ protected:
 			worldBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &subResource
 		);
 
-		memcpy(subResource.pData, data, sizeof(D3DXMATRIX));
+		memcpy(subResource.pData, &world, sizeof(D3DXMATRIX));
 
 		D3D::GetDeviceContext()->Unmap(worldBuffer, 0);
 	}
 
 	void UpdateVSBuffer(void* data, UINT dataSize)
 	{
+		if (dataSize == 0)
+			return;
 		D3D11_MAPPED_SUBRESOURCE subResource;
 
 		HRESULT hr = D3D::GetDeviceContext()->Map
@@ -141,6 +154,8 @@ protected:
 	}
 	void UpdateGSBuffer(void* data, UINT dataSize)
 	{
+		if (dataSize == 0)
+			return;
 		D3D11_MAPPED_SUBRESOURCE subResource;
 
 		HRESULT hr = D3D::GetDeviceContext()->Map
@@ -154,6 +169,8 @@ protected:
 	}
 	void UpdatePSBuffer(void* data, UINT dataSize)
 	{
+		if (dataSize == 0)
+			return;
 		D3D11_MAPPED_SUBRESOURCE subResource;
 
 		HRESULT hr = D3D::GetDeviceContext()->Map
@@ -166,6 +183,10 @@ protected:
 		D3D::GetDeviceContext()->Unmap(PS_Buffer, 0);
 	}
 
+	D3DXMATRIX world;
+
+
+
 private:
 	D3D11_BUFFER_DESC desc;
 	ID3D11Buffer* buffer;
@@ -173,6 +194,6 @@ private:
 	ID3D11Buffer* GS_Buffer;
 	ID3D11Buffer* PS_Buffer;
 
-	D3DXMATRIX world;
+	
 	ID3D11Buffer* worldBuffer;
 };

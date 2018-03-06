@@ -1,16 +1,12 @@
-cbuffer MatrixBuffer : register(b10)
+cbuffer MatrixBuffer : register(b12)
+{
+    matrix _viewXprojection;
+};
+
+cbuffer MatrixBuffer : register(b13)
 {
     matrix _world;
-
-
 };
-cbuffer MatrixBuffer : register(b11)
-{
-    matrix _view;
-    matrix _projection;
-
-};
-
 cbuffer Camera : register(b1)
 {
     float3 _cameraPosition;
@@ -70,8 +66,8 @@ PixelInput VS(VertexInput input)
 	
     worldPosition = mul(output.position, _world);
 
-    output.position = mul(worldPosition, _view);
-    output.position = mul(output.position, _projection);
+    output.position = mul(worldPosition, _viewXprojection);
+   // output.position = mul(output.position, _projection);
 
     output.normal = mul(output.normal, (float3x3) _world);
     output.normal = normalize(output.normal);

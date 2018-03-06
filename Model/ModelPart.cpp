@@ -113,12 +113,8 @@ void ModelPart::Render(FBXModelShader* shader)
 	dc->PSSetShaderResources(2, 1, &specularmapView);
 
 
-	D3DXMATRIX view, projection;
-	Camera::Get()->GetView(&view);
-	D3D::Get()->GetProjection(&projection);
-
 	//Shader::Render();
-	shader->Render(indexCount, world, view, projection);
+	shader->Render(indexCount, world);
 //	dc->DrawIndexed(indexCount, 0, 0);
 }
 

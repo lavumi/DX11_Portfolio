@@ -96,9 +96,6 @@
     <ClCompile Include="Shader\WaterShader.cpp">
       <Filter>Shader</Filter>
     </ClCompile>
-    <ClCompile Include="Shader\TerrainShader.cpp">
-      <Filter>Shader</Filter>
-    </ClCompile>
     <ClCompile Include="Terrain\Water.cpp">
       <Filter>Terrain</Filter>
     </ClCompile>
@@ -183,6 +180,9 @@
     <ClCompile Include="Render\Frustum.cpp">
       <Filter>Render</Filter>
     </ClCompile>
+    <ClCompile Include="Shader\TerrainShader.cpp">
+      <Filter>Shader\ShaderRenewal</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameMain.h" />
@@ -217,12 +217,6 @@
       <Filter>Render</Filter>
     </ClInclude>
     <ClInclude Include="Shader\Shader.h">
-      <Filter>Shader</Filter>
-    </ClInclude>
-    <ClInclude Include="Shader\CameraBuffer.h">
-      <Filter>Shader</Filter>
-    </ClInclude>
-    <ClInclude Include="Shader\WorldBuffer.h">
       <Filter>Shader</Filter>
     </ClInclude>
     <ClInclude Include="Render\Rasterizer.h">
@@ -286,9 +280,6 @@
       <Filter>Shader</Filter>
     </ClInclude>
     <ClInclude Include="Shader\WaterShader.h">
-      <Filter>Shader</Filter>
-    </ClInclude>
-    <ClInclude Include="Shader\TerrainShader.h">
       <Filter>Shader</Filter>
     </ClInclude>
     <ClInclude Include="Terrain\QuadTree.h">
@@ -394,6 +385,21 @@
     <ClInclude Include="Shader\TerrainBuffer.h">
       <Filter>Shader\Buffers</Filter>
     </ClInclude>
+    <ClInclude Include="Shader\WorldBuffer.h">
+      <Filter>Shader\Buffers</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader\VPBuffer.h">
+      <Filter>Shader\Buffers</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader\TerrainShader.h">
+      <Filter>Shader\ShaderRenewal</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader\WaterBuffer.h">
+      <Filter>Shader\Buffers</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader\BaseBuffer.h">
+      <Filter>Shader\Buffers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="System">
@@ -431,6 +437,9 @@
     </Filter>
     <Filter Include="Shader\Buffers">
       <UniqueIdentifier>{55de613b-74c9-4327-9e91-08230fb6ad24}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shader\ShaderRenewal">
+      <UniqueIdentifier>{76f10240-792b-4bd4-9f6d-9cf4a506f62b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -521,10 +530,8 @@
     <None Include="Shader\FX\FBXModelShader.fx">
       <Filter>FX</Filter>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <FxCompile Include="Shader\FX\TerrainShader.fx">
+    <None Include="Shader\FX\TerrainShader.fx">
       <Filter>FX</Filter>
-    </FxCompile>
+    </None>
   </ItemGroup>
 </Project>

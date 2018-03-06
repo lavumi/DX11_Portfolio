@@ -1,19 +1,19 @@
 cbuffer VSBuffer : register(b0)
 {
-    float3 _lightDir;
-    matrix worldInverseTransposeMatrix;
     float4 clipPlane;
+    matrix worldInverseTransposeMatrix;
+    float3 _lightDir;
 };
 
 
-cbuffer MatrixBuffer : register(b14)
+cbuffer MatrixBuffer : register(b12)
+{
+    matrix _viewXprojection;
+};
+
+cbuffer MatrixBuffer : register(b13)
 {
     matrix _world;
-};
-cbuffer MatrixBuffer : register(b15)
-{
-    matrix _view;
-    matrix _projection;
 };
 
 
@@ -36,8 +36,8 @@ struct PixelInput
     float3 worldNormal : NORMAL1;
     
     float3 viewPosition : TEXCOORD5;
-
-    float clip : SV_ClipDistance0;
+   
+    float4 clip :    SV_ClipDistance0;
 };
 
 
@@ -55,11 +55,11 @@ PixelInput VS(VertexInput input)
 
     output.position = mul(input.position, _world);
     output.worldPosition = output.position.y;
-   output.position = mul(output.position, _view);
-   output.position = mul(output.position, _projection);
+    output.position = mul(output.position, _viewXprojection);
+   // output.position = mul(output.position, _projection);
    
 
-
+   
      output.viewPosition = output.position.xyw;
 
     output.uv = input.uv;
@@ -82,8 +82,8 @@ PixelInput VS(VertexInput input)
     output.worldNormal = abs(input.normal);
 
 
-    output.clip = dot(mul(input.position, _world), clipPlane);
-
+  //  output.clip = dot(mul(input.position, _world), clipPlane);
+    output.clip = clipPlane;
     return output;
 
 }
@@ -123,9 +123,11 @@ struct PixelOut
 
 PixelOut PS(PixelInput input)
 {
+    
     //float ddx = fwidth(input.worldPosition.z);
     //return ddx;
     PixelOut output;
+
 
 
     float2 uv = input.uv;
@@ -168,7 +170,7 @@ PixelOut PS(PixelInput input)
 
     float4 diffuseMap = lerp(_map[1].Sample(samp[0], uv), landNmountain, blendFactor);
 
-    diffuseMap.a = input.clip;
+   // diffuseMap.a = input.clip;
 
 
 
@@ -185,5 +187,6 @@ PixelOut PS(PixelInput input)
    //
    //output.viewSpaceVector.a = 1;
     return output;
+    
 }
 

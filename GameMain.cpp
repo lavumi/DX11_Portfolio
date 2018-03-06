@@ -41,6 +41,11 @@
 
 
 
+#include "../Shader/VPBuffer.h"
+
+
+
+
 
 bool GameMain::landscapeWireFrame = false;
 
@@ -129,6 +134,10 @@ void GameMain::Initialize()
 
 
 
+
+
+
+	vpBuffer = new VPBuffer();
 
 }
 
@@ -365,8 +374,9 @@ void GameMain::PreRender()
 		if (landscapeWireFrame)
 			Rasterizer::Get()->SetWireframe();
 
+		vpBuffer->SetVPMatrix(view, projection);
 		landscape->Render();
-		terrainShader->Render(landscape->getIndexCount(), landscape->getWorld(), view, projection, landscape->getDiffuseMap(), landscape->getNormalMap(), *blurShadowTexture->GetShadowResourceView(), waterPlane);
+		terrainShader->Render(landscape->getIndexCount(), landscape->getWorld(), landscape->getDiffuseMap(), landscape->getNormalMap(), *blurShadowTexture->GetShadowResourceView());
 		Rasterizer::Get()->SetOnCullMode();
 	}
 
@@ -394,8 +404,9 @@ void GameMain::PreRender()
 
 		if (landscapeWireFrame)
 			Rasterizer::Get()->SetWireframe();
+		vpBuffer->SetVPMatrix(view, projection);
 		landscape->Render();
-		terrainShader->Render(landscape->getIndexCount(), landscape->getWorld(), view, projection, landscape->getDiffuseMap(), landscape->getNormalMap(), *blurShadowTexture->GetShadowResourceView(), clipPlane);
+		terrainShader->Render(landscape->getIndexCount(), landscape->getWorld(), landscape->getDiffuseMap(), landscape->getNormalMap(), *blurShadowTexture->GetShadowResourceView());
 		Rasterizer::Get()->SetSolid();
 	}
 
@@ -437,13 +448,16 @@ void GameMain::PreRender()
 		}
 
 		//Rasterizer::Get()->SetWireframe();
+
+		vpBuffer->SetVPMatrix(view, projection);
 		landscape->Render();
-		terrainShader->Render(landscape->getIndexCount(), landscape->getWorld(), view, projection, landscape->getDiffuseMap(), landscape->getNormalMap(), *blurShadowTexture->GetShadowResourceView(), lake->getwaterPlane());
+		terrainShader->Render(landscape->getIndexCount(), landscape->getWorld(), landscape->getDiffuseMap(), landscape->getNormalMap(), *blurShadowTexture->GetShadowResourceView());
+		//terrainShader->Render(landscape->getIndexCount(), landscape->getWorld(), view, projection, landscape->getDiffuseMap(), landscape->getNormalMap(), *blurShadowTexture->GetShadowResourceView(), lake->getwaterPlane());
 		//Rasterizer::Get()->SetSolid();
 
 
 		lake->Render();
-		waterShader->Render(lake->indexCount, lake->world, view, projection,
+		waterShader->Render(lake->indexCount, lake->world,
 			lake->getNormalTexture(), cloud->getPerlinMap(),
 			*lakeReflectionTexture->GetShadowResourceView(),
 			*lakeRefractionTexture->GetShadowResourceView());
