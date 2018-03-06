@@ -1,10 +1,11 @@
 #include "DepthShadowShader.h"
-#include "DepthShadowBuffer.h"
+#include "LightViewBuffer.h"
+
 DepthShadowShader::DepthShadowShader()
 	:Shader(L"./Shader/FX/LightDepthShader.fx")
 {
 	CreateInputLayout(VertexTextureNormalTangent::desc, VertexTextureNormalTangent::count);
-	buffer = new DepthShadowBuffer();
+	buffer = new LightViewBuffer();
 
 }
 

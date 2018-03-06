@@ -1,25 +1,21 @@
-cbuffer MatrixBuffer : register(b10)
+
+cbuffer MatrixBuffer : register(b13)
 {
     matrix _world;
-
-
 };
-cbuffer MatrixBuffer : register(b11)
+cbuffer MatrixBuffer : register(b12)
 {
-    matrix _view;
-    matrix _projection;
-
+    matrix _viewXprojection;
 };
 
 
 
 
-cbuffer LightBuffer : register(b2)
+
+cbuffer VS_buffer : register(b0)
 {
     matrix _lightView;
     matrix _lightProjection;
-    float3 _lightDir;
-    float _baseLight;
 };
 
 
@@ -39,7 +35,6 @@ struct PixelInput
     float4 position : SV_POSITION;
     float4 lightWorldPosition : TEXCOORD0;
     float3 normal : TEXCOORD1;
-    float3 lightDir : TEXCOORD2;
 };
 
 
@@ -57,11 +52,11 @@ PixelInput VS(VertexInput input)
     output.lightWorldPosition = mul(output.lightWorldPosition, _lightView);
     output.lightWorldPosition = mul(output.lightWorldPosition, _lightProjection);
 
-    output.position = mul(output.position, _view);
-    output.position = mul(output.position, _projection);
+    output.position = mul(output.position, _viewXprojection);
+ //   output.position = mul(output.position, _projection);
 
     output.normal = input.normal;
-    output.lightDir = -_lightDir;
+
 
 
     return output;
@@ -76,14 +71,18 @@ Texture2D _lightMap : register(t0);
 
 SamplerState samp[3];
 
+cbuffer PS_buffer : register(b0)
+{
+    float4 _lightDir;
+};
 
 
 float4 PS(PixelInput input) : SV_TARGET
 {    
  
-
+    //return lightDir;
     float3 normal = normalize(input.normal);
-    float3 lightDir = normalize(input.lightDir);
+    float3 lightDir = normalize(-_lightDir.xyz);
 
 
     float shadow = 0.3f;
@@ -112,7 +111,7 @@ float4 PS(PixelInput input) : SV_TARGET
 
         if (lightDepthValue < depthValue)
         {
-           lightIntensity = saturate(dot(normal, lightDir));
+           lightIntensity = saturate(dot(normal, lightDir.xyz));
           
            if (lightIntensity > 0.01f)
            {

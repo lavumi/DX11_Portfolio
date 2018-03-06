@@ -225,7 +225,7 @@ void GameMain::Update()
 	static int i = 0;
 
 	if (Keyboard::Get()->KeyUp(VK_SPACE)) {
-		depthShadowTexture->SaveTexture(L"depthShadow.png");
+		//depthShadowTexture->SaveTexture(L"depthShadow.png");
 		//shadowTexture->SaveTexture(L"shadow.png");
 		//blurShadowTexture->SaveTexture(L"blur.png");
 		//lakeRefractionTexture->SaveTexture(L"Mirror.png");
@@ -300,15 +300,15 @@ void GameMain::PreRender()
 
 		//testplane->Render();
 		//shadowShader->Render(testplane->indexCount, testplane->world,  view, projection,*depthShadowTexture->GetShadowResourceView());
-
+		vpBuffer->SetVPMatrix(view, projection);
 		testcube->Render();
 		for (int i = 0; i < 6; i++) {
-			shadowShader->Render(testcube->indexCount, testcube->world[i], view, projection, *depthShadowTexture->GetShadowResourceView());
+			shadowShader->Render(testcube->indexCount, testcube->world[i], *depthShadowTexture->GetShadowResourceView());
 		}
 
 
 		landscape->Render();
-		shadowShader->Render(landscape->getIndexCount(), landscape->getWorld(), view, projection, *depthShadowTexture->GetShadowResourceView());
+		shadowShader->Render(landscape->getIndexCount(), landscape->getWorld(),  *depthShadowTexture->GetShadowResourceView());
 	}
 	//연산된 그림자를 blur 처리
 	{

@@ -1,11 +1,11 @@
 #pragma once
 #include "ShaderBuffer.h"
 
-class DepthShadowBuffer : public ShaderBuffer
+class ShadowBuffer : public ShaderBuffer
 {
 public:
-	DepthShadowBuffer()
-		: ShaderBuffer(sizeof(VS_DATA), 0, 0)
+	ShadowBuffer()
+		: ShaderBuffer(sizeof(VS_DATA), 0, sizeof(PS_DATA))
 	{
 		Update();
 		//UpdateVSBuffer(&vsData, 0);
@@ -24,6 +24,9 @@ private:
 		LightManager::Get()->GetView(&vsData.lightViewXProjection);
 		LightManager::Get()->GetProjection(&vsData.proj);
 		UpdateVSBuffer(&vsData, sizeof(VS_DATA));
+
+		LightManager::Get()->GetLightDirection(&psData.lightDir);
+		UpdatePSBuffer(&psData, sizeof(PS_DATA));
 	}
 
 	struct VS_DATA
@@ -33,4 +36,11 @@ private:
 	};
 	VS_DATA vsData;
 
+
+	struct PS_DATA
+	{
+		D3DXVECTOR3 lightDir;
+		float padding;
+	};
+	PS_DATA psData;
 };

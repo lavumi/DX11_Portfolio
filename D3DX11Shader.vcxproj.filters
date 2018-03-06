@@ -54,9 +54,6 @@
     <ClCompile Include="ProceduralTexture\MosaicTile.cpp">
       <Filter>ProceduralTexture</Filter>
     </ClCompile>
-    <ClCompile Include="Shader\NormalMapShader.cpp">
-      <Filter>Shader</Filter>
-    </ClCompile>
     <ClCompile Include="Render\LightManager.cpp">
       <Filter>Render</Filter>
     </ClCompile>
@@ -183,6 +180,9 @@
     <ClCompile Include="Shader\DepthShadowShader.cpp">
       <Filter>Shader\ShaderRenewal</Filter>
     </ClCompile>
+    <ClCompile Include="Shader\NormalMapShader.cpp">
+      <Filter>Shader\ShaderRenewal</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameMain.h" />
@@ -236,9 +236,6 @@
     </ClInclude>
     <ClInclude Include="ProceduralTexture\MosaicTile.h">
       <Filter>ProceduralTexture</Filter>
-    </ClInclude>
-    <ClInclude Include="Shader\NormalMapShader.h">
-      <Filter>Shader</Filter>
     </ClInclude>
     <ClInclude Include="Render\LightManager.h">
       <Filter>Render</Filter>
@@ -406,13 +403,19 @@
     <ClInclude Include="Shader\GrassShader.h">
       <Filter>Shader\ShaderRenewal</Filter>
     </ClInclude>
-    <ClInclude Include="Shader\DepthShadowBuffer.h">
-      <Filter>Shader\Buffers</Filter>
-    </ClInclude>
     <ClInclude Include="Shader\DepthShadowShader.h">
       <Filter>Shader\ShaderRenewal</Filter>
     </ClInclude>
     <ClInclude Include="Shader\NormalShaderBuffer.h">
+      <Filter>Shader\Buffers</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader\NormalMapShader.h">
+      <Filter>Shader\ShaderRenewal</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader\ShadowBuffer.h">
+      <Filter>Shader\Buffers</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader\LightViewBuffer.h">
       <Filter>Shader\Buffers</Filter>
     </ClInclude>
   </ItemGroup>
