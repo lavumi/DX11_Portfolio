@@ -1,22 +1,10 @@
-cbuffer MatrixBuffer : register(b10)
+
+
+cbuffer MatrixBuffer : register(b13)
 {
     matrix _world;
-
-
 };
 
-cbuffer MatrixBuffer : register(b0)
-{
-    matrix _view;
-    matrix _projection;
-
-};
-
-cbuffer Camera : register(b1)
-{
-    float3 _cameraPosition;
-    float _paddd;
-}
 
 struct VertexInput
 {
@@ -47,7 +35,7 @@ PixelInput VS(VertexInput input)
 Texture2D _map : register(t0);
 SamplerState samp[3];
 
-cbuffer GsData : register(b7)
+cbuffer GsData : register(b0)
 {
     float _grassHeight;
     float _grassWidth;
@@ -55,6 +43,10 @@ cbuffer GsData : register(b7)
     float _wind;
 }
 
+cbuffer MatrixBuffer : register(b12)
+{
+    matrix _viewXprojection;
+};
 
 static float rndTable[36] =
 {
@@ -74,7 +66,7 @@ void GS(point PixelInput input[1], inout TriangleStream<PixelInput> triStream)
   
  
 
-    float grassheight = _grassHeight;
+    float grassheight =  _grassHeight;
     float grasswidth = _grassWidth;
     
     PixelInput base = input[0];
@@ -106,16 +98,16 @@ void GS(point PixelInput input[1], inout TriangleStream<PixelInput> triStream)
             rndZ = (i + j * 6 + rndSeed) % 36;
 
             output.position.xz += float2(rndTable[rndX], rndTable[rndZ]);
-            output.position = mul(output.position, _view);
-            output.position = mul(output.position, _projection);
+            output.position = mul(output.position, _viewXprojection);
+           // output.position = mul(output.position, _projection);
             triStream.Append(output);
     
             output = base;
             output.position.xz += float2(rndTable[rndX], rndTable[rndZ]);
             output.position.y += grassheight / 2;
             output.position.x -= grasswidth / 2 + sin(_timer * 3.141592f) * _wind / 2;
-            output.position = mul(output.position, _view);
-            output.position = mul(output.position, _projection);
+            output.position = mul(output.position, _viewXprojection);
+          //  output.position = mul(output.position, _projection);
             triStream.Append(output);
     
     
@@ -123,8 +115,8 @@ void GS(point PixelInput input[1], inout TriangleStream<PixelInput> triStream)
             output.position.xz += float2(rndTable[rndX], rndTable[rndZ]);
             output.position.y += grassheight / 2;
             output.position.x += grasswidth / 2 - sin(_timer * 3.141592f) * _wind / 2;
-            output.position = mul(output.position, _view);
-            output.position = mul(output.position, _projection);
+            output.position = mul(output.position, _viewXprojection);
+          //  output.position = mul(output.position, _projection);
     
             triStream.Append(output);
     
@@ -136,16 +128,16 @@ void GS(point PixelInput input[1], inout TriangleStream<PixelInput> triStream)
             output.position.xz += float2(rndTable[rndX], rndTable[rndZ]);
             output.position.y += grassheight / 2;
             output.position.x -= grasswidth / 2 + sin(_timer * 3.141592f) * _wind / 2;
-            output.position = mul(output.position, _view);
-            output.position = mul(output.position, _projection);
+            output.position = mul(output.position, _viewXprojection);
+           // output.position = mul(output.position, _projection);
             triStream.Append(output);
     
             output = base;
             output.position.xz += float2(rndTable[rndX], rndTable[rndZ]);
             output.position.y += grassheight;
             output.position.x -= sin(_timer * 3.141592f) * _wind;
-            output.position = mul(output.position, _view);
-            output.position = mul(output.position, _projection);
+            output.position = mul(output.position, _viewXprojection);
+           // output.position = mul(output.position, _projection);
             triStream.Append(output);
     
     

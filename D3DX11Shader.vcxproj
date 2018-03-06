@@ -194,12 +194,17 @@
     <ClInclude Include="Render\UserInterface.h" />
     <ClInclude Include="Render\VertexLayout.h" />
     <ClInclude Include="Shader\BaseBuffer.h" />
+    <ClInclude Include="Shader\BlurBuffer.h" />
     <ClInclude Include="Shader\BlurShader.h" />
+    <ClInclude Include="Shader\ColorBuffer.h" />
     <ClInclude Include="Shader\ColorShader.h" />
+    <ClInclude Include="Shader\DepthShadowBuffer.h" />
     <ClInclude Include="Shader\DepthShadowShader.h" />
     <ClInclude Include="Shader\FBXModelShader.h" />
+    <ClInclude Include="Shader\GrassBuffer.h" />
     <ClInclude Include="Shader\GrassShader.h" />
     <ClInclude Include="Shader\InstanceTextureShader.h" />
+    <ClInclude Include="Shader\NormalShaderBuffer.h" />
     <ClInclude Include="Shader\RainShader.h" />
     <ClInclude Include="Shader\ShadowShader.h" />
     <ClInclude Include="Shader\SkyplaneShader.h" />

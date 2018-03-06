@@ -24,6 +24,7 @@ void FBXModelShader::Render(UINT indexCount, D3DXMATRIX world)
 {
 
 	buffer->SetWorld(world);
+	buffer->SetBuffers();
 	D3D::GetDeviceContext()->IASetInputLayout(layout);
 	D3D::GetDeviceContext()->VSSetShader(vertexShader, NULL, 0);
 	D3D::GetDeviceContext()->PSSetShader(pixelShader, NULL, 0);

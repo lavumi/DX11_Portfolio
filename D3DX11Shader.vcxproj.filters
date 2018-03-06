@@ -57,9 +57,6 @@
     <ClCompile Include="Shader\NormalMapShader.cpp">
       <Filter>Shader</Filter>
     </ClCompile>
-    <ClCompile Include="Shader\DepthShadowShader.cpp">
-      <Filter>Shader</Filter>
-    </ClCompile>
     <ClCompile Include="Render\LightManager.cpp">
       <Filter>Render</Filter>
     </ClCompile>
@@ -81,19 +78,10 @@
     <ClCompile Include="Object\OrthoWindowPlane.cpp">
       <Filter>Object</Filter>
     </ClCompile>
-    <ClCompile Include="Shader\BlurShader.cpp">
-      <Filter>Shader</Filter>
-    </ClCompile>
     <ClCompile Include="Shader\TextureShader.cpp">
       <Filter>Shader</Filter>
     </ClCompile>
-    <ClCompile Include="Shader\ColorShader.cpp">
-      <Filter>Shader</Filter>
-    </ClCompile>
     <ClCompile Include="Shader\SkyplaneShader.cpp">
-      <Filter>Shader</Filter>
-    </ClCompile>
-    <ClCompile Include="Shader\WaterShader.cpp">
       <Filter>Shader</Filter>
     </ClCompile>
     <ClCompile Include="Terrain\Water.cpp">
@@ -132,9 +120,6 @@
     <ClCompile Include="Terrain\RainCone.cpp">
       <Filter>Terrain</Filter>
     </ClCompile>
-    <ClCompile Include="Shader\GrassShader.cpp">
-      <Filter>Shader</Filter>
-    </ClCompile>
     <ClCompile Include="Model\Model.cpp">
       <Filter>Model</Filter>
     </ClCompile>
@@ -171,9 +156,6 @@
     <ClCompile Include="Utility\String.cpp">
       <Filter>Utility</Filter>
     </ClCompile>
-    <ClCompile Include="Shader\FBXModelShader.cpp">
-      <Filter>Shader</Filter>
-    </ClCompile>
     <ClCompile Include="Object\Character.cpp">
       <Filter>Object</Filter>
     </ClCompile>
@@ -181,6 +163,24 @@
       <Filter>Render</Filter>
     </ClCompile>
     <ClCompile Include="Shader\TerrainShader.cpp">
+      <Filter>Shader\ShaderRenewal</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader\WaterShader.cpp">
+      <Filter>Shader\ShaderRenewal</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader\FBXModelShader.cpp">
+      <Filter>Shader\ShaderRenewal</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader\BlurShader.cpp">
+      <Filter>Shader\ShaderRenewal</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader\ColorShader.cpp">
+      <Filter>Shader\ShaderRenewal</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader\GrassShader.cpp">
+      <Filter>Shader\ShaderRenewal</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader\DepthShadowShader.cpp">
       <Filter>Shader\ShaderRenewal</Filter>
     </ClCompile>
   </ItemGroup>
@@ -240,9 +240,6 @@
     <ClInclude Include="Shader\NormalMapShader.h">
       <Filter>Shader</Filter>
     </ClInclude>
-    <ClInclude Include="Shader\DepthShadowShader.h">
-      <Filter>Shader</Filter>
-    </ClInclude>
     <ClInclude Include="Render\LightManager.h">
       <Filter>Render</Filter>
     </ClInclude>
@@ -264,22 +261,13 @@
     <ClInclude Include="Object\OrthoWindowPlane.h">
       <Filter>Object</Filter>
     </ClInclude>
-    <ClInclude Include="Shader\BlurShader.h">
-      <Filter>Shader</Filter>
-    </ClInclude>
     <ClInclude Include="Render\Frustum.h">
       <Filter>Render</Filter>
     </ClInclude>
     <ClInclude Include="Shader\TextureShader.h">
       <Filter>Shader</Filter>
     </ClInclude>
-    <ClInclude Include="Shader\ColorShader.h">
-      <Filter>Shader</Filter>
-    </ClInclude>
     <ClInclude Include="Shader\SkyplaneShader.h">
-      <Filter>Shader</Filter>
-    </ClInclude>
-    <ClInclude Include="Shader\WaterShader.h">
       <Filter>Shader</Filter>
     </ClInclude>
     <ClInclude Include="Terrain\QuadTree.h">
@@ -317,9 +305,6 @@
     </ClInclude>
     <ClInclude Include="Terrain\RainCone.h">
       <Filter>Terrain</Filter>
-    </ClInclude>
-    <ClInclude Include="Shader\GrassShader.h">
-      <Filter>Shader</Filter>
     </ClInclude>
     <ClInclude Include="Model\Model.h">
       <Filter>Model</Filter>
@@ -370,9 +355,6 @@
     <ClInclude Include="Utility\String.h">
       <Filter>Utility</Filter>
     </ClInclude>
-    <ClInclude Include="Shader\FBXModelShader.h">
-      <Filter>Shader</Filter>
-    </ClInclude>
     <ClInclude Include="Object\Character.h">
       <Filter>Object</Filter>
     </ClInclude>
@@ -398,6 +380,39 @@
       <Filter>Shader\Buffers</Filter>
     </ClInclude>
     <ClInclude Include="Shader\BaseBuffer.h">
+      <Filter>Shader\Buffers</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader\WaterShader.h">
+      <Filter>Shader\ShaderRenewal</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader\BlurBuffer.h">
+      <Filter>Shader\Buffers</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader\BlurShader.h">
+      <Filter>Shader\ShaderRenewal</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader\ColorBuffer.h">
+      <Filter>Shader\Buffers</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader\ColorShader.h">
+      <Filter>Shader\ShaderRenewal</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader\FBXModelShader.h">
+      <Filter>Shader\ShaderRenewal</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader\GrassBuffer.h">
+      <Filter>Shader\Buffers</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader\GrassShader.h">
+      <Filter>Shader\ShaderRenewal</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader\DepthShadowBuffer.h">
+      <Filter>Shader\Buffers</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader\DepthShadowShader.h">
+      <Filter>Shader\ShaderRenewal</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader\NormalShaderBuffer.h">
       <Filter>Shader\Buffers</Filter>
     </ClInclude>
   </ItemGroup>

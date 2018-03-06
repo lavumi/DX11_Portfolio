@@ -21,9 +21,7 @@ public:
 	//	ID3D11ShaderResourceView* lightMap, D3DXPLANE clipPlane
 	//	);
 
-
-
-
+	void SetPlane(D3DXPLANE& plane);
 
 	TerrainBuffer* buffer;
 

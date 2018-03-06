@@ -1,16 +1,19 @@
 #include "BlurShader.h"
+#include "BlurBuffer.h"
 
 BlurShader::BlurShader()
 	:Shader(L"./Shader/FX/BlurShader.fx")
 {
 	CreateInputLayout(VertexTexture::desc, VertexTexture::count);
 
-	CreateBuffers();
+	buffer = new BlurBuffer();
+	//CreateBuffers();
 }
 
 BlurShader::~BlurShader()
 {
-	SAFE_RELEASE(screenSizeBuffer);
+	SAFE_DELETE(buffer);
+	//SAFE_RELEASE(screenSizeBuffer);
 }
 
 void BlurShader::Update()
@@ -18,10 +21,11 @@ void BlurShader::Update()
 
 }
 
-void BlurShader::Render(UINT indexCount, D3DXMATRIX world, D3DXMATRIX view, D3DXMATRIX projection, ID3D11ShaderResourceView* diffuse)
+void BlurShader::Render(UINT indexCount, D3DXMATRIX world, ID3D11ShaderResourceView* diffuse)
 {
+	buffer->SetWorld(world);
+	buffer->SetBuffers();
 
-	SetMatrix(world, view, projection);
 
 	D3D::GetDeviceContext()->VSSetConstantBuffers(10, 1, &wBuffer);
 	D3D::GetDeviceContext()->VSSetConstantBuffers(11, 1, &vpBuffer);
@@ -32,14 +36,14 @@ void BlurShader::Render(UINT indexCount, D3DXMATRIX world, D3DXMATRIX view, D3DX
 
 
 
-	D3D::GetDeviceContext()->VSSetConstantBuffers(2, 1, &screenSizeBuffer);
+	//D3D::GetDeviceContext()->VSSetConstantBuffers(2, 1, &screenSizeBuffer);
 
 	if(diffuse != nullptr)
 		D3D::GetDeviceContext()->PSSetShaderResources(0, 1, &diffuse);
 
 	D3D::GetDeviceContext()->DrawIndexed(indexCount, 0, 0);
 }
-
+/*
 void BlurShader::CreateBuffers()
 {
 	D3D11_BUFFER_DESC desc;
@@ -67,3 +71,4 @@ void BlurShader::CreateBuffers()
 	hr = D3D::GetDevice()->CreateBuffer(&desc, &data, &screenSizeBuffer);
 	assert(SUCCEEDED(hr));
 }
+*/

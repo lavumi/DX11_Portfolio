@@ -30,12 +30,12 @@ public:
 
 	}
 
-	virtual void SetWorld(D3DXMATRIX world) {
-		this->world = world;
-		D3DXMatrixTranspose(&this->world, &this->world);
+	virtual void SetWorld(D3DXMATRIX _world) {
+		world = _world;
+		D3DXMatrixTranspose(&world, &world);
 		UpdateWorld();
 	}
-	virtual void Update() = 0;
+	
 
 protected:
 	ShaderBuffer(UINT dataSize)
@@ -109,6 +109,7 @@ protected:
 
 	}
 
+	virtual void Update() = 0;
 
 	void UpdateBuffer(void* data, UINT dataSize)
 	{

@@ -18,30 +18,12 @@ void ColorShader::Update()
 
 }
 
-void ColorShader::Render(UINT indexCount, D3DXMATRIX world, D3DXMATRIX view, D3DXMATRIX projection,D3DXCOLOR color)
+void ColorShader::Render(UINT indexCount)
 {
-	SetMatrix(world, view, projection);
-
-	D3D::GetDeviceContext()->VSSetConstantBuffers(10, 1, &wBuffer);
-	D3D::GetDeviceContext()->VSSetConstantBuffers(11, 1, &vpBuffer);
-
-	D3D11_MAPPED_SUBRESOURCE subResource;
-	ZeroMemory(&subResource, sizeof(D3D11_MAPPED_SUBRESOURCE));
-	D3D::GetDeviceContext()->Map
-	(
-		colorBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &subResource
-	);
-
-	memcpy(subResource.pData, &color, sizeof(D3DXCOLOR));
-
-	D3D::GetDeviceContext()->Unmap(colorBuffer, 0);
-
-
 
 	D3D::GetDeviceContext()->IASetInputLayout(layout);
 	D3D::GetDeviceContext()->VSSetShader(vertexShader, NULL, 0);
 	D3D::GetDeviceContext()->PSSetShader(pixelShader, NULL, 0);
-	D3D::GetDeviceContext()->PSSetConstantBuffers(0, 1, &colorBuffer);
 
 
 	D3D::GetDeviceContext()->DrawIndexed(indexCount, 0, 0);

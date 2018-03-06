@@ -69,6 +69,12 @@ void TerrainShader::Render(UINT indexCount, D3DXMATRIX world,
 	D3D::GetDeviceContext()->GSSetShader(NULL, NULL, 0);
 }
 
+void TerrainShader::SetPlane(D3DXPLANE & plane)
+{
+	buffer->SetPLANE(plane);
+}
+
+
 
 
 /*

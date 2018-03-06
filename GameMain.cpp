@@ -225,7 +225,7 @@ void GameMain::Update()
 	static int i = 0;
 
 	if (Keyboard::Get()->KeyUp(VK_SPACE)) {
-		//depthShadowTexture->SaveTexture(L"depthShadow.png");
+		depthShadowTexture->SaveTexture(L"depthShadow.png");
 		//shadowTexture->SaveTexture(L"shadow.png");
 		//blurShadowTexture->SaveTexture(L"blur.png");
 		//lakeRefractionTexture->SaveTexture(L"Mirror.png");
@@ -281,11 +281,11 @@ void GameMain::PreRender()
 
 		testcube->Render();
 		for (int i = 0; i < 6; i++) {
-			depthShadowShader->Render(testcube->indexCount, testcube->world[i], view, projection);
+			depthShadowShader->Render(testcube->indexCount, testcube->world[i]);
 		}
 
 		landscape->Render();
-		depthShadowShader->Render(landscape->getIndexCount(), landscape->getWorld(), view, projection);
+		depthShadowShader->Render(landscape->getIndexCount(), landscape->getWorld());
 
 
 	}
@@ -319,8 +319,11 @@ void GameMain::PreRender()
 		Camera::Get()->GetDefaultView(&view);
 		D3D::Get()->GetOrthoProjection(&projection);
 
+
+		
 		orthoWindow->Render();
-		blurShader->Render(orthoWindow->GetIndexCount(), orthoWindow->GetWorld(), view, projection, *shadowTexture->GetShadowResourceView());
+		vpBuffer->SetVPMatrix(view, projection);
+		blurShader->Render(orthoWindow->GetIndexCount(), orthoWindow->GetWorld(), *shadowTexture->GetShadowResourceView());
 	}
 
 	//호수의 반사평면 그리기
@@ -366,15 +369,23 @@ void GameMain::PreRender()
 		D3D::Get()->SetDepthStencilState(D3D::DS_state::onState);
 		Rasterizer::Get()->SetFrontCullMode();
 
+
+
+		vpBuffer->SetVPMatrix(view, projection);
 		testcube->Render();
 		for (int i = 0; i < 6; i++) {
-			normalMapShader->Render(testcube->indexCount, testcube->world[i], view, projection, testcube->diffuseMap, testcube->normalMap, testcube->heightMap, *blurShadowTexture->GetShadowResourceView());
+			normalMapShader->Render(testcube->indexCount, testcube->world[i],  testcube->diffuseMap, testcube->normalMap, testcube->heightMap, *blurShadowTexture->GetShadowResourceView());
 		}
 
 		if (landscapeWireFrame)
 			Rasterizer::Get()->SetWireframe();
 
-		vpBuffer->SetVPMatrix(view, projection);
+
+
+		D3DXPLANE clipPlane = lake->getwaterPlane();
+		terrainShader->SetPlane(clipPlane);
+
+
 		landscape->Render();
 		terrainShader->Render(landscape->getIndexCount(), landscape->getWorld(), landscape->getDiffuseMap(), landscape->getNormalMap(), *blurShadowTexture->GetShadowResourceView());
 		Rasterizer::Get()->SetOnCullMode();
@@ -400,10 +411,8 @@ void GameMain::PreRender()
 		//호수 아랫면을 랜더링하게 클립면을 바꿔준다
 		D3DXPLANE clipPlane = lake->getwaterPlane();
 		clipPlane *= -1;
+		terrainShader->SetPlane(clipPlane);
 
-
-		if (landscapeWireFrame)
-			Rasterizer::Get()->SetWireframe();
 		vpBuffer->SetVPMatrix(view, projection);
 		landscape->Render();
 		terrainShader->Render(landscape->getIndexCount(), landscape->getWorld(), landscape->getDiffuseMap(), landscape->getNormalMap(), *blurShadowTexture->GetShadowResourceView());
@@ -440,16 +449,18 @@ void GameMain::PreRender()
 		Rasterizer::Get()->SetOnCullMode();
 
 
-
+		vpBuffer->SetVPMatrix(view, projection);
 
 		testcube->Render();
 		for (int i = 0; i < 6; i++) {
-			normalMapShader->Render(testcube->indexCount, testcube->world[i], view, projection, testcube->diffuseMap, testcube->normalMap, testcube->heightMap, *blurShadowTexture->GetShadowResourceView());
+			normalMapShader->Render(testcube->indexCount, testcube->world[i],  testcube->diffuseMap, testcube->normalMap, testcube->heightMap, *blurShadowTexture->GetShadowResourceView());
 		}
 
 		//Rasterizer::Get()->SetWireframe();
 
-		vpBuffer->SetVPMatrix(view, projection);
+		D3DXPLANE clipPlane = lake->getwaterPlane();
+		terrainShader->SetPlane(clipPlane);
+
 		landscape->Render();
 		terrainShader->Render(landscape->getIndexCount(), landscape->getWorld(), landscape->getDiffuseMap(), landscape->getNormalMap(), *blurShadowTexture->GetShadowResourceView());
 		//terrainShader->Render(landscape->getIndexCount(), landscape->getWorld(), view, projection, landscape->getDiffuseMap(), landscape->getNormalMap(), *blurShadowTexture->GetShadowResourceView(), lake->getwaterPlane());
@@ -463,8 +474,9 @@ void GameMain::PreRender()
 			*lakeRefractionTexture->GetShadowResourceView());
 
 
-		//grass->Render();
-		//grassShader->Render(grass->getInstanceCount(), view, projection, *noise->GetPerlinNoise());
+		vpBuffer->SetVPMatrix(view, projection, 1);
+		grass->Render();
+		grassShader->Render(grass->getInstanceCount(), *noise->GetPerlinNoise());
 
 
 		player->Render();

@@ -37,7 +37,7 @@ struct PixelInput
     
     float3 viewPosition : TEXCOORD5;
    
-    float4 clip :    SV_ClipDistance0;
+    float4 clip : SV_ClipDistance0;
 };
 
 
@@ -82,8 +82,8 @@ PixelInput VS(VertexInput input)
     output.worldNormal = abs(input.normal);
 
 
-  //  output.clip = dot(mul(input.position, _world), clipPlane);
-    output.clip = clipPlane;
+    output.clip = dot(mul(input.position, _world), clipPlane);
+   // output.clip = clipPlane;
     return output;
 
 }

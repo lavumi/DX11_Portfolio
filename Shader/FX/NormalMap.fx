@@ -1,37 +1,21 @@
-cbuffer MatrixBuffer : register(b10)
+
+cbuffer MatrixBuffer : register(b12)
+{
+    matrix _viewXprojection;
+};
+
+cbuffer MatrixBuffer : register(b13)
 {
     matrix _world;
-
-
-};
-cbuffer MatrixBuffer : register(b11)
-{
-    matrix _view;
-    matrix _projection;
-
 };
 
 
-cbuffer Camera : register(b1)
+cbuffer VSBuffer : register(b0)
 {
-    float3 _cameraPosition;
-    float _paddd;
-}
-
-
-cbuffer LightBuffer : register(b2)
-{
-    matrix _lightView;
-    matrix _lightProjection;
+    float4 _cameraPosition;
+    matrix worldInverseTransposeMatrix;
     float3 _lightDir;
-    float _baseLight;
 };
-
-cbuffer ExtraBuffer : register(b3)
-{
-    matrix _inverseWorld;
-    float shadowBias;
-}
 
 
 
@@ -69,12 +53,12 @@ PixelInput VS(VertexInput input)
     output.position = mul(input.position, _world);
 
 
-    float3 viewDir = _cameraPosition - output.position.xyz;
+    float3 viewDir = _cameraPosition.xyz - output.position.xyz;
     float3 halfVector = normalize(-_lightDir) + normalize(viewDir);
 
 
-    float3 n = mul(input.normal, (float3x3) _inverseWorld);
-    float3 t = mul(input.tangent, (float3x3) _inverseWorld);
+    float3 n = mul(input.normal, (float3x3) worldInverseTransposeMatrix);
+    float3 t = mul(input.tangent, (float3x3) worldInverseTransposeMatrix);
     float3 b = cross(n, t);
     float3x3 tbnMatrix = float3x3(t.x, b.x, n.x,
 	                              t.y, b.y, n.y,
@@ -86,8 +70,8 @@ PixelInput VS(VertexInput input)
     output.viewDir = mul(viewDir, tbnMatrix);
 
    
-    output.position = mul(output.position, _view);
-    output.position = mul(output.position, _projection);
+    output.position = mul(output.position, _viewXprojection);
+   // output.position = mul(output.position, _projection);
    
     output.viewPosition = output.position;
 
@@ -111,22 +95,16 @@ Texture2D _lightMap : register(t3);
 SamplerState samp[3];
 
 
-cbuffer Material : register(b0)
+cbuffer PSBuffer : register(b0)
 {
     float4 ambient;
     float4 diffuse;
     float4 specular;
     float4 globalAmbient;
     float shininess;
-    
-};
-
-cbuffer parallex : register(b1)
-{
     float scale;
     float layer;
-    float drawTexture;
-}
+};
 
 float4 PStest(PixelInput input) : SV_TARGET
 {

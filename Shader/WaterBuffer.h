@@ -33,7 +33,7 @@ public:
 		psData.diffuse = diffuse;
 		psData.globalAmbient = globalAmbient;
 
-		UpdatePSBuffer(&psData, sizeof(PS_DATA));
+		//UpdatePSBuffer(&psData, sizeof(PS_DATA));
 	}
 
 	void SetWater(float speed, float angle, float scale) {
@@ -49,7 +49,7 @@ public:
 		D3DXMatrixInverse(&invWorld, nullptr, &world);
 		D3DXMatrixTranspose(&vsData.invTransWorld, &invWorld);
 
-		UpdateVSBuffer(&vsData, sizeof(VS_DATA));
+		//UpdateVSBuffer(&vsData, sizeof(VS_DATA));
 	}
 
 	void Update()

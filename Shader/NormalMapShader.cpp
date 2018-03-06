@@ -1,28 +1,31 @@
 #include "NormalMapShader.h"
+#include "NormalShaderBuffer.h"
 
 NormalMapShader::NormalMapShader()
 	:Shader(L"./Shader/FX/NormalMap.fx")
 {
 	CreateInputLayout(VertexTextureNormalTangent::desc, VertexTextureNormalTangent::count);
 
-	CreateBuffers();
-	parallexData.scale = 0.1f;
-	parallexData.layer = 32;
 
-
-	material.ambient = D3DXCOLOR(0.5f, 0.5f, 0.5f, 1.0f);
-	material.diffuse = D3DXCOLOR(0.7f, 0.7f, 0.7f, 1.0f);
-	material.specular = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
-	material.shininess = 70;
-	material.globalAmbient = D3DXCOLOR(0.6f, 0.6f, 0.6f, 1.0f);
+	buffer = new NormalShaderBuffer();
+	//CreateBuffers();
+	//parallexData.scale = 0.1f;
+	//parallexData.layer = 32;
+	//
+	//
+	//material.ambient = D3DXCOLOR(0.5f, 0.5f, 0.5f, 1.0f);
+	//material.diffuse = D3DXCOLOR(0.7f, 0.7f, 0.7f, 1.0f);
+	//material.specular = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+	//material.shininess = 70;
+	//material.globalAmbient = D3DXCOLOR(0.6f, 0.6f, 0.6f, 1.0f);
 }
 
 NormalMapShader::~NormalMapShader()
 {
-	SAFE_RELEASE(LightBuffer);
-	SAFE_RELEASE(ExtraBuffer);
-	SAFE_RELEASE(MaterialBuffer);
-	SAFE_RELEASE(parallaxBuffer);
+	//SAFE_RELEASE(LightBuffer);
+	//SAFE_RELEASE(ExtraBuffer);
+	//SAFE_RELEASE(MaterialBuffer);
+	//SAFE_RELEASE(parallaxBuffer);
 
 }
 
@@ -31,10 +34,10 @@ void NormalMapShader::Update()
 
 }
 
-void NormalMapShader::Render(UINT indexCount, D3DXMATRIX world, D3DXMATRIX view, D3DXMATRIX projection,
+void NormalMapShader::Render(UINT indexCount, D3DXMATRIX world, 
 	ID3D11ShaderResourceView * diffuseMap, ID3D11ShaderResourceView * normalMap, ID3D11ShaderResourceView * heightMap, ID3D11ShaderResourceView* lightMap)
 {
-	SetMatrix(world, view, projection);
+	/*SetMatrix(world, view, projection);
 
 	D3D::GetDeviceContext()->VSSetConstantBuffers(10, 1, &wBuffer);
 	D3D::GetDeviceContext()->VSSetConstantBuffers(11, 1, &vpBuffer);
@@ -106,8 +109,17 @@ void NormalMapShader::Render(UINT indexCount, D3DXMATRIX world, D3DXMATRIX view,
 	memcpy(subResource.pData, LightManager::Get()->GetLightData(), sizeof(LightManager::LightData));
 
 	D3D::GetDeviceContext()->Unmap(LightBuffer, 0);
+	
+		D3D::GetDeviceContext()->VSSetConstantBuffers(1, 1, &cameraPosBuffer);
+	D3D::GetDeviceContext()->VSSetConstantBuffers(2, 1, &LightBuffer);
+	D3D::GetDeviceContext()->VSSetConstantBuffers(3, 1, &ExtraBuffer);
 
+	D3D::GetDeviceContext()->PSSetConstantBuffers(0, 1, &MaterialBuffer);
+	D3D::GetDeviceContext()->PSSetConstantBuffers(1, 1, &parallaxBuffer);
+	*/
 
+	buffer->SetWorld(world);
+	buffer->SetBuffers();
 
 
 	D3D::GetDeviceContext()->PSSetShaderResources(0, 1, &diffuseMap);
@@ -116,12 +128,7 @@ void NormalMapShader::Render(UINT indexCount, D3DXMATRIX world, D3DXMATRIX view,
 	D3D::GetDeviceContext()->PSSetShaderResources(3, 1, &lightMap);
 
 
-	D3D::GetDeviceContext()->VSSetConstantBuffers(1, 1, &cameraPosBuffer);
-	D3D::GetDeviceContext()->VSSetConstantBuffers(2, 1, &LightBuffer);
-	D3D::GetDeviceContext()->VSSetConstantBuffers(3, 1, &ExtraBuffer);
 
-	D3D::GetDeviceContext()->PSSetConstantBuffers(0, 1, &MaterialBuffer);
-	D3D::GetDeviceContext()->PSSetConstantBuffers(1, 1, &parallaxBuffer);
 	
 	D3D::GetDeviceContext()->IASetInputLayout(layout);
 	D3D::GetDeviceContext()->VSSetShader(vertexShader, NULL, 0);
@@ -132,7 +139,7 @@ void NormalMapShader::Render(UINT indexCount, D3DXMATRIX world, D3DXMATRIX view,
 	Sampler::Get()->SetDefault();
 
 }
-
+/*
 void NormalMapShader::CreateBuffers()
 {
 	D3D11_BUFFER_DESC desc;
@@ -200,3 +207,4 @@ void NormalMapShader::CreateBuffers()
 	assert(SUCCEEDED(hr));
 
 }
+*/

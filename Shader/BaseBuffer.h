@@ -12,10 +12,6 @@ public:
 		//UpdatePSBuffer(&psData, 0);
 	}
 
-	//void SetWorld(D3DXMATRIX& world) {
-	//	ShaderBuffer::SetWorld(world);
-	//}
-
 	void Update()
 	{
 	}

@@ -1,18 +1,15 @@
-cbuffer MatrixBuffer : register(b10)
+cbuffer MatrixBuffer : register(b12)
+{
+    matrix _viewXprojection;
+};
+
+cbuffer MatrixBuffer : register(b13)
 {
     matrix _world;
-
-
-};
-cbuffer MatrixBuffer : register(b11)
-{
-    matrix _view;
-    matrix _projection;
-
 };
 
 
-cbuffer ScreenSize : register(b2)
+cbuffer ScreenSize : register(b0)
 {
     float2 ScreenSize;
     float2 padding;
@@ -64,9 +61,7 @@ PixelInput VS(VertexInput input)
 
 
     output.position = mul(input.position, _world);
-    output.position = mul(output.position, _view);
-    output.position = mul(output.position, _projection);
-    
+    output.position = mul(output.position, _viewXprojection);
     
     pixelSize = 4.0f / ScreenSize.x;
 

@@ -1,23 +1,18 @@
-cbuffer MatrixBuffer : register(b10)
+
+cbuffer MatrixBuffer : register(b13)
 {
     matrix _world;
-
-
 };
-cbuffer MatrixBuffer : register(b11)
+cbuffer MatrixBuffer : register(b12)
 {
-    matrix _view;
-    matrix _projection;
-
+    matrix _viewXprojection;
 };
 
 
-cbuffer LightView : register(b2)
+cbuffer LightView : register(b0)
 {
     matrix _lightView;
     matrix _lightProjection;
-    float3 _lightDir;
-    float _baseLight;
 };
 
 
@@ -58,6 +53,6 @@ float4 PS(PixelInput input) : SV_Target
 
     depthValue = input.worldPosotion.z / input.worldPosotion.w;
 
-    return depthValue; 
+    return depthValue;
 
 }

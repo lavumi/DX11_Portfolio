@@ -29,11 +29,25 @@ void LightManager::Update()
 	D3DXVec3Normalize(&lightData.lightDirection, &lightData.lightDirection);
 
 
+
+
 	D3DXMatrixLookAtLH(&lightData.lightView, &(position - lightData.lightDirection * 300), &(position), &up);
-	D3DXMatrixOrthoLH(&lightData.lightProjection,500, 500, 0.1f, 500);
+	D3DXMatrixOrthoLH(&lightData.lightProjection, 500, 500, 0.1f, 500);
+	
+	
+	
 	
 	D3DXMatrixTranspose(&lightData.lightView, &lightData.lightView);
 	D3DXMatrixTranspose(&lightData.lightProjection, &lightData.lightProjection);
+	//D3DXMATRIX view, projection;
+	//
+	//D3DXMatrixLookAtLH(&view, &(position - lightData.lightDirection * 300), &(position), &up);
+	//D3DXMatrixOrthoLH(&projection,500, 500, 0.1f, 500);
+	//
+	//view *= projection;
+	//
+	//D3DXMatrixTranspose(&lightData.lightView, &view);
+	
 }
 
 void LightManager::Delete()
