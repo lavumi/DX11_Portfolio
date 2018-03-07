@@ -7,7 +7,7 @@ NormalMapShader::NormalMapShader()
 	CreateInputLayout(VertexTextureNormalTangent::desc, VertexTextureNormalTangent::count);
 
 
-	buffer = new NormalShaderBuffer();
+    buffer = new NormalShaderBuffer();
 	//CreateBuffers();
 	//parallexData.scale = 0.1f;
 	//parallexData.layer = 32;
@@ -34,7 +34,7 @@ void NormalMapShader::Update()
 
 }
 
-void NormalMapShader::Render(UINT indexCount, D3DXMATRIX world, 
+void NormalMapShader::Render(
 	ID3D11ShaderResourceView * diffuseMap, ID3D11ShaderResourceView * normalMap, ID3D11ShaderResourceView * heightMap, ID3D11ShaderResourceView* lightMap)
 {
 	/*SetMatrix(world, view, projection);
@@ -118,7 +118,7 @@ void NormalMapShader::Render(UINT indexCount, D3DXMATRIX world,
 	D3D::GetDeviceContext()->PSSetConstantBuffers(1, 1, &parallaxBuffer);
 	*/
 
-	buffer->SetWorld(world);
+	//buffer->SetWorld(world);
 	buffer->SetBuffers();
 
 
@@ -135,7 +135,7 @@ void NormalMapShader::Render(UINT indexCount, D3DXMATRIX world,
 	D3D::GetDeviceContext()->PSSetShader(pixelShader, NULL, 0);
 
 
-	D3D::GetDeviceContext()->DrawIndexed(indexCount, 0, 0);
+	//D3D::GetDeviceContext()->DrawIndexed(indexCount, 0, 0);
 	Sampler::Get()->SetDefault();
 
 }

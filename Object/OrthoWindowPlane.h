@@ -15,12 +15,12 @@ public:
 	UINT GetIndexCount() {
 		return indexCount;
 	}
-	D3DXMATRIX GetWorld();
+//	D3DXMATRIX GetWorld();
 
 
 private:
 
-
+	WorldBuffer * wBuffer;
 
 
 

@@ -22,10 +22,10 @@ void SkyplaneShader::Update()
 
 }
 
-void SkyplaneShader::Render(UINT indexCount, D3DXMATRIX world,
+void SkyplaneShader::Render(
 	ID3D11ShaderResourceView* perlin)
 {
-	buffer->SetWorld(world);
+
 	buffer->SetBuffers();
 
 	D3D::GetDeviceContext()->PSSetShaderResources(0, 1, &perlin);
@@ -40,7 +40,7 @@ void SkyplaneShader::Render(UINT indexCount, D3DXMATRIX world,
 
 
 
-	D3D::GetDeviceContext()->DrawIndexed(indexCount, 0, 0);
+	
 }
 
 

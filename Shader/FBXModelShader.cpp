@@ -23,7 +23,7 @@ void FBXModelShader::Update()
 void FBXModelShader::Render(UINT indexCount, D3DXMATRIX world)
 {
 
-	buffer->SetWorld(world);
+//	buffer->SetWorld(world);
 	buffer->SetBuffers();
 	D3D::GetDeviceContext()->IASetInputLayout(layout);
 	D3D::GetDeviceContext()->VSSetShader(vertexShader, NULL, 0);

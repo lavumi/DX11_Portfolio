@@ -7,6 +7,15 @@ public:
 	WaterBuffer()
 		: ShaderBuffer(sizeof(VS_DATA), 0, sizeof(PS_DATA))
 	{
+		D3DXMATRIX world;
+		D3DXMatrixTranslation(&world, 0.0f, -7.9f, 0.0f);
+
+		D3DXMATRIX invWorld;
+		D3DXMatrixInverse(&invWorld, nullptr, &world);
+		D3DXMatrixTranspose(&vsData.invTransWorld, &invWorld);
+
+
+
 		psData.ambient = D3DXCOLOR(0.5f, 0.5f, 0.5f, 1.0f);
 		psData.diffuse = D3DXCOLOR(0.7f, 0.7f, 0.7f, 1.0f);
 		psData.specular = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
@@ -43,7 +52,7 @@ public:
 	}
 
 	void SetWorld(D3DXMATRIX& world) {
-		ShaderBuffer::SetWorld(world);
+		//ShaderBuffer::SetWorld(world);
 
 		D3DXMATRIX invWorld;
 		D3DXMatrixInverse(&invWorld, nullptr, &world);

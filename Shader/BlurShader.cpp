@@ -21,27 +21,20 @@ void BlurShader::Update()
 
 }
 
-void BlurShader::Render(UINT indexCount, D3DXMATRIX world, ID3D11ShaderResourceView* diffuse)
+void BlurShader::Render( ID3D11ShaderResourceView* diffuse)
 {
-	buffer->SetWorld(world);
+//	buffer->SetWorld(world);
 	buffer->SetBuffers();
 
-
-	D3D::GetDeviceContext()->VSSetConstantBuffers(10, 1, &wBuffer);
-	D3D::GetDeviceContext()->VSSetConstantBuffers(11, 1, &vpBuffer);
 
 	D3D::GetDeviceContext()->IASetInputLayout(layout);
 	D3D::GetDeviceContext()->VSSetShader(vertexShader, NULL, 0);
 	D3D::GetDeviceContext()->PSSetShader(pixelShader, NULL, 0);
 
 
-
-	//D3D::GetDeviceContext()->VSSetConstantBuffers(2, 1, &screenSizeBuffer);
-
 	if(diffuse != nullptr)
 		D3D::GetDeviceContext()->PSSetShaderResources(0, 1, &diffuse);
 
-	D3D::GetDeviceContext()->DrawIndexed(indexCount, 0, 0);
 }
 /*
 void BlurShader::CreateBuffers()

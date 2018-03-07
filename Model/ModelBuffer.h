@@ -10,7 +10,7 @@ class ModelBuffer : public ShaderBuffer
 {
 public:
 	ModelBuffer()
-		: ShaderBuffer(sizeof(Data))
+		: ShaderBuffer(sizeof(VSData), 0, 0)
 	{
 		D3DXMatrixIdentity(&data.boneScale);
 		
@@ -22,7 +22,7 @@ public:
 
 	void Update()
 	{
-		UpdateBuffer(&data, sizeof(data));
+		UpdateVSBuffer(&data, sizeof(VSData));
 	}
 
 	void SetSkinning(bool isSkinning)
@@ -39,7 +39,7 @@ public:
 	}
 
 
-	struct Data
+	struct VSData
 	{
 		D3DXMATRIX boneScale;
 		D3DXMATRIX boneArray[100];
@@ -48,5 +48,5 @@ public:
 	};
 
 private:
-	Data data;
+	VSData data;
 };

@@ -31,7 +31,7 @@ void ObjectMesh::Render()
 
 void ObjectMesh::Update()
 {
-	Shader::Update();
+//	Shader::Update();
 }
 
 

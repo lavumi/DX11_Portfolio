@@ -1,27 +1,47 @@
 #pragma once
 #include "ShaderBuffer.h"
 
-class WorldBuffer : public ShaderBuffer
+class WorldBuffer
 {
 public:
 	WorldBuffer()
-		: ShaderBuffer(sizeof(Data))
 	{
 		D3DXMatrixIdentity(&data.world);
-		UpdateBuffer(&data.world, sizeof(Data));
+
+		desc.Usage = D3D11_USAGE_DYNAMIC;
+		desc.ByteWidth = sizeof(D3DXMATRIX);
+		desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+		desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+		desc.MiscFlags = 0;
+		desc.StructureByteStride = 0;
+
+		HRESULT hr = D3D::GetDevice()->CreateBuffer(&desc, NULL, &buffer);
+		assert(SUCCEEDED(hr));
+
+
 	}
 
-	void SetWorld(D3DXMATRIX& world)
-	{
-		data.world = world;
-		Data temp;
-		D3DXMatrixTranspose(&temp.world, &data.world);
-
-		UpdateBuffer(&temp, sizeof(Data));
+	void SetBuffer() {
+		D3D::GetDeviceContext()->VSSetConstantBuffers(13, 1, &buffer);
+		D3D::GetDeviceContext()->GSSetConstantBuffers(13, 1, &buffer);
 	}
 
-	void Update()
-	{
+
+	void SetWorld(D3DXMATRIX world) {
+
+		D3DXMatrixTranspose(&data.world, &world);
+
+		D3D11_MAPPED_SUBRESOURCE subResource;
+
+		HRESULT hr = D3D::GetDeviceContext()->Map
+		(
+			buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &subResource
+		);
+
+		memcpy(subResource.pData, &data, sizeof(Data));
+
+		D3D::GetDeviceContext()->Unmap(buffer, 0);
+
 
 	}
 
@@ -31,5 +51,7 @@ public:
 	};
 
 private:
+	D3D11_BUFFER_DESC desc;
+	ID3D11Buffer* buffer;
 	Data data;
 };

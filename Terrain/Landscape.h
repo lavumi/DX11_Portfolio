@@ -4,7 +4,7 @@
 class Frustum;
 class QuadTree;
 class TerrainGrass;
-class Landscape 
+class Landscape : public Renderer
 {
 public:
 	Landscape();
@@ -98,7 +98,7 @@ private:
 	ID3D11ShaderResourceView* normalMap;
 	ID3D11ShaderResourceView* specularMap;
 	D3DXMATRIX world;
-
+	WorldBuffer* wBuffer;
 
 	QuadTree* quadTree;
 	TerrainGrass* grass;

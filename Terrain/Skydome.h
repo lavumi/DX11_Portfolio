@@ -28,4 +28,5 @@ private:
 	UINT vertexCount;
 	UINT indexCount;
 	D3DXMATRIX world;
+	WorldBuffer* wBuffer;
 };

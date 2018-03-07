@@ -3,43 +3,11 @@
 
 
 
-void Shader::Update()
+void Shader::SetShader()
 {
-
-
-}
-
-
-void Shader::SetMatrix(D3DXMATRIX& world, D3DXMATRIX& view, D3DXMATRIX& projection)
-{
-	D3D11_MAPPED_SUBRESOURCE subResource = { 0 };
-
-	wData.world = world;
-	vpData.view = view;
-	vpData.projection = projection;
-
-	D3DXMatrixTranspose(&wData.world, &wData.world);
-	D3DXMatrixTranspose(&vpData.view, &vpData.view);
-	D3DXMatrixTranspose(&vpData.projection, &vpData.projection);
-
-	ZeroMemory(&subResource, sizeof(D3D11_MAPPED_SUBRESOURCE));
-	D3D::GetDeviceContext()->Map
-	(
-		wBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &subResource
-	);
-
-	memcpy(subResource.pData, &wData, sizeof(WorldMatrix));
-	D3D::GetDeviceContext()->Unmap(wBuffer, 0);
-
-
-	ZeroMemory(&subResource, sizeof(D3D11_MAPPED_SUBRESOURCE));
-	D3D::GetDeviceContext()->Map
-	(
-		vpBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &subResource
-	);
-
-	memcpy(subResource.pData, &vpData, sizeof(ViewProjectionMatrix));
-	D3D::GetDeviceContext()->Unmap(vpBuffer, 0);
+	D3D::GetDeviceContext()->IASetInputLayout(layout);
+	D3D::GetDeviceContext()->VSSetShader(vertexShader, NULL, 0);
+	D3D::GetDeviceContext()->PSSetShader(pixelShader, NULL, 0);
 }
 
 Shader::Shader(wstring shaderFile)
@@ -47,7 +15,8 @@ Shader::Shader(wstring shaderFile)
 {
 	CreateVertexShader();
 	CreatePixelShader();
-	CreateMATRIXBuffer();
+	//CreateGeometryShader();
+
 	geoBlob = 0;
 	geoShader = 0;
 }
@@ -55,13 +24,10 @@ Shader::Shader(wstring shaderFile)
 Shader::~Shader()
 {
 
-
 	SAFE_RELEASE(layout);
 
 	SAFE_RELEASE(vertexBlob);
 	SAFE_RELEASE(vertexShader);
-	SAFE_RELEASE(wBuffer);
-	SAFE_RELEASE(vpBuffer);
 
 	SAFE_RELEASE(pixelBlob);
 	SAFE_RELEASE(pixelShader);
@@ -70,51 +36,26 @@ Shader::~Shader()
 	SAFE_RELEASE(geoShader);
 }
 
-void Shader::CreateInputLayout(D3D11_INPUT_ELEMENT_DESC * desc, UINT count)
+bool Shader::CreateInputLayout(D3D11_INPUT_ELEMENT_DESC * desc, UINT count)
 {
+
+	void* temp = vertexBlob->GetBufferPointer();
+	SIZE_T temp2 = vertexBlob->GetBufferSize();
 	HRESULT hr = D3D::GetDevice()->CreateInputLayout
 	(
 		desc
 		, count
-		, vertexBlob->GetBufferPointer()
-		, vertexBlob->GetBufferSize()
+		, temp
+		, temp2
 		, &layout
 	);
-	if(!SUCCEEDED(hr))
-		assert(0);
+	if (!SUCCEEDED(hr))
+		return false;
+	else
+		return true;
 }
 
-void Shader::CreateMATRIXBuffer()
-{
-	D3D11_BUFFER_DESC desc;
-	HRESULT hr;
-
-
-	ZeroMemory(&desc, sizeof(D3D11_BUFFER_DESC));
-	desc.Usage = D3D11_USAGE_DYNAMIC;
-	desc.ByteWidth = sizeof(WorldMatrix);
-	desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-	desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-	desc.MiscFlags = 0;
-	desc.StructureByteStride = 0;
-
-	hr = D3D::GetDevice()->CreateBuffer(&desc, NULL, &wBuffer);
-	assert(SUCCEEDED(hr));
-
-	ZeroMemory(&desc, sizeof(D3D11_BUFFER_DESC));
-	desc.Usage = D3D11_USAGE_DYNAMIC;
-	desc.ByteWidth = sizeof(ViewProjectionMatrix);
-	desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-	desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-	desc.MiscFlags = 0;
-	desc.StructureByteStride = 0;
-
-	hr = D3D::GetDevice()->CreateBuffer(&desc, NULL, &vpBuffer);
-	assert(SUCCEEDED(hr));
-
-}
-
-void Shader::CreateVertexShader()
+bool Shader::CreateVertexShader()
 {
 	ID3D10Blob* error;
 
@@ -124,8 +65,10 @@ void Shader::CreateVertexShader()
 		, D3D10_SHADER_ENABLE_STRICTNESS, 0, NULL
 		, &vertexBlob, &error, NULL
 	);
-	CheckShaderError(hr, error);
-
+	if (CheckShaderError(hr, error) == false) {
+		return false;
+	}
+	
 	hr = D3D::GetDevice()->CreateVertexShader
 	(
 		vertexBlob->GetBufferPointer()
@@ -133,10 +76,10 @@ void Shader::CreateVertexShader()
 		, NULL
 		, &vertexShader
 	);
-	assert(SUCCEEDED(hr));
+	return SUCCEEDED(hr);
 }
 
-void Shader::CreatePixelShader()
+bool Shader::CreatePixelShader()
 {
 	ID3D10Blob* error;
 	HRESULT hr = D3DX10CompileFromFile
@@ -145,7 +88,9 @@ void Shader::CreatePixelShader()
 		, D3D10_SHADER_ENABLE_STRICTNESS, 0, NULL
 		, &pixelBlob, &error, NULL
 	);
-	CheckShaderError(hr, error);
+	if (CheckShaderError(hr, error) == false) {
+		return false;
+	}
 	
 	hr = D3D::GetDevice()->CreatePixelShader
 	(
@@ -154,12 +99,12 @@ void Shader::CreatePixelShader()
 		, NULL
 		, &pixelShader
 	);
-	assert(SUCCEEDED(hr));
+	return SUCCEEDED(hr);
 }
 
 
 
-void Shader::CreateGeometryShader()
+bool Shader::CreateGeometryShader()
 {
 	ID3D10Blob* error;
 	HRESULT hr = D3DX10CompileFromFile
@@ -168,7 +113,9 @@ void Shader::CreateGeometryShader()
 		, D3D10_SHADER_ENABLE_STRICTNESS, 0, NULL
 		, &geoBlob, &error, NULL
 	);
-	CheckShaderError(hr, error);
+	if (CheckShaderError(hr, error) == false) {
+		return false;
+	}
 
 	hr = D3D::GetDevice()->CreateGeometryShader
 	(
@@ -177,10 +124,10 @@ void Shader::CreateGeometryShader()
 		, NULL
 		, &geoShader
 	);
-	assert(SUCCEEDED(hr));
+	return SUCCEEDED(hr);
 }
 
-void Shader::CheckShaderError(HRESULT hr, ID3D10Blob * error)
+bool Shader::CheckShaderError(HRESULT hr, ID3D10Blob * error)
 {
 	if (FAILED(hr))
 	{
@@ -189,6 +136,7 @@ void Shader::CheckShaderError(HRESULT hr, ID3D10Blob * error)
 			string str = (const char *)error->GetBufferPointer();
 			MessageBoxA(NULL, str.c_str(), "Shader Error", MB_OK);
 		}
-		assert(false);
+		return false;
 	}
+	return true;
 }

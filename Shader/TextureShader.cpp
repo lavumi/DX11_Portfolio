@@ -18,10 +18,10 @@ void TextureShader::Update()
 
 }
 
-void TextureShader::Render(UINT indexCount, D3DXMATRIX world, ID3D11ShaderResourceView* diffuse)
+void TextureShader::Render(ID3D11ShaderResourceView* diffuse)
 {
 
-	buffer->SetWorld(world);
+	//buffer->SetWorld(world);
 	buffer->SetBuffers();
 
 
@@ -33,6 +33,6 @@ void TextureShader::Render(UINT indexCount, D3DXMATRIX world, ID3D11ShaderResour
 	if(diffuse != nullptr)
 		D3D::GetDeviceContext()->PSSetShaderResources(0, 1, &diffuse);
 
-	D3D::GetDeviceContext()->DrawIndexed(indexCount, 0, 0);
+	//D3D::GetDeviceContext()->DrawIndexed(indexCount, 0, 0);
 }
 

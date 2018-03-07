@@ -21,9 +21,9 @@ void SkydomeShader::Update()
 
 }
 
-void SkydomeShader::Render(UINT indexCount, D3DXMATRIX world)
+void SkydomeShader::Render()
 {
-	buffer->SetWorld(world);
+	//buffer->SetWorld(world);
 	buffer->SetBuffers();
 
 	D3D::GetDeviceContext()->IASetInputLayout(layout);
@@ -31,12 +31,6 @@ void SkydomeShader::Render(UINT indexCount, D3DXMATRIX world)
 	D3D::GetDeviceContext()->PSSetShader(pixelShader, NULL, 0);
 
 
-
-	
-
-
-	D3D::GetDeviceContext()->DrawIndexed(indexCount, 0, 0);
-
-	
+		
 }
 

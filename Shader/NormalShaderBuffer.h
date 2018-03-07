@@ -27,7 +27,7 @@ public:
 	}
 
 	void SetWorld(D3DXMATRIX& world) {
-		ShaderBuffer::SetWorld(world);
+	//	ShaderBuffer::SetWorld(world);
 
 		D3DXMATRIX invWorld;
 		D3DXMatrixInverse(&invWorld, nullptr, &world);

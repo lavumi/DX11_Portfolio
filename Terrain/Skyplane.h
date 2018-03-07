@@ -49,5 +49,5 @@ private:
 	PerlinNoise* perlinNoise;
 	ID3D11ShaderResourceView* perlin;
 	D3DXMATRIX world;
-
+	WorldBuffer* wBuffer;
 };

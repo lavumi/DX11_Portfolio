@@ -9,7 +9,7 @@ public:
 
 
 	virtual void Update();
-	void Render(UINT indexCount, D3DXMATRIX world);
+	void Render();
 
 
 

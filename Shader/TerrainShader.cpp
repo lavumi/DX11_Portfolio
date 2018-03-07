@@ -36,10 +36,10 @@ void TerrainShader::Update()
 }
 
 
-void TerrainShader::Render(UINT indexCount, D3DXMATRIX world,
+void TerrainShader::Render(
 	ID3D11ShaderResourceView ** diffuseMap, ID3D11ShaderResourceView* normalMap, ID3D11ShaderResourceView* lightMap) {
 
-	buffer->SetWorld(world);
+	//buffer->SetWorld(world);
 	buffer->SetBuffers();
 
 	D3D::GetDeviceContext()->PSSetShaderResources(10, 3, diffuseMap);
@@ -48,25 +48,10 @@ void TerrainShader::Render(UINT indexCount, D3DXMATRIX world,
 
 
 
-
-
-
-
-
 	D3D::GetDeviceContext()->IASetInputLayout(layout);
 	D3D::GetDeviceContext()->VSSetShader(vertexShader, NULL, 0);
 	D3D::GetDeviceContext()->PSSetShader(pixelShader, NULL, 0);
 
-	D3D::GetDeviceContext()->GSSetShader(NULL, NULL, 0);
-
-
-
-
-
-
-	D3D::GetDeviceContext()->DrawIndexed(indexCount, 0, 0);
-	Sampler::Get()->SetDefault();
-	D3D::GetDeviceContext()->GSSetShader(NULL, NULL, 0);
 }
 
 void TerrainShader::SetPlane(D3DXPLANE & plane)

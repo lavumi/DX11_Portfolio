@@ -183,6 +183,9 @@
       <Filter>Shader\ShaderRenewal</Filter>
     </ClCompile>
     <ClCompile Include="GameMain.cpp" />
+    <ClCompile Include="Shader\ShaderManager.cpp">
+      <Filter>Shader</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameMain.h" />
@@ -427,6 +430,12 @@
     <ClInclude Include="Shader\TextureShader.h">
       <Filter>Shader\ShaderRenewal</Filter>
     </ClInclude>
+    <ClInclude Include="Shader\ShaderManager.h">
+      <Filter>Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\Renderer.h">
+      <Filter>Render</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="System">
@@ -559,6 +568,9 @@
     </None>
     <None Include="Shader\FX\SkyplaneShader.fx">
       <Filter>Shader\ShaderRenewal</Filter>
+    </None>
+    <None Include="Shader\FX\WVPMatrix.hlsli">
+      <Filter>FX</Filter>
     </None>
   </ItemGroup>
 </Project>

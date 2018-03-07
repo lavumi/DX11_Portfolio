@@ -21,7 +21,7 @@ void RainShader::Update()
 
 void RainShader::Render(UINT indexCount, D3DXMATRIX world, D3DXMATRIX view, D3DXMATRIX projection, ID3D11ShaderResourceView* depthMap, D3DXCOLOR color)
 {
-	buffer->SetWorld(world);
+	//buffer->SetWorld(world);
 	buffer->SetBuffers();
 
 

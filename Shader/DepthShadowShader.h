@@ -8,8 +8,7 @@ public:
 
 
 	virtual void Update();
-	virtual void Render(UINT indexCount,
-		D3DXMATRIX world);
+	virtual void Render();
 
 
 

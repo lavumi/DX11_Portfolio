@@ -9,9 +9,7 @@ public:
 
 
 	virtual void Update();
-	virtual void Render(UINT indexCount,
-		D3DXMATRIX world, 
-		ID3D11ShaderResourceView * lightMap);
+	virtual void Render(ID3D11ShaderResourceView * lightMap);
 
 
 

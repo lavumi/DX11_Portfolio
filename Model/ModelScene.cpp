@@ -197,7 +197,7 @@ void ModelScene::Update(D3DXMATRIX* worldPos)
 
 void ModelScene::Render(FBXModelShader* shader)
 {
-	modelBuffer->SetVSBuffer(2);
+	modelBuffer->SetBuffers();
 
 	for each(Model* model in models)
 		model->Render(shader);

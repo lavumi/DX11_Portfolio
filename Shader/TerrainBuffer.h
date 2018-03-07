@@ -10,7 +10,9 @@ public:
 		psData.ambient = D3DXCOLOR(0.5f, 0.5f, 0.5f, 1.0f);
 		psData.diffuse = D3DXCOLOR(0.7f, 0.7f, 0.7f, 1.0f);
 		psData.globalAmbient = D3DXCOLOR(0.6f, 0.6f, 0.6f, 1.0f);
-
+		D3DXMATRIX world;
+		D3DXMatrixIdentity(&world);
+		vsData.invTransWorld = world;
 		vsData.clipPlane = D3DXPLANE(0, 1, 0, 7.9f);
 
 
@@ -32,7 +34,7 @@ public:
 	}
 
 	void SetWorld(D3DXMATRIX& world) {
-		ShaderBuffer::SetWorld(world);
+	//	ShaderBuffer::SetWorld(world);
 
 		D3DXMATRIX invWorld;
 		D3DXMatrixInverse(&invWorld, nullptr, &world);

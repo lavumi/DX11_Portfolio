@@ -22,7 +22,7 @@ public:
 
 	}
 
-	void SetVPMatrix(D3DXMATRIX view,D3DXMATRIX projection, UINT shader = 0) {
+	void SetVPMatrix(D3DXMATRIX view,D3DXMATRIX projection) {
 
 		D3DXMATRIX _view, _projection;
 		_view = view;
@@ -47,10 +47,9 @@ public:
 		memcpy(subResource.pData, &data, sizeof(Data));
 
 		D3D::GetDeviceContext()->Unmap(buffer, 0);
-		if(shader == 0)
-			D3D::GetDeviceContext()->VSSetConstantBuffers(12, 1, &buffer);
-		else if (shader == 1)
-			D3D::GetDeviceContext()->GSSetConstantBuffers(12, 1, &buffer);
+
+		D3D::GetDeviceContext()->VSSetConstantBuffers(12, 1, &buffer);
+		D3D::GetDeviceContext()->GSSetConstantBuffers(12, 1, &buffer);
 	}
 
 

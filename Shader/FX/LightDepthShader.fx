@@ -1,19 +1,4 @@
-
-cbuffer MatrixBuffer : register(b13)
-{
-    matrix _world;
-};
-cbuffer MatrixBuffer : register(b12)
-{
-    matrix _viewXprojection;
-};
-
-
-cbuffer LightView : register(b0)
-{
-    matrix _lightView;
-    matrix _lightProjection;
-};
+#include "WVPMatrix.hlsli"
 
 
 

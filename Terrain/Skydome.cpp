@@ -7,6 +7,8 @@ Skydome::Skydome()
 {
 	CreateBuffer();
 	D3DXMatrixIdentity(&world);
+	wBuffer = new WorldBuffer();
+	wBuffer->SetWorld(world);
 }
 
 Skydome::~Skydome()
@@ -19,22 +21,17 @@ Skydome::~Skydome()
 
 void Skydome::Update()
 {
+	
 	D3DXVECTOR3 position;
 	Camera::Get()->GetPosition(&position);
-
-	
-	D3DXMatrixScaling(&world, 2, 2, 2);
-
-	D3DXMATRIX trans;
-	D3DXMatrixTranslation(&trans, position.x, position.y, position.z);
-	world *= trans;
-	
+	D3DXMatrixTranslation(&world, position.x, position.y, position.z);
+	wBuffer->SetWorld(world);
 
 }
 
 void Skydome::Render()
 {
-
+	wBuffer->SetBuffer();
 	UINT stride = sizeof(VertexTextureNormal);
 	UINT offset = 0;
 
@@ -42,6 +39,7 @@ void Skydome::Render()
 	D3D::GetDeviceContext()->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R32_UINT, 0);
 	D3D::GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	
+	D3D::GetDeviceContext()->DrawIndexed(indexCount, 0, 0);
 }
 
 

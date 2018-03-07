@@ -275,17 +275,12 @@ void GameMain::PreRender()
 		depthShadowTexture->SetTarget();
 		depthShadowTexture->Clear(0, 0, 0, 1);
 
-		//testplane->Render();
-		//depthShadowShader->Render(testplane->indexCount, testplane->world, view, projection);
-
-
+		depthShadowShader->Render();
 		testcube->Render();
-		for (int i = 0; i < 6; i++) {
-			depthShadowShader->Render(testcube->indexCount, testcube->world[i]);
-		}
-
+		
+		depthShadowShader->Render();
 		landscape->Render();
-		depthShadowShader->Render(landscape->getIndexCount(), landscape->getWorld());
+		
 
 
 	}
@@ -298,17 +293,16 @@ void GameMain::PreRender()
 		Camera::Get()->GetView(&view);
 		D3D::Get()->GetProjection(&projection);
 
-		//testplane->Render();
-		//shadowShader->Render(testplane->indexCount, testplane->world,  view, projection,*depthShadowTexture->GetShadowResourceView());
 		vpBuffer->SetVPMatrix(view, projection);
+
+		shadowShader->Render(*depthShadowTexture->GetShadowResourceView());
 		testcube->Render();
-		for (int i = 0; i < 6; i++) {
-			shadowShader->Render(testcube->indexCount, testcube->world[i], *depthShadowTexture->GetShadowResourceView());
-		}
 
 
+
+		
+		shadowShader->Render(*depthShadowTexture->GetShadowResourceView());
 		landscape->Render();
-		shadowShader->Render(landscape->getIndexCount(), landscape->getWorld(),  *depthShadowTexture->GetShadowResourceView());
 	}
 	//연산된 그림자를 blur 처리
 	{
@@ -318,12 +312,12 @@ void GameMain::PreRender()
 
 		Camera::Get()->GetDefaultView(&view);
 		D3D::Get()->GetOrthoProjection(&projection);
-
+		vpBuffer->SetVPMatrix(view, projection);
 
 		
+		
+		blurShader->Render(*shadowTexture->GetShadowResourceView());
 		orthoWindow->Render();
-		vpBuffer->SetVPMatrix(view, projection);
-		blurShader->Render(orthoWindow->GetIndexCount(), orthoWindow->GetWorld(), *shadowTexture->GetShadowResourceView());
 	}
 
 	//호수의 반사평면 그리기
@@ -335,11 +329,10 @@ void GameMain::PreRender()
 		//반사된 세계는 현실 세계에 대해 뒤집혀있으므로 컬모드가 반대다
 		Rasterizer::Get()->SetFrontCullMode();
 
-		D3DXPLANE waterPlane = lake->getwaterPlane();
 		//반사된 뷰, 프로젝션 받기
 		Camera::Get()->GetMirrorView(&view);
 		D3D::Get()->GetProjection(&projection);
-
+		vpBuffer->SetVPMatrix(view, projection);
 
 
 
@@ -355,35 +348,29 @@ void GameMain::PreRender()
 			camPos.y = -camPos.y + (lake->GetWaterHeigh() * 2.0f);
 			D3DXMatrixTranslation(&world, camPos.x, camPos.y, camPos.z);
 
+			skydomeShader->Render();
 			skydome->Render();
-			skydomeShader->Render(skydome->getIndexCount(), world);
+			
 			D3D::Get()->SetBlender(D3D::BL_state::Add);
+			skyplaneShader->Render(cloud->getPerlinMap());
 			cloud->Render();
-			skyplaneShader->Render(cloud->getIndexCount(), world, cloud->getPerlinMap());
+			
 			D3D::Get()->SetBlender(D3D::BL_state::Off);
 		}
 		D3D::Get()->SetDepthStencilState(D3D::DS_state::onState);
 		Rasterizer::Get()->SetFrontCullMode();
 
 
-
-		vpBuffer->SetVPMatrix(view, projection);
+		normalMapShader->Render(testcube->diffuseMap, testcube->normalMap, testcube->heightMap, *blurShadowTexture->GetShadowResourceView());
 		testcube->Render();
-		for (int i = 0; i < 6; i++) {
-			normalMapShader->Render(testcube->indexCount, testcube->world[i],  testcube->diffuseMap, testcube->normalMap, testcube->heightMap, *blurShadowTexture->GetShadowResourceView());
-		}
-
-		if (landscapeWireFrame)
-			Rasterizer::Get()->SetWireframe();
 
 
 
 		D3DXPLANE clipPlane = lake->getwaterPlane();
 		terrainShader->SetPlane(clipPlane);
 
-
+		terrainShader->Render(landscape->getDiffuseMap(), landscape->getNormalMap(), *blurShadowTexture->GetShadowResourceView());
 		landscape->Render();
-		terrainShader->Render(landscape->getIndexCount(), landscape->getWorld(), landscape->getDiffuseMap(), landscape->getNormalMap(), *blurShadowTexture->GetShadowResourceView());
 		Rasterizer::Get()->SetOnCullMode();
 	}
 
@@ -397,7 +384,7 @@ void GameMain::PreRender()
 		//뷰, 프로젝션 받기
 		Camera::Get()->GetView(&view);
 		D3D::Get()->GetProjection(&projection);
-
+		vpBuffer->SetVPMatrix(view, projection);
 		//testcube->Render();
 		//for (int i = 0; i < 6; i++) {
 		//	normalMapShader->Render(testcube->indexCount, testcube->world[i], view, projection, testcube->diffuseMap, testcube->normalMap, testcube->heightMap, *blurShadowTexture->GetShadowResourceView());
@@ -409,9 +396,8 @@ void GameMain::PreRender()
 		clipPlane *= -1;
 		terrainShader->SetPlane(clipPlane);
 
-		vpBuffer->SetVPMatrix(view, projection);
+		terrainShader->Render(landscape->getDiffuseMap(), landscape->getNormalMap(), *blurShadowTexture->GetShadowResourceView());
 		landscape->Render();
-		terrainShader->Render(landscape->getIndexCount(), landscape->getWorld(), landscape->getDiffuseMap(), landscape->getNormalMap(), *blurShadowTexture->GetShadowResourceView());
 		Rasterizer::Get()->SetSolid();
 	}
 
@@ -422,16 +408,20 @@ void GameMain::PreRender()
 
 		Camera::Get()->GetView(&view);
 		D3D::Get()->GetProjection(&projection);
+		vpBuffer->SetVPMatrix(view, projection);
+
 
 		D3D::Get()->SetDepthStencilState(D3D::DS_state::offState);
 		Rasterizer::Get()->SetOffCullMode();
 		{
+			skydomeShader->Render();
 			skydome->Render();
-			skydomeShader->Render(skydome->getIndexCount(), skydome->getWorld());
+			
 
 			D3D::Get()->SetBlender(D3D::BL_state::Add);
+			skyplaneShader->Render(cloud->getPerlinMap());
 			cloud->Render();
-			skyplaneShader->Render(cloud->getIndexCount(), cloud->getWorld(), cloud->getPerlinMap());
+			
 
 			rainCone->Render();
 			rainShader->Render(rainCone->getIndexCount(), rainCone->getWorld(), view, projection,
@@ -442,20 +432,17 @@ void GameMain::PreRender()
 		Rasterizer::Get()->SetOnCullMode();
 
 
-		vpBuffer->SetVPMatrix(view, projection);
 
+		normalMapShader->Render(testcube->diffuseMap, testcube->normalMap, testcube->heightMap, *blurShadowTexture->GetShadowResourceView());
 		testcube->Render();
-		for (int i = 0; i < 6; i++) {
-			normalMapShader->Render(testcube->indexCount, testcube->world[i],  testcube->diffuseMap, testcube->normalMap, testcube->heightMap, *blurShadowTexture->GetShadowResourceView());
-		}
 
-		//Rasterizer::Get()->SetWireframe();
+
 
 		D3DXPLANE clipPlane = lake->getwaterPlane();
 		terrainShader->SetPlane(clipPlane);
 
+		terrainShader->Render(landscape->getDiffuseMap(), landscape->getNormalMap(), *blurShadowTexture->GetShadowResourceView());
 		landscape->Render();
-		terrainShader->Render(landscape->getIndexCount(), landscape->getWorld(), landscape->getDiffuseMap(), landscape->getNormalMap(), *blurShadowTexture->GetShadowResourceView());
 		//terrainShader->Render(landscape->getIndexCount(), landscape->getWorld(), view, projection, landscape->getDiffuseMap(), landscape->getNormalMap(), *blurShadowTexture->GetShadowResourceView(), lake->getwaterPlane());
 		//Rasterizer::Get()->SetSolid();
 
@@ -466,10 +453,8 @@ void GameMain::PreRender()
 			*lakeReflectionTexture->GetShadowResourceView(),
 			*lakeRefractionTexture->GetShadowResourceView());
 
-
-		vpBuffer->SetVPMatrix(view, projection, 1);
-		grass->Render();
-		grassShader->Render(grass->getInstanceCount(), *noise->GetPerlinNoise());
+		//grass->Render();
+		//grassShader->Render(grass->getInstanceCount(), *noise->GetPerlinNoise());
 
 
 		player->Render();
@@ -520,10 +505,10 @@ void GameMain::Render()
 	D3D::Get()->GetOrthoProjection(&projection);
 	D3D::Get()->SetBlender(D3D::BL_state::Off);
 	vpBuffer->SetVPMatrix(view, projection);
+	
+
+	textureShader->Render( *mainRendering->GetShadowResourceView(0));
 	orthoWindow->Render();
-
-	textureShader->Render(orthoWindow->GetIndexCount(), orthoWindow->GetWorld(), *mainRendering->GetShadowResourceView(0));
-
 
 
 	/*

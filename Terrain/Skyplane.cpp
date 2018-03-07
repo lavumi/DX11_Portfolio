@@ -12,7 +12,8 @@ Skyplane::Skyplane()
 
 
 
-
+	wBuffer = new WorldBuffer();
+	wBuffer->SetWorld(world);
 	//hr = D3DX11CreateShaderResourceViewFromFile(D3D::GetDevice(), L"./Terrain/perturb001.dds", nullptr, nullptr, &perlin, nullptr);
 	//
 	//assert(SUCCEEDED(hr));
@@ -44,19 +45,19 @@ void Skyplane::Update()
 	D3DXVECTOR3 position;
 	Camera::Get()->GetPosition(&position);
 	D3DXMatrixTranslation(&world, position.x, position.y, position.z);
-
+	wBuffer->SetWorld(world);
 }
 
 void Skyplane::Render()
 {
-
+	wBuffer->SetBuffer();
 	UINT stride = sizeof(VertexTexture);
 	UINT offset = 0;
 
 	D3D::GetDeviceContext()->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
 	D3D::GetDeviceContext()->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R32_UINT, 0);
 	D3D::GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
+	D3D::GetDeviceContext()->DrawIndexed(indexCount, 0, 0);
 }
 
 void Skyplane::MakeCloudPerlin()

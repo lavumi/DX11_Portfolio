@@ -22,9 +22,8 @@ void ShadowShader::Update()
 
 }
 
-void ShadowShader::Render(UINT indexCount, D3DXMATRIX world, ID3D11ShaderResourceView * lightMap)
+void ShadowShader::Render(ID3D11ShaderResourceView * lightMap)
 {
-	buffer->SetWorld(world);
 	buffer->SetBuffers();
 	D3D::GetDeviceContext()->PSSetShaderResources(0, 1, &lightMap);
 
@@ -32,12 +31,6 @@ void ShadowShader::Render(UINT indexCount, D3DXMATRIX world, ID3D11ShaderResourc
 	D3D::GetDeviceContext()->IASetInputLayout(layout);
 	D3D::GetDeviceContext()->VSSetShader(vertexShader, NULL, 0);
 	D3D::GetDeviceContext()->PSSetShader(pixelShader, NULL, 0);
-
-
-
-	D3D::GetDeviceContext()->DrawIndexed(indexCount, 0, 0);
-	Sampler::Get()->SetDefault();
-
 }
 
 //void ShadowShader::CreateBuffers()

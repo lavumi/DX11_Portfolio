@@ -15,7 +15,7 @@ cbuffer Camera : register(b1)
     float _paddd;
 }
 
-cbuffer BoneBuffer : register(b2)
+cbuffer BoneBuffer : register(b0)
 {
     float4x4 _boneScale;
     float4x4 _boneArray[100];

@@ -4,21 +4,15 @@
 
 class Shader
 {
-public:
-
-	void SetMatrix(D3DXMATRIX& world, D3DXMATRIX& view, D3DXMATRIX& projection);
-
-	
+	void SetShader();
 protected:
+	friend class ShaderManager;
 	Shader(wstring vertexshaderFile);
 	~Shader();
 
-	void CreateInputLayout(D3D11_INPUT_ELEMENT_DESC* desc, UINT count);
-	void CreateMATRIXBuffer();
+	bool CreateInputLayout(D3D11_INPUT_ELEMENT_DESC* desc, UINT count);
 
-	virtual void Update();
 	
-
 
 	ID3D10Blob* vertexBlob;
 	ID3D10Blob* pixelBlob;
@@ -27,27 +21,10 @@ protected:
 	ID3D11InputLayout* layout;
 
 
-
-	struct WorldMatrix {
-		D3DXMATRIX world;
-	} wData;
-
-
-	struct ViewProjectionMatrix {
-		D3DXMATRIX view;
-		D3DXMATRIX projection;
-	} vpData;
-
-	ID3D11Buffer* wBuffer;
-	ID3D11Buffer* vpBuffer;
-
-	void CreateVertexShader();
-	void CreatePixelShader();
-	void CreateGeometryShader();
-	void CheckShaderError(HRESULT hr, ID3D10Blob* error);
-
-
-
+	bool CreateVertexShader();
+	bool CreatePixelShader();
+	bool CreateGeometryShader();
+	bool CheckShaderError(HRESULT hr, ID3D10Blob* error);
 
 	wstring shaderFile;
 	ID3D11VertexShader* vertexShader;

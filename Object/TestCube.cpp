@@ -9,11 +9,13 @@ TestCube::TestCube()
 	: vertexBuffer(nullptr), indexBuffer(nullptr)
 	{
 
-
 	for (int i = 0; i < 6; i++) {
 		D3DXMatrixTranslation(&world[i], 128 + 10 + 4*(i%3) , 0, 128 + 10 * (i/3));
+		wBuffers[i] = new WorldBuffer();
+		wBuffers[i]->SetWorld(world[i]);
 	}
 
+	
 	
 
 	CreateBuffer();
@@ -77,6 +79,13 @@ void TestCube::Render()
 	D3D::GetDeviceContext()->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R32_UINT, 0);
 	D3D::GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
+
+	for (int i = 0; i < 6; i++) {
+		wBuffers[i]->SetBuffer();
+		D3D::GetDeviceContext()->DrawIndexed(indexCount, 0, 0);
+	}
+
+	
 //	shader->Render(indexCount, world[0], diffuseMap, normalMap, heightMap);
 }
 

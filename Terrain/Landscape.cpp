@@ -15,6 +15,11 @@ Landscape::Landscape()
 	normalMap = 0;
 	specularMap = 0;
 
+
+	wBuffer = new WorldBuffer();
+	wBuffer->SetWorld(world);
+
+
 	diffuseMap = new ID3D11ShaderResourceView*[3];
 
 	HRESULT hr = D3DX11CreateShaderResourceViewFromFile(D3D::GetDevice(), L"./Terrain/normal.jpg", nullptr, nullptr, &normalMap, nullptr);
@@ -240,12 +245,16 @@ void Landscape::Update()
 
 void Landscape::Render()
 {
+
 	UINT stride = sizeof(VertexTextureNormalTangent);
 	UINT offset = 0;
 
 	D3D::GetDeviceContext()->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
 	D3D::GetDeviceContext()->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R32_UINT, 0);
 	D3D::GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	wBuffer->SetBuffer();
+	D3D::GetDeviceContext()->DrawIndexed(indexCount, 0, 0);
 
 }
 
