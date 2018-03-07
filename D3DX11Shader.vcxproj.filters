@@ -41,12 +41,6 @@
     <ClCompile Include="Render\Sampler.cpp">
       <Filter>Render</Filter>
     </ClCompile>
-    <ClCompile Include="Mesh\Mesh.cpp">
-      <Filter>Mesh</Filter>
-    </ClCompile>
-    <ClCompile Include="Mesh\ObjectMesh.cpp">
-      <Filter>Mesh</Filter>
-    </ClCompile>
     <ClCompile Include="Render\RenderTexture.cpp">
       <Filter>Render</Filter>
     </ClCompile>
@@ -188,12 +182,6 @@
     </ClInclude>
     <ClInclude Include="Render\Sampler.h">
       <Filter>Render</Filter>
-    </ClInclude>
-    <ClInclude Include="Mesh\Mesh.h">
-      <Filter>Mesh</Filter>
-    </ClInclude>
-    <ClInclude Include="Mesh\ObjectMesh.h">
-      <Filter>Mesh</Filter>
     </ClInclude>
     <ClInclude Include="Render\RenderTexture.h">
       <Filter>Render</Filter>
@@ -363,9 +351,6 @@
     <Filter Include="Render">
       <UniqueIdentifier>{25457864-9887-4cb1-809d-4f1243c8c952}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Mesh">
-      <UniqueIdentifier>{a788f370-b405-435f-862b-ba835acd0020}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Shader">
       <UniqueIdentifier>{55ca23e0-d999-4a31-a218-2e166de4f1b6}</UniqueIdentifier>
     </Filter>
@@ -395,9 +380,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Mesh\Mesh.fx">
-      <Filter>Mesh</Filter>
-    </None>
     <None Include="Shader\FX\BaseTile.fx">
       <Filter>ProceduralTexture\FX</Filter>
     </None>

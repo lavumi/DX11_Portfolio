@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "GameMain.h"
 
-#include "./Mesh/ObjectMesh.h"
 #include "./Render\RenderTexture.h"
 #include "./Render/Frustum.h"
 

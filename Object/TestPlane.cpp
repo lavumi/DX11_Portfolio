@@ -1,9 +1,6 @@
 #include "../stdafx.h"
 #include "TestPlane.h"
 
-#include "../Mesh/Mesh.h"
-
-
 
 TestPlane::TestPlane()
 	: vertexBuffer(nullptr), indexBuffer(nullptr)

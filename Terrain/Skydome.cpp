@@ -1,7 +1,6 @@
 #include "../stdafx.h"
 #include "Skydome.h"
 
-#include "../Mesh/Mesh.h"
 
 Skydome::Skydome()
 {
@@ -56,12 +55,21 @@ void Skydome::CreateBuffer()
 
 
 
-	Mesh* mesh = new Mesh(L"Sphere");
-	
-	
-	vertexCount = mesh->vertexCount;
-	indexCount = mesh->indexCount;
+	wstring file = L"./Contents/Meshes/Sphere.data";
 
+
+	ifstream ifs(file.c_str(), ios::binary);
+
+	ifs.read((char*)&vertexCount, sizeof(UINT));
+	VertexTextureNormal* vertexData = new VertexTextureNormal[vertexCount];
+	ifs.read((char*)vertexData, sizeof(VertexTextureNormal)*vertexCount);
+
+	ifs.read((char*)&indexCount, sizeof(UINT));
+	UINT* indexData = new UINT[indexCount];
+	ifs.read((char*)indexData, sizeof(UINT)*indexCount);
+
+	ifs.close();
+	
 
 	D3D11_BUFFER_DESC desc;
 	D3D11_SUBRESOURCE_DATA data;
@@ -74,7 +82,7 @@ void Skydome::CreateBuffer()
 	desc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 
 	ZeroMemory(&data, sizeof(D3D11_SUBRESOURCE_DATA));
-	data.pSysMem = mesh->vertexData;
+	data.pSysMem = vertexData;
 
 	hr = D3D::GetDevice()->CreateBuffer(&desc, &data, &vertexBuffer);
 	assert(SUCCEEDED(hr));
@@ -88,13 +96,13 @@ void Skydome::CreateBuffer()
 	desc.BindFlags = D3D11_BIND_INDEX_BUFFER;
 
 	ZeroMemory(&data, sizeof(D3D11_SUBRESOURCE_DATA));
-	data.pSysMem = mesh->indexData;
+	data.pSysMem = indexData;
 
 	hr = D3D::GetDevice()->CreateBuffer(&desc, &data, &indexBuffer);
 	assert(SUCCEEDED(hr));
 
 
 
-	SAFE_DELETE(mesh);
+	
 
 }

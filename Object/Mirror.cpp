@@ -1,10 +1,6 @@
 #include "../stdafx.h"
 #include "Mirror.h"
 
-#include "../Mesh/Mesh.h"
-
-
-
 Mirror::Mirror()
 	: vertexBuffer(nullptr), indexBuffer(nullptr)
 {

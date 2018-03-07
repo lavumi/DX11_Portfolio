@@ -162,8 +162,6 @@
     <ClInclude Include="Camera\Camera.h" />
     <ClInclude Include="Camera\iFallowCamera.h" />
     <ClInclude Include="GameMain.h" />
-    <ClInclude Include="Mesh\Mesh.h" />
-    <ClInclude Include="Mesh\ObjectMesh.h" />
     <ClInclude Include="Model\Model.h" />
     <ClInclude Include="Model\ModelAnimation.h" />
     <ClInclude Include="Model\ModelAnimationController.h" />
@@ -234,8 +232,6 @@
   <ItemGroup>
     <ClCompile Include="Camera\Camera.cpp" />
     <ClCompile Include="GameMain.cpp" />
-    <ClCompile Include="Mesh\Mesh.cpp" />
-    <ClCompile Include="Mesh\ObjectMesh.cpp" />
     <ClCompile Include="Model\Model.cpp" />
     <ClCompile Include="Model\ModelAnimation.cpp" />
     <ClCompile Include="Model\ModelAnimationController.cpp" />
@@ -285,9 +281,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="FX\ShaderPreset.hlsli" />
-    <None Include="Mesh\Mesh.fx">
-      <FileType>Document</FileType>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="Shader\FX\BaseTile.fx">
