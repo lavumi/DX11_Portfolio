@@ -195,7 +195,7 @@ void ModelScene::Update(D3DXMATRIX* worldPos)
 		model->Update(isAnimated, worldPos);
 }
 
-void ModelScene::Render(FBXModelShader* shader)
+void ModelScene::Render(Shader* shader)
 {
 	modelBuffer->SetBuffers();
 

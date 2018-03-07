@@ -1,10 +1,10 @@
 #pragma once
 #include "ShaderBuffer.h"
 
-class BlurBuffer : public ShaderBuffer
+class OrthoWindowBuffer : public ShaderBuffer
 {
 public:
-	BlurBuffer()
+	OrthoWindowBuffer()
 		: ShaderBuffer(sizeof(VS_DATA), 0, 0)
 	{
 		D3DInfo info;
@@ -14,7 +14,6 @@ public:
 		vsData.screenSize.y = (float)info.screenHeight;
 		
 		UpdateVSBuffer(&vsData, sizeof(VS_DATA));
-		//UpdatePSBuffer(&psData, 0);
 	}
 
 	

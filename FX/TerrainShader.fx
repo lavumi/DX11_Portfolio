@@ -1,21 +1,13 @@
+#include "ShaderPreset.hlsli"
+
+
+
+
 cbuffer VSBuffer : register(b0)
 {
     float4 clipPlane;
     matrix worldInverseTransposeMatrix;
-    float3 _lightDir;
 };
-
-
-cbuffer MatrixBuffer : register(b12)
-{
-    matrix _viewXprojection;
-};
-
-cbuffer MatrixBuffer : register(b13)
-{
-    matrix _world;
-};
-
 
 struct VertexInput
 {

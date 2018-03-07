@@ -1,6 +1,7 @@
 #pragma once
 
 class PerlinNoise;
+class SkyplaneBuffer;
 class Skyplane{
 public:
 	Skyplane();
@@ -13,21 +14,7 @@ public:
 
 	void MakeCloudPerlin();
 
-	UINT getIndexCount() {
-		return indexCount;
-	}
 
-
-
-	ID3D11ShaderResourceView* getPerlinMap() {
-		return perlin;
-	}
-
-	D3DXMATRIX getWorld() {
-		return world;
-	}
-	
-	
 private:
 	void CreateVertexData();
 	void CreateIndexData();
@@ -49,5 +36,8 @@ private:
 	PerlinNoise* perlinNoise;
 	ID3D11ShaderResourceView* perlin;
 	D3DXMATRIX world;
+
+
 	WorldBuffer* wBuffer;
+	SkyplaneBuffer * buffer;
 };

@@ -42,6 +42,11 @@ void Skydome::Render()
 	D3D::GetDeviceContext()->DrawIndexed(indexCount, 0, 0);
 }
 
+void Skydome::RenderReflection()
+{
+
+}
+
 
 
 

@@ -13,12 +13,19 @@ void Shader::SetShader()
 Shader::Shader(wstring shaderFile)
 	: shaderFile(shaderFile)
 {
-	CreateVertexShader();
-	CreatePixelShader();
-	//CreateGeometryShader();
+
+	vertexBlob = 0;
+	vertexShader = 0;
+
+	pixelBlob = 0;
+	pixelShader = 0;
 
 	geoBlob = 0;
 	geoShader = 0;
+	//assert(CreateVertexShader());
+	//assert(CreatePixelShader());
+	//CreateGeometryShader();
+
 }
 
 Shader::~Shader()
@@ -133,8 +140,8 @@ bool Shader::CheckShaderError(HRESULT hr, ID3D10Blob * error)
 	{
 		if (error != NULL)
 		{
-			string str = (const char *)error->GetBufferPointer();
-			MessageBoxA(NULL, str.c_str(), "Shader Error", MB_OK);
+			//string str = (const char *)error->GetBufferPointer();
+			//MessageBoxA(NULL, str.c_str(), "Shader Error", MB_OK);
 		}
 		return false;
 	}

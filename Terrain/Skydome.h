@@ -9,6 +9,7 @@ public:
 
 	void Update();
 	void Render();
+	void RenderReflection();
 
 	UINT getIndexCount() {
 		return indexCount;

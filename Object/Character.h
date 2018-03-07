@@ -1,7 +1,7 @@
 #pragma once
 
 class ModelScene;
-class FBXModelShader;
+class Shader;
 class Landscape;
 
 #include "../Camera/iFallowCamera.h"
@@ -12,7 +12,7 @@ public:
 	Character();
 	~Character();
 
-	void Initialize(FBXModelShader*,Landscape* );
+	void Initialize(Shader*,Landscape* );
 	void MoveTo(float x, float y, float z);
 	void Move(float x, float z);
 	void Update();
@@ -28,6 +28,6 @@ private:
 	D3DXMATRIX world;
 	D3DXVECTOR3 position;
 	float speed;
-	FBXModelShader* shader;
+	Shader* shader;
 	Landscape* land;
 };

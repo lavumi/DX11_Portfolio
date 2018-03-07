@@ -1,19 +1,16 @@
 #include "BlurShader.h"
-#include "BlurBuffer.h"
+
 
 BlurShader::BlurShader()
 	:Shader(L"./Shader/FX/BlurShader.fx")
 {
 	CreateInputLayout(VertexTexture::desc, VertexTexture::count);
 
-	buffer = new BlurBuffer();
-	//CreateBuffers();
 }
 
 BlurShader::~BlurShader()
 {
-	SAFE_DELETE(buffer);
-	//SAFE_RELEASE(screenSizeBuffer);
+
 }
 
 void BlurShader::Update()
@@ -21,19 +18,16 @@ void BlurShader::Update()
 
 }
 
-void BlurShader::Render( ID3D11ShaderResourceView* diffuse)
+void BlurShader::Render()
 {
-//	buffer->SetWorld(world);
-	buffer->SetBuffers();
+
+
 
 
 	D3D::GetDeviceContext()->IASetInputLayout(layout);
 	D3D::GetDeviceContext()->VSSetShader(vertexShader, NULL, 0);
 	D3D::GetDeviceContext()->PSSetShader(pixelShader, NULL, 0);
 
-
-	if(diffuse != nullptr)
-		D3D::GetDeviceContext()->PSSetShaderResources(0, 1, &diffuse);
 
 }
 /*

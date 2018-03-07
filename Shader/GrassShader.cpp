@@ -3,7 +3,9 @@
 GrassShader::GrassShader()
 	:Shader(L"./Shader/FX/GrassShader.fx")
 {
-	CreateInputLayout();
+
+
+	CreateInputLayout(VertexInstance::desc, VertexInstance::count);
 	CreateGeometryShader();
 	//CreateBuffers();
 	//data.x = 0.7f;
@@ -46,27 +48,27 @@ void GrassShader::Render(UINT instanceCount, ID3D11ShaderResourceView* perlin)
 	D3D::GetDeviceContext()->GSSetShader(NULL, NULL, 0);
 }
 
-void GrassShader::CreateInputLayout()
-{
-	D3D11_INPUT_ELEMENT_DESC layoutdesc[] =
-	{
-		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-	{ "INSTMATRIX",0, DXGI_FORMAT_R32G32B32A32_FLOAT, 1,0 , D3D11_INPUT_PER_INSTANCE_DATA, 1 },
-	{ "INSTMATRIX",1, DXGI_FORMAT_R32G32B32A32_FLOAT, 1,D3D11_APPEND_ALIGNED_ELEMENT , D3D11_INPUT_PER_INSTANCE_DATA, 1 },
-	{ "INSTMATRIX",2, DXGI_FORMAT_R32G32B32A32_FLOAT, 1,D3D11_APPEND_ALIGNED_ELEMENT , D3D11_INPUT_PER_INSTANCE_DATA, 1 },
-	{ "INSTMATRIX",3, DXGI_FORMAT_R32G32B32A32_FLOAT, 1,D3D11_APPEND_ALIGNED_ELEMENT , D3D11_INPUT_PER_INSTANCE_DATA, 1 },
-	};
-
-	HRESULT hr = D3D::GetDevice()->CreateInputLayout
-	(
-		layoutdesc
-		, 5
-		, vertexBlob->GetBufferPointer()
-		, vertexBlob->GetBufferSize()
-		, &layout
-	);
-	assert(SUCCEEDED(hr));
-}
+//void GrassShader::CreateInputLayout()
+//{
+//	D3D11_INPUT_ELEMENT_DESC layoutdesc[] =
+//	{
+//		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+//	{ "INSTMATRIX",0, DXGI_FORMAT_R32G32B32A32_FLOAT, 1,0 , D3D11_INPUT_PER_INSTANCE_DATA, 1 },
+//	{ "INSTMATRIX",1, DXGI_FORMAT_R32G32B32A32_FLOAT, 1,D3D11_APPEND_ALIGNED_ELEMENT , D3D11_INPUT_PER_INSTANCE_DATA, 1 },
+//	{ "INSTMATRIX",2, DXGI_FORMAT_R32G32B32A32_FLOAT, 1,D3D11_APPEND_ALIGNED_ELEMENT , D3D11_INPUT_PER_INSTANCE_DATA, 1 },
+//	{ "INSTMATRIX",3, DXGI_FORMAT_R32G32B32A32_FLOAT, 1,D3D11_APPEND_ALIGNED_ELEMENT , D3D11_INPUT_PER_INSTANCE_DATA, 1 },
+//	};
+//
+//	HRESULT hr = D3D::GetDevice()->CreateInputLayout
+//	(
+//		layoutdesc
+//		, 5
+//		, vertexBlob->GetBufferPointer()
+//		, vertexBlob->GetBufferSize()
+//		, &layout
+//	);
+//	assert(SUCCEEDED(hr));
+//}
 //
 //void GrassShader::CreateBuffers()
 //{

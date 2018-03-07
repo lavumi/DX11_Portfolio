@@ -1,5 +1,5 @@
 #pragma once
-
+class WaterBuffer;
 class Water {
 public:
 
@@ -43,9 +43,8 @@ private:
 
 
 
-	D3DXMATRIX Rworld;
-	ID3D11Buffer* worldBuffer;
-
+	WorldBuffer* wBuffer;
+	WaterBuffer* buffer;
 
 	ID3D11ShaderResourceView* normal;
 };

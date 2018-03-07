@@ -1,7 +1,8 @@
 #include "../stdafx.h"
 #include "Skyplane.h"
-#include "../ProceduralTexture/PerlinNoise.h"
 
+#include "../ProceduralTexture/PerlinNoise.h"
+#include "../Shader/SkyplaneBuffer.h"
 Skyplane::Skyplane()
 {
 
@@ -14,6 +15,8 @@ Skyplane::Skyplane()
 
 	wBuffer = new WorldBuffer();
 	wBuffer->SetWorld(world);
+	buffer = new SkyplaneBuffer();
+
 	//hr = D3DX11CreateShaderResourceViewFromFile(D3D::GetDevice(), L"./Terrain/perturb001.dds", nullptr, nullptr, &perlin, nullptr);
 	//
 	//assert(SUCCEEDED(hr));
@@ -22,7 +25,8 @@ Skyplane::Skyplane()
 Skyplane::~Skyplane()
 {
 
-
+	SAFE_DELETE(buffer);
+	SAFE_DELETE(wBuffer);
 	SAFE_RELEASE(vertexBuffer);
 	SAFE_RELEASE(indexBuffer);
 }
@@ -50,13 +54,21 @@ void Skyplane::Update()
 
 void Skyplane::Render()
 {
-	wBuffer->SetBuffer();
+
 	UINT stride = sizeof(VertexTexture);
 	UINT offset = 0;
 
 	D3D::GetDeviceContext()->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
 	D3D::GetDeviceContext()->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R32_UINT, 0);
 	D3D::GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+
+	wBuffer->SetBuffer();
+	buffer->SetBuffers();
+
+	D3D::GetDeviceContext()->PSSetShaderResources(0, 1, &perlin);
+
+
 	D3D::GetDeviceContext()->DrawIndexed(indexCount, 0, 0);
 }
 

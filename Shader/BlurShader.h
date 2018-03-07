@@ -1,7 +1,7 @@
 #pragma once
 #include "Shader.h"
 
-class BlurBuffer;
+
 class BlurShader : public Shader {
 public:
 	BlurShader();
@@ -11,12 +11,10 @@ public:
 	virtual void Update();
 
 	
-	virtual void Render(ID3D11ShaderResourceView* diffuse);
+	virtual void Render();
 
 
 
 private:
 
-
-	BlurBuffer * buffer;
 };

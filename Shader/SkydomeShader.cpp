@@ -1,19 +1,16 @@
 #include "SkydomeShader.h"
 
-#include "SkydomeBuffer.h"
 SkydomeShader::SkydomeShader()
 	:Shader(L"./Shader/FX/Skydome.fx")
 {
-	CreateInputLayout(VertexTextureNormalTangent::desc, VertexTextureNormalTangent::count);
+	CreateInputLayout(VertexTextureNormal::desc, VertexTextureNormal::count);
 
-
-	buffer = new SkydomeBuffer();
 
 }
 
 SkydomeShader::~SkydomeShader()
 {
-	SAFE_DELETE(buffer);
+
 }
 
 void SkydomeShader::Update()
@@ -23,8 +20,6 @@ void SkydomeShader::Update()
 
 void SkydomeShader::Render()
 {
-	//buffer->SetWorld(world);
-	buffer->SetBuffers();
 
 	D3D::GetDeviceContext()->IASetInputLayout(layout);
 	D3D::GetDeviceContext()->VSSetShader(vertexShader, NULL, 0);

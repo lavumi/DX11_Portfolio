@@ -27,7 +27,7 @@ public:
 		speed = 0.001f;
 
 		psData.translation = 0;
-		psData.scale = 20;
+		psData.scale = 6;
 		psData.angle = (float)D3DX_PI / 180 * angle;
 
 		UpdateVSBuffer(&vsData, sizeof(VS_DATA));
@@ -63,7 +63,6 @@ public:
 
 	void Update()
 	{
-		vsData.lightDirection = LightManager::Get()->GetLightData()->lightDirection;
 		Camera::Get()->GetPosition(&(vsData.cameraPos));
 		UpdateVSBuffer(&vsData, sizeof(VS_DATA));
 
@@ -79,8 +78,6 @@ public:
 		D3DXVECTOR3 cameraPos;
 		float padding;
 		D3DXMATRIX invTransWorld;
-		D3DXVECTOR3 lightDirection;
-		float padding2;
 	};
 	struct PS_DATA
 	{

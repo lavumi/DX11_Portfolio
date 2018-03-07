@@ -1,4 +1,12 @@
 #pragma once
+
+
 class Renderer {
-	virtual void Render() = 0;
+public:
+	Renderer();
+	~Renderer();
+
+private:
+
+		
 };

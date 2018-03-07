@@ -1,6 +1,5 @@
 #pragma once
 #include "Shader.h"
-class LightViewBuffer;
 class DepthShadowShader : public Shader {
 public:
 	DepthShadowShader();
@@ -13,10 +12,6 @@ public:
 
 
 private:
-
-
-	LightViewBuffer * buffer;
-
 
 
 };

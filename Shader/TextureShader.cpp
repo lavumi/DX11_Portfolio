@@ -4,7 +4,7 @@
 TextureShader::TextureShader()
 	:Shader(L"./Shader/FX/TextureShader.fx")
 {
-	CreateInputLayout(VertexTextureNormalTangent::desc, VertexTextureNormalTangent::count);
+	CreateInputLayout(VertexTexture::desc, VertexTexture::count);
 
 	buffer = new BaseBuffer();
 }

@@ -32,7 +32,6 @@ public:
 	
 	
 private:
-	void CreateBuffer();
 	void CreateBufferTemp();
 	void CreateInstanceData();
 

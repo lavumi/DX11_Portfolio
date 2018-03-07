@@ -9,39 +9,27 @@ class Landscape;
 class Water;
 class Skyplane;
 class TerrainGrass;
-class Cloud;
 class RainCone;
-
+class TestCube;
 
 class GrassTexture;
-class MosaicTile;
+//class MosaicTile;
 class PerlinNoise;
 
 
-class TestCube;
-class Mirror;
 
-class NormalMapShader;
-class DepthShadowShader;
-class TextureShader;
-class SkydomeShader;
-class ShadowShader;
-class BlurShader;
-class TerrainShader;
-class ColorShader;
-class SkyplaneShader;
-class WaterShader;
-class InstanceTextureShader;
-class RainShader;
-class GrassShader;
 
-class FBXModelShader;
+class ShaderManager;
+
+
+
 
 class Frustum;
 
 class OrthoWindowPlane;
 
 class VPBuffer;
+class LightBuffer;
 
 
 class Character;
@@ -86,36 +74,21 @@ private:
 	Landscape* landscape;
 	Water* lake;
 	TerrainGrass* grass;
-	//Cloud* volumeCloud;
 	RainCone* rainCone;
 
 
 	TestCube* testcube;
-	Mirror* testplane;
+	
 
 
 
 	OrthoWindowPlane* orthoWindow;
 
-
-
-	SkydomeShader* skydomeShader;
-	NormalMapShader* normalMapShader;
-	DepthShadowShader* depthShadowShader;
-	TextureShader* textureShader;
-	ShadowShader* shadowShader;
-	BlurShader* blurShader;
-	TerrainShader* terrainShader;
-	ColorShader* colorShader;
-	SkyplaneShader* skyplaneShader;
-	WaterShader* waterShader;
-	InstanceTextureShader* instanceShader;
-	RainShader* rainShader;
-	GrassShader* grassShader;
-
-	FBXModelShader* fbxShader;
+	ShaderManager* shaderManager;
 
 	VPBuffer* vpBuffer;
+	LightBuffer* lightBuffer;
+
 	Character* player;
 
 	int testvalue = 0;

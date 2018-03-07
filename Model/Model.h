@@ -8,7 +8,7 @@ class ModelBuffer;
 class ModelBoneWeights;
 class ModelAnimationKeyFrames;
 class ModelAnimationController;
-class FBXModelShader;
+class Shader;
 
 class Model : public BinaryInputOutputHandler
 {
@@ -20,7 +20,7 @@ public:
 
 	void Update(bool isAnimation, D3DXMATRIX* worldPos);
 	void UpdateAnimation(ModelAnimationController* animationController);
-	void Render(FBXModelShader* shader);
+	void Render(Shader* shader);
 
 
 	ModelScene* GetModelScene() { return modelScene; }

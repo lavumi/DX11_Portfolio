@@ -1,7 +1,7 @@
 #include "../stdafx.h"
 #include "OrthoWindowPlane.h"
 
-
+#include "../Shader/OrthoWindowBuffer.h"
 
 
 OrthoWindowPlane::OrthoWindowPlane()
@@ -10,6 +10,8 @@ OrthoWindowPlane::OrthoWindowPlane()
 	D3DXMatrixIdentity(&world);
 	wBuffer = new WorldBuffer();
 	wBuffer->SetWorld(world);
+	buffer = new OrthoWindowBuffer();
+
 	CreateBuffer();
 	D3DXMatrixTranslation(&translation, 0, 0, 0.1f);
 }
@@ -20,8 +22,8 @@ OrthoWindowPlane::~OrthoWindowPlane()
 	SAFE_RELEASE(vertexBuffer);
 	SAFE_RELEASE(indexBuffer);
 
-
-	
+	SAFE_DELETE(buffer);
+	SAFE_DELETE(wBuffer);
 }
 
 void OrthoWindowPlane::Update()
@@ -35,8 +37,7 @@ void OrthoWindowPlane::Update()
 void OrthoWindowPlane::Render()
 {
 	wBuffer->SetBuffer();
-	//world *= translation;
-	//wBuffer->SetWorld(world);
+	buffer->SetBuffers();
 	UINT stride = sizeof(VertexTexture);
 	UINT offset = 0;
 

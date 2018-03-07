@@ -1,6 +1,6 @@
 #pragma once
 #include "Shader.h"
-class BaseBuffer;
+
 class FBXModelShader : public Shader {
 public:
 	FBXModelShader();
@@ -8,16 +8,12 @@ public:
 
 
 	virtual void Update();
-	virtual void Render(UINT indexCount,
-		D3DXMATRIX world);
+	virtual void Render();
 
-	BaseBuffer* buffer;
+
 
 
 private:
-	void CreateBuffers();
-
-
 
 
 

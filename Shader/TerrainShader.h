@@ -2,7 +2,7 @@
 
 #include "Shader.h"
 
-class TerrainBuffer;
+
 class TerrainShader : public Shader {
 public:
 	TerrainShader();
@@ -11,40 +11,12 @@ public:
 
 	virtual void Update();
 
-	virtual void Render(
-		ID3D11ShaderResourceView ** diffuseMap, ID3D11ShaderResourceView* normalMap, ID3D11ShaderResourceView* lightMap);
-
-	//virtual void Render(UINT indexCount,
-	//	D3DXMATRIX world, D3DXMATRIX view, D3DXMATRIX projection,
-	//	ID3D11ShaderResourceView** diffuseMap,
-	//	ID3D11ShaderResourceView* normalMap,
-	//	ID3D11ShaderResourceView* lightMap, D3DXPLANE clipPlane
-	//	);
-
-	void SetPlane(D3DXPLANE& plane);
-
-	TerrainBuffer* buffer;
+	virtual void Render();
 
 
 
-	//void CreateBuffers();
-	//
-	//
-	//ID3D11Buffer* LightBuffer;
-	//ID3D11Buffer* MaterialBuffer;
-	//ID3D11Buffer* ExtraBuffer;
-	//ID3D11Buffer* clipPlaneBuffer;
-	//ID3D11Buffer* cameraSpaceBuffer;
-	//
-	//struct MaterialData {
-	//	D3DXCOLOR ambient;
-	//	D3DXCOLOR diffuse;
-	//	D3DXCOLOR globalAmbient;
-	//} material;
-	//
-	//struct ExtraData {
-	//	D3DXMATRIX invTransWorld;
-	//} extraData;
+
+
 
 
 };

@@ -166,3 +166,12 @@ struct VertexTextureNormalTangentBlend
 	static D3D11_INPUT_ELEMENT_DESC desc[];
 	static UINT count;
 };
+
+struct VertexInstance {
+	VertexInstance();
+
+
+	D3DXVECTOR3 position;
+	static D3D11_INPUT_ELEMENT_DESC desc[];
+	static UINT count;
+};

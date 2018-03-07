@@ -8,7 +8,7 @@
 #include "ModelAnimation.h"
 #include "ModelAnimationKeyFrames.h"
 #include "ModelAnimationController.h"
-#include "../Shader/FBXModelShader.h"
+#include "../Shader/Shader.h"
 
 
 Model::Model(ModelScene* modelScene)
@@ -78,7 +78,7 @@ void Model::Update(bool isAnimation, D3DXMATRIX* worldPos)
 		part->Update(isAnimation, worldPos);
 }
 
-void Model::Render(FBXModelShader* shader)
+void Model::Render(Shader* shader)
 {
 	for each(ModelPart* part in parts)
 		part->Render(shader);

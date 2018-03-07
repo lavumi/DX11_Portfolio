@@ -62,7 +62,7 @@ using namespace fbxsdk;
 #include "./Render/VertexLayout.h"
 #include "./Render/UserInterface.h"
 #include "./Render/LightManager.h"
-#include "./Render/Renderer.h"
+#include "./Render/iRenderObject.h"
 
 
 #include "./Shader/WorldBuffer.h"

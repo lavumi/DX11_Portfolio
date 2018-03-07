@@ -4,29 +4,12 @@ TerrainShader::TerrainShader()
 	:Shader(L"./Shader/FX/TerrainShader.fx")
 {
 	CreateInputLayout(VertexTextureNormalTangent::desc, VertexTextureNormalTangent::count);
-
-
-	buffer = new TerrainBuffer();
-	//D3DXPLANE plane = D3DXPLANE(0, 1, 0, 7.9f);
-
-
-
-
-	//CreateBuffers();
-	//UserInterface::AddParallexBias(&parallexData.scale, &parallexData.layer);
-
-
-	//material.ambient = D3DXCOLOR(0.5f, 0.5f, 0.5f, 1.0f);
-	//material.diffuse = D3DXCOLOR(0.7f, 0.7f, 0.7f, 1.0f);
-	//material.globalAmbient = D3DXCOLOR(0.6f, 0.6f, 0.6f, 1.0f);
 }
 
 TerrainShader::~TerrainShader()
 {
-	SAFE_DELETE(buffer);
-	//SAFE_RELEASE(LightBuffer);
-	//SAFE_RELEASE(MaterialBuffer);
-	//SAFE_RELEASE(ExtraBuffer);
+
+
 
 }
 
@@ -36,27 +19,12 @@ void TerrainShader::Update()
 }
 
 
-void TerrainShader::Render(
-	ID3D11ShaderResourceView ** diffuseMap, ID3D11ShaderResourceView* normalMap, ID3D11ShaderResourceView* lightMap) {
-
-	//buffer->SetWorld(world);
-	buffer->SetBuffers();
-
-	D3D::GetDeviceContext()->PSSetShaderResources(10, 3, diffuseMap);
-	D3D::GetDeviceContext()->PSSetShaderResources(1, 1, &lightMap);
-	D3D::GetDeviceContext()->PSSetShaderResources(2, 1, &normalMap);
-
-
+void TerrainShader::Render() {
 
 	D3D::GetDeviceContext()->IASetInputLayout(layout);
 	D3D::GetDeviceContext()->VSSetShader(vertexShader, NULL, 0);
 	D3D::GetDeviceContext()->PSSetShader(pixelShader, NULL, 0);
 
-}
-
-void TerrainShader::SetPlane(D3DXPLANE & plane)
-{
-	buffer->SetPLANE(plane);
 }
 
 

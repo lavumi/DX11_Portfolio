@@ -572,7 +572,7 @@ void GrassTexture::RND_SRT_Instancing()
 	CreateShader(4);
 
 	D3DXCOLOR color = D3DXCOLOR(0.172f*0.5f, 0.117f*0.5f, 0.09f*0.5f, 1);
-	color.a = rand() / 523;
+	color.a = (float)rand() / 523;
 
 	D3D11_BUFFER_DESC desc;
 	desc.Usage = D3D11_USAGE_DEFAULT;

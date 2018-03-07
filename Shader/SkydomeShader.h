@@ -1,7 +1,7 @@
 #pragma once
 #include "Shader.h"
 
-class SkydomeBuffer;
+
 class SkydomeShader : public Shader {
 public:
 	SkydomeShader();
@@ -15,7 +15,7 @@ public:
 
 private:
 
-	SkydomeBuffer* buffer;
+
 
 
 

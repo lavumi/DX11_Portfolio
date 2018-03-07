@@ -188,6 +188,7 @@
     <ClInclude Include="Render\Frustum.h" />
     <ClInclude Include="Render\LightManager.h" />
     <ClInclude Include="Render\Rasterizer.h" />
+    <ClInclude Include="Render\iRenderObject.h" />
     <ClInclude Include="Render\Renderer.h" />
     <ClInclude Include="Render\RenderTexture.h" />
     <ClInclude Include="Render\Sampler.h" />
@@ -195,35 +196,19 @@
     <ClInclude Include="Render\UserInterface.h" />
     <ClInclude Include="Render\VertexLayout.h" />
     <ClInclude Include="Shader\BaseBuffer.h" />
-    <ClInclude Include="Shader\BlurBuffer.h" />
-    <ClInclude Include="Shader\BlurShader.h" />
+    <ClInclude Include="Shader\OrthoWindowBuffer.h" />
     <ClInclude Include="Shader\ColorBuffer.h" />
-    <ClInclude Include="Shader\ColorShader.h" />
-    <ClInclude Include="Shader\LightViewBuffer.h" />
-    <ClInclude Include="Shader\DepthShadowShader.h" />
-    <ClInclude Include="Shader\FBXModelShader.h" />
+    <ClInclude Include="Shader\LightBuffer.h" />
     <ClInclude Include="Shader\GrassBuffer.h" />
-    <ClInclude Include="Shader\GrassShader.h" />
-    <ClInclude Include="Shader\InstanceTextureShader.h" />
     <ClInclude Include="Shader\NormalShaderBuffer.h" />
     <ClInclude Include="Shader\RainBuffer.h" />
-    <ClInclude Include="Shader\RainShader.h" />
     <ClInclude Include="Shader\ShaderManager.h" />
-    <ClInclude Include="Shader\ShadowBuffer.h" />
-    <ClInclude Include="Shader\ShadowShader.h" />
-    <ClInclude Include="Shader\SkydomeBuffer.h" />
     <ClInclude Include="Shader\SkyplaneBuffer.h" />
-    <ClInclude Include="Shader\SkyplaneShader.h" />
     <ClInclude Include="Shader\TerrainBuffer.h" />
-    <ClInclude Include="Shader\TextureShader.h" />
-    <ClInclude Include="Shader\NormalMapShader.h" />
     <ClInclude Include="Shader\Shader.h" />
     <ClInclude Include="Shader\ShaderBuffer.h" />
-    <ClInclude Include="Shader\SkydomeShader.h" />
-    <ClInclude Include="Shader\TerrainShader.h" />
     <ClInclude Include="Shader\VPBuffer.h" />
     <ClInclude Include="Shader\WaterBuffer.h" />
-    <ClInclude Include="Shader\WaterShader.h" />
     <ClInclude Include="Shader\WorldBuffer.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
     </ClInclude>
@@ -272,27 +257,14 @@
     <ClCompile Include="Render\Frustum.cpp" />
     <ClCompile Include="Render\LightManager.cpp" />
     <ClCompile Include="Render\Rasterizer.cpp" />
+    <ClCompile Include="Render\Renderer.cpp" />
     <ClCompile Include="Render\RenderTexture.cpp" />
     <ClCompile Include="Render\Sampler.cpp" />
     <ClCompile Include="Render\Texture.cpp" />
     <ClCompile Include="Render\UserInterface.cpp" />
     <ClCompile Include="Render\VertexLayout.cpp" />
-    <ClCompile Include="Shader\BlurShader.cpp" />
-    <ClCompile Include="Shader\ColorShader.cpp" />
-    <ClCompile Include="Shader\DepthShadowShader.cpp" />
-    <ClCompile Include="Shader\FBXModelShader.cpp" />
-    <ClCompile Include="Shader\GrassShader.cpp" />
-    <ClCompile Include="Shader\InstanceTextureShader.cpp" />
-    <ClCompile Include="Shader\RainShader.cpp" />
     <ClCompile Include="Shader\ShaderManager.cpp" />
-    <ClCompile Include="Shader\ShadowShader.cpp" />
-    <ClCompile Include="Shader\SkyplaneShader.cpp" />
-    <ClCompile Include="Shader\TextureShader.cpp" />
-    <ClCompile Include="Shader\NormalMapShader.cpp" />
     <ClCompile Include="Shader\Shader.cpp" />
-    <ClCompile Include="Shader\SkydomeShader.cpp" />
-    <ClCompile Include="Shader\TerrainShader.cpp" />
-    <ClCompile Include="Shader\WaterShader.cpp" />
     <ClCompile Include="System\D3D.cpp" />
     <ClCompile Include="System\Frames.cpp" />
     <ClCompile Include="System\Keyboard.cpp" />
@@ -312,6 +284,7 @@
     <ClCompile Include="WinMain.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="FX\ShaderPreset.hlsli" />
     <None Include="Mesh\Mesh.fx">
       <FileType>Document</FileType>
     </None>
@@ -335,9 +308,6 @@
     <None Include="Shader\FX\midPointGrad.fx">
       <FileType>Document</FileType>
     </None>
-    <None Include="Shader\FX\NormalMap.fx">
-      <FileType>Document</FileType>
-    </None>
     <None Include="Shader\FX\randomSRT.fx">
       <FileType>Document</FileType>
     </None>
@@ -358,52 +328,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shader\FX\LightDepthShader.fx">
-      <FileType>Document</FileType>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Shader\FX\TextureShader.fx">
-      <FileType>Document</FileType>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Shader\FX\Skydome.fx">
-      <FileType>Document</FileType>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Shader\FX\Shadow.fx">
-      <FileType>Document</FileType>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Shader\FX\BlurShader.fx">
-      <FileType>Document</FileType>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Shader\FX\MirrorShader.fx">
-      <FileType>Document</FileType>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Shader\FX\Terrain.fx">
-      <FileType>Document</FileType>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Shader\FX\ColorShader.fx">
-      <FileType>Document</FileType>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Shader\FX\SkyplaneShader.fx">
-      <FileType>Document</FileType>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Shader\FX\WaterShader.fx">
       <FileType>Document</FileType>
     </None>
   </ItemGroup>
@@ -418,27 +343,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shader\FX\RainShader.fx">
-      <FileType>Document</FileType>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Shader\FX\GrassShader.fx">
-      <FileType>Document</FileType>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Shader\FX\FBXModelShader.fx">
-      <FileType>Document</FileType>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Shader\FX\TerrainShader.fx">
-      <FileType>Document</FileType>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Shader\FX\WVPMatrix.hlsli">
+    <None Include="Shader\FX\ShaderPreset.hlsli">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Geometry</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">4.0</ShaderModel>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Geometry</ShaderType>
@@ -447,6 +352,47 @@
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">4.0</ShaderModel>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Geometry</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0</ShaderModel>
+      <FileType>Document</FileType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="FX\BlurShader.fx">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="FX\ColorShader.fx">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="FX\FBXModelShader.fx">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="FX\GrassShader.fx">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="FX\LightViewShader.fx">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="FX\NormalMapShader.fx">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="FX\RainShader.fx">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="FX\ShadowShader.fx">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="FX\SkydomeShader.fx">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="FX\SkyplaneShader.fx">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="FX\TerrainShader.fx">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="FX\TextureShader.fx">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="FX\WaterShader.fx">
       <FileType>Document</FileType>
     </None>
   </ItemGroup>

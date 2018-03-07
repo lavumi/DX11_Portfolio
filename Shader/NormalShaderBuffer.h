@@ -27,17 +27,14 @@ public:
 	}
 
 	void SetWorld(D3DXMATRIX& world) {
-	//	ShaderBuffer::SetWorld(world);
 
 		D3DXMATRIX invWorld;
 		D3DXMatrixInverse(&invWorld, nullptr, &world);
 		D3DXMatrixTranspose(&vsData.invTransWorld, &invWorld);
 
-		//UpdateVSBuffer(&vsData, sizeof(VS_DATA));
 	}
 	void Update()
 	{
-		vsData.lightDirection = LightManager::Get()->GetLightData()->lightDirection;
 		Camera::Get()->GetPosition(&(vsData.cameraPos));
 		UpdateVSBuffer(&vsData, sizeof(VS_DATA));
 	}
@@ -47,8 +44,6 @@ public:
 		D3DXVECTOR3 cameraPos;
 		float padding;
 		D3DXMATRIX invTransWorld;
-		D3DXVECTOR3 lightDirection;
-		float padding2;
 
 	};
 	struct PS_DATA

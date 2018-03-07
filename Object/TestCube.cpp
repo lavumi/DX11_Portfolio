@@ -1,8 +1,7 @@
 #include "../stdafx.h"
 #include "TestCube.h"
 
-#include "../Mesh/Mesh.h"
-
+#include "../Shader/NormalShaderBuffer.h"
 
 
 TestCube::TestCube()
@@ -15,51 +14,25 @@ TestCube::TestCube()
 		wBuffers[i]->SetWorld(world[i]);
 	}
 
-	
+
+	buffer = new NormalShaderBuffer();
 	
 
 	CreateBuffer();
 	
 
-	HRESULT hr = D3DX11CreateShaderResourceViewFromFile(
-		D3D::GetDevice(),
-		L"./Contents/Textures/wood.jpg",
-		NULL,
-		NULL,
-		&diffuseMap,
-		NULL
-	);
-	assert(SUCCEEDED(hr));
 
-
-	hr = D3DX11CreateShaderResourceViewFromFile(
-		D3D::GetDevice(),
-		L"./Contents/Textures/normal.png",
-		NULL,
-		NULL,
-		&normalMap,
-		NULL
-	);
-	assert(SUCCEEDED(hr));
-
-	hr = D3DX11CreateShaderResourceViewFromFile(
-		D3D::GetDevice(),
-		L"./Contents/Textures/depth.png", // height_map.jpg",
-		NULL,
-		NULL,
-		&heightMap,
-		NULL
-	);
-	assert(SUCCEEDED(hr));
-
+	LoadResourcesFiles();
 
 
 }
 
 TestCube::~TestCube()
 {
-
-
+	for (int i = 0; i < 6; i++) {
+		SAFE_DELETE(wBuffers[i])
+	}
+	SAFE_DELETE(buffer);
 }
 
 void TestCube::Update()
@@ -70,8 +43,6 @@ void TestCube::Update()
 
 void TestCube::Render()
 {
-
-
 	UINT stride = sizeof(VertexTextureNormalTangent);
 	UINT offset = 0;
 
@@ -80,13 +51,58 @@ void TestCube::Render()
 	D3D::GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 
+
+
+	D3D::GetDeviceContext()->PSSetShaderResources(0, 1, &diffuseMap);
+	D3D::GetDeviceContext()->PSSetShaderResources(1, 1, &normalMap);
+	D3D::GetDeviceContext()->PSSetShaderResources(2, 1, &heightMap);
+
+	
+
 	for (int i = 0; i < 6; i++) {
 		wBuffers[i]->SetBuffer();
+		buffer->SetWorld(world[i]);
+		buffer->SetBuffers();
 		D3D::GetDeviceContext()->DrawIndexed(indexCount, 0, 0);
 	}
 
-	
-//	shader->Render(indexCount, world[0], diffuseMap, normalMap, heightMap);
+}
+
+bool TestCube::LoadResourcesFiles()
+{
+	bool diffuse, normal, height;
+	HRESULT hr = D3DX11CreateShaderResourceViewFromFile(
+		D3D::GetDevice(),
+		L"./Contents/Textures/wood.jpg",
+		NULL,
+		NULL,
+		&diffuseMap,
+		NULL
+	);
+	diffuse = SUCCEEDED(hr);
+
+
+	hr = D3DX11CreateShaderResourceViewFromFile(
+		D3D::GetDevice(),
+		L"./Contents/Textures/normal.png",
+		NULL,
+		NULL,
+		&normalMap,
+		NULL
+	);
+	normal = SUCCEEDED(hr);
+
+	hr = D3DX11CreateShaderResourceViewFromFile(
+		D3D::GetDevice(),
+		L"./Contents/Textures/depth.png",
+		NULL,
+		NULL,
+		&heightMap,
+		NULL
+	);
+	height = SUCCEEDED(hr);
+
+	return diffuse || normal || height;
 }
 
 

@@ -2,7 +2,21 @@
 #include "ShaderManager.h"
 #include "Shader.h"
 ShaderManager::ShaderManager()
-{
+{																															
+	assert(CreateShader(L"BlurShader", VertexTexture::desc, VertexTexture::count)											);
+	assert(CreateShader(L"ColorShader", VertexTexture::desc, VertexTexture::count)											);
+	assert(CreateShader(L"FBXModelShader", VertexTextureNormalTangentBlend::desc, VertexTextureNormalTangentBlend::count)	);
+	assert(CreateShader(L"GrassShader", VertexInstance::desc, VertexInstance::count)										);
+	assert(CreateShader(L"LightViewShader", VertexTextureNormalTangent::desc, VertexTextureNormalTangent::count)			);
+	assert(CreateShader(L"NormalMapShader", VertexTextureNormalTangent::desc, VertexTextureNormalTangent::count)			);
+	assert(CreateShader(L"RainShader", VertexTexture3::desc, VertexTexture3::count)											);
+	assert(CreateShader(L"ShadowShader", VertexTextureNormalTangent::desc, VertexTextureNormalTangent::count)				);
+	assert(CreateShader(L"SkydomeShader", VertexTextureNormal::desc, VertexTextureNormal::count)							);
+	assert(CreateShader(L"SkyplaneShader", VertexTexture::desc, VertexTexture::count)										);
+	assert(CreateShader(L"TerrainShader", VertexTextureNormalTangent::desc, VertexTextureNormalTangent::count)				);
+	assert(CreateShader(L"TextureShader", VertexTexture::desc, VertexTexture::count)										);
+	assert(CreateShader(L"WaterShader", VertexTextureNormalTangent::desc, VertexTextureNormalTangent::count)				);
+
 }
 
 ShaderManager::~ShaderManager()
@@ -15,18 +29,19 @@ ShaderManager::~ShaderManager()
 
 bool ShaderManager::CreateShader(wstring fxName, D3D11_INPUT_ELEMENT_DESC * desc, UINT count)
 {
-	fxName += L".fx";
-	Shader* shader = new Shader(fxName);
+	wstring fullfxName = L"./FX/" + fxName + L".fx";
+
+	Shader* shader = new Shader(fullfxName);
 	bool vs, ps, gs, layout;
-	//vs = shader->CreateVertexShader();
-	//ps = shader->CreatePixelShader();
-	//gs = shader->CreateGeometryShader();
-	//
-	//
-	//if ((vs || ps || layout) == false) 
-	//	assert(0);
+	vs = shader->CreateVertexShader();
+	ps = shader->CreatePixelShader();
+	gs = shader->CreateGeometryShader();
+	
+	
+	if ((vs || ps || layout) == false) 
+		assert(0);
 	layout = shader->CreateInputLayout(desc, count);
-	if (shaders.find(fxName) != shaders.end()) {
+	if (shaders.find(fxName) == shaders.end()) {
 		shaders[fxName] = shader;
 		return true;
 	}
@@ -40,4 +55,14 @@ Shader * ShaderManager::GetShader(wstring fxName)
 		return shaders[fxName];
 	else
 		return nullptr;
+}
+
+bool ShaderManager::SetShader(wstring fxName)
+{
+	if (shaders.find(fxName) != shaders.end()) {
+		shaders[fxName]->SetShader();
+		return true;
+	}
+	else
+		return false;
 }

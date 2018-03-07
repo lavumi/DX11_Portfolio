@@ -8,7 +8,7 @@ class ModelSkeleton;
 class ModelAnimation;
 class ModelAnimationController;
 class ModelBoneWeights;
-class FBXModelShader;
+class Shader;
 
 class ModelScene
 {
@@ -25,7 +25,7 @@ public:
 	ModelAnimation* GetAnimation(wstring animName);
 
 	void Update(D3DXMATRIX* worldPos);
-	void Render(FBXModelShader* shader);
+	void Render(Shader* shader);
 
 
 	void SetAni(int);

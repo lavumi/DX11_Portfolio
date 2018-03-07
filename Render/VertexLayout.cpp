@@ -77,6 +77,20 @@ D3D11_INPUT_ELEMENT_DESC VertexTextureNormalTangentBlend::desc[] =
 };
 UINT VertexTextureNormalTangentBlend::count = 6;
 
+
+D3D11_INPUT_ELEMENT_DESC VertexInstance::desc[] =
+{
+	{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+{ "INSTMATRIX",0, DXGI_FORMAT_R32G32B32A32_FLOAT, 1,0 , D3D11_INPUT_PER_INSTANCE_DATA, 1 },
+{ "INSTMATRIX",1, DXGI_FORMAT_R32G32B32A32_FLOAT, 1,D3D11_APPEND_ALIGNED_ELEMENT , D3D11_INPUT_PER_INSTANCE_DATA, 1 },
+{ "INSTMATRIX",2, DXGI_FORMAT_R32G32B32A32_FLOAT, 1,D3D11_APPEND_ALIGNED_ELEMENT , D3D11_INPUT_PER_INSTANCE_DATA, 1 },
+{ "INSTMATRIX",3, DXGI_FORMAT_R32G32B32A32_FLOAT, 1,D3D11_APPEND_ALIGNED_ELEMENT , D3D11_INPUT_PER_INSTANCE_DATA, 1 },
+};
+UINT VertexInstance::count = 5;
+
+
+
+
 //////////////////////////////////////////////////////////
 
 Vertex::Vertex()
@@ -224,5 +238,14 @@ VertexTextureNormalTangentBlend::VertexTextureNormalTangentBlend(D3DXVECTOR3 pos
 	this->tangent = tangent;
 	this->blendIndices = blendIndices;
 	this->blendWeights = blendWeights;
+}
+
+
+
+
+
+VertexInstance::VertexInstance()
+{
+	position = D3DXVECTOR3(0, 0, 0);
 }
 

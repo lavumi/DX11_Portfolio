@@ -1,7 +1,7 @@
 #pragma once
 #include "Shader.h"
 
-class ShadowBuffer;
+
 class ShadowShader : public Shader {
 public:
 	ShadowShader();
@@ -9,12 +9,9 @@ public:
 
 
 	virtual void Update();
-	virtual void Render(ID3D11ShaderResourceView * lightMap);
+	virtual void Render();
 
 
-
-
-	ShadowBuffer* buffer;
 
 	//void CreateBuffers();
 	//

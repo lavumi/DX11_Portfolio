@@ -16,7 +16,7 @@ public:
 
 private:
 
-	void CreateInputLayout();
+	//void CreateInputLayout();
 
 	GrassBuffer* buffer;
 	//void CreateBuffers();

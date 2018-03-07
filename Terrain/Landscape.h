@@ -3,8 +3,8 @@
 
 class Frustum;
 class QuadTree;
-class TerrainGrass;
-class Landscape : public Renderer
+class TerrainBuffer;
+class Landscape : public iRenderObject
 {
 public:
 	Landscape();
@@ -69,8 +69,14 @@ public:
 	 void GetGroundPos(vector<D3DXMATRIX>& grassGround) {
 		 grassGround = this->grassGround;
 	 }
+
+
+	 void SetPlane(D3DXPLANE& plane);
+
+
 private:
 
+	void LoadTextures();
 	void CheckGround();
 
 
@@ -101,5 +107,8 @@ private:
 	WorldBuffer* wBuffer;
 
 	QuadTree* quadTree;
-	TerrainGrass* grass;
+
+
+
+	TerrainBuffer* buffer;
 };

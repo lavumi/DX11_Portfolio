@@ -26,10 +26,10 @@ public:
 	//	memcpy(view, this->lightData.lightViewXProjection, sizeof(D3DXMATRIX));
 	//}
 
-	void GetLightDirection(D3DXVECTOR3* out_lightDir) {
-		memcpy(out_lightDir, this->lightData.lightDirection, sizeof(D3DXVECTOR3));
-
-	}
+	//void GetLightDirection(D3DXVECTOR3* out_lightDir) {
+	//	memcpy(out_lightDir, this->lightData.lightDirection, sizeof(D3DXVECTOR3));
+	//
+	//}
 
 	LightData* GetLightData() {
 		return &lightData;

@@ -4,6 +4,7 @@
 
 class Shader
 {
+public:
 	void SetShader();
 protected:
 	friend class ShaderManager;

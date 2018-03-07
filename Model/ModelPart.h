@@ -16,7 +16,7 @@ public:
 	~ModelPart();
 
 	void Update(bool isAnimation, D3DXMATRIX* worldPos);
-	void Render(FBXModelShader* shader);
+	void Render(Shader* shader);
 
 	void SetModel(Model* model) { this->model = model; }
 
@@ -57,4 +57,5 @@ private:
 	ID3D11Buffer* indexBuffer;
 
 	D3DXMATRIX world;
+	WorldBuffer* wBuffer;
 };

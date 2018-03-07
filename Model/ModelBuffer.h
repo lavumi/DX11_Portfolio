@@ -10,7 +10,7 @@ class ModelBuffer : public ShaderBuffer
 {
 public:
 	ModelBuffer()
-		: ShaderBuffer(sizeof(VSData), 0, 0)
+		: ShaderBuffer(sizeof(VS_Data), 0, sizeof(PS_DATA))
 	{
 		D3DXMatrixIdentity(&data.boneScale);
 		
@@ -18,11 +18,19 @@ public:
 			D3DXMatrixIdentity(&data.boneArray[i]);
 
 		data.isSkinning = false;
+
+
+		psData.ambient = D3DXCOLOR(0.5f, 0.5f, 0.5f, 1.0f);
+		psData.diffuse = D3DXCOLOR(0.7f, 0.7f, 0.7f, 1.0f);
+		psData.specular = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+		psData.shininess = 70;
+		psData.globalAmbient = D3DXCOLOR(0.6f, 0.6f, 0.6f, 1.0f);
+		UpdatePSBuffer(&psData, sizeof(PS_DATA));
 	}
 
 	void Update()
 	{
-		UpdateVSBuffer(&data, sizeof(VSData));
+		UpdateVSBuffer(&data, sizeof(VS_Data));
 	}
 
 	void SetSkinning(bool isSkinning)
@@ -39,14 +47,23 @@ public:
 	}
 
 
-	struct VSData
+	struct VS_Data
 	{
 		D3DXMATRIX boneScale;
 		D3DXMATRIX boneArray[100];
 		UINT isSkinning;
 		D3DXVECTOR3 padding;
 	};
-
+	struct PS_DATA
+	{
+		D3DXCOLOR ambient;
+		D3DXCOLOR diffuse;
+		D3DXCOLOR specular;
+		D3DXCOLOR globalAmbient;
+		float shininess;
+		D3DXVECTOR3 padding;
+	};
 private:
-	VSData data;
+	VS_Data data;
+	PS_DATA psData;
 };

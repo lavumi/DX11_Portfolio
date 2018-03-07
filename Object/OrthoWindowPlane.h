@@ -1,6 +1,6 @@
 #pragma once
 
-
+class OrthoWindowBuffer;
 class OrthoWindowPlane
 {
 public:
@@ -21,7 +21,7 @@ public:
 private:
 
 	WorldBuffer * wBuffer;
-
+	OrthoWindowBuffer* buffer;
 
 
 
@@ -36,9 +36,6 @@ private:
 
 
 	UINT vertexCount;
-
-	ID3D11Buffer* worldBuffer;
-
 
 	float rotSpeed = 0.00f;
 

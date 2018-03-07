@@ -140,51 +140,12 @@
     <ClCompile Include="Render\Frustum.cpp">
       <Filter>Render</Filter>
     </ClCompile>
-    <ClCompile Include="Shader\TerrainShader.cpp">
-      <Filter>Shader\ShaderRenewal</Filter>
-    </ClCompile>
-    <ClCompile Include="Shader\WaterShader.cpp">
-      <Filter>Shader\ShaderRenewal</Filter>
-    </ClCompile>
-    <ClCompile Include="Shader\FBXModelShader.cpp">
-      <Filter>Shader\ShaderRenewal</Filter>
-    </ClCompile>
-    <ClCompile Include="Shader\BlurShader.cpp">
-      <Filter>Shader\ShaderRenewal</Filter>
-    </ClCompile>
-    <ClCompile Include="Shader\ColorShader.cpp">
-      <Filter>Shader\ShaderRenewal</Filter>
-    </ClCompile>
-    <ClCompile Include="Shader\GrassShader.cpp">
-      <Filter>Shader\ShaderRenewal</Filter>
-    </ClCompile>
-    <ClCompile Include="Shader\DepthShadowShader.cpp">
-      <Filter>Shader\ShaderRenewal</Filter>
-    </ClCompile>
-    <ClCompile Include="Shader\NormalMapShader.cpp">
-      <Filter>Shader\ShaderRenewal</Filter>
-    </ClCompile>
-    <ClCompile Include="Shader\ShadowShader.cpp">
-      <Filter>Shader\ShaderRenewal</Filter>
-    </ClCompile>
-    <ClCompile Include="Shader\InstanceTextureShader.cpp">
-      <Filter>Shader\ShaderRenewal</Filter>
-    </ClCompile>
-    <ClCompile Include="Shader\RainShader.cpp">
-      <Filter>Shader\ShaderRenewal</Filter>
-    </ClCompile>
-    <ClCompile Include="Shader\SkydomeShader.cpp">
-      <Filter>Shader\ShaderRenewal</Filter>
-    </ClCompile>
-    <ClCompile Include="Shader\SkyplaneShader.cpp">
-      <Filter>Shader\ShaderRenewal</Filter>
-    </ClCompile>
-    <ClCompile Include="Shader\TextureShader.cpp">
-      <Filter>Shader\ShaderRenewal</Filter>
-    </ClCompile>
     <ClCompile Include="GameMain.cpp" />
     <ClCompile Include="Shader\ShaderManager.cpp">
       <Filter>Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="Render\Renderer.cpp">
+      <Filter>Render</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -303,9 +264,6 @@
     <ClInclude Include="Model\ModelBoneWeights.h">
       <Filter>Model</Filter>
     </ClInclude>
-    <ClInclude Include="Model\ModelBuffer.h">
-      <Filter>Model</Filter>
-    </ClInclude>
     <ClInclude Include="Model\ModelEnums.h">
       <Filter>Model</Filter>
     </ClInclude>
@@ -355,86 +313,44 @@
     <ClInclude Include="Shader\VPBuffer.h">
       <Filter>Shader\Buffers</Filter>
     </ClInclude>
-    <ClInclude Include="Shader\TerrainShader.h">
-      <Filter>Shader\ShaderRenewal</Filter>
-    </ClInclude>
     <ClInclude Include="Shader\WaterBuffer.h">
       <Filter>Shader\Buffers</Filter>
     </ClInclude>
     <ClInclude Include="Shader\BaseBuffer.h">
       <Filter>Shader\Buffers</Filter>
     </ClInclude>
-    <ClInclude Include="Shader\WaterShader.h">
-      <Filter>Shader\ShaderRenewal</Filter>
-    </ClInclude>
-    <ClInclude Include="Shader\BlurBuffer.h">
-      <Filter>Shader\Buffers</Filter>
-    </ClInclude>
-    <ClInclude Include="Shader\BlurShader.h">
-      <Filter>Shader\ShaderRenewal</Filter>
-    </ClInclude>
     <ClInclude Include="Shader\ColorBuffer.h">
       <Filter>Shader\Buffers</Filter>
-    </ClInclude>
-    <ClInclude Include="Shader\ColorShader.h">
-      <Filter>Shader\ShaderRenewal</Filter>
-    </ClInclude>
-    <ClInclude Include="Shader\FBXModelShader.h">
-      <Filter>Shader\ShaderRenewal</Filter>
     </ClInclude>
     <ClInclude Include="Shader\GrassBuffer.h">
       <Filter>Shader\Buffers</Filter>
     </ClInclude>
-    <ClInclude Include="Shader\GrassShader.h">
-      <Filter>Shader\ShaderRenewal</Filter>
-    </ClInclude>
-    <ClInclude Include="Shader\DepthShadowShader.h">
-      <Filter>Shader\ShaderRenewal</Filter>
-    </ClInclude>
     <ClInclude Include="Shader\NormalShaderBuffer.h">
       <Filter>Shader\Buffers</Filter>
-    </ClInclude>
-    <ClInclude Include="Shader\NormalMapShader.h">
-      <Filter>Shader\ShaderRenewal</Filter>
-    </ClInclude>
-    <ClInclude Include="Shader\ShadowBuffer.h">
-      <Filter>Shader\Buffers</Filter>
-    </ClInclude>
-    <ClInclude Include="Shader\LightViewBuffer.h">
-      <Filter>Shader\Buffers</Filter>
-    </ClInclude>
-    <ClInclude Include="Shader\ShadowShader.h">
-      <Filter>Shader\ShaderRenewal</Filter>
-    </ClInclude>
-    <ClInclude Include="Shader\InstanceTextureShader.h">
-      <Filter>Shader\ShaderRenewal</Filter>
     </ClInclude>
     <ClInclude Include="Shader\RainBuffer.h">
       <Filter>Shader\Buffers</Filter>
     </ClInclude>
-    <ClInclude Include="Shader\RainShader.h">
-      <Filter>Shader\ShaderRenewal</Filter>
-    </ClInclude>
-    <ClInclude Include="Shader\SkydomeBuffer.h">
-      <Filter>Shader\Buffers</Filter>
-    </ClInclude>
-    <ClInclude Include="Shader\SkydomeShader.h">
-      <Filter>Shader\ShaderRenewal</Filter>
-    </ClInclude>
     <ClInclude Include="Shader\SkyplaneBuffer.h">
       <Filter>Shader\Buffers</Filter>
-    </ClInclude>
-    <ClInclude Include="Shader\SkyplaneShader.h">
-      <Filter>Shader\ShaderRenewal</Filter>
-    </ClInclude>
-    <ClInclude Include="Shader\TextureShader.h">
-      <Filter>Shader\ShaderRenewal</Filter>
     </ClInclude>
     <ClInclude Include="Shader\ShaderManager.h">
       <Filter>Shader</Filter>
     </ClInclude>
+    <ClInclude Include="Shader\LightBuffer.h">
+      <Filter>Shader\Buffers</Filter>
+    </ClInclude>
     <ClInclude Include="Render\Renderer.h">
       <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\iRenderObject.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader\OrthoWindowBuffer.h">
+      <Filter>Shader\Buffers</Filter>
+    </ClInclude>
+    <ClInclude Include="Model\ModelBuffer.h">
+      <Filter>Shader\Buffers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -468,14 +384,14 @@
     <Filter Include="Utility">
       <UniqueIdentifier>{396c9709-56b0-4eb0-a69d-18929b6e0ff7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="FX">
-      <UniqueIdentifier>{caf5405c-847a-4e3d-85bb-567eb1844735}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Shader\Buffers">
       <UniqueIdentifier>{55de613b-74c9-4327-9e91-08230fb6ad24}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Shader\ShaderRenewal">
-      <UniqueIdentifier>{76f10240-792b-4bd4-9f6d-9cf4a506f62b}</UniqueIdentifier>
+    <Filter Include="ProceduralTexture\FX">
+      <UniqueIdentifier>{caf5405c-847a-4e3d-85bb-567eb1844735}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="FX">
+      <UniqueIdentifier>{0b34cee2-31a1-44d7-8e50-56c1f7d6c774}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -483,93 +399,93 @@
       <Filter>Mesh</Filter>
     </None>
     <None Include="Shader\FX\BaseTile.fx">
-      <Filter>FX</Filter>
+      <Filter>ProceduralTexture\FX</Filter>
     </None>
     <None Include="Shader\FX\CreateTangentMap.fx">
-      <Filter>FX</Filter>
+      <Filter>ProceduralTexture\FX</Filter>
     </None>
     <None Include="Shader\FX\directionalWarp.fx">
-      <Filter>FX</Filter>
+      <Filter>ProceduralTexture\FX</Filter>
     </None>
     <None Include="Shader\FX\DrawPatternInTile.fx">
-      <Filter>FX</Filter>
+      <Filter>ProceduralTexture\FX</Filter>
     </None>
     <None Include="Shader\FX\finalDraw.fx">
-      <Filter>FX</Filter>
+      <Filter>ProceduralTexture\FX</Filter>
     </None>
     <None Include="Shader\FX\midPointGrad.fx">
-      <Filter>FX</Filter>
-    </None>
-    <None Include="Shader\FX\NormalMap.fx">
-      <Filter>FX</Filter>
+      <Filter>ProceduralTexture\FX</Filter>
     </None>
     <None Include="Shader\FX\randomSRT.fx">
-      <Filter>FX</Filter>
+      <Filter>ProceduralTexture\FX</Filter>
     </None>
     <None Include="Shader\FX\randomSRTInstance.fx">
-      <Filter>FX</Filter>
+      <Filter>ProceduralTexture\FX</Filter>
     </None>
     <None Include="Shader\FX\singleGrass.fx">
-      <Filter>FX</Filter>
+      <Filter>ProceduralTexture\FX</Filter>
     </None>
     <None Include="Shader\FX\SquarePattern.fx">
-      <Filter>FX</Filter>
+      <Filter>ProceduralTexture\FX</Filter>
     </None>
     <None Include="Shader\FX\UIShader.fx">
-      <Filter>FX</Filter>
-    </None>
-    <None Include="Shader\FX\Skydome.fx">
-      <Filter>FX</Filter>
-    </None>
-    <None Include="Shader\FX\LightDepthShader.fx">
-      <Filter>FX</Filter>
-    </None>
-    <None Include="Shader\FX\Shadow.fx">
-      <Filter>FX</Filter>
-    </None>
-    <None Include="Shader\FX\BlurShader.fx">
-      <Filter>FX</Filter>
+      <Filter>ProceduralTexture\FX</Filter>
     </None>
     <None Include="Shader\FX\MirrorShader.fx">
-      <Filter>FX</Filter>
-    </None>
-    <None Include="Shader\FX\TextureShader.fx">
-      <Filter>FX</Filter>
-    </None>
-    <None Include="Shader\FX\ColorShader.fx">
-      <Filter>FX</Filter>
-    </None>
-    <None Include="Shader\FX\WaterShader.fx">
-      <Filter>FX</Filter>
-    </None>
-    <None Include="Shader\FX\Terrain.fx">
-      <Filter>FX</Filter>
+      <Filter>ProceduralTexture\FX</Filter>
     </None>
     <None Include="Shader\FX\InstanceTextureShader.fx">
-      <Filter>FX</Filter>
+      <Filter>ProceduralTexture\FX</Filter>
     </None>
     <None Include="Shader\FX\perlin.fx">
-      <Filter>FX</Filter>
+      <Filter>ProceduralTexture\FX</Filter>
     </None>
     <None Include="Shader\FX\3dPerlin.fx">
+      <Filter>ProceduralTexture\FX</Filter>
+    </None>
+    <None Include="Shader\FX\ShaderPreset.hlsli">
+      <Filter>ProceduralTexture\FX</Filter>
+    </None>
+    <None Include="FX\ShaderPreset.hlsli">
       <Filter>FX</Filter>
     </None>
-    <None Include="Shader\FX\RainShader.fx">
+    <None Include="FX\BlurShader.fx">
       <Filter>FX</Filter>
     </None>
-    <None Include="Shader\FX\GrassShader.fx">
+    <None Include="FX\ColorShader.fx">
       <Filter>FX</Filter>
     </None>
-    <None Include="Shader\FX\FBXModelShader.fx">
+    <None Include="FX\FBXModelShader.fx">
       <Filter>FX</Filter>
     </None>
-    <None Include="Shader\FX\TerrainShader.fx">
+    <None Include="FX\GrassShader.fx">
       <Filter>FX</Filter>
     </None>
-    <None Include="Shader\FX\SkyplaneShader.fx">
-      <Filter>Shader\ShaderRenewal</Filter>
+    <None Include="FX\LightViewShader.fx">
+      <Filter>FX</Filter>
     </None>
-    <None Include="Shader\FX\WVPMatrix.hlsli">
+    <None Include="FX\NormalMapShader.fx">
+      <Filter>FX</Filter>
+    </None>
+    <None Include="FX\RainShader.fx">
+      <Filter>FX</Filter>
+    </None>
+    <None Include="FX\ShadowShader.fx">
+      <Filter>FX</Filter>
+    </None>
+    <None Include="FX\SkydomeShader.fx">
+      <Filter>FX</Filter>
+    </None>
+    <None Include="FX\SkyplaneShader.fx">
+      <Filter>FX</Filter>
+    </None>
+    <None Include="FX\TerrainShader.fx">
+      <Filter>FX</Filter>
+    </None>
+    <None Include="FX\TextureShader.fx">
+      <Filter>FX</Filter>
+    </None>
+    <None Include="FX\WaterShader.fx">
       <Filter>FX</Filter>
     </None>
   </ItemGroup>

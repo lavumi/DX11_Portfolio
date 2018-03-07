@@ -2,33 +2,18 @@
 #include "Landscape.h"
 #include "QuadTree.h"
 
+#include "../Shader/TerrainBuffer.h"
 //#include "../ProceduralTexture/PerlinNoise.h"
 
 Landscape::Landscape()
 	:heightMapFile(L"./Terrain/heightmap.jpg")
 
 {
-	
-
 	D3DXMatrixIdentity(&world);
 	diffuseMap = 0;
 	normalMap = 0;
 	specularMap = 0;
-
-
-	wBuffer = new WorldBuffer();
-	wBuffer->SetWorld(world);
-
-
-	diffuseMap = new ID3D11ShaderResourceView*[3];
-
-	HRESULT hr = D3DX11CreateShaderResourceViewFromFile(D3D::GetDevice(), L"./Terrain/normal.jpg", nullptr, nullptr, &normalMap, nullptr);
-	assert(SUCCEEDED(hr));
-	hr = D3DX11CreateShaderResourceViewFromFile(D3D::GetDevice(), L"./Terrain/underwater.jpg", nullptr, nullptr, &diffuseMap[1], nullptr);
-	assert(SUCCEEDED(hr));
-	hr = D3DX11CreateShaderResourceViewFromFile(D3D::GetDevice(), L"./Terrain/mountain.jpg", nullptr, nullptr, &diffuseMap[2], nullptr);
-	assert(SUCCEEDED(hr));
-
+	LoadTextures();
 }
 
 
@@ -40,6 +25,9 @@ Landscape::~Landscape()
 	
 	SAFE_RELEASE(indexBuffer);
 	SAFE_RELEASE(vertexBuffer);
+
+	SAFE_DELETE(wBuffer);
+	SAFE_DELETE(buffer);
 }
 
 void Landscape::Initialize()
@@ -55,7 +43,9 @@ void Landscape::Initialize()
 	quadTree = new QuadTree(width + 1, height + 1);
 	quadTree->CreateTree();
 
-
+	wBuffer = new WorldBuffer();
+	wBuffer->SetWorld(world);
+	buffer = new TerrainBuffer();
 
 }
 
@@ -254,6 +244,11 @@ void Landscape::Render()
 	D3D::GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	wBuffer->SetBuffer();
+	buffer->SetBuffers();
+
+	D3D::GetDeviceContext()->PSSetShaderResources(0, 3, diffuseMap);
+	D3D::GetDeviceContext()->PSSetShaderResources(5, 1, &normalMap);
+
 	D3D::GetDeviceContext()->DrawIndexed(indexCount, 0, 0);
 
 }
@@ -317,6 +312,23 @@ void Landscape::changeLOD(Frustum* frustum)
 	D3D::GetDeviceContext()->Unmap(indexBuffer, 0);
 	indexCount = indexDataTemp.size();
 
+}
+
+void Landscape::SetPlane(D3DXPLANE & plane)
+{
+	buffer->SetPLANE(plane);
+}
+
+void Landscape::LoadTextures()
+{
+	diffuseMap = new ID3D11ShaderResourceView*[3];
+
+	HRESULT hr = D3DX11CreateShaderResourceViewFromFile(D3D::GetDevice(), L"./Terrain/normal.jpg", nullptr, nullptr, &normalMap, nullptr);
+	assert(SUCCEEDED(hr));
+	hr = D3DX11CreateShaderResourceViewFromFile(D3D::GetDevice(), L"./Terrain/underwater.jpg", nullptr, nullptr, &diffuseMap[1], nullptr);
+	assert(SUCCEEDED(hr));
+	hr = D3DX11CreateShaderResourceViewFromFile(D3D::GetDevice(), L"./Terrain/mountain.jpg", nullptr, nullptr, &diffuseMap[2], nullptr);
+	assert(SUCCEEDED(hr));
 }
 
 void Landscape::CheckGround()

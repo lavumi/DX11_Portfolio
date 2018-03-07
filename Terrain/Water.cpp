@@ -1,9 +1,6 @@
 #include "../stdafx.h"
 #include "Water.h"
-
-
-
-
+#include "../Shader/WaterBuffer.h"
 
 Water::Water()
 	: vertexBuffer(nullptr), indexBuffer(nullptr)
@@ -12,6 +9,11 @@ Water::Water()
 	waterHeight = -7.9f;
 
 	D3DXMatrixTranslation(&world, 0.0f, waterHeight, 0.0f);
+
+
+	wBuffer = new WorldBuffer();
+	wBuffer->SetWorld(world);
+	buffer = new WaterBuffer();
 
 	waterPlane = D3DXPLANE(0, 1, 0, -waterHeight);
 	CreateBuffer();
@@ -25,6 +27,8 @@ Water::~Water()
 {
 	SAFE_RELEASE(vertexBuffer);
 	SAFE_RELEASE(indexBuffer);
+	SAFE_DELETE(buffer);
+	SAFE_DELETE(wBuffer);
 }
 
 
@@ -42,7 +46,12 @@ void Water::Render()
 	D3D::GetDeviceContext()->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R32_UINT, 0);
 	D3D::GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
+	wBuffer->SetBuffer();
+	buffer->SetWorld(world);
+	buffer->SetBuffers();
 
+	D3D::GetDeviceContext()->PSSetShaderResources(1, 1, &normal);
+	D3D::GetDeviceContext()->DrawIndexed(indexCount, 0, 0);
 }
 
 

@@ -3,13 +3,14 @@
 struct VertexInput
 {
     float4 position : POSITION0;
+    float2 uv : TEXCOORD0;
 
 };
 
 struct PixelInput
 {
     float4 position : SV_POSITION;
-    float4 worldPosotion : TEXCOORD0;
+    float2 uv : TEXCOORD0;
 
 };
 
@@ -18,22 +19,29 @@ PixelInput VS(VertexInput input)
     PixelInput output;
     input.position.w = 1;
     output.position = mul(input.position, _world);
+    output.position = mul(output.position, _viewXprojection);
 
-    output.position = mul(output.position, _lightView);
-    output.position = mul(output.position, _lightProjection);
-    output.worldPosotion = output.position;
+
+    output.uv = input.uv;
 
 
     return output;
 }
 
 
+
+Texture2D _map : register(t10);
+
+
+SamplerState samp[3];
+
+
 float4 PS(PixelInput input) : SV_Target
 {
-    float depthValue;
+    float4 color = _map.Sample(samp[0], input.uv);
 
-    depthValue = input.worldPosotion.z / input.worldPosotion.w;
+   
 
-    return depthValue;
+    return  color;
 
 }

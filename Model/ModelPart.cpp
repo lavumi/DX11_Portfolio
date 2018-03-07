@@ -6,7 +6,7 @@
 #include "ModelBoneWeights.h"
 #include "ModelBuffer.h"
 
-#include "../Shader/FBXModelShader.h"
+#include "../Shader/Shader.h"
 
 ModelPart::ModelPart(Model * model)
 	//: Shader(L"./Model/Model.fx")
@@ -14,6 +14,7 @@ ModelPart::ModelPart(Model * model)
 	, vertex(NULL), index(NULL)
 	, vertexBuffer(NULL), indexBuffer(NULL)
 {
+	wBuffer = new WorldBuffer();
 	//CreateInputLayout(VertexTextureNormalTangentBlend::desc, VertexTextureNormalTangentBlend::count);
 }
 
@@ -24,6 +25,7 @@ ModelPart::ModelPart(Model* model, ModelMaterial* material)
 	, vertexBuffer(NULL), indexBuffer(NULL)
 {
 	materialIndex = material->GetIndex();
+	wBuffer = new WorldBuffer();
 //	CreateInputLayout(VertexTextureNormalTangentBlend ::desc, VertexTextureNormalTangentBlend::count);
 }
 
@@ -54,9 +56,9 @@ ModelPart::ModelPart(ModelPart & otherModelPart)
 
 	isSkinnedModel = otherModelPart.isSkinnedModel;
 
-	//CreateInputLayout(VertexTextureNormalTangentBlend::desc, VertexTextureNormalTangentBlend::count);
 
 	CreateBuffer();
+	wBuffer = new WorldBuffer();
 }
 
 ModelPart::~ModelPart()
@@ -66,6 +68,7 @@ ModelPart::~ModelPart()
 
 	SAFE_RELEASE(vertexBuffer);
 	SAFE_RELEASE(indexBuffer);
+	SAFE_DELETE(wBuffer);
 }
 
 void ModelPart::Update(bool isAnimation, D3DXMATRIX* worldPos)
@@ -86,14 +89,16 @@ void ModelPart::Update(bool isAnimation, D3DXMATRIX* worldPos)
 
 
 	world *= *worldPos;
-
+	wBuffer->SetWorld(world);
 //	worldBuffer->SetWorld(world);
 
 	//Shader::Update();
 }
 
-void ModelPart::Render(FBXModelShader* shader)
+void ModelPart::Render(Shader* shader)
 {
+	shader->SetShader();
+
 	ID3D11DeviceContext* dc = D3D::GetDeviceContext();
 
 	UINT stride = sizeof(VertexTextureNormalTangentBlend);
@@ -109,13 +114,13 @@ void ModelPart::Render(FBXModelShader* shader)
 	ID3D11ShaderResourceView* normalmapView = material->GetNormalMapView();
 	dc->PSSetShaderResources(1, 1, &normalmapView);
 
-	ID3D11ShaderResourceView* specularmapView = material->GetSpecularView();
-	dc->PSSetShaderResources(2, 1, &specularmapView);
+	//ID3D11ShaderResourceView* specularmapView = material->GetSpecularView();
+	//dc->PSSetShaderResources(2, 1, &specularmapView);
 
 
-	//Shader::Render();
-	shader->Render(indexCount, world);
-//	dc->DrawIndexed(indexCount, 0, 0);
+	wBuffer->SetBuffer();
+	D3D::GetDeviceContext()->DrawIndexed(indexCount, 0, 0);
+
 }
 
 void ModelPart::AddVertex(D3DXVECTOR3 & position, D3DXVECTOR3 & normal, D3DXVECTOR2 & uv, const ModelBoneWeights& boneWeights)
