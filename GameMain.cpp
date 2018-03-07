@@ -348,22 +348,18 @@ void GameMain::PreRender()
 		Rasterizer::Get()->SetOffCullMode();
 		{
 			//반사된 평면에 맞춰서 카메라의 위치, 스카이 플레인의 위치까지 보정해주어야 함
+			//TODO 이부분 개선 필요할듯
 			D3DXMATRIX world;
 			D3DXVECTOR3 camPos;
 			Camera::Get()->GetPosition(&camPos);
 			camPos.y = -camPos.y + (lake->GetWaterHeigh() * 2.0f);
 			D3DXMatrixTranslation(&world, camPos.x, camPos.y, camPos.z);
 
-
-			D3DXVECTOR3 lightDir;
-			LightManager::Get()->GetLightDirection(&lightDir);
-
-
 			skydome->Render();
-			skydomeShader->Render(skydome->getIndexCount(), world, view, projection, lightDir);
+			skydomeShader->Render(skydome->getIndexCount(), world);
 			D3D::Get()->SetBlender(D3D::BL_state::Add);
 			cloud->Render();
-			skyplaneShader->Render(cloud->getIndexCount(), world, view, projection, cloud->getPerlinMap());
+			skyplaneShader->Render(cloud->getIndexCount(), world, cloud->getPerlinMap());
 			D3D::Get()->SetBlender(D3D::BL_state::Off);
 		}
 		D3D::Get()->SetDepthStencilState(D3D::DS_state::onState);
@@ -430,15 +426,12 @@ void GameMain::PreRender()
 		D3D::Get()->SetDepthStencilState(D3D::DS_state::offState);
 		Rasterizer::Get()->SetOffCullMode();
 		{
-			D3DXVECTOR3 lightDir;
-			LightManager::Get()->GetLightDirection(&lightDir);
-
 			skydome->Render();
-			skydomeShader->Render(skydome->getIndexCount(), skydome->getWorld(), view, projection, lightDir);
+			skydomeShader->Render(skydome->getIndexCount(), skydome->getWorld());
 
 			D3D::Get()->SetBlender(D3D::BL_state::Add);
 			cloud->Render();
-			skyplaneShader->Render(cloud->getIndexCount(), cloud->getWorld(), view, projection, cloud->getPerlinMap());
+			skyplaneShader->Render(cloud->getIndexCount(), cloud->getWorld(), cloud->getPerlinMap());
 
 			rainCone->Render();
 			rainShader->Render(rainCone->getIndexCount(), rainCone->getWorld(), view, projection,
@@ -526,9 +519,10 @@ void GameMain::Render()
 	Camera::Get()->GetDefaultView(&view);
 	D3D::Get()->GetOrthoProjection(&projection);
 	D3D::Get()->SetBlender(D3D::BL_state::Off);
+	vpBuffer->SetVPMatrix(view, projection);
 	orthoWindow->Render();
 
-	textureShader->Render(orthoWindow->GetIndexCount(), orthoWindow->GetWorld(), view, projection, *mainRendering->GetShadowResourceView(0));
+	textureShader->Render(orthoWindow->GetIndexCount(), orthoWindow->GetWorld(), *mainRendering->GetShadowResourceView(0));
 
 
 

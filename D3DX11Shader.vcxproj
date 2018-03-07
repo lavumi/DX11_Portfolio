@@ -205,9 +205,12 @@
     <ClInclude Include="Shader\GrassShader.h" />
     <ClInclude Include="Shader\InstanceTextureShader.h" />
     <ClInclude Include="Shader\NormalShaderBuffer.h" />
+    <ClInclude Include="Shader\RainBuffer.h" />
     <ClInclude Include="Shader\RainShader.h" />
     <ClInclude Include="Shader\ShadowBuffer.h" />
     <ClInclude Include="Shader\ShadowShader.h" />
+    <ClInclude Include="Shader\SkydomeBuffer.h" />
+    <ClInclude Include="Shader\SkyplaneBuffer.h" />
     <ClInclude Include="Shader\SkyplaneShader.h" />
     <ClInclude Include="Shader\TerrainBuffer.h" />
     <ClInclude Include="Shader\TextureShader.h" />

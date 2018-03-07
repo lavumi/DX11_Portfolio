@@ -1,6 +1,7 @@
 #pragma once
 #include "Shader.h"
 
+class SkydomeBuffer;
 class SkydomeShader : public Shader {
 public:
 	SkydomeShader();
@@ -8,16 +9,16 @@ public:
 
 
 	virtual void Update();
-	void Render(UINT indexCount, D3DXMATRIX world, D3DXMATRIX view, D3DXMATRIX projection, D3DXVECTOR3 lightDir);
+	void Render(UINT indexCount, D3DXMATRIX world);
 
 
 
 private:
-	void CreateBuffers();
+
+	SkydomeBuffer* buffer;
 
 
-	D3D11_BUFFER_DESC desc;
-	ID3D11Buffer* LightBuffer;
+
 
 
 

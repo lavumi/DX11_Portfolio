@@ -1,6 +1,7 @@
 #pragma once
 #include "Shader.h"
 
+class SkyplaneBuffer;
 class SkyplaneShader : public Shader {
 public:
 	SkyplaneShader();
@@ -9,21 +10,14 @@ public:
 
 	virtual void Update();
 	virtual void Render(UINT indexCount,
-		D3DXMATRIX world, D3DXMATRIX view, D3DXMATRIX projection,  
+		D3DXMATRIX world,  
 		ID3D11ShaderResourceView* perlin);
 
 
 
 private:
+	SkyplaneBuffer * buffer;
 
-	struct SkyplaneData {
-		float translation;
-		float scale;
-		D3DXVECTOR2 pad;
-	} data;
-
-	void CreateBuffers();
-	ID3D11Buffer* skyplaneBuffer;
 
 	float speed;
 

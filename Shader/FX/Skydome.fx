@@ -1,25 +1,17 @@
-cbuffer MatrixBuffer : register(b10)
+cbuffer MatrixBuffer : register(b13)
 {
     matrix _world;
-
-
 };
-cbuffer MatrixBuffer : register(b11)
+cbuffer MatrixBuffer : register(b12)
 {
-    matrix _view;
-    matrix _projection;
-
+    matrix _viewXprojection;
 };
 
 
 
 
 
-cbuffer LightBuffer : register(b1)
-{
-    float3 _lightDir;
-    float _padding;
-};
+
 
 struct VertexInput
 {
@@ -30,7 +22,6 @@ struct PixelInput
 {
     float4 position : SV_POSITION;
     float4 wPosition : TEXCOORD0;
-    float3 lightPos : TEXCOORD1;
     float3 vertexPos : TEXCOORD2;
 
 };
@@ -42,12 +33,11 @@ PixelInput VS(VertexInput input)
     input.position.w = 1.0f;
 
     output.vertexPos = input.position.xyz;
-    output.lightPos =- _lightDir;
 
 
     output.position = mul(input.position, _world);
-    output.position = mul(output.position, _view);
-    output.position = mul(output.position, _projection);
+    output.position = mul(output.position, _viewXprojection);
+   // output.position = mul(output.position, _projection);
 
     output.wPosition = input.position;
 
@@ -56,7 +46,11 @@ PixelInput VS(VertexInput input)
 
 
 
-
+cbuffer LightBuffer : register(b0)
+{
+    float3 _lightDir;
+    float _padding;
+};
 
 
 
@@ -64,7 +58,7 @@ PixelInput VS(VertexInput input)
 float4 PS(PixelInput input) : SV_TARGET0
 {
     float height = saturate(input.wPosition.y);
-    float3 lightPos = normalize(input.lightPos);
+    float3 lightPos = -_lightDir;
     float3 vertexPos = normalize(input.vertexPos);
 
     float lightVertexCos = dot(lightPos, vertexPos);

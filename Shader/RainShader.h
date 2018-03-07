@@ -1,6 +1,7 @@
 #pragma once
 #include "Shader.h"
 
+class RainBuffer;
 class RainShader : public Shader {
 public:
 	RainShader();
@@ -14,10 +15,10 @@ public:
 
 
 private:
-	void CreateBuffers();
 
-	float Data;
-	ID3D11Buffer* colorBuffer;
+	RainBuffer * buffer;
+
+
 
 
 

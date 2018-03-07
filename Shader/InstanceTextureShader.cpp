@@ -5,7 +5,6 @@ InstanceTextureShader::InstanceTextureShader()
 {
 	CreateInputLayout();
 
-	CreateBuffers();
 }
 
 InstanceTextureShader::~InstanceTextureShader()
@@ -18,17 +17,11 @@ void InstanceTextureShader::Update()
 
 }
 
-void InstanceTextureShader::Render(UINT indexCount, UINT instanceCount, D3DXMATRIX view, D3DXMATRIX projection, ID3D11ShaderResourceView* diffuse)
+void InstanceTextureShader::Render(UINT indexCount, UINT instanceCount, ID3D11ShaderResourceView* diffuse)
 {
-
 	D3D::GetDeviceContext()->IASetInputLayout(layout);
 	D3D::GetDeviceContext()->VSSetShader(vertexShader, NULL, 0);
 	D3D::GetDeviceContext()->PSSetShader(pixelShader, NULL, 0);
-
-	SetMatrix(view, view, projection);
-
-	D3D::GetDeviceContext()->VSSetConstantBuffers(10, 1, &wBuffer);
-	D3D::GetDeviceContext()->VSSetConstantBuffers(11, 1, &vpBuffer);
 
 	if(diffuse != nullptr)
 		D3D::GetDeviceContext()->PSSetShaderResources(0, 1, &diffuse);
@@ -59,7 +52,3 @@ void InstanceTextureShader::CreateInputLayout()
 	assert(SUCCEEDED(hr));
 }
 
-void InstanceTextureShader::CreateBuffers()
-{
-
-}
