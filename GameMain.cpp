@@ -106,7 +106,7 @@ void GameMain::Initialize()
 
 	grassTexture->DrawTexture();
 	landscape->SetTexture(grassTexture->diffuse, nullptr, nullptr);
-	grass->setDiffuseMap(grassTexture->getGrassTexture());
+	//grass->setDiffuseMap(grassTexture->getGrassTexture());
 	LodOff = false;
 	
 
@@ -173,7 +173,7 @@ void GameMain::Update()
 
 	Camera::Get()->GetView(&view);
 	D3D::Get()->GetProjection(&projection);
-	frustum->SetFrustum(Camera::screenDepth, view, projection);
+	//frustum->SetFrustum(Camera::screenDepth, view, projection);
 
 
 
@@ -210,7 +210,7 @@ void GameMain::Update()
 		player->SetAni(i);
 	}
 	if (!LodOff) {
-		landscape->changeLOD(frustum);
+		//landscape->changeLOD(frustum);
 		//Camera::Get()->SetFallowCamera(nullptr);
 
 	}
@@ -234,6 +234,8 @@ void GameMain::PreRender()
 
 
 	D3DXMATRIX world, view, projection;
+
+	/*
 	D3DXMatrixIdentity(&view);
 	D3DXMatrixIdentity(&projection);
 
@@ -359,6 +361,9 @@ void GameMain::PreRender()
 		Rasterizer::Get()->SetSolid();
 	}
 
+
+	*/
+
 	//메인 장면 렌더링(2번 텍스쳐에는 터레인의  깊이값 저장한다)
 	{
 		mainRendering->SetTarget();
@@ -387,23 +392,24 @@ void GameMain::PreRender()
 
 
 
-		assert(shaderManager->SetShader(L"NormalMapShader"));
-		D3D::GetDeviceContext()->PSSetShaderResources(13, 1, blurShadowTexture->GetShadowResourceView());
-		testcube->Render();
+		//assert(shaderManager->SetShader(L"NormalMapShader"));
+		//D3D::GetDeviceContext()->PSSetShaderResources(13, 1, blurShadowTexture->GetShadowResourceView());
+		//testcube->Render();
 
 
 		assert(shaderManager->SetShader(L"TerrainShader"));
 		D3DXPLANE clipPlane = lake->getwaterPlane();
 		landscape->SetPlane(clipPlane);
+	//	Rasterizer::Get()->SetWireframe();
 		landscape->Render();
-
+	//	Rasterizer::Get()->SetSolid();
 	
-		D3D::GetDeviceContext()->PSSetShaderResources(14, 1, noise->GetPerlinNoise());
-		D3D::GetDeviceContext()->PSSetShaderResources(11, 1, lakeReflectionTexture->GetShadowResourceView());
-		D3D::GetDeviceContext()->PSSetShaderResources(10, 1, lakeRefractionTexture->GetShadowResourceView());
-
-		assert(shaderManager->SetShader(L"WaterShader"));
-		lake->Render();
+		//D3D::GetDeviceContext()->PSSetShaderResources(14, 1, noise->GetPerlinNoise());
+		//D3D::GetDeviceContext()->PSSetShaderResources(11, 1, lakeReflectionTexture->GetShadowResourceView());
+		//D3D::GetDeviceContext()->PSSetShaderResources(10, 1, lakeRefractionTexture->GetShadowResourceView());
+		//
+		//assert(shaderManager->SetShader(L"WaterShader"));
+		//lake->Render();
 
 
 		//grass->Render();

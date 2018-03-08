@@ -14,9 +14,11 @@ public:
 	void Initialize();
 
 
-	void LoadHeightMap();
+	//void LoadHeightMap();
 	void CreateVertexData();
 	void CreateIndexData();
+	void CreateQuadVertexData();
+	void CreateQuadIndexData();
 	void CreateNormalData();
 	void CreateBuffer();
 
@@ -82,8 +84,8 @@ private:
 
 	//MaterialBuffer* materialBuffer;
 
-	wstring heightMapFile;
-	BYTE* heightData;
+	
+	//BYTE* heightData;
 
 
 	vector<D3DXMATRIX> grassGround;
@@ -103,6 +105,7 @@ private:
 	ID3D11ShaderResourceView** diffuseMap;
 	ID3D11ShaderResourceView* normalMap;
 	ID3D11ShaderResourceView* specularMap;
+	ID3D11ShaderResourceView* heightMap;
 	D3DXMATRIX world;
 	WorldBuffer* wBuffer;
 

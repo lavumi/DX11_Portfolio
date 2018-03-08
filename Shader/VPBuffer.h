@@ -22,7 +22,7 @@ public:
 
 	}
 
-	void SetVPMatrix(D3DXMATRIX view,D3DXMATRIX projection) {
+	void SetVPMatrix(D3DXMATRIX view, D3DXMATRIX projection) {
 
 		D3DXMATRIX _view, _projection;
 		_view = view;
@@ -33,7 +33,7 @@ public:
 		D3DXMatrixTranspose(&_projection, &projection);
 
 		data.view = _view * _projection;
-		
+
 		D3DXMatrixTranspose(&data.view, &(view*projection));
 		//D3DXMatrixTranspose(&data.projection, &projection);
 
@@ -50,9 +50,11 @@ public:
 
 		D3D::GetDeviceContext()->VSSetConstantBuffers(12, 1, &buffer);
 		D3D::GetDeviceContext()->GSSetConstantBuffers(12, 1, &buffer);
+		D3D::GetDeviceContext()->HSSetConstantBuffers(12, 1, &buffer);
+		D3D::GetDeviceContext()->DSSetConstantBuffers(12, 1, &buffer);
+
+
 	}
-
-
 
 
 	void Update()
