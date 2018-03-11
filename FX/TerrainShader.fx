@@ -156,9 +156,9 @@ DomainOut DS(PatchTess patchTess,
 
    
     
-    float3 t1 = lerp(quad[0].tangent, quad[1].tangent, uv.x);
-    float3 t2 = lerp(quad[2].tangent, quad[3].tangent, uv.x);
-    outData.tangent = lerp(t1, t2, uv.y);
+   // float3 t1 = lerp(quad[0].tangent, quad[1].tangent, uv.x);
+   // float3 t2 = lerp(quad[2].tangent, quad[3].tangent, uv.x);
+   // outData.tangent = lerp(t1, t2, uv.y);
 
 
 
@@ -171,22 +171,25 @@ DomainOut DS(PatchTess patchTess,
     dout.viewPosition = dout.position.xyw;
     dout.uv = outData.uv;
     
-    float3 n = mul(outData.normal, (float3x3) worldInverseTransposeMatrix);
-    float3 t = mul(outData.tangent, (float3x3) worldInverseTransposeMatrix);
-    float3 b = cross(n, t);
+   // float3 n = mul(outData.normal, (float3x3) worldInverseTransposeMatrix);
+   // float3 t = mul(outData.tangent, (float3x3) worldInverseTransposeMatrix);
+   // float3 b = cross(n, t);
+   //
+   //
+   // float3x3 tbnMatrix = float3x3(t.x, b.x, n.x,
+	//                            t.y, b.y, n.y,
+	//                            t.z, b.z, n.z);
+   //
 
-
-    float3x3 tbnMatrix = float3x3(t.x, b.x, n.x,
-	                            t.y, b.y, n.y,
-	                            t.z, b.z, n.z);
-
-
-    dout.lightDir = normalize(mul(-_lightDir, tbnMatrix));
-
+   // dout.lightDir = normalize(mul(-_lightDir, tbnMatrix));
+   // dout.normal = normalize(mul(outData.normal, tbnMatrix));
 
 
     dout.uv = outData.uv;
-    dout.normal = normalize(mul(outData.normal, tbnMatrix));
+
+    
+
+
     dout.gNormal = abs(outData.normal).y;
 
 
@@ -227,13 +230,13 @@ PixelOut PS(DomainOut input) : SV_Target
 
     float2 uv = input.uv;
 
-    float3 normal = _normalMap.Sample(samp[0], uv).rgb;
-    normal = (normal * 2.0f) - 1.0f;
-    normal = normalize(normal);
-
-    float3 light = normalize(input.lightDir);
-    float nDotL = saturate(dot(normal, light));
-    float4 intensity = ambient * globalAmbient + diffuse * nDotL;
+   // float3 normal = _normalMap.Sample(samp[0], uv).rgb;
+   // normal = (normal * 2.0f) - 1.0f;
+   // normal = normalize(normal);
+   //
+   // float3 light = normalize(input.lightDir);
+   // float nDotL = saturate(dot(normal, light));
+   // float4 intensity = ambient * globalAmbient + diffuse * nDotL;
 
 
 
@@ -243,7 +246,7 @@ PixelOut PS(DomainOut input) : SV_Target
     projectTexCoord.y = -input.viewPosition.y / input.viewPosition.z / 2.0f + 0.5f;
     
     float shadowValue = _lightMap.Sample(samp[1], projectTexCoord).g * 0.3f;
-    intensity *= shadowValue;
+   // intensity *= shadowValue;
 
 
 
