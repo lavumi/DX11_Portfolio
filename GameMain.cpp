@@ -32,6 +32,7 @@
 
 
 
+#include "../ProceduralTexture/Convert_Normal_Height.h"
 
 bool GameMain::landscapeWireFrame = false;
 
@@ -115,6 +116,23 @@ void GameMain::Initialize()
 
 
 
+
+
+	{
+		Convert_Normal_Height change;
+		change.Convert(L"./Terrain/heightmap.jpg");
+	}
+
+
+
+
+
+
+
+
+
+
+
 	vpBuffer = new VPBuffer();
 	lightBuffer = new LightBuffer();
 }
@@ -192,7 +210,7 @@ void GameMain::Update()
 
 	if (Keyboard::Get()->KeyUp(VK_SPACE)) {
 		//depthShadowTexture->SaveTexture(L"depthShadow.png");
-		//shadowTexture->SaveTexture(L"shadow.png");
+		shadowTexture->SaveTexture(L"shadow.png");
 		//blurShadowTexture->SaveTexture(L"blur.png");
 		//lakeRefractionTexture->SaveTexture(L"Mirror.png");
 		//mainRendering->SaveTexture(L"main.png",1);
@@ -235,7 +253,7 @@ void GameMain::PreRender()
 
 	D3DXMATRIX world, view, projection;
 
-	/*
+	
 	D3DXMatrixIdentity(&view);
 	D3DXMatrixIdentity(&projection);
 
@@ -247,10 +265,7 @@ void GameMain::PreRender()
 
 		assert(shaderManager->SetShader(L"LightViewShader"));
 		testcube->Render();
-		landscape->Render();
-		
-
-
+		landscape->RenderShadow();
 	}
 	//기록된 depth를 바탕으로 그림자 연산
 	//TODO 여기서 텍스쳐를 여러개 쓰고 각 텍스쳐별로 bias를 따로 설정해주어야 한다. ( cascade shadow)
@@ -266,7 +281,8 @@ void GameMain::PreRender()
 		D3D::GetDeviceContext()->PSSetShaderResources(13, 1, depthShadowTexture->GetShadowResourceView());
 		assert(shaderManager->SetShader(L"ShadowShader"));
 		testcube->Render();
-		landscape->Render();
+		landscape->RenderShadow();
+		//landscape->RenderShadow();
 	}
 	//연산된 그림자를 blur 처리
 	{
@@ -362,7 +378,7 @@ void GameMain::PreRender()
 	}
 
 
-	*/
+	
 
 	//메인 장면 렌더링(2번 텍스쳐에는 터레인의  깊이값 저장한다)
 	{
@@ -392,33 +408,35 @@ void GameMain::PreRender()
 
 
 
-		//assert(shaderManager->SetShader(L"NormalMapShader"));
-		//D3D::GetDeviceContext()->PSSetShaderResources(13, 1, blurShadowTexture->GetShadowResourceView());
-		//testcube->Render();
+		assert(shaderManager->SetShader(L"NormalMapShader"));
+		D3D::GetDeviceContext()->PSSetShaderResources(13, 1, blurShadowTexture->GetShadowResourceView());
+		testcube->Render();
 
 
 		assert(shaderManager->SetShader(L"TerrainShader"));
 		D3DXPLANE clipPlane = lake->getwaterPlane();
 		landscape->SetPlane(clipPlane);
-	//	Rasterizer::Get()->SetWireframe();
+
+		//Rasterizer::Get()->SetWireframe();
 		landscape->Render();
-	//	Rasterizer::Get()->SetSolid();
+		//Rasterizer::Get()->SetSolid();
 	
-		//D3D::GetDeviceContext()->PSSetShaderResources(14, 1, noise->GetPerlinNoise());
-		//D3D::GetDeviceContext()->PSSetShaderResources(11, 1, lakeReflectionTexture->GetShadowResourceView());
-		//D3D::GetDeviceContext()->PSSetShaderResources(10, 1, lakeRefractionTexture->GetShadowResourceView());
-		//
-		//assert(shaderManager->SetShader(L"WaterShader"));
-		//lake->Render();
+		D3D::GetDeviceContext()->PSSetShaderResources(14, 1, noise->GetPerlinNoise());
+		D3D::GetDeviceContext()->PSSetShaderResources(11, 1, lakeReflectionTexture->GetShadowResourceView());
+		D3D::GetDeviceContext()->PSSetShaderResources(10, 1, lakeRefractionTexture->GetShadowResourceView());
+		
+		assert(shaderManager->SetShader(L"WaterShader"));
+		lake->Render();
 
 
-		//grass->Render();
-		//grassShader->Render(grass->getInstanceCount(), *noise->GetPerlinNoise());
+		assert(shaderManager->SetShader(L"GrassShader"));
+		grass->Render();
+		
 
 
 		player->Render();
 	}
-	}
+}
 
 void GameMain::Render()
 {

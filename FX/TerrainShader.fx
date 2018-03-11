@@ -4,31 +4,41 @@ struct VertexIn
 {
     float4 position : POSITION0;
     float2 uv : TEXCOORD0;
-    float3 normal : NORMAL0;
-    float3 tangent : NORMAL1;
+    //float3 normal : NORMAL0;
+    //float3 tangent : NORMAL1;
 };
 
 struct VertexOut
 {
     float4 position : POSITION0;
     float2 uv : TEXCOORD0;
-    float3 normal : NORMAL0;
-    float3 tangent : NORMAL1;
+   // float3 normal : NORMAL0;
+   // float3 tangent : NORMAL1;
 };
 
 VertexOut VS(VertexIn vin)
 {
     VertexOut vout;
-    
-    vout.position = vin.position;
+
+
+    //vout.position = vin.position;
+    vout.position = mul(vin.position, _world);
     vout.position.w = 1;
 
+
     vout.uv = vin.uv;
-    vout.normal = vin.normal;
     vout.position = vin.position;
 
     return vout;
 }
+
+
+cbuffer HSBuffer : register(b0)
+{
+    float3 _cameraPosition;
+    float hpadding;
+};
+
 
 
 
@@ -42,13 +52,21 @@ PatchTess ConstantHS(InputPatch<VertexOut, 4> patch, uint patchID : SV_Primitive
 {
     PatchTess pt;
 
-    pt.EdgeTess[0] = 64.0f;
-    pt.EdgeTess[1] = 64.0f;
-    pt.EdgeTess[2] = 64.0f;
-    pt.EdgeTess[3] = 64.0f;
+    float edgeDistance[4];
+    edgeDistance[0] = distance(0.5f * (patch[0].position + patch[2].position).xyz, _cameraPosition);
+    edgeDistance[1] = distance(0.5f * (patch[0].position + patch[1].position).xyz, _cameraPosition);
+    edgeDistance[2] = distance(0.5f * (patch[1].position + patch[3].position).xyz, _cameraPosition);
+    edgeDistance[3] = distance(0.5f * (patch[2].position + patch[3].position).xyz, _cameraPosition);
 
-    pt.InsideTess[0] = 64.0f;
-    pt.InsideTess[1] = 64.0f;
+    pt.EdgeTess[0] = 64.0f / ceil(edgeDistance[0] / 50);
+    pt.EdgeTess[1] = 64.0f / ceil(edgeDistance[1] / 50);
+    pt.EdgeTess[2] = 64.0f / ceil(edgeDistance[2] / 50);
+    pt.EdgeTess[3] = 64.0f / ceil(edgeDistance[3] / 50);
+
+    float tess = 0.25f * (pt.EdgeTess[0] + pt.EdgeTess[1] + pt.EdgeTess[2] + pt.EdgeTess[3]);
+
+    pt.InsideTess[0] = tess;
+    pt.InsideTess[1] = tess;
 
     return pt;
 }
@@ -77,8 +95,6 @@ HullOut HS(InputPatch<VertexOut, 4> p,
 
     hout.position = p[i].position;
     hout.uv         = p[i].uv;
-    hout.normal = p[i].normal;
-    hout.position = p[i].position;
 
     return hout;
 }
@@ -99,7 +115,7 @@ struct DomainOut
     float worldPosition : TEXCOORD1;
     float3 lightDir : TEXCOORD2;
     float3 normal : NORMAL0;
-    float3 worldNormal : NORMAL1;
+    float gNormal : NORMAL1;
     
     float3 viewPosition : TEXCOORD5;
    
@@ -107,6 +123,7 @@ struct DomainOut
 };
 
 Texture2D _map : register(t0);
+Texture2D _worldNormalMap : register(t1);
 SamplerState samp[3];
 
 [domain("quad")]
@@ -117,20 +134,28 @@ DomainOut DS(PatchTess patchTess,
     DomainOut dout;
 
     HullOut outData;
-	// Bilinear interpolation.
+
     float4 p1 = lerp(quad[0].position, quad[1].position, uv.x);
     float4 p2 = lerp(quad[2].position, quad[3].position, uv.x);
     outData.position = lerp(p1, p2, uv.y);
+
+
+    float2 heightuv = outData.position.xz / 256;
+    //이미지에 대한 uv 좌표 처리
+    heightuv.y *= -1;
+    heightuv.y += 1;
+    
+    outData.position.y = _map.SampleLevel(samp[0], heightuv, 0).r * 34.0f - 18.0f;
 
 
     float2 uv1 = lerp(quad[0].uv, quad[1].uv, uv.x);
     float2 uv2 = lerp(quad[2].uv, quad[3].uv, uv.x);
     outData.uv = lerp(uv1, uv2, uv.y);
 
-    float3 n1 = lerp(quad[0].normal, quad[1].normal, uv.x);
-    float3 n2 = lerp(quad[2].normal, quad[3].normal, uv.x);
-    outData.normal = lerp(n1, n2, uv.y);
+    outData.normal = _worldNormalMap.SampleLevel(samp[0], heightuv, 0).rgb*2-1;
 
+   
+    
     float3 t1 = lerp(quad[0].tangent, quad[1].tangent, uv.x);
     float3 t2 = lerp(quad[2].tangent, quad[3].tangent, uv.x);
     outData.tangent = lerp(t1, t2, uv.y);
@@ -138,20 +163,18 @@ DomainOut DS(PatchTess patchTess,
 
 
 
-    float2 hightuv = outData.position.xz / 256;
-    outData.position.y = _map.SampleLevel(samp[0], hightuv, 0).r * 20.0f;
-
-    dout.position = mul(outData.position, _world);
+    
+    dout.position = outData.position;
     dout.worldPosition = dout.position.y;
     dout.position = mul(dout.position, _viewXprojection);
 
     dout.viewPosition = dout.position.xyw;
-
     dout.uv = outData.uv;
-
+    
     float3 n = mul(outData.normal, (float3x3) worldInverseTransposeMatrix);
     float3 t = mul(outData.tangent, (float3x3) worldInverseTransposeMatrix);
     float3 b = cross(n, t);
+
 
     float3x3 tbnMatrix = float3x3(t.x, b.x, n.x,
 	                            t.y, b.y, n.y,
@@ -164,7 +187,7 @@ DomainOut DS(PatchTess patchTess,
 
     dout.uv = outData.uv;
     dout.normal = normalize(mul(outData.normal, tbnMatrix));
-    dout.worldNormal = abs(outData.normal);
+    dout.gNormal = abs(outData.normal).y;
 
 
     dout.clip = dot(mul(outData.position, _world), clipPlane);
@@ -220,36 +243,36 @@ PixelOut PS(DomainOut input) : SV_Target
     projectTexCoord.y = -input.viewPosition.y / input.viewPosition.z / 2.0f + 0.5f;
     
     float shadowValue = _lightMap.Sample(samp[1], projectTexCoord).g * 0.3f;
-    intensity *= 1; //    shadowValue;
+    intensity *= shadowValue;
 
 
 
 
 
     //텍스쳐링
-    float3 blending = input.worldNormal;
-    blending.y -= (blending.x + blending.z) / 2;
-    blending = normalize(max(blending, 0.0001f));
-   
+    float landNormal = input.gNormal;
+   // blending.y -=   (blending.x + blending.z) /2;
+    //blending = normalize(blending);
+       
     float4 Mountain = _texture[2].Sample(samp[0], uv);
     float4 Grass = _texture[0].Sample(samp[0], uv);
-   
-    float4 landNmountain = Mountain * blending.x + Grass * blending.y + Mountain * blending.z;
+
+    float4 landNmountain = lerp(Mountain, Grass, landNormal * landNormal * landNormal );
 
 
-
-    float blendFactor = saturate((input.worldPosition + 7.7f) / 0.4f);
-
-    float4 diffuseMap = lerp(_texture[1].Sample(samp[0], uv), landNmountain, blendFactor);
+    float blendFactor2 = saturate((input.worldPosition + 8.0f) / 0.7f);
+    float4 diffuseMap = lerp(_texture[1].Sample(samp[0], uv), landNmountain, blendFactor2);
 
     diffuseMap.a = input.clip;
 
 
 
 
- 
 
-    output.albedo = intensity * diffuseMap;
+
+
+
+    output.albedo = diffuseMap * shadowValue;
 
     float3 depthValue = input.position.w / 300;
     output.depthMap = float4(depthValue, 1);

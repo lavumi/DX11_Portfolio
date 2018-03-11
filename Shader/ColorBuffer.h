@@ -5,7 +5,7 @@ class BaseBuffer : public ShaderBuffer
 {
 public:
 	BaseBuffer()
-		: ShaderBuffer(0, 0,0, sizeof(PS_DATA))
+		: ShaderBuffer(0, 0,0,0, sizeof(PS_DATA))
 	{
 		SetColor(0, 0, 0, 1);
 		//UpdateVSBuffer(&vsData, 0);

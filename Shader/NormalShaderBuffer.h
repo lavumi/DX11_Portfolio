@@ -5,7 +5,7 @@ class NormalShaderBuffer : public ShaderBuffer
 {
 public:
 	NormalShaderBuffer()
-		: ShaderBuffer(sizeof(VS_DATA),0, 0, sizeof(PS_DATA))
+		: ShaderBuffer(sizeof(VS_DATA),0,0, 0, sizeof(PS_DATA))
 	{
 		psData.ambient = D3DXCOLOR(0.5f, 0.5f, 0.5f, 1.0f);
 		psData.diffuse = D3DXCOLOR(0.7f, 0.7f, 0.7f, 1.0f);
