@@ -191,7 +191,7 @@ void GameMain::Update()
 
 	Camera::Get()->GetView(&view);
 	D3D::Get()->GetProjection(&projection);
-	//frustum->SetFrustum(Camera::screenDepth, view, projection);
+	frustum->SetFrustum(view, projection);
 
 
 
@@ -388,6 +388,9 @@ void GameMain::PreRender()
 		Camera::Get()->GetView(&view);
 		D3D::Get()->GetProjection(&projection);
 		vpBuffer->SetVPMatrix(view, projection);
+
+		D3DXMATRIX cropMatrix =  frustum->GetCropMatrix(0);
+		projection *= cropMatrix;
 
 
 		D3D::Get()->SetDepthStencilState(D3D::DS_state::offState);

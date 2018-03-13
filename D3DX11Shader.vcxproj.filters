@@ -144,6 +144,9 @@
     <ClCompile Include="ProceduralTexture\Convert_Normal_Height.cpp">
       <Filter>ProceduralTexture</Filter>
     </ClCompile>
+    <ClCompile Include="System\BoundingBox.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameMain.h" />
@@ -345,6 +348,9 @@
     </ClInclude>
     <ClInclude Include="ProceduralTexture\Convert_Normal_Height.h">
       <Filter>ProceduralTexture</Filter>
+    </ClInclude>
+    <ClInclude Include="System\BoundingBox.h">
+      <Filter>System</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
