@@ -5,7 +5,7 @@ class BaseBuffer : public ShaderBuffer
 {
 public:
 	BaseBuffer()
-		: ShaderBuffer(0, 0,0,0, 0)
+		: ShaderBuffer(0, 0,0, 0)
 	{
 
 		//UpdateVSBuffer(&vsData, 0);

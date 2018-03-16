@@ -18,9 +18,6 @@ public:
 
 		if (DS_Buffer != 0)
 			D3D::GetDeviceContext()->DSSetConstantBuffers(0, 1, &DS_Buffer);
-
-		if (HS_Buffer != 0)
-			D3D::GetDeviceContext()->HSSetConstantBuffers(0, 1, &HS_Buffer);
 	//	D3D::GetDeviceContext()->VSSetConstantBuffers(13, 1, &worldBuffer);
 
 	}
@@ -34,14 +31,63 @@ public:
 
 protected:
 
-	ShaderBuffer(UINT vs_dataSize, UINT hs_dataSize, UINT ds_dataSize, UINT gs_dataSize, UINT ps_dataSize)
-		:VS_Buffer(0), HS_Buffer(0), DS_Buffer(0),GS_Buffer(0), PS_Buffer(0)
+	ShaderBuffer(UINT vs_dataSize, UINT ds_dataSize, UINT gs_dataSize, UINT ps_dataSize)
+		:VS_Buffer(0), DS_Buffer(0),GS_Buffer(0), PS_Buffer(0)//, buffer(0)
 	{
-		CreateBuffer(vs_dataSize, VS_Buffer);
-		CreateBuffer(hs_dataSize, HS_Buffer);
-		CreateBuffer(ds_dataSize, DS_Buffer);
-		CreateBuffer(gs_dataSize, GS_Buffer);
-		CreateBuffer(ps_dataSize, PS_Buffer);
+		if (vs_dataSize != 0) {
+			desc.Usage = D3D11_USAGE_DYNAMIC;
+			desc.ByteWidth = vs_dataSize;
+			desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+			desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+			desc.MiscFlags = 0;
+			desc.StructureByteStride = 0;
+
+			HRESULT hr = D3D::GetDevice()->CreateBuffer(&desc, NULL, &VS_Buffer);
+			assert(SUCCEEDED(hr));
+		}
+		if (ds_dataSize != 0) {
+			desc.Usage = D3D11_USAGE_DYNAMIC;
+			desc.ByteWidth = ds_dataSize;
+			desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+			desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+			desc.MiscFlags = 0;
+			desc.StructureByteStride = 0;
+
+			HRESULT hr = D3D::GetDevice()->CreateBuffer(&desc, NULL, &DS_Buffer);
+			assert(SUCCEEDED(hr));
+		}
+		if (gs_dataSize != 0) {
+			desc.Usage = D3D11_USAGE_DYNAMIC;
+			desc.ByteWidth = gs_dataSize;
+			desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+			desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+			desc.MiscFlags = 0;
+			desc.StructureByteStride = 0;
+
+			HRESULT hr = D3D::GetDevice()->CreateBuffer(&desc, NULL, &GS_Buffer);
+			assert(SUCCEEDED(hr));
+		}
+		if (ps_dataSize != 0) {
+			desc.Usage = D3D11_USAGE_DYNAMIC;
+			desc.ByteWidth = ps_dataSize;
+			desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+			desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+			desc.MiscFlags = 0;
+			desc.StructureByteStride = 0;
+
+			HRESULT hr = D3D::GetDevice()->CreateBuffer(&desc, NULL, &PS_Buffer);
+			assert(SUCCEEDED(hr));
+		}
+
+		//desc.Usage = D3D11_USAGE_DYNAMIC;
+		//desc.ByteWidth = sizeof(D3DXMATRIX);
+		//desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+		//desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+		//desc.MiscFlags = 0;
+		//desc.StructureByteStride = 0;
+		//
+		//HRESULT hr = D3D::GetDevice()->CreateBuffer(&desc, NULL, &worldBuffer);
+		//assert(SUCCEEDED(hr));
 	}
 
 	~ShaderBuffer()
@@ -51,10 +97,24 @@ protected:
 		SAFE_RELEASE(GS_Buffer);
 		SAFE_RELEASE(PS_Buffer);
 		SAFE_RELEASE(DS_Buffer);
-		SAFE_RELEASE(HS_Buffer);
+
 	}
 
 	virtual void Update() = 0;
+
+	//void UpdateBuffer(void* data, UINT dataSize)
+	//{
+	//	D3D11_MAPPED_SUBRESOURCE subResource;
+	//
+	//	HRESULT hr = D3D::GetDeviceContext()->Map
+	//	(
+	//		buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &subResource
+	//	);
+	//
+	//	memcpy(subResource.pData, data, dataSize);
+	//
+	//	D3D::GetDeviceContext()->Unmap(buffer, 0);
+	//}
 
 
 
@@ -119,23 +179,6 @@ protected:
 
 		D3D::GetDeviceContext()->Unmap(DS_Buffer, 0);
 	}
-
-	void UpdateHSBuffer(void* data, UINT dataSize)
-	{
-		if (dataSize == 0)
-			return;
-		D3D11_MAPPED_SUBRESOURCE subResource;
-
-		HRESULT hr = D3D::GetDeviceContext()->Map
-		(
-			HS_Buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &subResource
-		);
-
-		memcpy(subResource.pData, data, dataSize);
-
-		D3D::GetDeviceContext()->Unmap(HS_Buffer, 0);
-	}
-
 	D3DXMATRIX world;
 
 
@@ -147,20 +190,7 @@ private:
 	ID3D11Buffer* DS_Buffer;
 	ID3D11Buffer* GS_Buffer;
 	ID3D11Buffer* PS_Buffer;
-	ID3D11Buffer* HS_Buffer;
-	
-	void CreateBuffer(UINT dataSize, ID3D11Buffer*& buffer) {
-		if (dataSize == 0)
-			return;
-		desc.Usage = D3D11_USAGE_DYNAMIC;
-		desc.ByteWidth = dataSize;
-		desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-		desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-		desc.MiscFlags = 0;
-		desc.StructureByteStride = 0;
 
-		HRESULT hr = D3D::GetDevice()->CreateBuffer(&desc, NULL, &buffer);
-		assert(SUCCEEDED(hr));
-		
-	}
+	
+//	ID3D11Buffer* worldBuffer;
 };

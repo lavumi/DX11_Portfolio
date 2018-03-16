@@ -32,6 +32,9 @@ private:
 	ID3D10Blob*			vertexBlob;
 	ID3D10Blob*			pixelBlob;
 	ID3D11Buffer*		vertexBuffer;
+	
+
+
 	ID3D11Buffer*		indexBuffer;
 
 	wstring basePath;

@@ -180,7 +180,6 @@
     <ClInclude Include="Object\OrthoWindowPlane.h" />
     <ClInclude Include="Object\TestCube.h" />
     <ClInclude Include="Object\TestPlane.h" />
-    <ClInclude Include="ProceduralTexture\Convert_Normal_Height.h" />
     <ClInclude Include="ProceduralTexture\GrassTexture.h" />
     <ClInclude Include="ProceduralTexture\MosaicTile.h" />
     <ClInclude Include="ProceduralTexture\PerlinNoise.h" />
@@ -248,7 +247,6 @@
     <ClCompile Include="Object\OrthoWindowPlane.cpp" />
     <ClCompile Include="Object\TestCube.cpp" />
     <ClCompile Include="Object\TestPlane.cpp" />
-    <ClCompile Include="ProceduralTexture\Convert_Normal_Height.cpp" />
     <ClCompile Include="ProceduralTexture\GrassTexture.cpp" />
     <ClCompile Include="ProceduralTexture\MosaicTile.cpp" />
     <ClCompile Include="ProceduralTexture\PerlinNoise.cpp" />

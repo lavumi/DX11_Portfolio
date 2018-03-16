@@ -30,7 +30,7 @@ PixelInput VS(VertexInput input)
 
 float4 PS(PixelInput input) : SV_Target
 {
-	float pixelWidth = 1.0/256.0;
+	float pixelWidth = 1.0/420.0;
 	float baseMap = _map.Sample(samp, input.uv).r;
 	
 	float baseMapLeft = _map.Sample(samp, float2(input.uv.x - pixelWidth, input.uv.y)).r;

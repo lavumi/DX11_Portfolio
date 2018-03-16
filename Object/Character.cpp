@@ -56,7 +56,7 @@ void Character::MoveTo(float x, float y, float z)
 
 void Character::Move(float x, float z)
 {
-	//return;
+	return;
 	position.x += x * speed;
 	position.z += z * speed;
 	land->GetY(position);

@@ -5,7 +5,7 @@ class WaterBuffer : public ShaderBuffer
 {
 public:
 	WaterBuffer()
-		: ShaderBuffer(sizeof(VS_DATA), 0,0,0, sizeof(PS_DATA))
+		: ShaderBuffer(sizeof(VS_DATA), 0,0, sizeof(PS_DATA))
 	{
 		D3DXMATRIX world;
 		D3DXMatrixTranslation(&world, 0.0f, -7.9f, 0.0f);

@@ -61,9 +61,6 @@ Shader::~Shader()
 	SAFE_RELEASE(domainShader);
 }
 
-
-
-
 bool Shader::CreateInputLayout(D3D11_INPUT_ELEMENT_DESC * desc, UINT count)
 {
 

@@ -14,12 +14,17 @@ public:
 	void Initialize();
 
 
-
+	//void LoadHeightMap();
+	void CreateVertexData();
+	void CreateIndexData();
+	void CreateQuadVertexData();
+	void CreateQuadIndexData();
+	void CreateNormalData();
+	void CreateBuffer();
 
 
 	void Update();
 	void Render();
-	void RenderShadow();
 	void GetY(D3DXVECTOR3 &position);
 	//Brush* brush;
 
@@ -30,8 +35,34 @@ public:
 
 
 
-	void getVertexData(VertexTextureNormalTangent* vertices) {
+	UINT getvertexCount() {
+		return vertexCount;
+	}
+
+
+	UINT getIndexCount() {
+		return indexCount;
+	}
+
+	ID3D11ShaderResourceView** getDiffuseMap() {
+		return diffuseMap;
+	}
+
+
+
+	ID3D11ShaderResourceView* getNormalMap() {
+		return normalMap;
+	}
+
+	D3DXMATRIX getWorld() {
+		return world;
+	}
+
+	 void getVertexData(VertexTextureNormalTangent* vertices) {
+
 		memcpy(vertices, vertexData, sizeof(VertexTextureNormalTangent) * vertexCount);
+
+		return;
 	};
 
 
@@ -47,29 +78,14 @@ public:
 
 private:
 
-	void LoadHeightMap();
-	void CreateVertexData();
-	void CreateQuadIndexData();
-
-
-
-	void CreateFullVertexData();
-	void CreateIndexData();
-	void CreateNormalData();
-	void CheckGround();
-
-	
-	
-	
-	void CreateBuffer();
 	void LoadTextures();
-	
+	void CheckGround();
 
 
 	//MaterialBuffer* materialBuffer;
 
 	
-	float* heightData;
+	//BYTE* heightData;
 
 
 	vector<D3DXMATRIX> grassGround;
@@ -81,40 +97,13 @@ private:
 	ID3D11Buffer* indexBuffer;
 
 	UINT width, height;
-	VertexTexture* vertexData;
+	VertexTextureNormalTangent* vertexData;
 	vector<UINT> indexData;
 
 	UINT vertexCount;
 	UINT indexCount;
-
-
-
-	ID3D11Buffer* fullvertexBuffer;
-	ID3D11Buffer* fullindexBuffer;
-
-
-	UINT worldWidth, worldHeight;
-	VertexTextureNormalTangent* fullVertexData;
-	vector<UINT> fullIndexData;
-
-	UINT fullVertexCount, fullIndexCount;
-
-
-
-
-	//UINT tessWidth, tessHeight;
-	//VertexTextureNormalTangent* tessVertexData;
-	//vector<UINT> tessIndexData;
-	//
-	//UINT tessVertexCount;
-	//UINT tessIndexCount;
-
-
-
-
 	ID3D11ShaderResourceView** diffuseMap;
 	ID3D11ShaderResourceView* normalMap;
-	ID3D11ShaderResourceView* worldNormalMap;
 	ID3D11ShaderResourceView* specularMap;
 	ID3D11ShaderResourceView* heightMap;
 	D3DXMATRIX world;

@@ -1,7 +1,6 @@
 #pragma once
 
 class Landscape;
-class GrassBuffer;
 class TerrainGrass
 {
 public:
@@ -13,7 +12,18 @@ public:
 	void Update();
 	void Render();
 
+	//UINT getIndexCount() {
+	//	return indexCount;
+	//}
 
+	 void setDiffuseMap(ID3D11ShaderResourceView* texture) {
+		// diffuse = texture;
+	}
+
+
+	ID3D11ShaderResourceView* getDiffuseMap() {
+		return diffuse;
+	}
 
 
 	UINT getInstanceCount() {
@@ -32,9 +42,11 @@ private:
 	UINT vertexCount;
 
 	VertexTexture* vertexData;
+	
+	ID3D11ShaderResourceView* diffuse;
+
 	vector<D3DXMATRIX> instanceData;
 
 	Landscape* land;
 
-	GrassBuffer* buffer;
 };

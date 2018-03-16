@@ -5,7 +5,7 @@ class OrthoWindowBuffer : public ShaderBuffer
 {
 public:
 	OrthoWindowBuffer()
-		: ShaderBuffer(sizeof(VS_DATA), 0,0,0, 0)
+		: ShaderBuffer(sizeof(VS_DATA), 0,0, 0)
 	{
 		D3DInfo info;
 		D3D::GetInfo(&info);
