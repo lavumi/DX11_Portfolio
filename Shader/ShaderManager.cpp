@@ -39,8 +39,7 @@ bool ShaderManager::CreateShader(wstring fxName, D3D11_INPUT_ELEMENT_DESC * desc
 	success[3] = shader->CreateGeometryShader();
 	success[4] = shader->CreatePixelShader();
 	success[5] = shader->CreateInputLayout(desc, count);
-
-
+	
 	if (shaders.find(fxName) == shaders.end()) {
 		shaders[fxName] = shader;
 		return true;

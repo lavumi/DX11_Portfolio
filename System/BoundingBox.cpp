@@ -11,7 +11,7 @@ BoundingBox::~BoundingBox()
 
 }
 
-BoundingBox BoundingBox::CreateAABB(D3DXVECTOR3 vtx[8], D3DXVECTOR3 vtx2[8], D3DXMATRIX matrix)
+BoundingBox BoundingBox::CreateAABB(D3DXVECTOR3 vtx[8], D3DXMATRIX matrix)
 {
 
 
@@ -21,12 +21,6 @@ BoundingBox BoundingBox::CreateAABB(D3DXVECTOR3 vtx[8], D3DXVECTOR3 vtx2[8], D3D
 	maxx = maxy = maxz = -9999999.0f;
 	for (UINT i = 0; i < 8; i++) {
 		D3DXVec3TransformCoord(&vector[i], &vtx[i], &matrix);
-		//maxx = max(maxx, vtx[i].x); minx = min(minx, vtx[i].x);
-		//maxy = max(maxy, vtx[i].y); miny = min(miny, vtx[i].y);
-		//maxz = max(maxz, vtx[i].z); minz = min(minz, vtx[i].z);
-	}
-	for (UINT i = 0; i < 8; i++) {
-		D3DXVec3TransformCoord(&vector2[i], &vtx2[i], &matrix);
 		//maxx = max(maxx, vtx[i].x); minx = min(minx, vtx[i].x);
 		//maxy = max(maxy, vtx[i].y); miny = min(miny, vtx[i].y);
 		//maxz = max(maxz, vtx[i].z); minz = min(minz, vtx[i].z);
