@@ -4,14 +4,14 @@
 struct VertexInput
 {
     float4 position : POSITION0;
-    float4 color : COLOR0;
+    float2 uv : TEXCOORD0;
 
 };
 
 struct PixelInput
 {
     float4 position : SV_POSITION;
-    float4 color : COLOR0;
+    float2 uv : TEXCOORD0;
 
 };
 
@@ -22,7 +22,7 @@ PixelInput VS(VertexInput input)
     output.position = mul(input.position, _world);
     output.position = mul(output.position, _viewXprojection);
 
-    output.color = input.color;
+    output.uv = input.uv;
 
 
     return output;
@@ -41,8 +41,8 @@ cbuffer color : register(b0)
 
 float4 PS(PixelInput input) : SV_Target
 {
-    float4 color = input.color;
+    float4 color = inputColor;
 
-    return color;
+    return  color;
 
 }

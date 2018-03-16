@@ -118,10 +118,10 @@ void GameMain::Initialize()
 
 
 
-	//{
-	//	Convert_Normal_Height change;
-	//	change.Convert(L"./Terrain/heightmap.jpg");
-	//}
+	{
+		Convert_Normal_Height change;
+		change.Convert(L"./Terrain/heightmap.jpg");
+	}
 
 
 
@@ -192,7 +192,7 @@ void GameMain::Update()
 	Camera::Get()->GetView(&view);
 	D3D::Get()->GetProjection(&projection);
 	frustum->SetFrustum(view, projection);
-	frustum->Update();
+
 
 
 
@@ -210,18 +210,22 @@ void GameMain::Update()
 
 	if (Keyboard::Get()->KeyUp(VK_SPACE)) {
 		//depthShadowTexture->SaveTexture(L"depthShadow.png");
-		//shadowTexture->SaveTexture(L"shadow.png");
+		shadowTexture->SaveTexture(L"shadow.png");
 		//blurShadowTexture->SaveTexture(L"blur.png");
 		//lakeRefractionTexture->SaveTexture(L"Mirror.png");
 		//mainRendering->SaveTexture(L"main.png",1);
+		LodOff = !LodOff;
+		//testvalue++;
+		//if (testvalue == 7)
+		//	testvalue = 0;
+		//noise->MakePerlinNoise();
+		//D3D::Get()->TestMultiTexture(0);
 
-		//LodOff = !LodOff;
 		Camera::Get()->SetFallowCamera(nullptr);
-		frustum->fixFrustum = !frustum->fixFrustum;
-		//i++;
-		//if (i > 3)
-		//	i = 0;
-		//player->SetAni(i);
+		i++;
+		if (i > 3)
+			i = 0;
+		player->SetAni(i);
 	}
 	if (!LodOff) {
 		//landscape->changeLOD(frustum);
@@ -385,7 +389,8 @@ void GameMain::PreRender()
 		D3D::Get()->GetProjection(&projection);
 		vpBuffer->SetVPMatrix(view, projection);
 
-
+		D3DXMATRIX cropMatrix =  frustum->GetCropMatrix(0);
+		projection *= cropMatrix;
 
 
 		D3D::Get()->SetDepthStencilState(D3D::DS_state::offState);
@@ -430,8 +435,7 @@ void GameMain::PreRender()
 		assert(shaderManager->SetShader(L"GrassShader"));
 		grass->Render();
 		
-		assert(shaderManager->SetShader(L"ColorShader"));
-		frustum->Render();
+
 
 		player->Render();
 	}

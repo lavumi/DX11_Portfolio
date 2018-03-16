@@ -4,7 +4,7 @@
 ShaderManager::ShaderManager()
 {																															
 	assert(CreateShader(L"BlurShader", VertexTexture::desc, VertexTexture::count)											);
-	assert(CreateShader(L"ColorShader", VertexColor::desc, VertexColor::count)												);
+	assert(CreateShader(L"ColorShader", VertexTexture::desc, VertexTexture::count)											);
 	assert(CreateShader(L"FBXModelShader", VertexTextureNormalTangentBlend::desc, VertexTextureNormalTangentBlend::count)	);
 	assert(CreateShader(L"GrassShader", VertexInstance::desc, VertexInstance::count)										);
 	assert(CreateShader(L"LightViewShader", VertexTextureNormalTangent::desc, VertexTextureNormalTangent::count)			);
@@ -13,7 +13,7 @@ ShaderManager::ShaderManager()
 	assert(CreateShader(L"ShadowShader", VertexTextureNormalTangent::desc, VertexTextureNormalTangent::count)				);
 	assert(CreateShader(L"SkydomeShader", VertexTextureNormal::desc, VertexTextureNormal::count)							);
 	assert(CreateShader(L"SkyplaneShader", VertexTexture::desc, VertexTexture::count)										);
-	assert(CreateShader(L"TerrainShader", VertexTexture::desc, VertexTexture::count)										);
+	assert(CreateShader(L"TerrainShader", VertexTexture::desc, VertexTexture::count)				);
 	assert(CreateShader(L"TextureShader", VertexTexture::desc, VertexTexture::count)										);
 	assert(CreateShader(L"WaterShader", VertexTextureNormalTangent::desc, VertexTextureNormalTangent::count)				);
 	}
