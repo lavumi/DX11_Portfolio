@@ -1,6 +1,5 @@
 #include "../stdafx.h"
 #include "Frustum.h"
-#include "../System/BoundingBox.h"
 
 Frustum::Frustum()
 {
@@ -10,25 +9,21 @@ Frustum::~Frustum()
 {
 }
 
-void Frustum::SetFrustum(D3DXMATRIX viewMatrix, D3DXMATRIX projectionMatrix)
+void Frustum::SetFrustum(float screenDepth, D3DXMATRIX viewMatrix, D3DXMATRIX projectionMatrix)
 {
 
-	//D3DXVECTOR3* vtx = new D3DXVECTOR3[8];
-	
+	DWORD starttime = timeGetTime();
+	D3DXVECTOR3* vtx = new D3DXVECTOR3[8];
 
-	//뷰, 프로젝션 연산이 끝나면 모든 점은 (-1, -1, 0) ~ (1, 1, 1)  사이의 값으로 변환된다
+
+	//뷰, 프로젝션 연산이 끝나면 모든 점은 (-1, -1, 0) ~ (1, 1, 1)  사이으 ㅣ값으로 변환된다
 	//그 꼭지점 값들을 지정해둔다...
 	vtx[0] = D3DXVECTOR3(-1.0f, -1.0f, 0.0f);
 	vtx[1] = D3DXVECTOR3(1.0f, -1.0f, 0.0f);
-	vtx[2] = D3DXVECTOR3(1.0f, 1.0f, 0.0f);
-	vtx[3] = D3DXVECTOR3(-1.0f, 1.0f, 0.0f);
-
-
-
-
-
-	vtx[4] = D3DXVECTOR3(-1.0f, -1.0f, 1.0f);
-	vtx[5] = D3DXVECTOR3(1.0f, -1.0f, 1.0f);
+	vtx[2] = D3DXVECTOR3(1.0f, -1.0f, 1.0f);
+	vtx[3] = D3DXVECTOR3(-1.0f, -1.0f, 1.0f);
+	vtx[4] = D3DXVECTOR3(-1.0f, 1.0f, 0.0f);
+	vtx[5] = D3DXVECTOR3(1.0f, 1.0f, 0.0f);
 	vtx[6] = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
 	vtx[7] = D3DXVECTOR3(-1.0f, 1.0f, 1.0f);
 
@@ -45,14 +40,17 @@ void Frustum::SetFrustum(D3DXMATRIX viewMatrix, D3DXMATRIX projectionMatrix)
 		D3DXVec3TransformCoord(&vtx[i], &vtx[i], &matInv);
 
 
-	D3DXPlaneFromPoints(&m_planes[0], &vtx[5], &vtx[6], &vtx[7]);		// 원 평면(far)
-	D3DXPlaneFromPoints(&m_planes[1], &vtx[0], &vtx[4], &vtx[7]);		// 좌 평면(left)
-	D3DXPlaneFromPoints(&m_planes[2], &vtx[1], &vtx[2], &vtx[6]);		// 우 평면(right)
-	//	D3DXPlaneFromPoints(&m_plane[3], &vtx[4], &vtx[7], &vtx[6]);	// 상 평면(top)
-	//	D3DXPlaneFromPoints(&m_plane[4], &vtx  ,  &vtx[1], &vtx[2]);	// 하 평면(bottom)
-	//	D3DXPlaneFromPoints(&m_plane[5], &vtx  ,  &vtx[4], &vtx[5]);	// 근 평면(near)
+	D3DXPlaneFromPoints(&m_planes[0], &vtx[2], &vtx[6], &vtx[7]);	// 원 평면(far)
+	D3DXPlaneFromPoints(&m_planes[1], &vtx[0], &vtx[3], &vtx[7]);	// 좌 평면(left)
+	D3DXPlaneFromPoints(&m_planes[2], &vtx[1], &vtx[5], &vtx[6]);	// 우 평면(right)
+																	//	D3DXPlaneFromPoints(&m_plane[3], &vtx[4], &vtx[7], &vtx[6]);	// 상 평면(top)
+																	//	D3DXPlaneFromPoints(&m_plane[4], &vtx  ,  &vtx[1], &vtx[2]);	// 하 평면(bottom)
+																	//	D3DXPlaneFromPoints(&m_plane[5], &vtx  ,  &vtx[4], &vtx[5]);	// 근 평면(near)
 
-	SplitFrustum(3);
+
+	DWORD currentTime = timeGetTime();
+	DWORD spendTime = currentTime - starttime;
+	return;
 }
 
 bool Frustum::CheckCapsule(D3DXVECTOR3 start, D3DXVECTOR3 end, float radius)
@@ -110,6 +108,7 @@ bool Frustum::CheckSphere(float xCenter, float yCenter, float zCenter, float rad
 	return true;
 }
 
+
 bool Frustum::CheckSphere(D3DXVECTOR3 center, float radius)
 {
 	for (int i = 0; i<3; i++)
@@ -122,70 +121,6 @@ bool Frustum::CheckSphere(D3DXVECTOR3 center, float radius)
 	return true;
 }
 
-void Frustum::SplitFrustum(UINT count)
-{
-	splitCount = count;
-	//splitVtx = new D3DXVECTOR3[(splitCount -1)*4];
-	splitedVtx.clear();
-
-	splitedVtx.push_back(vtx[0]);
-	splitedVtx.push_back(vtx[1]);
-	splitedVtx.push_back(vtx[2]);
-	splitedVtx.push_back(vtx[3]);
-	for (UINT i = 0; i < splitCount - 1; i++) {
-		float split = ((float)i+1)/ splitCount;
-		splitedVtx.push_back(vtx[0] * (1 - split) + vtx[4] * split);
-		splitedVtx.push_back(vtx[1] * (1 - split) + vtx[5] * split);
-		splitedVtx.push_back(vtx[2] * (1 - split) + vtx[6] * split);
-		splitedVtx.push_back(vtx[3] * (1 - split) + vtx[7] * split);
-	}
-	splitedVtx.push_back(vtx[4]);
-	splitedVtx.push_back(vtx[5]);
-	splitedVtx.push_back(vtx[6]);
-	splitedVtx.push_back(vtx[7]);
-
-
-	assert(splitedVtx.size() == (splitCount + 1) * 4);
-}
-
 void Frustum::Render()
 {
-
-}
-
-D3DXMATRIX Frustum::GetCropMatrix(UINT index)
-{
-	D3DXMATRIX view, projection;
-	Camera::Get()->GetView(&view);
-	D3D::Get()->GetProjection(&projection);
-
-	D3DXVECTOR3 vtx_input[8];
-	if (index >= splitCount)
-		return D3DXMATRIX();
-	else {
-		for (UINT i = 0; i < 8; i++) {
-			vtx_input[i] = splitedVtx[i + index*4];
-		}
-	}
-	
-
-	BoundingBox box = BoundingBox::CreateAABB(vtx_input, vtx, view*projection);
-
-
-	box.min.z = 0;
-	float scaleX, scaleY, scaleZ;
-	float offsetX, offsetY, offsetZ;
-
-	scaleX = 2.0f / (box.max.x - box.min.x);
-	scaleY = 2.0f / (box.max.y - box.min.y);
-	offsetX = -0.5f * (box.max.x + box.min.x) * scaleX;
-	offsetY = -0.5f * (box.max.y + box.min.y) * scaleY;
-	scaleZ = 1.0f / (box.max.z - box.min.z);
-	offsetZ = -box.min.z * scaleZ;
-
-	return D3DXMATRIX(
-		scaleX,		0.0f,		0.0f,		0.0f,
-		0.0f,		scaleY,		0.0f,		0.0f,
-		0.0f,		0.0f,		scaleZ,		0.0f,
-		offsetX,	offsetY,	offsetZ,	1.0f);
 }
