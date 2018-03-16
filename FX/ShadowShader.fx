@@ -84,7 +84,7 @@ float4 PS(PixelInput input) : SV_TARGET
 
 
         //TODO : bias 외부에서 받아서 셋팅할수 있게 하자
-        lightDepthValue = lightDepthValue -0.01f;
+        lightDepthValue = lightDepthValue - 0.01f;
 
         if (lightDepthValue < depthValue)
         {
