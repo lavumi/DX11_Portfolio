@@ -5,7 +5,7 @@ class SkyplaneBuffer : public ShaderBuffer
 {
 public:
 	SkyplaneBuffer()
-		: ShaderBuffer(0, 0,sizeof(PS_DATA))
+		: ShaderBuffer(0,0, 0,sizeof(PS_DATA))
 	{
 		psData.scale = 0.3f;
 		psData.translation = 0.0f;

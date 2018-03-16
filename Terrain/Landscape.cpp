@@ -6,8 +6,6 @@
 //#include "../ProceduralTexture/PerlinNoise.h"
 
 Landscape::Landscape()
-	:heightMapFile(L"./Terrain/heightmap.jpg")
-
 {
 	D3DXMatrixIdentity(&world);
 	diffuseMap = 0;
@@ -20,7 +18,7 @@ Landscape::Landscape()
 
 Landscape::~Landscape()
 {
-	SAFE_DELETE(quadTree);
+//	SAFE_DELETE(quadTree);
 	SAFE_DELETE_ARRAY(vertexData);
 	
 	SAFE_RELEASE(indexBuffer);
@@ -32,23 +30,25 @@ Landscape::~Landscape()
 
 void Landscape::Initialize()
 {
-	LoadHeightMap();
+	//LoadHeightMap();
+	width = 8;
+	height = 8;
 	CreateVertexData();
-	CreateIndexData();
+	CreateQuadIndexData();
 	CreateNormalData();
 	CreateBuffer();
 
-	CheckGround();
+	//CheckGround();
 
-	quadTree = new QuadTree(width + 1, height + 1);
-	quadTree->CreateTree();
+	//quadTree = new QuadTree(width + 1, height + 1);
+	//quadTree->CreateTree();
 
 	wBuffer = new WorldBuffer();
 	wBuffer->SetWorld(world);
 	buffer = new TerrainBuffer();
 
 }
-
+/*
 void Landscape::LoadHeightMap()
 {
 	ID3D11Texture2D* texture;
@@ -72,14 +72,14 @@ void Landscape::LoadHeightMap()
 
 			UINT color = colors[tempY * width + x];
 			BYTE r = ((color & 0x00FF0000) >> 16);
-			heightData[z * width + x] = r;
+			heightData[z * width + x] =  r;
 		}
 	}
 
 	width--;
 	height--;
 }
-
+*/
 void Landscape::CreateVertexData()
 {
 	vertexCount = (width + 1) * (height + 1);
@@ -92,9 +92,9 @@ void Landscape::CreateVertexData()
 		{
 			int index = (width + 1) * z + x;
 
-			vertexData[index].position.x = (float)x -0.1f;
-			vertexData[index].position.y = (float)heightData[index] / 7.5f - 18;
-			vertexData[index].position.z = (float)z -0.1f;
+			vertexData[index].position.x = (float)x *256 / 8;
+			vertexData[index].position.y = 0; //(float)heightData[index] / 7.5f - 18;
+			vertexData[index].position.z = (float)z * 256 / 8;
 
 			vertexData[index].uv.x = (float)(x );// (float)width;
 			vertexData[index].uv.y = (float)(z );// (float)height;
@@ -121,6 +121,40 @@ void Landscape::CreateIndexData()
 			indexData.push_back((width + 1) * z + x + 1);
 			indexData.push_back((width + 1) * (z + 1) + x);
 			indexData.push_back((width + 1) * (z + 1) + (x + 1));
+			//indexData[count + 0] = (width + 1) * z + x;
+			//indexData[count + 1] = (width + 1) * (z + 1) + x;
+			//indexData[count + 2] = (width + 1) * z + x + 1;
+			//indexData[count + 3] = (width + 1) * z + x + 1;
+			//indexData[count + 4] = (width + 1) * (z + 1) + x;
+			//indexData[count + 5] = (width + 1) * (z + 1) + (x + 1);
+			//
+			//count += 6;
+		}//for(x)
+	}//for(z)
+
+	if (indexData.size() != indexCount)
+		assert(0);
+}
+
+void Landscape::CreateQuadVertexData()
+{
+}
+
+void Landscape::CreateQuadIndexData()
+{
+	indexCount = width * height * 4;
+	indexData;// = new UINT[indexCount];
+
+	UINT count = 0;
+	for (UINT z = 0; z < height; z++)
+	{
+		for (UINT x = 0; x < width; x++)
+		{
+			indexData.push_back((width + 1) * (z + 1) + x);
+			indexData.push_back((width + 1) * (z + 1) + (x + 1));
+
+			indexData.push_back((width + 1) * z + x);
+			indexData.push_back((width + 1) * z + x + 1);
 			//indexData[count + 0] = (width + 1) * z + x;
 			//indexData[count + 1] = (width + 1) * (z + 1) + x;
 			//indexData[count + 2] = (width + 1) * z + x + 1;
@@ -241,11 +275,15 @@ void Landscape::Render()
 
 	D3D::GetDeviceContext()->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
 	D3D::GetDeviceContext()->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R32_UINT, 0);
-	D3D::GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	//D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST
+	//D3D11_PRIMITIVE_TOPOLOGY_3_CONTROL_POINT_PATCHLIST
+	D3D::GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_4_CONTROL_POINT_PATCHLIST);
 
 	wBuffer->SetBuffer();
 	buffer->SetBuffers();
 
+	D3D::GetDeviceContext()->DSSetShaderResources(0, 1, &heightMap);
 	D3D::GetDeviceContext()->PSSetShaderResources(0, 3, diffuseMap);
 	D3D::GetDeviceContext()->PSSetShaderResources(5, 1, &normalMap);
 
@@ -328,6 +366,9 @@ void Landscape::LoadTextures()
 	hr = D3DX11CreateShaderResourceViewFromFile(D3D::GetDevice(), L"./Terrain/underwater.jpg", nullptr, nullptr, &diffuseMap[1], nullptr);
 	assert(SUCCEEDED(hr));
 	hr = D3DX11CreateShaderResourceViewFromFile(D3D::GetDevice(), L"./Terrain/mountain.jpg", nullptr, nullptr, &diffuseMap[2], nullptr);
+	assert(SUCCEEDED(hr));
+
+	hr = D3DX11CreateShaderResourceViewFromFile(D3D::GetDevice(), L"./Terrain/heightmap.jpg", nullptr, nullptr, &heightMap, nullptr);
 	assert(SUCCEEDED(hr));
 }
 

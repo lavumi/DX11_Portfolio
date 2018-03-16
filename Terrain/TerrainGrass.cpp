@@ -4,8 +4,8 @@
 
 TerrainGrass::TerrainGrass()
 {
-
-
+	vertexBuffer = 0;
+	instanceBuffer = 0;
 
 }
 
@@ -148,6 +148,11 @@ void TerrainGrass::CreateBufferTemp()
 	assert(SUCCEEDED(hr));
 
 	SAFE_DELETE_ARRAY(vertexData);
+
+
+
+	if (instanceData.size() == 0)
+		return;
 
 	ZeroMemory(&desc, sizeof(D3D11_BUFFER_DESC));
 	desc.Usage = D3D11_USAGE_DEFAULT;
