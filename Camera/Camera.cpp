@@ -5,13 +5,13 @@
 Camera* Camera::instance = NULL;
 
 const float Camera::screenNear = 0.1f;
-const float Camera::screenDepth = 300.0f;
+const float Camera::screenDepth = 100.0f;
 
 Camera::Camera()
 	: position(0, 10, 0)
 	, forward(0, 128, 0), right(0, 0, 0), up(0, 0, 0)
 	, rotate(0, 0)
-	, translationSpeed(18.0f), rotationSpeed(1.5f)
+	, translationSpeed(88.0f), rotationSpeed(1.5f)
 	, targetpos(nullptr), angle_pie(3.141592f/8*3), angle_theta(3.141592f/2), targetDistance(8)
 {
 	D3DXMatrixIdentity(&view);
