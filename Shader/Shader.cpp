@@ -11,6 +11,8 @@ void Shader::SetShader()
 	D3D::GetDeviceContext()->DSSetShader(domainShader, NULL, 0);
 	D3D::GetDeviceContext()->GSSetShader(geoShader, NULL, 0);
 	D3D::GetDeviceContext()->PSSetShader(pixelShader, NULL, 0);
+
+
 }
 
 Shader::Shader(wstring shaderFile)

@@ -9,15 +9,20 @@ public:
 		Update();
 		if(VS_Buffer !=0)
 			D3D::GetDeviceContext()->VSSetConstantBuffers(0, 1, &VS_Buffer);
-		if (DS_Buffer != 0)
-			D3D::GetDeviceContext()->DSSetConstantBuffers(0, 1, &DS_Buffer);
-		if (HS_Buffer != 0)
-			D3D::GetDeviceContext()->HSSetConstantBuffers(0, 1, &HS_Buffer);
+
 		if (GS_Buffer != 0)
 			D3D::GetDeviceContext()->GSSetConstantBuffers(0, 1, &GS_Buffer);
+
 		if (PS_Buffer != 0)
 			D3D::GetDeviceContext()->PSSetConstantBuffers(0, 1, &PS_Buffer);
+
+		if (DS_Buffer != 0)
+			D3D::GetDeviceContext()->DSSetConstantBuffers(0, 1, &DS_Buffer);
+
+		if (HS_Buffer != 0)
+			D3D::GetDeviceContext()->HSSetConstantBuffers(0, 1, &HS_Buffer);
 	//	D3D::GetDeviceContext()->VSSetConstantBuffers(13, 1, &worldBuffer);
+
 	}
 
 	//virtual void SetWorld(D3DXMATRIX _world) {

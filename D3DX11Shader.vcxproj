@@ -195,7 +195,6 @@
     <ClInclude Include="Render\UserInterface.h" />
     <ClInclude Include="Render\VertexLayout.h" />
     <ClInclude Include="Shader\BaseBuffer.h" />
-    <ClInclude Include="Shader\CascadeShadowBuffer.h" />
     <ClInclude Include="Shader\OrthoWindowBuffer.h" />
     <ClInclude Include="Shader\ColorBuffer.h" />
     <ClInclude Include="Shader\LightBuffer.h" />

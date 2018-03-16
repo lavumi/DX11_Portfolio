@@ -352,9 +352,6 @@
     <ClInclude Include="System\BoundingBox.h">
       <Filter>System</Filter>
     </ClInclude>
-    <ClInclude Include="Shader\CascadeShadowBuffer.h">
-      <Filter>Shader\Buffers</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="System">

@@ -20,7 +20,7 @@ class PerlinNoise;
 
 
 class ShaderManager;
-class CascadeShadowBuffer;
+
 
 
 
@@ -85,20 +85,11 @@ private:
 	OrthoWindowPlane* orthoWindow;
 
 	ShaderManager* shaderManager;
-	CascadeShadowBuffer* shadowBuffer;
 
 	VPBuffer* vpBuffer;
 	LightBuffer* lightBuffer;
 
-
-
 	Character* player;
-
-
-
-
-
-
 
 	int testvalue = 0;
 };

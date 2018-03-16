@@ -29,7 +29,6 @@
 
 #include "../Shader/VPBuffer.h"
 #include "../Shader/LightBuffer.h"
-#include "../Shader/CascadeShadowBuffer.h"
 
 
 
@@ -74,7 +73,8 @@ void GameMain::Initialize()
 
 
 	shaderManager = new ShaderManager();
-	shadowBuffer = new CascadeShadowBuffer();
+
+
 
 
 
@@ -82,7 +82,7 @@ void GameMain::Initialize()
 	player = new Character();
 
 
-	depthShadowTexture->Initialize(3);
+	depthShadowTexture->Initialize();
 	shadowTexture->Initialize();
 	blurShadowTexture->Initialize();
 	lakeReflectionTexture->Initialize();
@@ -209,9 +209,7 @@ void GameMain::Update()
 	static int i = 0;
 
 	if (Keyboard::Get()->KeyUp(VK_SPACE)) {
-		depthShadowTexture->SaveTexture(L"depthShadow0.png",0);
-		depthShadowTexture->SaveTexture(L"depthShadow1.png", 1);
-		depthShadowTexture->SaveTexture(L"depthShadow2.png", 1);
+		//depthShadowTexture->SaveTexture(L"depthShadow.png");
 		//shadowTexture->SaveTexture(L"shadow.png");
 		//blurShadowTexture->SaveTexture(L"blur.png");
 		//lakeRefractionTexture->SaveTexture(L"Mirror.png");
@@ -242,18 +240,6 @@ void GameMain::Update()
 		landscapeWireFrame = !landscapeWireFrame;
 	}
 
-
-
-	D3DXMATRIX cropMatrix[3];
-
-	for (UINT i = 0; i < 3; i++) {
-		cropMatrix[i] = frustum->GetCropMatrix(i);
-	}
-	
-
-
-	shadowBuffer->UpdateMatrix(cropMatrix);
-
 }
 
 void GameMain::PreRender()
@@ -272,11 +258,8 @@ void GameMain::PreRender()
 		vpBuffer->SetVPMatrix(view, projection);
 		depthShadowTexture->SetTarget();
 		depthShadowTexture->Clear(0, 0, 0, 1);
-		
 
 		assert(shaderManager->SetShader(L"LightViewShader"));
-		shadowBuffer->SetBuffers();
-
 		testcube->Render();
 		landscape->RenderShadow();
 	}
@@ -400,10 +383,6 @@ void GameMain::PreRender()
 
 		Camera::Get()->GetView(&view);
 		D3D::Get()->GetProjection(&projection);
-
-		//D3DXMATRIX cropMatrix = frustum->GetCropMatrix(0);
-		//projection *= cropMatrix;
-
 		vpBuffer->SetVPMatrix(view, projection);
 
 
