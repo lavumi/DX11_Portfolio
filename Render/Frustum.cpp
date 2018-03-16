@@ -26,10 +26,6 @@ void Frustum::SetFrustum(D3DXMATRIX viewMatrix, D3DXMATRIX projectionMatrix)
 	vtx[2] = D3DXVECTOR3(1.0f, 1.0f, 0.0f);
 	vtx[3] = D3DXVECTOR3(-1.0f, 1.0f, 0.0f);
 
-
-
-
-
 	vtx[4] = D3DXVECTOR3(-1.0f, -1.0f, 1.0f);
 	vtx[5] = D3DXVECTOR3(1.0f, -1.0f, 1.0f);
 	vtx[6] = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
@@ -215,9 +211,7 @@ void Frustum::Render()
 
 D3DXMATRIX Frustum::GetCropMatrix(UINT index)
 {
-	D3DXMATRIX view, projection;
-	Camera::Get()->GetView(&view);
-	D3D::Get()->GetProjection(&projection);
+
 
 	D3DXVECTOR3 vtx_input[8];
 	if (index >= splitCount)
@@ -227,9 +221,12 @@ D3DXMATRIX Frustum::GetCropMatrix(UINT index)
 			vtx_input[i] = splitedVtx[i + index*4];
 		}
 	}
-	
+	D3DXMATRIX view, projection;
 
-	BoundingBox box = BoundingBox::CreateAABB(vtx_input, vtx, view*projection);
+	LightManager::Get()->GetView(&view);
+	LightManager::Get()->GetProjection(&projection);
+
+	BoundingBox box = BoundingBox::CreateAABB(vtx_input, view*projection);
 
 
 	//box.min.z = 0;
