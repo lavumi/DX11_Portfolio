@@ -5,7 +5,7 @@ class RainBuffer : public ShaderBuffer
 {
 public:
 	RainBuffer()
-		: ShaderBuffer(0, 0,0, sizeof(PS_DATA))
+		: ShaderBuffer(0, 0, sizeof(PS_DATA))
 	{
 	}
 

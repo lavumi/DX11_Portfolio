@@ -16,8 +16,6 @@ public:
 		if (PS_Buffer != 0)
 			D3D::GetDeviceContext()->PSSetConstantBuffers(0, 1, &PS_Buffer);
 
-		if (DS_Buffer != 0)
-			D3D::GetDeviceContext()->DSSetConstantBuffers(0, 1, &DS_Buffer);
 	//	D3D::GetDeviceContext()->VSSetConstantBuffers(13, 1, &worldBuffer);
 
 	}
@@ -31,8 +29,8 @@ public:
 
 protected:
 
-	ShaderBuffer(UINT vs_dataSize, UINT ds_dataSize, UINT gs_dataSize, UINT ps_dataSize)
-		:VS_Buffer(0), DS_Buffer(0),GS_Buffer(0), PS_Buffer(0)//, buffer(0)
+	ShaderBuffer(UINT vs_dataSize, UINT gs_dataSize, UINT ps_dataSize)
+		:VS_Buffer(0), GS_Buffer(0), PS_Buffer(0)//, buffer(0)
 	{
 		if (vs_dataSize != 0) {
 			desc.Usage = D3D11_USAGE_DYNAMIC;
@@ -43,17 +41,6 @@ protected:
 			desc.StructureByteStride = 0;
 
 			HRESULT hr = D3D::GetDevice()->CreateBuffer(&desc, NULL, &VS_Buffer);
-			assert(SUCCEEDED(hr));
-		}
-		if (ds_dataSize != 0) {
-			desc.Usage = D3D11_USAGE_DYNAMIC;
-			desc.ByteWidth = ds_dataSize;
-			desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-			desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-			desc.MiscFlags = 0;
-			desc.StructureByteStride = 0;
-
-			HRESULT hr = D3D::GetDevice()->CreateBuffer(&desc, NULL, &DS_Buffer);
 			assert(SUCCEEDED(hr));
 		}
 		if (gs_dataSize != 0) {
@@ -96,7 +83,6 @@ protected:
 		SAFE_RELEASE(VS_Buffer);
 		SAFE_RELEASE(GS_Buffer);
 		SAFE_RELEASE(PS_Buffer);
-		SAFE_RELEASE(DS_Buffer);
 
 	}
 
@@ -164,30 +150,14 @@ protected:
 		D3D::GetDeviceContext()->Unmap(PS_Buffer, 0);
 	}
 
-	void UpdateDSBuffer(void* data, UINT dataSize)
-	{
-		if (dataSize == 0)
-			return;
-		D3D11_MAPPED_SUBRESOURCE subResource;
-
-		HRESULT hr = D3D::GetDeviceContext()->Map
-		(
-			DS_Buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &subResource
-		);
-
-		memcpy(subResource.pData, data, dataSize);
-
-		D3D::GetDeviceContext()->Unmap(DS_Buffer, 0);
-	}
 	D3DXMATRIX world;
 
 
 
 private:
 	D3D11_BUFFER_DESC desc;
-
+//	ID3D11Buffer* buffer;
 	ID3D11Buffer* VS_Buffer;
-	ID3D11Buffer* DS_Buffer;
 	ID3D11Buffer* GS_Buffer;
 	ID3D11Buffer* PS_Buffer;
 

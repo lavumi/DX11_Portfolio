@@ -24,9 +24,6 @@ public:
 	void SetBuffer() {
 		D3D::GetDeviceContext()->VSSetConstantBuffers(13, 1, &buffer);
 		D3D::GetDeviceContext()->GSSetConstantBuffers(13, 1, &buffer);
-		D3D::GetDeviceContext()->HSSetConstantBuffers(13, 1, &buffer);
-		D3D::GetDeviceContext()->DSSetConstantBuffers(13, 1, &buffer);
-
 	}
 
 

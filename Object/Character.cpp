@@ -45,7 +45,7 @@ void Character::Initialize(Shader* shader, Landscape* land)
 	D3DXMatrixTranslation(&world, position.x, position.y, position.z);
 	speed = 1;
 
-	//SetCamera(Camera::Get());
+	SetCamera(Camera::Get());
 }
 
 void Character::MoveTo(float x, float y, float z)

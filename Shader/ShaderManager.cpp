@@ -32,15 +32,16 @@ bool ShaderManager::CreateShader(wstring fxName, D3D11_INPUT_ELEMENT_DESC * desc
 	wstring fullfxName = L"./FX/" + fxName + L".fx";
 
 	Shader* shader = new Shader(fullfxName);
-	bool success[6];
+	bool vs, ps, gs, layout;
 
-	success[0] = shader->CreateVertexShader();
-	success[1] = shader->CreateHullShader();
-	success[2] = shader->CreateDomainShader();
-	success[3] = shader->CreateGeometryShader();
-	success[4] = shader->CreatePixelShader();
-	success[5] = shader->CreateInputLayout(desc, count);
+	vs = shader->CreateVertexShader();
+	ps = shader->CreatePixelShader();
+	gs = shader->CreateGeometryShader();
+	layout = shader->CreateInputLayout(desc, count);
 
+
+	if ((vs || ps || layout) == false)
+		assert(0);
 
 	if (shaders.find(fxName) == shaders.end()) {
 		shaders[fxName] = shader;
