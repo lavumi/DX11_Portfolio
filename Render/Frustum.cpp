@@ -4,6 +4,9 @@
 
 Frustum::Frustum()
 {
+	wBuffer = new WorldBuffer();
+	CreateBuffer();
+	fixFrustum = false;
 }
 
 Frustum::~Frustum()
@@ -35,14 +38,14 @@ void Frustum::SetFrustum(D3DXMATRIX viewMatrix, D3DXMATRIX projectionMatrix)
 
 	//뷰, 프로젝션 연산의 역행렬을 구해서
 	D3DXMATRIX viewProj = viewMatrix * projectionMatrix;
-	D3DXMATRIXA16	matInv;
-	D3DXMatrixInverse(&matInv, NULL, &viewProj);
+
+	D3DXMatrixInverse(&ViewProjectionInverse, NULL, &viewProj);
 
 
 	//각 점에 곱해주면 점들의 기존 위치를 알수 있게 된다.
 	//이 점들을 이용해 평면을 만든다.
 	for (int i = 0; i < 8; i++)
-		D3DXVec3TransformCoord(&vtx[i], &vtx[i], &matInv);
+		D3DXVec3TransformCoord(&vtx[i], &vtx[i], &ViewProjectionInverse);
 
 
 	D3DXPlaneFromPoints(&m_planes[0], &vtx[5], &vtx[6], &vtx[7]);		// 원 평면(far)
@@ -53,6 +56,15 @@ void Frustum::SetFrustum(D3DXMATRIX viewMatrix, D3DXMATRIX projectionMatrix)
 	//	D3DXPlaneFromPoints(&m_plane[5], &vtx  ,  &vtx[4], &vtx[5]);	// 근 평면(near)
 
 	SplitFrustum(3);
+}
+
+void Frustum::Update()
+{
+	if (!fixFrustum) {
+		frustumWorld = ViewProjectionInverse;
+		wBuffer->SetWorld(frustumWorld);
+	}
+
 }
 
 bool Frustum::CheckCapsule(D3DXVECTOR3 start, D3DXVECTOR3 end, float radius)
@@ -128,6 +140,38 @@ void Frustum::SplitFrustum(UINT count)
 	//splitVtx = new D3DXVECTOR3[(splitCount -1)*4];
 	splitedVtx.clear();
 
+
+	D3DXVECTOR3 vtxSplited[16];
+
+	//UINT index = 0;
+	//vtxSplited[index++] = D3DXVECTOR3(-1.0f, -1.0f, 0.0f);
+	//vtxSplited[index++] = D3DXVECTOR3(1.0f, -1.0f, 0.0f);
+	//vtxSplited[index++] = D3DXVECTOR3(1.0f, 1.0f, 0.0f);
+	//vtxSplited[index++] = D3DXVECTOR3(-1.0f, 1.0f, 0.0f);
+	//		 
+	//vtxSplited[index++] = D3DXVECTOR3(-1.0f, -1.0f, 0.999f);
+	//vtxSplited[index++] = D3DXVECTOR3(1.0f, -1.0f,  0.999f);
+	//vtxSplited[index++] = D3DXVECTOR3(1.0f, 1.0f,   0.999f);
+	//vtxSplited[index++] = D3DXVECTOR3(-1.0f, 1.0f,  0.999f);
+	//		
+	//vtxSplited[index++] = D3DXVECTOR3(-1.0f, -1.0f, 0.9995f);
+	//vtxSplited[index++] = D3DXVECTOR3(1.0f, -1.0f,  0.9995f);
+	//vtxSplited[index++] = D3DXVECTOR3(1.0f, 1.0f,   0.9995f);
+	//vtxSplited[index++] = D3DXVECTOR3(-1.0f, 1.0f,  0.9995f);
+	//	
+	//vtxSplited[index++] = D3DXVECTOR3(-1.0f, -1.0f, 1.0f);
+	//vtxSplited[index++] = D3DXVECTOR3(1.0f, -1.0f, 1.0f);
+	//vtxSplited[index++] = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
+	//vtxSplited[index++] = D3DXVECTOR3(-1.0f, 1.0f, 1.0f);
+	//
+	//for (UINT i = 0; i < 16; i++) {
+	//	D3DXVec3TransformCoord(&vtxSplited[i], &vtxSplited[i], &ViewProjectionInverse);
+	//	splitedVtx.push_back(vtxSplited[i]);
+	//}
+
+
+
+	
 	splitedVtx.push_back(vtx[0]);
 	splitedVtx.push_back(vtx[1]);
 	splitedVtx.push_back(vtx[2]);
@@ -145,12 +189,28 @@ void Frustum::SplitFrustum(UINT count)
 	splitedVtx.push_back(vtx[7]);
 
 
+
+	for (UINT i = 0; i < 16; i++) {
+		vtxSplited[i] = splitedVtx[i];
+	}
+
 	assert(splitedVtx.size() == (splitCount + 1) * 4);
 }
 
 void Frustum::Render()
 {
+	return;
+	UINT stride = sizeof(VertexColor);
+	UINT offset = 0;
 
+	wBuffer->SetBuffer();
+
+	D3D::GetDeviceContext()->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
+	D3D::GetDeviceContext()->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R32_UINT, 0);
+	D3D::GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+
+	D3D::GetDeviceContext()->DrawIndexed(36, 0, 0);
 }
 
 D3DXMATRIX Frustum::GetCropMatrix(UINT index)
@@ -162,7 +222,7 @@ D3DXMATRIX Frustum::GetCropMatrix(UINT index)
 	D3DXVECTOR3 vtx_input[8];
 	if (index >= splitCount)
 		return D3DXMATRIX();
-	else {
+	else {	
 		for (UINT i = 0; i < 8; i++) {
 			vtx_input[i] = splitedVtx[i + index*4];
 		}
@@ -172,7 +232,7 @@ D3DXMATRIX Frustum::GetCropMatrix(UINT index)
 	BoundingBox box = BoundingBox::CreateAABB(vtx_input, vtx, view*projection);
 
 
-	box.min.z = 0;
+	//box.min.z = 0;
 	float scaleX, scaleY, scaleZ;
 	float offsetX, offsetY, offsetZ;
 
@@ -188,4 +248,95 @@ D3DXMATRIX Frustum::GetCropMatrix(UINT index)
 		0.0f,		scaleY,		0.0f,		0.0f,
 		0.0f,		0.0f,		scaleZ,		0.0f,
 		offsetX,	offsetY,	offsetZ,	1.0f);
+}
+void Frustum::CreateBuffer()
+{
+	HRESULT hr;
+
+	VertexColor* vertexData = new VertexColor[24];
+	int i = 0;
+
+	vertexData[i].position = D3DXVECTOR3(-1.0, -1.0, 1.0);		vertexData[i++].color = D3DXCOLOR(1,0,0,1);	
+	vertexData[i].position = D3DXVECTOR3(1.0, -1.0, 1.0);		vertexData[i++].color = D3DXCOLOR(1,0,0,1);	
+	vertexData[i].position = D3DXVECTOR3(1.0, 1.0, 1.0);		vertexData[i++].color = D3DXCOLOR(1,0,0,1);	
+	vertexData[i].position = D3DXVECTOR3(-1.0, 1.0, 1.0);		vertexData[i++].color = D3DXCOLOR(1,0,0,1);	
+															
+	vertexData[i].position = D3DXVECTOR3(1.0, 1.0, 1.0);		vertexData[i++].color = D3DXCOLOR(0,1,0,1);	
+	vertexData[i].position = D3DXVECTOR3(1.0, 1.0, 0.0);		vertexData[i++].color = D3DXCOLOR(0,1,0,1);	
+	vertexData[i].position = D3DXVECTOR3(1.0, -1.0, 0.0);		vertexData[i++].color = D3DXCOLOR(0,1,0,1);	
+	vertexData[i].position = D3DXVECTOR3(1.0, -1.0, 1.0);		vertexData[i++].color = D3DXCOLOR(0,1,0,1);	
+															
+	vertexData[i].position = D3DXVECTOR3(-1.0, -1.0, 0.0);		vertexData[i++].color = D3DXCOLOR(0,0,1,1);	
+	vertexData[i].position = D3DXVECTOR3(1.0, -1.0, 0.0);		vertexData[i++].color = D3DXCOLOR(0,0,1,1);	
+	vertexData[i].position = D3DXVECTOR3(1.0, 1.0, 0.0);		vertexData[i++].color = D3DXCOLOR(0,0,1,1);	
+	vertexData[i].position = D3DXVECTOR3(-1.0, 1.0, 0.0);		vertexData[i++].color = D3DXCOLOR(0,0,1,1);	
+															
+	vertexData[i].position = D3DXVECTOR3(-1.0, -1.0, 0.0);		vertexData[i++].color = D3DXCOLOR(1,1,0,1);	
+	vertexData[i].position = D3DXVECTOR3(-1.0, -1.0, 1.0);		vertexData[i++].color = D3DXCOLOR(1,1,0,1);	
+	vertexData[i].position = D3DXVECTOR3(-1.0, 1.0, 1.0);		vertexData[i++].color = D3DXCOLOR(1,1,0,1);	
+	vertexData[i].position = D3DXVECTOR3(-1.0, 1.0, 0.0);		vertexData[i++].color = D3DXCOLOR(1,1,0,1);	
+															
+	vertexData[i].position = D3DXVECTOR3(1.0, 1.0, 1.0);		vertexData[i++].color = D3DXCOLOR(1,0,1,1);	
+	vertexData[i].position = D3DXVECTOR3(-1.0, 1.0, 1.0);		vertexData[i++].color = D3DXCOLOR(1,0,1,1);	
+	vertexData[i].position = D3DXVECTOR3(-1.0, 1.0, 0.0);		vertexData[i++].color = D3DXCOLOR(1,0,1,1);	
+	vertexData[i].position = D3DXVECTOR3(1.0, 1.0, -1.0);		vertexData[i++].color = D3DXCOLOR(1,0,1,1);	
+															
+	vertexData[i].position = D3DXVECTOR3(-1.0, -1.0, 0.0);		vertexData[i++].color = D3DXCOLOR(0,1,1,1);	
+	vertexData[i].position = D3DXVECTOR3(1.0, -1.0, 0.0);		vertexData[i++].color = D3DXCOLOR(0,1,1,1);	
+	vertexData[i].position = D3DXVECTOR3(1.0, -1.0, 1.0);		vertexData[i++].color = D3DXCOLOR(0,1,1,1);	
+	vertexData[i].position = D3DXVECTOR3(-1.0, -1.0, 1.0);		vertexData[i++].color = D3DXCOLOR(0,1,1,1);	
+
+
+
+
+
+
+
+
+
+	UINT* indexData = new UINT[36]{
+		0, 1, 3, 2, 3, 1,
+		5, 4, 6, 4, 7, 6,
+		8, 11, 9, 11, 10, 9,
+		12, 13, 15, 13, 14, 15,
+		17, 16, 19, 17, 19, 18,
+		20, 21, 23,22, 23, 21 };
+
+
+
+
+
+	
+
+	D3D11_BUFFER_DESC desc;
+	D3D11_SUBRESOURCE_DATA data;
+
+
+	//1. Vertex Buffer
+	ZeroMemory(&desc, sizeof(D3D11_BUFFER_DESC));
+	desc.Usage = D3D11_USAGE_DEFAULT;
+	desc.ByteWidth = sizeof(VertexColor) * 24;
+	desc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+
+	ZeroMemory(&data, sizeof(D3D11_SUBRESOURCE_DATA));
+	data.pSysMem = vertexData;
+
+	hr = D3D::GetDevice()->CreateBuffer(&desc, &data, &vertexBuffer);
+	assert(SUCCEEDED(hr));
+
+
+	//2. Index Buffer
+	ZeroMemory(&desc, sizeof(D3D11_BUFFER_DESC));
+	desc.Usage = D3D11_USAGE_DEFAULT;
+	desc.ByteWidth = sizeof(UINT) * 36;
+	desc.BindFlags = D3D11_BIND_INDEX_BUFFER;
+
+	ZeroMemory(&data, sizeof(D3D11_SUBRESOURCE_DATA));
+	data.pSysMem = indexData;
+
+	hr = D3D::GetDevice()->CreateBuffer(&desc, &data, &indexBuffer);
+	assert(SUCCEEDED(hr));
+
+	SAFE_DELETE_ARRAY(vertexData);
+	SAFE_DELETE_ARRAY(indexData);
 }
