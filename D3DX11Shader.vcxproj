@@ -212,6 +212,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="System\BoundingBox.h" />
     <ClInclude Include="System\D3D.h" />
     <ClInclude Include="System\Frames.h" />
     <ClInclude Include="System\Keyboard.h" />
@@ -263,6 +264,7 @@
     <ClCompile Include="Render\VertexLayout.cpp" />
     <ClCompile Include="Shader\ShaderManager.cpp" />
     <ClCompile Include="Shader\Shader.cpp" />
+    <ClCompile Include="System\BoundingBox.cpp" />
     <ClCompile Include="System\D3D.cpp" />
     <ClCompile Include="System\Frames.cpp" />
     <ClCompile Include="System\Keyboard.cpp" />
