@@ -10,7 +10,7 @@ class ModelBuffer : public ShaderBuffer
 {
 public:
 	ModelBuffer()
-		: ShaderBuffer(sizeof(VS_Data), 0,0, sizeof(PS_DATA))
+		: ShaderBuffer(sizeof(VS_Data), 0,0,0, sizeof(PS_DATA))
 	{
 		D3DXMatrixIdentity(&data.boneScale);
 		

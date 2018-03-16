@@ -57,7 +57,7 @@ void GS(point PixelInput input[1], inout TriangleStream<PixelInput> triStream)
   
  
 
-    float grassheight =  _grassHeight;
+    float grassheight = _grassHeight;
     float grasswidth = _grassWidth;
     
     PixelInput base = input[0];

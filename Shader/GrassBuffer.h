@@ -5,7 +5,7 @@ class GrassBuffer : public ShaderBuffer
 {
 public:
 	GrassBuffer()
-		: ShaderBuffer(0,0, sizeof(GS_DATA), 0)
+		: ShaderBuffer(0,0,0, sizeof(GS_DATA), 0)
 	{	
 		gsData._grassHeight = 0.7f;
 		gsData._grassWidth = 0.04f;
