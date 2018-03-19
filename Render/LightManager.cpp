@@ -36,9 +36,12 @@ void LightManager::Update()
 	
 	
 	
+
+
+
 	
-	D3DXMatrixTranspose(&lightData.lightView, &lightData.lightView);
-	D3DXMatrixTranspose(&lightData.lightProjection, &lightData.lightProjection);
+	//D3DXMatrixTranspose(&lightData.lightView, &lightData.lightView);
+	//D3DXMatrixTranspose(&lightData.lightProjection, &lightData.lightProjection);
 	//D3DXMATRIX view, projection;
 	//
 	//D3DXMatrixLookAtLH(&view, &(position - lightData.lightDirection * 300), &(position), &up);

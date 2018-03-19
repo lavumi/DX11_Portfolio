@@ -211,7 +211,7 @@ void GameMain::Update()
 	if (Keyboard::Get()->KeyUp(VK_SPACE)) {
 		depthShadowTexture->SaveTexture(L"depthShadow0.png",0);
 		depthShadowTexture->SaveTexture(L"depthShadow1.png", 1);
-		depthShadowTexture->SaveTexture(L"depthShadow2.png", 1);
+		//depthShadowTexture->SaveTexture(L"depthShadow2.png", 4);
 		//shadowTexture->SaveTexture(L"shadow.png");
 		//blurShadowTexture->SaveTexture(L"blur.png");
 		//lakeRefractionTexture->SaveTexture(L"Mirror.png");
@@ -259,7 +259,7 @@ void GameMain::Update()
 void GameMain::PreRender()
 {
 	lightBuffer->SetBuffers();
-
+	
 
 	D3DXMATRIX world, view, projection;
 
@@ -280,6 +280,7 @@ void GameMain::PreRender()
 		testcube->Render();
 		landscape->RenderShadow();
 	}
+	return;
 	//기록된 depth를 바탕으로 그림자 연산
 	//TODO 여기서 텍스쳐를 여러개 쓰고 각 텍스쳐별로 bias를 따로 설정해주어야 한다. ( cascade shadow)
 	{
@@ -462,9 +463,47 @@ void GameMain::Render()
 {
 	D3DXMATRIX world, view, projection;
 
+	//Test
+	{
+		D3DXMATRIX cropMatrix[3];
+
+		for (UINT i = 0; i < 3; i++) {
+			cropMatrix[i] = frustum->GetCropMatrix(i);
+		}
+
+		LightManager::Get()->GetView(&view);
+		LightManager::Get()->GetProjection(&projection);
+
+		projection *= cropMatrix[0];
+
+		D3D::Get()->SetBlender(D3D::BL_state::Off);
+		vpBuffer->SetVPMatrix(view, projection);
+
+
+		assert(shaderManager->SetShader(L"TerrainShader"));
+		D3DXPLANE clipPlane = lake->getwaterPlane();
+		landscape->SetPlane(clipPlane);
+
+		//Rasterizer::Get()->SetWireframe();
+		landscape->Render();
+	
+
+		return;
+	}
+
+
+
+
+
+
+
 
 	Camera::Get()->GetDefaultView(&view);
 	D3D::Get()->GetOrthoProjection(&projection);
+
+
+
+
 	D3D::Get()->SetBlender(D3D::BL_state::Off);
 	vpBuffer->SetVPMatrix(view, projection);
 	

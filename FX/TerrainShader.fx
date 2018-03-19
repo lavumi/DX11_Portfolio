@@ -167,6 +167,10 @@ DomainOut DS(PatchTess patchTess,
     dout.position = outData.position;
     dout.worldPosition = dout.position.y;
     dout.position = mul(dout.position, _viewXprojection);
+   // dout.position = mul(dout.position, _lightView);
+   // dout.position = mul(dout.position, _lightProjection);
+
+
 
     dout.viewPosition = dout.position.xyw;
     dout.uv = outData.uv;
@@ -222,7 +226,7 @@ struct PixelOut
     float4 viewSpaceVector : SV_TARGET2;
 };
 
-PixelOut PS(DomainOut input) : SV_Target
+PixelOut PS(DomainOut input) 
 {
     PixelOut output;
 
@@ -275,7 +279,7 @@ PixelOut PS(DomainOut input) : SV_Target
 
 
 
-    output.albedo = diffuseMap * shadowValue;
+    output.albedo = diffuseMap; // * shadowValue;
 
     float3 depthValue = input.position.w / 300;
     output.depthMap = float4(depthValue, 1);

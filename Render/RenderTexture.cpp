@@ -35,6 +35,8 @@ void RenderTexture::Initialize(UINT count)
 {
 	assert(count >= 1);
 	subRT_count = count;
+
+
 	HRESULT hr;
 	texture = new ID3D11Texture2D*[count];
 	renderView = new ID3D11RenderTargetView*[count];

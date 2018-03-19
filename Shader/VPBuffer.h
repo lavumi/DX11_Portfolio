@@ -24,18 +24,18 @@ public:
 
 	void SetVPMatrix(D3DXMATRIX view, D3DXMATRIX projection) {
 
-		D3DXMATRIX _view, _projection;
-		_view = view;
-		_projection = projection;
-
-
-		D3DXMatrixTranspose(&_view, &view);
-		D3DXMatrixTranspose(&_projection, &projection);
-
-		data.view = _view * _projection;
+		//D3DXMATRIX _view, _projection;
+		//_view = view;
+		//_projection = projection;
+		//
+		//
+		//D3DXMatrixTranspose(&_view, &view);
+		//D3DXMatrixTranspose(&_projection, &projection);
+		//
+		//data.view = _view * _projection;
 
 		D3DXMatrixTranspose(&data.view, &(view*projection));
-		//D3DXMatrixTranspose(&data.projection, &projection);
+
 
 		D3D11_MAPPED_SUBRESOURCE subResource;
 

@@ -229,7 +229,7 @@ D3DXMATRIX Frustum::GetCropMatrix(UINT index)
 	BoundingBox box = BoundingBox::CreateAABB(vtx_input, view*projection);
 
 
-	//box.min.z = 0;
+	box.min.z = 0;
 	float scaleX, scaleY, scaleZ;
 	float offsetX, offsetY, offsetZ;
 
@@ -237,7 +237,7 @@ D3DXMATRIX Frustum::GetCropMatrix(UINT index)
 	scaleY = 2.0f / (box.max.y - box.min.y);
 	offsetX = -0.5f * (box.max.x + box.min.x) * scaleX;
 	offsetY = -0.5f * (box.max.y + box.min.y) * scaleY;
-	scaleZ = 1.0f / (box.max.z - box.min.z);
+	scaleZ = 1.0f; // (box.max.z - box.min.z);
 	offsetZ = -box.min.z * scaleZ;
 
 	return D3DXMATRIX(

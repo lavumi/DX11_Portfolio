@@ -16,7 +16,7 @@ struct PixelInput
 {
     float4 position : SV_POSITION;
     float4 worldPosition : TEXCOORD0;
-    uint RTIndex : SV_RenderTargetArrayIndex;
+    uint RTIndex : TEXCOORD1;
 };
 
 GeoInput VS(VertexInput input)
@@ -49,7 +49,8 @@ void GS(triangle GeoInput input[3], inout TriangleStream<PixelInput> triStream)
         output.RTIndex = split;
         for (int vertex = 0; vertex < 3; vertex++)
         {
-            output.position = input[vertex].position; //mul(input[vertex].position, cropMatrix[split]);
+            output.position = input[vertex].position;//
+           // output.position = mul(input[vertex].position, cropMatrix[split]);
             output.worldPosition = output.position;
             triStream.Append(output);
         }
@@ -58,12 +59,29 @@ void GS(triangle GeoInput input[3], inout TriangleStream<PixelInput> triStream)
 }
 
 
-float4 PS(PixelInput input) : SV_Target
+struct PixelOutput
 {
-    float depthValue;
+    float4 split0 : SV_TARGET0;
+    float4 split1 : SV_TARGET1;
+    float4 split2 : SV_TARGET2;
+};
+
+
+PixelOutput PS(PixelInput input)
+{
+    PixelOutput output;
+    float4 depthValue;
 
     depthValue = input.worldPosition.z / input.worldPosition.w;
 
-    return depthValue;
+    if(input.RTIndex == 0)
+        output.split0 = depthValue;
+    else if (input.RTIndex == 1)
+        output.split1 = 1;
+    else if (input.RTIndex == 2)
+        output.split2 = 1;
+
+
+    return output;
 
 }
