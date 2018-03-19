@@ -41,7 +41,7 @@ cbuffer HSBuffer : register(b0)
 
 
 
-
+//     í¸ì§‘
 struct PatchTess
 {
     float EdgeTess[4] : SV_TessFactor;
@@ -141,7 +141,7 @@ DomainOut DS(PatchTess patchTess,
 
 
     float2 heightuv = outData.position.xz / 256;
-    //ÀÌ¹ÌÁö¿¡ ´ëÇÑ uv ÁÂÇ¥ Ã³¸®
+    //ì´ë¯¸ì§€ì— ëŒ€í•œ uv ì¢Œí‘œ ì²˜ë¦¬
     heightuv.y *= -1;
     heightuv.y += 1;
     
@@ -244,7 +244,7 @@ PixelOut PS(DomainOut input)
 
 
 
-    //±×¸²ÀÚ
+    //ê·¸ë¦¼ì
     float2 projectTexCoord;
     projectTexCoord.x = input.viewPosition.x / input.viewPosition.z / 2.0f + 0.5f;
     projectTexCoord.y = -input.viewPosition.y / input.viewPosition.z / 2.0f + 0.5f;
@@ -256,7 +256,7 @@ PixelOut PS(DomainOut input)
 
 
 
-    //ÅØ½ºÃÄ¸µ
+    //í…ìŠ¤ì³ë§
     float landNormal = input.gNormal;
    // blending.y -=   (blending.x + blending.z) /2;
     //blending = normalize(blending);
