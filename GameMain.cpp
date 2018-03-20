@@ -209,8 +209,8 @@ void GameMain::Update()
 	static int i = 0;
 
 	if (Keyboard::Get()->KeyUp(VK_SPACE)) {
-		depthShadowTexture->SaveTexture(L"depthShadow0.png",0);
-		depthShadowTexture->SaveTexture(L"depthShadow1.png", 1);
+		//depthShadowTexture->SaveTexture(L"depthShadow0.png",0);
+		//depthShadowTexture->SaveTexture(L"depthShadow1.png", 1);
 		//depthShadowTexture->SaveTexture(L"depthShadow2.png", 4);
 		//shadowTexture->SaveTexture(L"shadow.png");
 		//blurShadowTexture->SaveTexture(L"blur.png");
@@ -480,13 +480,15 @@ void GameMain::Render()
 		vpBuffer->SetVPMatrix(view, projection);
 
 
-		assert(shaderManager->SetShader(L"TerrainShader"));
-		D3DXPLANE clipPlane = lake->getwaterPlane();
-		landscape->SetPlane(clipPlane);
+		//assert(shaderManager->SetShader(L"TerrainShader"));
+		//D3DXPLANE clipPlane = lake->getwaterPlane();
+		//landscape->SetPlane(clipPlane);
 
-		//Rasterizer::Get()->SetWireframe();
-		landscape->Render();
-	
+		////Rasterizer::Get()->SetWireframe();
+		//landscape->Render();
+
+		assert(shaderManager->SetShader(L"ColorShader"));
+		frustum->Render();
 
 		return;
 	}

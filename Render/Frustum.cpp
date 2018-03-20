@@ -195,7 +195,7 @@ void Frustum::SplitFrustum(UINT count)
 
 void Frustum::Render()
 {
-	return;
+	
 	UINT stride = sizeof(VertexColor);
 	UINT offset = 0;
 
@@ -253,35 +253,35 @@ void Frustum::CreateBuffer()
 	VertexColor* vertexData = new VertexColor[24];
 	int i = 0;
 
-	vertexData[i].position = D3DXVECTOR3(-1.0, -1.0, 1.0);		vertexData[i++].color = D3DXCOLOR(1,0,0,1);	
-	vertexData[i].position = D3DXVECTOR3(1.0, -1.0, 1.0);		vertexData[i++].color = D3DXCOLOR(1,0,0,1);	
-	vertexData[i].position = D3DXVECTOR3(1.0, 1.0, 1.0);		vertexData[i++].color = D3DXCOLOR(1,0,0,1);	
-	vertexData[i].position = D3DXVECTOR3(-1.0, 1.0, 1.0);		vertexData[i++].color = D3DXCOLOR(1,0,0,1);	
+	vertexData[i].position = D3DXVECTOR3(-1.0, -1.0,	1.0);		vertexData[i++].color = D3DXCOLOR(1,0,0,1);	
+	vertexData[i].position = D3DXVECTOR3(1.0, -1.0,		1.0);		vertexData[i++].color = D3DXCOLOR(1,0,0,1);	
+	vertexData[i].position = D3DXVECTOR3(1.0, 1.0,		1.0);		vertexData[i++].color = D3DXCOLOR(1,0,0,1);	
+	vertexData[i].position = D3DXVECTOR3(-1.0, 1.0,		1.0);		vertexData[i++].color = D3DXCOLOR(1,0,0,1);	
 															
-	vertexData[i].position = D3DXVECTOR3(1.0, 1.0, 1.0);		vertexData[i++].color = D3DXCOLOR(0,1,0,1);	
-	vertexData[i].position = D3DXVECTOR3(1.0, 1.0, 0.0);		vertexData[i++].color = D3DXCOLOR(0,1,0,1);	
-	vertexData[i].position = D3DXVECTOR3(1.0, -1.0, 0.0);		vertexData[i++].color = D3DXCOLOR(0,1,0,1);	
-	vertexData[i].position = D3DXVECTOR3(1.0, -1.0, 1.0);		vertexData[i++].color = D3DXCOLOR(0,1,0,1);	
+	vertexData[i].position = D3DXVECTOR3(1.0, 1.0,		1.0);		vertexData[i++].color = D3DXCOLOR(0,1,0,1);	
+	vertexData[i].position = D3DXVECTOR3(1.0, 1.0,		0.0);		vertexData[i++].color = D3DXCOLOR(0,1,0,1);	
+	vertexData[i].position = D3DXVECTOR3(1.0, -1.0,		0.0);		vertexData[i++].color = D3DXCOLOR(0,1,0,1);	
+	vertexData[i].position = D3DXVECTOR3(1.0, -1.0,		1.0);		vertexData[i++].color = D3DXCOLOR(0,1,0,1);	
 															
-	vertexData[i].position = D3DXVECTOR3(-1.0, -1.0, 0.0);		vertexData[i++].color = D3DXCOLOR(0,0,1,1);	
-	vertexData[i].position = D3DXVECTOR3(1.0, -1.0, 0.0);		vertexData[i++].color = D3DXCOLOR(0,0,1,1);	
-	vertexData[i].position = D3DXVECTOR3(1.0, 1.0, 0.0);		vertexData[i++].color = D3DXCOLOR(0,0,1,1);	
-	vertexData[i].position = D3DXVECTOR3(-1.0, 1.0, 0.0);		vertexData[i++].color = D3DXCOLOR(0,0,1,1);	
+	vertexData[i].position = D3DXVECTOR3(-1.0, -1.0,	0.0);		vertexData[i++].color = D3DXCOLOR(0,0,1,1);	
+	vertexData[i].position = D3DXVECTOR3(1.0, -1.0,		0.0);		vertexData[i++].color = D3DXCOLOR(0,0,1,1);	
+	vertexData[i].position = D3DXVECTOR3(1.0, 1.0,		0.0);		vertexData[i++].color = D3DXCOLOR(0,0,1,1);	
+	vertexData[i].position = D3DXVECTOR3(-1.0, 1.0,		0.0);		vertexData[i++].color = D3DXCOLOR(0,0,1,1);	
 															
-	vertexData[i].position = D3DXVECTOR3(-1.0, -1.0, 0.0);		vertexData[i++].color = D3DXCOLOR(1,1,0,1);	
-	vertexData[i].position = D3DXVECTOR3(-1.0, -1.0, 1.0);		vertexData[i++].color = D3DXCOLOR(1,1,0,1);	
-	vertexData[i].position = D3DXVECTOR3(-1.0, 1.0, 1.0);		vertexData[i++].color = D3DXCOLOR(1,1,0,1);	
-	vertexData[i].position = D3DXVECTOR3(-1.0, 1.0, 0.0);		vertexData[i++].color = D3DXCOLOR(1,1,0,1);	
+	vertexData[i].position = D3DXVECTOR3(-1.0, -1.0,	0.0);		vertexData[i++].color = D3DXCOLOR(1,1,0,1);	
+	vertexData[i].position = D3DXVECTOR3(-1.0, -1.0,	1.0);		vertexData[i++].color = D3DXCOLOR(1,1,0,1);	
+	vertexData[i].position = D3DXVECTOR3(-1.0, 1.0,		1.0);		vertexData[i++].color = D3DXCOLOR(1,1,0,1);	
+	vertexData[i].position = D3DXVECTOR3(-1.0, 1.0,		0.0);		vertexData[i++].color = D3DXCOLOR(1,1,0,1);	
 															
-	vertexData[i].position = D3DXVECTOR3(1.0, 1.0, 1.0);		vertexData[i++].color = D3DXCOLOR(1,0,1,1);	
-	vertexData[i].position = D3DXVECTOR3(-1.0, 1.0, 1.0);		vertexData[i++].color = D3DXCOLOR(1,0,1,1);	
-	vertexData[i].position = D3DXVECTOR3(-1.0, 1.0, 0.0);		vertexData[i++].color = D3DXCOLOR(1,0,1,1);	
-	vertexData[i].position = D3DXVECTOR3(1.0, 1.0, -1.0);		vertexData[i++].color = D3DXCOLOR(1,0,1,1);	
+	vertexData[i].position = D3DXVECTOR3(1.0, 1.0,		1.0);		vertexData[i++].color = D3DXCOLOR(1,0,1,1);	
+	vertexData[i].position = D3DXVECTOR3(-1.0, 1.0,		1.0);		vertexData[i++].color = D3DXCOLOR(1,0,1,1);	
+	vertexData[i].position = D3DXVECTOR3(-1.0, 1.0,		0.0);		vertexData[i++].color = D3DXCOLOR(1,0,1,1);	
+	vertexData[i].position = D3DXVECTOR3(1.0, 1.0,		1.0);		vertexData[i++].color = D3DXCOLOR(1,0,1,1);	
 															
-	vertexData[i].position = D3DXVECTOR3(-1.0, -1.0, 0.0);		vertexData[i++].color = D3DXCOLOR(0,1,1,1);	
-	vertexData[i].position = D3DXVECTOR3(1.0, -1.0, 0.0);		vertexData[i++].color = D3DXCOLOR(0,1,1,1);	
-	vertexData[i].position = D3DXVECTOR3(1.0, -1.0, 1.0);		vertexData[i++].color = D3DXCOLOR(0,1,1,1);	
-	vertexData[i].position = D3DXVECTOR3(-1.0, -1.0, 1.0);		vertexData[i++].color = D3DXCOLOR(0,1,1,1);	
+	vertexData[i].position = D3DXVECTOR3(-1.0, -1.0,	0.0);		vertexData[i++].color = D3DXCOLOR(0,1,1,1);	
+	vertexData[i].position = D3DXVECTOR3(1.0, -1.0,		0.0);		vertexData[i++].color = D3DXCOLOR(0,1,1,1);	
+	vertexData[i].position = D3DXVECTOR3(1.0, -1.0,		1.0);		vertexData[i++].color = D3DXCOLOR(0,1,1,1);	
+	vertexData[i].position = D3DXVECTOR3(-1.0, -1.0,	1.0);		vertexData[i++].color = D3DXCOLOR(0,1,1,1);	
 
 
 

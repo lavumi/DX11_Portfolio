@@ -41,7 +41,7 @@ cbuffer HSBuffer : register(b0)
 
 
 
-//     편집
+//테셀레이션하는데 필요햔 변수들의 구조체
 struct PatchTess
 {
     float EdgeTess[4] : SV_TessFactor;
@@ -94,7 +94,7 @@ HullOut HS(InputPatch<VertexOut, 4> p,
     HullOut hout;
 
     hout.position = p[i].position;
-    hout.uv         = p[i].uv;
+    hout.uv       = p[i].uv;
 
     return hout;
 }
