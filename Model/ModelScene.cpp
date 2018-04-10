@@ -195,12 +195,12 @@ void ModelScene::Update(D3DXMATRIX* worldPos)
 		model->Update(isAnimated, worldPos);
 }
 
-void ModelScene::Render(Shader* shader)
+void ModelScene::Render()
 {
 	modelBuffer->SetBuffers();
 
 	for each(Model* model in models)
-		model->Render(shader);
+		model->Render();
 }
 
 
@@ -214,8 +214,6 @@ void ModelScene::ProcessScene()
 	ProcessMaterial();
 	ProcessNode(scene->GetRootNode(), FbxNodeAttribute::eSkeleton);
 	ProcessNode(scene->GetRootNode(), FbxNodeAttribute::eMesh);
-	//ProcessAnimations();
-	
 }
 
 /****************************************************************************************************

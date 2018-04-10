@@ -19,9 +19,8 @@ Character::~Character()
 	SAFE_DELETE(model);
 }
 
-void Character::Initialize(Shader* shader, Landscape* land)
+void Character::Initialize(Landscape* land)
 {
-	//
 	//model->LoadFbx(L"/Contents/Models/Sword And Shield Idle.fbx");
 	//
 	//
@@ -39,7 +38,6 @@ void Character::Initialize(Shader* shader, Landscape* land)
 
 
 	this->land = land;
-	this->shader = shader;
 	position = D3DXVECTOR3(140, 0, 110);
 	land->GetY(position);
 	D3DXMatrixTranslation(&world, position.x, position.y, position.z);
@@ -70,7 +68,7 @@ void Character::Update()
 
 void Character::Render()
 {
-	model->Render(shader);
+	model->Render();
 }
 
 void Character::SetAni(int index)

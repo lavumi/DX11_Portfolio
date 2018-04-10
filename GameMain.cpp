@@ -35,11 +35,9 @@
 
 #include "../ProceduralTexture/Convert_Normal_Height.h"
 
-bool GameMain::landscapeWireFrame = false;
-
 void GameMain::Initialize()
 {
-	depthShadowTexture = new RenderTexture(1280, 1280);
+	depthShadowTexture = new RenderTexture(2048, 2048);
 	shadowTexture = new RenderTexture();
 	blurShadowTexture = new RenderTexture();
 	lakeReflectionTexture = new RenderTexture();
@@ -60,11 +58,9 @@ void GameMain::Initialize()
 	landscape = new Landscape();
 	lake = new Water();
 	grass = new TerrainGrass();
-	//volumeCloud = new Cloud();
 	rainCone = new RainCone();
 
 	grassTexture = new GrassTexture();
-	//mosaicTile = new MosaicTile();
 	noise = new PerlinNoise();
 
 
@@ -82,7 +78,7 @@ void GameMain::Initialize()
 	player = new Character();
 
 
-	depthShadowTexture->Initialize(3);
+	depthShadowTexture->IntializeShadowTexture(3);
 	shadowTexture->Initialize();
 	blurShadowTexture->Initialize();
 	lakeReflectionTexture->Initialize();
@@ -99,7 +95,7 @@ void GameMain::Initialize()
 	rainCone->Initialize();
 
 
-	player->Initialize(shaderManager->GetShader(L"FBXModelShader"), landscape);
+	player->Initialize(landscape);
 
 
 
@@ -108,29 +104,13 @@ void GameMain::Initialize()
 	grassTexture->DrawTexture();
 	landscape->SetTexture(grassTexture->diffuse, nullptr, nullptr);
 	//grass->setDiffuseMap(grassTexture->getGrassTexture());
-	LodOff = false;
+
+
 	
-
-
-
-
-
-
-
-
 	//{
 	//	Convert_Normal_Height change;
 	//	change.Convert(L"./Terrain/heightmap.jpg");
 	//}
-
-
-
-
-
-
-
-
-
 
 
 	vpBuffer = new VPBuffer();
@@ -203,63 +183,39 @@ void GameMain::Update()
 
 	testcube->Update();
 
-
-	//player->Move(0.5f, 0.5f);
-
-	static int i = 0;
-
 	if (Keyboard::Get()->KeyUp(VK_SPACE)) {
+		testvalue++;
+		if (testvalue == 3)
+			testvalue = 0;
+		
 		//depthShadowTexture->SaveTexture(L"depthShadow0.png",0);
 		//depthShadowTexture->SaveTexture(L"depthShadow1.png", 1);
-		//depthShadowTexture->SaveTexture(L"depthShadow2.png", 4);
+		//depthShadowTexture->SaveTexture(L"depthShadow2.png", 2);
 		//shadowTexture->SaveTexture(L"shadow.png");
 		//blurShadowTexture->SaveTexture(L"blur.png");
 		//lakeRefractionTexture->SaveTexture(L"Mirror.png");
 		//mainRendering->SaveTexture(L"main.png",1);
-
-		//LodOff = !LodOff;
-		Camera::Get()->SetFallowCamera(nullptr);
-		frustum->fixFrustum = !frustum->fixFrustum;
+		//
+		////LodOff = !LodOff;
+		//Camera::Get()->SetFallowCamera(nullptr);
+		//frustum->fixFrustum = !frustum->fixFrustum;
 		//i++;
 		//if (i > 3)
 		//	i = 0;
-		//player->SetAni(i);
+		player->SetAni(testvalue);
 	}
-	if (!LodOff) {
-		//landscape->changeLOD(frustum);
-		//Camera::Get()->SetFallowCamera(nullptr);
+	if (Keyboard::Get()->KeyUp('A')) {
 
-	}
-	else
-	{
-		//player->SetCamera(Camera::Get());
-	}
-
-	
-
-
-	if (Keyboard::Get()->KeyUp('P')) {
-		landscapeWireFrame = !landscapeWireFrame;
 	}
 
 
-
-	D3DXMATRIX cropMatrix[3];
-
-	for (UINT i = 0; i < 3; i++) {
-		cropMatrix[i] = frustum->GetCropMatrix(i);
-	}
-	
-
-
-	shadowBuffer->UpdateMatrix(cropMatrix);
 
 }
 
 void GameMain::PreRender()
 {
+
 	lightBuffer->SetBuffers();
-	
 
 	D3DXMATRIX world, view, projection;
 
@@ -272,17 +228,35 @@ void GameMain::PreRender()
 		vpBuffer->SetVPMatrix(view, projection);
 		depthShadowTexture->SetTarget();
 		depthShadowTexture->Clear(0, 0, 0, 1);
+
+
+
 		
+		D3DXMATRIX cropMatrix[4];
+		for (UINT i = 0; i < 3; i++) {
+			cropMatrix[i] = frustum->GetCropMatrix(i);
+		}
+		
+		Camera::Get()->GetView(&cropMatrix[3]);
+		D3DXMatrixTranspose(&cropMatrix[3], &cropMatrix[3]);
+		shadowBuffer->UpdateMatrix(cropMatrix);
+
+
+
+
 
 		assert(shaderManager->SetShader(L"LightViewShader"));
 		shadowBuffer->SetBuffers();
 
-		testcube->Render();
+		
 		landscape->RenderShadow();
+		testcube->Render();
+
+
+		assert(shaderManager->SetShader(L"FBXLightViewShader"));
+		player->Render();
 	}
-	return;
-	//기록된 depth를 바탕으로 그림자 연산
-	//TODO 여기서 텍스쳐를 여러개 쓰고 각 텍스쳐별로 bias를 따로 설정해주어야 한다. ( cascade shadow)
+	
 	{
 		shadowTexture->SetTarget();
 		shadowTexture->Clear();
@@ -294,25 +268,29 @@ void GameMain::PreRender()
 
 		D3D::GetDeviceContext()->PSSetShaderResources(13, 1, depthShadowTexture->GetShadowResourceView());
 		assert(shaderManager->SetShader(L"ShadowShader"));
-		testcube->Render();
 		landscape->RenderShadow();
-		//landscape->RenderShadow();
+		testcube->Render();
+
+		assert(shaderManager->SetShader(L"FBXShadowShader"));
+		player->Render();
+		
 	}
-	//연산된 그림자를 blur 처리
-	{
-		blurShadowTexture->SetTarget(true);
-		blurShadowTexture->Clear(0, 0, 0, 1);
-
-
-		Camera::Get()->GetDefaultView(&view);
-		D3D::Get()->GetOrthoProjection(&projection);
-		vpBuffer->SetVPMatrix(view, projection);
-
-		D3D::GetDeviceContext()->PSSetShaderResources(10, 1, shadowTexture->GetShadowResourceView());
-		assert(shaderManager->SetShader(L"BlurShader"));
-		orthoWindow->Render();
-
-	}
+	////연산된 그림자를 blur 처리
+	//{
+	//	blurShadowTexture->SetTarget(true);
+	//	blurShadowTexture->Clear(0, 0, 0, 1);
+	//
+	//
+	//	Camera::Get()->GetDefaultView(&view);
+	//	D3D::Get()->GetOrthoProjection(&projection);
+	//	vpBuffer->SetVPMatrix(view, projection);
+	//
+	//
+	//	D3D::GetDeviceContext()->PSSetShaderResources(10, 1, shadowTexture->GetShadowResourceView());
+	//	assert(shaderManager->SetShader(L"BlurShader"));
+	//	orthoWindow->Render();
+	//
+	//}
 
 	//호수의 반사평면 그리기
 	{
@@ -399,11 +377,16 @@ void GameMain::PreRender()
 		mainRendering->SetTarget();
 		mainRendering->Clear();
 
+
+		//LightManager::Get()->GetView(&view);
+		//LightManager::Get()->GetProjection(&projection);
+		//D3DXMATRIX cropMatrix = frustum->GetCropMatrix(testvalue);
+		//projection *= cropMatrix;
+
 		Camera::Get()->GetView(&view);
 		D3D::Get()->GetProjection(&projection);
 
-		//D3DXMATRIX cropMatrix = frustum->GetCropMatrix(0);
-		//projection *= cropMatrix;
+
 
 		vpBuffer->SetVPMatrix(view, projection);
 
@@ -421,6 +404,7 @@ void GameMain::PreRender()
 			assert(shaderManager->SetShader(L"SkyplaneShader"));
 			cloud->Render();
 
+			
 			D3D::Get()->SetBlender(D3D::BL_state::Off);
 		}
 		D3D::Get()->SetDepthStencilState(D3D::DS_state::onState);
@@ -429,7 +413,7 @@ void GameMain::PreRender()
 
 
 		assert(shaderManager->SetShader(L"NormalMapShader"));
-		D3D::GetDeviceContext()->PSSetShaderResources(13, 1, blurShadowTexture->GetShadowResourceView());
+		D3D::GetDeviceContext()->PSSetShaderResources(13, 1, shadowTexture->GetShadowResourceView());
 		testcube->Render();
 
 
@@ -452,69 +436,30 @@ void GameMain::PreRender()
 		assert(shaderManager->SetShader(L"GrassShader"));
 		grass->Render();
 		
-		assert(shaderManager->SetShader(L"ColorShader"));
-		frustum->Render();
-
+		assert(shaderManager->SetShader(L"FBXModelShader"));
 		player->Render();
 	}
 }
 
 void GameMain::Render()
 {
+
 	D3DXMATRIX world, view, projection;
-
-	//Test
-	{
-		D3DXMATRIX cropMatrix[3];
-
-		for (UINT i = 0; i < 3; i++) {
-			cropMatrix[i] = frustum->GetCropMatrix(i);
-		}
-
-		LightManager::Get()->GetView(&view);
-		LightManager::Get()->GetProjection(&projection);
-
-		projection *= cropMatrix[0];
-
-		D3D::Get()->SetBlender(D3D::BL_state::Off);
-		vpBuffer->SetVPMatrix(view, projection);
-
-
-		//assert(shaderManager->SetShader(L"TerrainShader"));
-		//D3DXPLANE clipPlane = lake->getwaterPlane();
-		//landscape->SetPlane(clipPlane);
-
-		////Rasterizer::Get()->SetWireframe();
-		//landscape->Render();
-
-		assert(shaderManager->SetShader(L"ColorShader"));
-		frustum->Render();
-
-		return;
-	}
-
-
-
-
-
-
 
 
 	Camera::Get()->GetDefaultView(&view);
 	D3D::Get()->GetOrthoProjection(&projection);
 
 
-
-
 	D3D::Get()->SetBlender(D3D::BL_state::Off);
 	vpBuffer->SetVPMatrix(view, projection);
 	
 
-	D3D::GetDeviceContext()->PSSetShaderResources(10, 1, mainRendering->GetShadowResourceView(0));
+	D3D::GetDeviceContext()->PSSetShaderResources(10, 1, mainRendering->GetShadowResourceView());
 	assert(shaderManager->SetShader(L"TextureShader"));
 	orthoWindow->Render();
 
-
+	
 	/*
 	//WATER REFLECTION OLD ver.
 	{

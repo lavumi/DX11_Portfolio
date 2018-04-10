@@ -1,18 +1,13 @@
 #include "ShaderPreset.hlsli"
 
 
-cbuffer Camera : register(b1)
-{
-    float4 _cameraPosition;
-    matrix worldInverseTransposeMatrix;
-}
 
 cbuffer BoneBuffer : register(b0)
 {
-    float4x4 _boneScale;
-    float4x4 _boneArray[100];
+    matrix _boneScale;
+    matrix _boneArray[100];
     uint _skinning;
-    float3 _bonePadding;
+    float3 _cameraPosition;
 }
 struct VertexInput
 {
@@ -42,10 +37,10 @@ PixelInput VS(VertexInput input)
     float4 worldPosition;
 
     float3 normal, tangent;
+    input.position.w = 1;
     if (_skinning == 0)
     {
         output.position = input.position;
-
     }
     else
     {
@@ -59,21 +54,20 @@ PixelInput VS(VertexInput input)
         normal = normalize(mul(input.normal, (float3x3) skinTransform));
         tangent = normalize(mul(input.tangent, (float3x3) skinTransform));
     }
-	
-
+   // output.position = input.position;
     output.position = mul(output.position, _world);
 
     float3 viewDir = _cameraPosition.xyz - output.position.xyz;
     float3 halfVector = normalize(-_lightDir) + normalize(viewDir);
 
 
-    float3 n = mul(normal, (float3x3) worldInverseTransposeMatrix);
-    float3 t = mul(tangent, (float3x3) worldInverseTransposeMatrix);
-    float3 b = cross(n, t);
-    float3x3 tbnMatrix = float3x3(t.x, b.x, n.x,
-	                              t.y, b.y, n.y,
-	                              t.z, b.z, n.z);
-
+    float3 n = mul(normal, (float3x3) _world);
+    float3 t = mul(tangent, (float3x3) _world);
+  float3 b = cross(n, t);
+  float3x3 tbnMatrix = float3x3(t.x, b.x, n.x,
+                            t.y, b.y, n.y,
+                            t.z, b.z, n.z);
+  //
 
     output.halfVector = mul(halfVector, tbnMatrix);
     output.lightDir = mul(-_lightDir, tbnMatrix);
@@ -94,7 +88,7 @@ PixelInput VS(VertexInput input)
 
 Texture2D _map : register(t0);
 Texture2D _normalMap : register(t1);
-
+Texture2D _lightMap : register(t13);
 
 SamplerState samp[3];
 
@@ -133,6 +127,17 @@ float4 PS(PixelInput input) : SV_Target
 
     float4 intensity = ambient * globalAmbient + diffuse * nDotL + specular * power;
 
-    return intensity*diffuseMap;
+
+
+    float2 projectTexCoord;
+
+    projectTexCoord.x = input.viewPosition.x / input.viewPosition.w / 2.0f + 0.5f;
+    projectTexCoord.y = -input.viewPosition.y / input.viewPosition.w / 2.0f + 0.5f;
+    float shadowValue = _lightMap.Sample(samp[1], projectTexCoord).g;
+   // shadowValue *= 0.3f;
+    intensity *= shadowValue;
+
+
+    return intensity * diffuseMap;
 
 }

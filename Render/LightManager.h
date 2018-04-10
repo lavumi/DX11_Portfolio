@@ -21,6 +21,9 @@ public:
 	void GetProjection(D3DXMATRIX* view) {
 		memcpy(view, this->lightData.lightProjection, sizeof(D3DXMATRIX));
 	}
+	void GetDirection(D3DXVECTOR3* view) {
+		memcpy(view, this->lightData.lightDirection, sizeof(D3DXVECTOR3));
+	}
 
 	//void GetViewXProjection(D3DXMATRIX* view) {
 	//	memcpy(view, this->lightData.lightViewXProjection, sizeof(D3DXMATRIX));

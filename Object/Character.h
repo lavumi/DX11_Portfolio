@@ -12,7 +12,7 @@ public:
 	Character();
 	~Character();
 
-	void Initialize(Shader*,Landscape* );
+	void Initialize(Landscape* );
 	void MoveTo(float x, float y, float z);
 	void Move(float x, float z);
 	void Update();
@@ -28,6 +28,5 @@ private:
 	D3DXMATRIX world;
 	D3DXVECTOR3 position;
 	float speed;
-	Shader* shader;
 	Landscape* land;
 };

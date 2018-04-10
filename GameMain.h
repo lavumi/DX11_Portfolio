@@ -13,10 +13,7 @@ class RainCone;
 class TestCube;
 
 class GrassTexture;
-//class MosaicTile;
 class PerlinNoise;
-
-
 
 
 class ShaderManager;
@@ -44,10 +41,6 @@ public:
 
 private:
 
-	static bool landscapeWireFrame;
-	bool LodOff;
-
-
 	void ControlCamera();
 
 
@@ -65,8 +58,6 @@ private:
 	Frustum* frustum;
 
 	GrassTexture* grassTexture;
-
-	//MosaicTile* mosaicTile;
 	PerlinNoise* noise;
 
 	Skydome* skydome;

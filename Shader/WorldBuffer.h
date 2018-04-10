@@ -21,6 +21,10 @@ public:
 
 	}
 
+	~WorldBuffer() {
+		SAFE_RELEASE(buffer);
+	}
+
 	void SetBuffer() {
 		D3D::GetDeviceContext()->VSSetConstantBuffers(13, 1, &buffer);
 		D3D::GetDeviceContext()->GSSetConstantBuffers(13, 1, &buffer);

@@ -39,9 +39,5 @@ SamplerState samp[3];
 float4 PS(PixelInput input) : SV_Target
 {
     float4 color = _map.Sample(samp[0], input.uv);
-
-   
-
     return  color;
-
 }

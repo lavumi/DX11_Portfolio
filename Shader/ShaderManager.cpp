@@ -2,20 +2,28 @@
 #include "ShaderManager.h"
 #include "Shader.h"
 ShaderManager::ShaderManager()
-{																															
+{		
+
+
+
 	assert(CreateShader(L"BlurShader", VertexTexture::desc, VertexTexture::count)											);
 	assert(CreateShader(L"ColorShader", VertexColor::desc, VertexColor::count)												);
 	assert(CreateShader(L"FBXModelShader", VertexTextureNormalTangentBlend::desc, VertexTextureNormalTangentBlend::count)	);
 	assert(CreateShader(L"GrassShader", VertexInstance::desc, VertexInstance::count)										);
 	assert(CreateShader(L"LightViewShader", VertexTextureNormalTangent::desc, VertexTextureNormalTangent::count)			);
+	assert(CreateShader(L"FBXLightViewShader", VertexTextureNormalTangentBlend::desc, VertexTextureNormalTangentBlend::count));
 	assert(CreateShader(L"NormalMapShader", VertexTextureNormalTangent::desc, VertexTextureNormalTangent::count)			);
 	assert(CreateShader(L"RainShader", VertexTexture3::desc, VertexTexture3::count)											);
 	assert(CreateShader(L"ShadowShader", VertexTextureNormalTangent::desc, VertexTextureNormalTangent::count)				);
+	assert(CreateShader(L"FBXShadowShader", VertexTextureNormalTangentBlend::desc, VertexTextureNormalTangentBlend::count));
 	assert(CreateShader(L"SkydomeShader", VertexTextureNormal::desc, VertexTextureNormal::count)							);
 	assert(CreateShader(L"SkyplaneShader", VertexTexture::desc, VertexTexture::count)										);
 	assert(CreateShader(L"TerrainShader", VertexTexture::desc, VertexTexture::count)										);
 	assert(CreateShader(L"TextureShader", VertexTexture::desc, VertexTexture::count)										);
 	assert(CreateShader(L"WaterShader", VertexTextureNormalTangent::desc, VertexTextureNormalTangent::count)				);
+
+
+
 	}
 
 ShaderManager::~ShaderManager()
@@ -64,4 +72,43 @@ bool ShaderManager::SetShader(wstring fxName)
 	}
 	else
 		return false;
+}
+
+
+void ShaderManager::ReadFolder(wstring path)
+{
+	WIN32_FIND_DATA findData;
+	wstring new_path = path + L"*.*";
+
+	HANDLE handle = FindFirstFile(new_path.c_str(), &findData);
+	assert(handle != NULL);
+
+	//static int number = 0;
+	do {
+		wstring fileName = findData.cFileName;
+
+
+
+
+		//if (findData.dwFileAttributes == FILE_ATTRIBUTE_DIRECTORY) {
+		//	if (wcscmp(findData.cFileName, L".") & wcscmp(findData.cFileName, L"..")) {
+		//		ReadFolder(path + L"/" + findData.cFileName + L"/");
+		//	}
+		//}
+		//else {
+		//	vector<wstring> tempvec;
+		//	String::SplitString(&tempvec, fileName, L".");
+		//	if (tempvec[1] != L"fx") continue;
+		//	wstring* temp = new wstring();
+		//	*temp = path + fileName;
+		//
+		//	String::SplitString(&tempvec, path, L"/");
+		//
+		//	auto iter = tempvec.end();
+		//	String::WStringToString(*(iter - 1));
+		//}
+
+	} while (FindNextFile(handle, &findData));
+
+
 }

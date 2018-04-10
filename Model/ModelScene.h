@@ -25,7 +25,7 @@ public:
 	ModelAnimation* GetAnimation(wstring animName);
 
 	void Update(D3DXMATRIX* worldPos);
-	void Render(Shader* shader);
+	void Render();
 
 
 	void SetAni(int);
@@ -99,6 +99,7 @@ private:
 	map<wstring, ModelAnimation*> animations;
 
 	ModelBuffer* modelBuffer;
+
 	ModelAnimationController* animationController;
 
 

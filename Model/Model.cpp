@@ -78,10 +78,10 @@ void Model::Update(bool isAnimation, D3DXMATRIX* worldPos)
 		part->Update(isAnimation, worldPos);
 }
 
-void Model::Render(Shader* shader)
+void Model::Render()
 {
 	for each(ModelPart* part in parts)
-		part->Render(shader);
+		part->Render();
 }
 
 //void Model::SetModelBuffer(ModelBuffer * modelBuffer)

@@ -47,8 +47,10 @@ PixelInput VS(VertexInput input)
     float3 halfVector = normalize(-_lightDir) + normalize(viewDir);
 
 
-    float3 n = mul(input.normal, (float3x3) worldInverseTransposeMatrix);
-    float3 t = mul(input.tangent, (float3x3) worldInverseTransposeMatrix);
+   // float3 n = mul(input.normal, (float3x3) worldInverseTransposeMatrix);
+   // float3 t = mul(input.tangent, (float3x3) worldInverseTransposeMatrix);
+    float3 n = mul(input.normal, (float3x3) _world);
+    float3 t = mul(input.tangent, (float3x3) _world);
     float3 b = cross(n, t);
     float3x3 tbnMatrix = float3x3(t.x, b.x, n.x,
 	                              t.y, b.y, n.y,
@@ -202,7 +204,7 @@ float4 PS(PixelInput input) : SV_TARGET
     //
 
     float shadowValue = _lightMap.Sample(samp[1], projectTexCoord).g;
-    shadowValue *= 0.3;
+  //  shadowValue *= 0.3;
     intensity *= shadowValue;
 
 

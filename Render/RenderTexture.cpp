@@ -135,6 +135,71 @@ void RenderTexture::Initialize(UINT count)
 	);
 }
 
+void RenderTexture::IntializeShadowTexture(UINT count)
+{
+	assert(count >= 1);
+	subRT_count = 1;
+
+
+	HRESULT hr;
+	resourceView = new ID3D11ShaderResourceView*[1];
+
+	D3D11_TEXTURE2D_DESC shadowMapDesc;
+	ZeroMemory(&shadowMapDesc, sizeof(D3D11_TEXTURE2D_DESC));
+	shadowMapDesc.Format = DXGI_FORMAT_R32_TYPELESS;
+	shadowMapDesc.ArraySize = count;
+	shadowMapDesc.MipLevels = 1;
+	shadowMapDesc.SampleDesc.Count = 1;
+	shadowMapDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_DEPTH_STENCIL;
+	shadowMapDesc.Width = this->width;
+	shadowMapDesc.Height = this->height;
+	hr = D3D::GetDevice()->CreateTexture2D(&shadowMapDesc, NULL, &depthStencilBuffer);
+	assert(SUCCEEDED(hr));
+
+
+	D3D11_DEPTH_STENCIL_VIEW_DESC depthStencilViewDesc;
+	ZeroMemory(&depthStencilViewDesc, sizeof(D3D11_DEPTH_STENCIL_VIEW_DESC));
+	depthStencilViewDesc.Format = DXGI_FORMAT_D32_FLOAT;
+	depthStencilViewDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2DARRAY;
+	depthStencilViewDesc.Texture2DArray.ArraySize = count;
+
+
+	hr = D3D::GetDevice()->CreateDepthStencilView(
+		depthStencilBuffer,
+		&depthStencilViewDesc,
+		&depthStencilView
+	);
+
+	D3D11_SHADER_RESOURCE_VIEW_DESC shaderResourceViewDesc;
+	ZeroMemory(&shaderResourceViewDesc, sizeof(D3D11_SHADER_RESOURCE_VIEW_DESC));
+	shaderResourceViewDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2DARRAY;
+	shaderResourceViewDesc.Format = DXGI_FORMAT_R32_FLOAT;
+	shaderResourceViewDesc.Texture2DArray.ArraySize = count;
+	shaderResourceViewDesc.Texture2DArray.MipLevels = 1;
+
+	hr = D3D::GetDevice()->CreateShaderResourceView(
+		depthStencilBuffer,
+		&shaderResourceViewDesc,
+		&resourceView[0]
+	);
+
+	renderView = nullptr;	
+	subRT_count = 0;
+	viewport.Width = (float)this->width;
+	viewport.Height = (float)this->height;
+	viewport.MinDepth = 0.0f;
+	viewport.MaxDepth = 1.0f;
+	viewport.TopLeftX = 0.0f;
+	viewport.TopLeftY = 0.0f;
+
+
+	D3DXMatrixPerspectiveFovLH(&projectionMatrix, ((float)D3DX_PI / 4.0f), ((float)this->width / (float)this->height), Camera::screenNear, Camera::screenDepth);
+	D3DXMatrixOrthoLH(&orthoMatrix,
+		(float)this->width, (float)this->height,
+		Camera::screenNear, Camera::screenDepth
+	);
+}
+
 void RenderTexture::Clear(float r , float g , float b , float a )
 {
 
@@ -150,6 +215,7 @@ void RenderTexture::SetTarget(bool ortho)
 {
 
 	D3D::GetDeviceContext()->OMSetRenderTargets(subRT_count, renderView, depthStencilView);
+
 
 	D3D::GetDeviceContext()->RSSetViewports(1, &viewport);
 	if(ortho)
@@ -168,7 +234,9 @@ void RenderTexture::SaveTexture(wstring fileName, UINT i)
 		fileName.c_str()
 	);
 	assert(SUCCEEDED(hr));
+
 }
+
 
 void RenderTexture::ClearDepthStencil(UINT clearFlag, float depth, UINT8 stencil)
 {

@@ -95,9 +95,9 @@ void ModelPart::Update(bool isAnimation, D3DXMATRIX* worldPos)
 	//Shader::Update();
 }
 
-void ModelPart::Render(Shader* shader)
+void ModelPart::Render()
 {
-	shader->SetShader();
+
 
 	ID3D11DeviceContext* dc = D3D::GetDeviceContext();
 

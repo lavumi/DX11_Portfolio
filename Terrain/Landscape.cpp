@@ -400,13 +400,10 @@ void Landscape::RenderShadow()
 	D3D::GetDeviceContext()->IASetVertexBuffers(0, 1, &fullvertexBuffer, &stride, &offset);
 	D3D::GetDeviceContext()->IASetIndexBuffer(fullindexBuffer, DXGI_FORMAT_R32_UINT, 0);
 
-	//D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST
-	//D3D11_PRIMITIVE_TOPOLOGY_3_CONTROL_POINT_PATCHLIST
 	D3D::GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	wBuffer->SetBuffer();
-
-
+	buffer->SetBuffers();
 	D3D::GetDeviceContext()->DrawIndexed(fullIndexCount, 0, 0);
 
 

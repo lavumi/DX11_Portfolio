@@ -5,7 +5,7 @@
 Camera* Camera::instance = NULL;
 
 const float Camera::screenNear = 0.1f;
-const float Camera::screenDepth = 400.0f;
+const float Camera::screenDepth = 200.0f;
 
 Camera::Camera()
 	: position(0, 10, 0)

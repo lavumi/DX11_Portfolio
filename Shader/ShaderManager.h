@@ -11,4 +11,5 @@ public :
 	bool SetShader(wstring fxName);
 private:
 	map<wstring, Shader*> shaders;
+	void ReadFolder(wstring path);
 };

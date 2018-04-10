@@ -2,9 +2,7 @@
 #include "../Utility/BinaryInputOutputHandler.h"
 
 /********************************************************************************
- @brief
- 각 Vertex에 영향을 미치는 Bone Index와 
- 영향을 미치는 정도인 Wieght를 저장하는 Class
+ 각 Vertex에 영향을 미치는 Bone Index와 영향을 미치는 정도인 Wieght를 저장하는 Class
  각 Vertex는 최대 4개의 BoneWeight를 가질수 있으며,
  Bone Index와 Bone Weight는 vector4의 형태로 Vertex Data에 저장된다.
  최종적인 Vertex 정보에 이 Weights값 들이 Blending 되어 적용된다.

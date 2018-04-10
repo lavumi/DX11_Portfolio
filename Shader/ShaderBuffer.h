@@ -7,16 +7,11 @@ public:
 	void SetBuffers() {
 
 		Update();
-		if(VS_Buffer !=0)
-			D3D::GetDeviceContext()->VSSetConstantBuffers(0, 1, &VS_Buffer);
-		if (DS_Buffer != 0)
-			D3D::GetDeviceContext()->DSSetConstantBuffers(0, 1, &DS_Buffer);
-		if (HS_Buffer != 0)
-			D3D::GetDeviceContext()->HSSetConstantBuffers(0, 1, &HS_Buffer);
-		if (GS_Buffer != 0)
-			D3D::GetDeviceContext()->GSSetConstantBuffers(0, 1, &GS_Buffer);
-		if (PS_Buffer != 0)
-			D3D::GetDeviceContext()->PSSetConstantBuffers(0, 1, &PS_Buffer);
+		if(VS_Buffer !=0)			D3D::GetDeviceContext()->VSSetConstantBuffers(0, 1, &VS_Buffer);
+		if (DS_Buffer != 0)			D3D::GetDeviceContext()->DSSetConstantBuffers(0, 1, &DS_Buffer);
+		if (HS_Buffer != 0)			D3D::GetDeviceContext()->HSSetConstantBuffers(0, 1, &HS_Buffer);
+		if (GS_Buffer != 0)			D3D::GetDeviceContext()->GSSetConstantBuffers(0, 1, &GS_Buffer);
+		if (PS_Buffer != 0)			D3D::GetDeviceContext()->PSSetConstantBuffers(0, 1, &PS_Buffer);
 	//	D3D::GetDeviceContext()->VSSetConstantBuffers(13, 1, &worldBuffer);
 	}
 
@@ -26,7 +21,6 @@ public:
 	//	UpdateWorld();
 	//}
 	
-
 protected:
 
 	ShaderBuffer(UINT vs_dataSize, UINT hs_dataSize, UINT ds_dataSize, UINT gs_dataSize, UINT ps_dataSize)

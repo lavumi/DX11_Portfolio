@@ -3,6 +3,8 @@
 struct VertexInput
 {
     float4 position : POSITION0;
+    float4 boneIndices : BLENDINDICES;
+    float4 boneWeights : BLENDWEIGHT;
 };
 
 struct GeoInput
@@ -18,12 +20,35 @@ struct PixelInput
     uint RTIndex : SV_RenderTargetArrayIndex;
 };
 
+cbuffer BoneBuffer : register(b0)
+{
+    matrix _boneScale;
+    matrix _boneArray[100];
+    uint _skinning;
+    float3 _bonePadding;
+}
+
 
 GeoInput VS(VertexInput input)
 {
     GeoInput output;
     input.position.w = 1;
-    output.position = mul(input.position, _world);
+    if (_skinning == 0)
+    {
+        output.position = input.position;
+    }
+    else
+    {
+        float4x4 skinTransform = 0;
+        skinTransform += mul(input.boneWeights.x, _boneArray[(uint) input.boneIndices.x]);
+        skinTransform += mul(input.boneWeights.y, _boneArray[(uint) input.boneIndices.y]);
+        skinTransform += mul(input.boneWeights.z, _boneArray[(uint) input.boneIndices.z]);
+        skinTransform += mul(input.boneWeights.w, _boneArray[(uint) input.boneIndices.w]);
+  
+        output.position = mul(input.position, skinTransform);
+    }
+    output.position = mul(output.position, _world);
+    //output.position = mul(input.position, _world);
 
     output.position = mul(output.position, _lightView);
     output.position = mul(output.position, _lightProjection);

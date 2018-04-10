@@ -32,7 +32,7 @@ void LightManager::Update()
 
 
 	D3DXMatrixLookAtLH(&lightData.lightView, &(position - lightData.lightDirection * 300), &(position), &up);
-	D3DXMatrixOrthoLH(&lightData.lightProjection, 500, 500, 0.1f, 500);
+	D3DXMatrixOrthoLH(&lightData.lightProjection, 500, 500, 0.1f, 1000);
 	
 	
 	

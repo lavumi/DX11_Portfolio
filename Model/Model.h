@@ -20,7 +20,7 @@ public:
 
 	void Update(bool isAnimation, D3DXMATRIX* worldPos);
 	void UpdateAnimation(ModelAnimationController* animationController);
-	void Render(Shader* shader);
+	void Render();
 
 
 	ModelScene* GetModelScene() { return modelScene; }

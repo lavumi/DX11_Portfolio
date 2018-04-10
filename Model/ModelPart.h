@@ -16,7 +16,7 @@ public:
 	~ModelPart();
 
 	void Update(bool isAnimation, D3DXMATRIX* worldPos);
-	void Render(Shader* shader);
+	void Render();
 
 	void SetModel(Model* model) { this->model = model; }
 

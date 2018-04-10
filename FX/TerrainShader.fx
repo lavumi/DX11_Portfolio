@@ -249,7 +249,7 @@ PixelOut PS(DomainOut input)
     projectTexCoord.x = input.viewPosition.x / input.viewPosition.z / 2.0f + 0.5f;
     projectTexCoord.y = -input.viewPosition.y / input.viewPosition.z / 2.0f + 0.5f;
     
-    float shadowValue = _lightMap.Sample(samp[1], projectTexCoord).g * 0.3f;
+    float shadowValue = _lightMap.Sample(samp[1], projectTexCoord).g;
    // intensity *= shadowValue;
 
 
@@ -279,7 +279,7 @@ PixelOut PS(DomainOut input)
 
 
 
-    output.albedo = diffuseMap; // * shadowValue;
+    output.albedo = diffuseMap * shadowValue;
 
     float3 depthValue = input.position.w / 300;
     output.depthMap = float4(depthValue, 1);

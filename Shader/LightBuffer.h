@@ -23,6 +23,17 @@ public:
 
 	void SetBuffers() {
 
+		LightManager::Get()->GetDirection(&data.lightDirection);
+		LightManager::Get()->GetView(&data.lightView);
+		LightManager::Get()->GetProjection(&data.lightProjection);
+
+		
+
+
+		D3DXMatrixTranspose(&data.lightView, &data.lightView);
+		D3DXMatrixTranspose(&data.lightProjection, &data.lightProjection);
+
+
 		D3D11_MAPPED_SUBRESOURCE subResource;
 
 		HRESULT hr = D3D::GetDeviceContext()->Map
@@ -30,7 +41,7 @@ public:
 			buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &subResource
 		);
 
-		memcpy(subResource.pData, LightManager::Get()->GetLightData(), sizeof(LightManager::LightData));
+		memcpy(subResource.pData, &data, sizeof(LightData));
 
 		D3D::GetDeviceContext()->Unmap(buffer, 0);
 
@@ -44,9 +55,18 @@ public:
 
 	}
 
+	struct LightData {
+
+		D3DXMATRIX lightView;
+		D3DXMATRIX lightProjection;
+		D3DXVECTOR3 lightDirection;
+		float padding;
+	};
+
 
 
 private:
 	D3D11_BUFFER_DESC desc;
 	ID3D11Buffer* buffer;
+	LightData data;
 };

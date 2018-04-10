@@ -5,11 +5,9 @@ class BaseBuffer : public ShaderBuffer
 {
 public:
 	BaseBuffer()
-		: ShaderBuffer(0, 0,0,0, 0)
+		: ShaderBuffer(sizeof(VS_DATA), sizeof(VS_DATA), sizeof(VS_DATA), sizeof(VS_DATA), sizeof(VS_DATA))
 	{
 
-		//UpdateVSBuffer(&vsData, 0);
-		//UpdatePSBuffer(&psData, 0);
 	}
 
 	void Update()
@@ -18,16 +16,11 @@ public:
 
 	struct VS_DATA
 	{
-
-	};
-	struct PS_DATA
-	{
-
+		D3DXVECTOR4 empty;
 	};
 
 
 private:
 	
 	VS_DATA vsData;
-	PS_DATA psData;
 };

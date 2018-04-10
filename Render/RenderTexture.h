@@ -10,6 +10,7 @@ public:
 
 
 	void Initialize(UINT count = 1);
+	void IntializeShadowTexture(UINT count = 1);
 
 	void Clear(float r=1, float g = 1, float b = 1, float a = 1);
 	void SetTarget(bool ortho  = false);

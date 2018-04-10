@@ -30,6 +30,7 @@ public:
 
 	void Update()
 	{
+		Camera::Get()->GetPosition(&(data.cameraPos));
 		UpdateVSBuffer(&data, sizeof(VS_Data));
 	}
 
@@ -52,7 +53,8 @@ public:
 		D3DXMATRIX boneScale;
 		D3DXMATRIX boneArray[100];
 		UINT isSkinning;
-		D3DXVECTOR3 padding;
+		D3DXVECTOR3 cameraPos;
+		D3DXMATRIX invTransWorld;
 	};
 	struct PS_DATA
 	{
