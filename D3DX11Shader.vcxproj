@@ -161,6 +161,15 @@
   <ItemGroup>
     <ClInclude Include="Camera\Camera.h" />
     <ClInclude Include="Camera\iFallowCamera.h" />
+    <ClInclude Include="Environment\Cloud.h" />
+    <ClInclude Include="Environment\Environment.h" />
+    <ClInclude Include="Environment\Landscape.h" />
+    <ClInclude Include="Environment\QuadTree.h" />
+    <ClInclude Include="Environment\RainCone.h" />
+    <ClInclude Include="Environment\Skydome.h" />
+    <ClInclude Include="Environment\Skyplane.h" />
+    <ClInclude Include="Environment\TerrainGrass.h" />
+    <ClInclude Include="Environment\Water.h" />
     <ClInclude Include="GameMain.h" />
     <ClInclude Include="Model\Model.h" />
     <ClInclude Include="Model\ModelAnimation.h" />
@@ -187,11 +196,9 @@
     <ClInclude Include="Render\Frustum.h" />
     <ClInclude Include="Render\LightManager.h" />
     <ClInclude Include="Render\Rasterizer.h" />
-    <ClInclude Include="Render\iRenderObject.h" />
-    <ClInclude Include="Render\Renderer.h" />
+    <ClInclude Include="Render\RenderingManager.h" />
     <ClInclude Include="Render\RenderTexture.h" />
     <ClInclude Include="Render\Sampler.h" />
-    <ClInclude Include="Render\Texture.h" />
     <ClInclude Include="Render\UserInterface.h" />
     <ClInclude Include="Render\VertexLayout.h" />
     <ClInclude Include="Shader\BaseBuffer.h" />
@@ -220,20 +227,21 @@
     <ClInclude Include="System\Mouse.h" />
     <ClInclude Include="System\TweakBar.h" />
     <ClInclude Include="System\Window.h" />
-    <ClInclude Include="Terrain\Cloud.h" />
-    <ClInclude Include="Terrain\Landscape.h" />
-    <ClInclude Include="Terrain\RainCone.h" />
-    <ClInclude Include="Terrain\TerrainGrass.h" />
-    <ClInclude Include="Terrain\QuadTree.h" />
-    <ClInclude Include="Terrain\Skydome.h" />
-    <ClInclude Include="Terrain\Skyplane.h" />
-    <ClInclude Include="Terrain\Water.h" />
     <ClInclude Include="Utility\BinaryFile.h" />
     <ClInclude Include="Utility\BinaryInputOutputHandler.h" />
     <ClInclude Include="Utility\String.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera\Camera.cpp" />
+    <ClCompile Include="Environment\Cloud.cpp" />
+    <ClCompile Include="Environment\Environment.cpp" />
+    <ClCompile Include="Environment\Landscape.cpp" />
+    <ClCompile Include="Environment\QuadTree.cpp" />
+    <ClCompile Include="Environment\RainCone.cpp" />
+    <ClCompile Include="Environment\Skydome.cpp" />
+    <ClCompile Include="Environment\Skyplane.cpp" />
+    <ClCompile Include="Environment\TerrainGrass.cpp" />
+    <ClCompile Include="Environment\Water.cpp" />
     <ClCompile Include="GameMain.cpp" />
     <ClCompile Include="Model\Model.cpp" />
     <ClCompile Include="Model\ModelAnimation.cpp" />
@@ -257,10 +265,9 @@
     <ClCompile Include="Render\Frustum.cpp" />
     <ClCompile Include="Render\LightManager.cpp" />
     <ClCompile Include="Render\Rasterizer.cpp" />
-    <ClCompile Include="Render\Renderer.cpp" />
+    <ClCompile Include="Render\RenderingManager.cpp" />
     <ClCompile Include="Render\RenderTexture.cpp" />
     <ClCompile Include="Render\Sampler.cpp" />
-    <ClCompile Include="Render\Texture.cpp" />
     <ClCompile Include="Render\UserInterface.cpp" />
     <ClCompile Include="Render\VertexLayout.cpp" />
     <ClCompile Include="Shader\ShaderManager.cpp" />
@@ -272,14 +279,6 @@
     <ClCompile Include="System\Mouse.cpp" />
     <ClCompile Include="System\TweakBar.cpp" />
     <ClCompile Include="System\Window.cpp" />
-    <ClCompile Include="Terrain\Cloud.cpp" />
-    <ClCompile Include="Terrain\RainCone.cpp" />
-    <ClCompile Include="Terrain\TerrainGrass.cpp" />
-    <ClCompile Include="Terrain\Landscape.cpp" />
-    <ClCompile Include="Terrain\QuadTree.cpp" />
-    <ClCompile Include="Terrain\Skydome.cpp" />
-    <ClCompile Include="Terrain\Skyplane.cpp" />
-    <ClCompile Include="Terrain\Water.cpp" />
     <ClCompile Include="Utility\BinaryFile.cpp" />
     <ClCompile Include="Utility\String.cpp" />
     <ClCompile Include="WinMain.cpp" />
@@ -399,6 +398,14 @@
       <FileType>Document</FileType>
     </None>
     <None Include="FX\FBXShadowShader.fx">
+      <FileType>Document</FileType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="FX\GrassLightViewShader.fx">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="FX\GrassShadowShader.fx">
       <FileType>Document</FileType>
     </None>
   </ItemGroup>

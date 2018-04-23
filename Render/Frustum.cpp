@@ -1,6 +1,7 @@
 #include "../stdafx.h"
 #include "Frustum.h"
 #include "../System/BoundingBox.h"
+#include "LightManager.h"
 
 Frustum::Frustum()
 {
@@ -13,9 +14,17 @@ Frustum::~Frustum()
 {
 }
 
-void Frustum::SetFrustum(D3DXMATRIX viewMatrix, D3DXMATRIX projectionMatrix)
+void Frustum::Initialize(LightManager* light)
+{
+	lightM = light;
+}
+
+void Frustum::SetFrustum()
 {
 
+	D3DXMATRIX view, projection;
+	Camera::Get()->GetView(&view);
+	D3D::Get()->GetProjection(&projection);
 	//D3DXVECTOR3* vtx = new D3DXVECTOR3[8];
 	
 
@@ -33,8 +42,7 @@ void Frustum::SetFrustum(D3DXMATRIX viewMatrix, D3DXMATRIX projectionMatrix)
 
 
 	//뷰, 프로젝션 연산의 역행렬을 구해서
-	D3DXMATRIX viewProj = viewMatrix * projectionMatrix;
-
+	D3DXMATRIX viewProj = view * projection;
 	D3DXMatrixInverse(&ViewProjectionInverse, NULL, &viewProj);
 
 
@@ -54,8 +62,51 @@ void Frustum::SetFrustum(D3DXMATRIX viewMatrix, D3DXMATRIX projectionMatrix)
 	SplitFrustum(3);
 }
 
+void Frustum::MakeCropMatrix()
+{
+	D3DXVECTOR3 vtx_input[8];
+	D3DXMATRIX view, projection;
+
+	lightM->GetView(&view);
+	lightM->GetProjection(&projection);
+
+	float scaleX, scaleY, scaleZ;
+	float offsetX, offsetY, offsetZ;
+
+
+	for (UINT index = 0; index < 3; index++) {
+		for (UINT i = 0; i < 8; i++) {
+			vtx_input[i] = splitedVtx[i + index * 4];
+		}
+
+
+		BoundingBox box = BoundingBox::CreateAABB(vtx_input, view*projection);
+
+
+		box.min.z = 0;
+
+
+		scaleX = 2.0f / (box.max.x - box.min.x);
+		scaleY = 2.0f / (box.max.y - box.min.y);
+		offsetX = -0.5f * (box.max.x + box.min.x) * scaleX;
+		offsetY = -0.5f * (box.max.y + box.min.y) * scaleY;
+		scaleZ = 1.0f;
+		offsetZ = -box.min.z * scaleZ;
+
+		cropMatrix[index] = D3DXMATRIX(
+			scaleX, 0.0f, 0.0f, 0.0f,
+			0.0f, scaleY, 0.0f, 0.0f,
+			0.0f, 0.0f, scaleZ, 0.0f,
+			offsetX, offsetY, offsetZ, 1.0f);
+	}
+
+}
+
 void Frustum::Update()
 {
+	SetFrustum();
+	MakeCropMatrix();
+	return;
 	if (!fixFrustum) {
 		frustumWorld = ViewProjectionInverse;
 		wBuffer->SetWorld(frustumWorld);
@@ -174,42 +225,11 @@ void Frustum::Render()
 	D3D::GetDeviceContext()->DrawIndexed(36, 0, 0);
 }
 
+
+
 D3DXMATRIX Frustum::GetCropMatrix(UINT index)
 {
-
-
-	D3DXVECTOR3 vtx_input[8];
-	if (index >= splitCount)
-		return D3DXMATRIX();
-	else {	
-		for (UINT i = 0; i < 8; i++) {
-			vtx_input[i] = splitedVtx[i + index*4];
-		}
-	}
-	D3DXMATRIX view, projection;
-
-	LightManager::Get()->GetView(&view);
-	LightManager::Get()->GetProjection(&projection);
-
-	BoundingBox box = BoundingBox::CreateAABB(vtx_input, view*projection);
-
-
-	box.min.z = 0;
-	float scaleX, scaleY, scaleZ;
-	float offsetX, offsetY, offsetZ;
-
-	scaleX = 2.0f / (box.max.x - box.min.x);
-	scaleY = 2.0f / (box.max.y - box.min.y);
-	offsetX = -0.5f * (box.max.x + box.min.x) * scaleX;
-	offsetY = -0.5f * (box.max.y + box.min.y) * scaleY;
-	scaleZ = 1.0f; // (box.max.z - box.min.z);
-	offsetZ = -box.min.z * scaleZ;
-
-	return D3DXMATRIX(
-		scaleX,		0.0f,		0.0f,		0.0f,
-		0.0f,		scaleY,		0.0f,		0.0f,
-		0.0f,		0.0f,		scaleZ,		0.0f,
-		offsetX,	offsetY,	offsetZ,	1.0f);
+	return cropMatrix[index];
 }
 void Frustum::CreateBuffer()
 {

@@ -1,7 +1,12 @@
 #pragma once
+
 class LightManager {
 
 public:
+
+	LightManager();
+	~LightManager();
+
 	struct LightData {
 
 		D3DXMATRIX lightView;
@@ -13,7 +18,6 @@ public:
 
 
 
-	static LightManager* Get();
 
 	void GetView(D3DXMATRIX* view) {
 		memcpy(view, this->lightData.lightView, sizeof(D3DXMATRIX));
@@ -43,10 +47,7 @@ public:
 	void Delete();
 
 private:
-	LightManager();
-	~LightManager();
 	LightData lightData;
-	static LightManager* instance;
 
 
 	D3DXVECTOR3 up = D3DXVECTOR3(0, 1, 0);

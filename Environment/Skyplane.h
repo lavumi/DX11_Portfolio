@@ -33,8 +33,8 @@ private:
 	UINT skyPlaneResolution;
 	float skyPlaneWidth, skyPlaneTop, skyPlaneBottom;
 
-	PerlinNoise* perlinNoise;
-	ID3D11ShaderResourceView* perlin;
+//	PerlinNoise* perlinNoise;
+//	ID3D11ShaderResourceView* perlin;
 	D3DXMATRIX world;
 
 

@@ -1,9 +1,5 @@
 #include "ShaderPreset.hlsli"
 
-cbuffer GsData : register(b10)
-{
-    matrix cropMatrix[4];
-}
 
 struct VertexInput
 {

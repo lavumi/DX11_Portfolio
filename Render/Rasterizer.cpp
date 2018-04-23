@@ -1,7 +1,6 @@
 #include "../stdafx.h"
 #include "Rasterizer.h"
 
-Rasterizer* Rasterizer::instance = NULL;
 
 Rasterizer::Rasterizer()
 {
@@ -50,18 +49,6 @@ Rasterizer::~Rasterizer()
 	SAFE_RELEASE(wireframeState);
 }
 
-Rasterizer * Rasterizer::Get()
-{
-	if (instance == NULL)
-		instance = new Rasterizer();
-
-	return instance;
-}
-
-void Rasterizer::Delete()
-{
-	SAFE_DELETE(instance);
-}
 
 void Rasterizer::SetSolid()
 {

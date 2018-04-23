@@ -58,10 +58,10 @@ PatchTess ConstantHS(InputPatch<VertexOut, 4> patch, uint patchID : SV_Primitive
     edgeDistance[2] = distance(0.5f * (patch[1].position + patch[3].position).xyz, _cameraPosition);
     edgeDistance[3] = distance(0.5f * (patch[2].position + patch[3].position).xyz, _cameraPosition);
 
-    pt.EdgeTess[0] = 64.0f / ceil(edgeDistance[0] / 50);
-    pt.EdgeTess[1] = 64.0f / ceil(edgeDistance[1] / 50);
-    pt.EdgeTess[2] = 64.0f / ceil(edgeDistance[2] / 50);
-    pt.EdgeTess[3] = 64.0f / ceil(edgeDistance[3] / 50);
+    pt.EdgeTess[0] = 64.0f / ceil(edgeDistance[0] / 20);
+    pt.EdgeTess[1] = 64.0f / ceil(edgeDistance[1] / 20);
+    pt.EdgeTess[2] = 64.0f / ceil(edgeDistance[2] / 20);
+    pt.EdgeTess[3] = 64.0f / ceil(edgeDistance[3] / 20);
 
     float tess = 0.25f * (pt.EdgeTess[0] + pt.EdgeTess[1] + pt.EdgeTess[2] + pt.EdgeTess[3]);
 

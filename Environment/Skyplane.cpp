@@ -37,7 +37,7 @@ void Skyplane::Initialize()
 	CreateIndexData();
 	CreateBuffer();
 
-	perlinNoise = new PerlinNoise();
+//	perlinNoise = new PerlinNoise();
 
 
 	MakeCloudPerlin();
@@ -66,7 +66,7 @@ void Skyplane::Render()
 	wBuffer->SetBuffer();
 	buffer->SetBuffers();
 
-	D3D::GetDeviceContext()->PSSetShaderResources(0, 1, &perlin);
+	//D3D::GetDeviceContext()->PSSetShaderResources(0, 1, &perlin);
 
 
 	D3D::GetDeviceContext()->DrawIndexed(indexCount, 0, 0);
@@ -74,9 +74,9 @@ void Skyplane::Render()
 
 void Skyplane::MakeCloudPerlin()
 {
-	perlinNoise->MakePerlinNoise();
+	//perlinNoise->MakePerlinNoise();
 
-	perlin = *perlinNoise->GetPerlinNoise();
+	//perlin = *perlinNoise->GetPerlinNoise();
 
 	D3DXMatrixIdentity(&world);
 }

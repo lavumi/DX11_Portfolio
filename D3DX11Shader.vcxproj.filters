@@ -23,9 +23,6 @@
     <ClCompile Include="System\TweakBar.cpp">
       <Filter>System</Filter>
     </ClCompile>
-    <ClCompile Include="Render\Texture.cpp">
-      <Filter>Render</Filter>
-    </ClCompile>
     <ClCompile Include="Render\VertexLayout.cpp">
       <Filter>Render</Filter>
     </ClCompile>
@@ -62,35 +59,11 @@
     <ClCompile Include="Object\OrthoWindowPlane.cpp">
       <Filter>Object</Filter>
     </ClCompile>
-    <ClCompile Include="Terrain\Water.cpp">
-      <Filter>Terrain</Filter>
-    </ClCompile>
-    <ClCompile Include="Terrain\Landscape.cpp">
-      <Filter>Terrain</Filter>
-    </ClCompile>
-    <ClCompile Include="Terrain\QuadTree.cpp">
-      <Filter>Terrain</Filter>
-    </ClCompile>
-    <ClCompile Include="Terrain\Skydome.cpp">
-      <Filter>Terrain</Filter>
-    </ClCompile>
-    <ClCompile Include="Terrain\Skyplane.cpp">
-      <Filter>Terrain</Filter>
-    </ClCompile>
-    <ClCompile Include="Terrain\TerrainGrass.cpp">
-      <Filter>Terrain</Filter>
-    </ClCompile>
     <ClCompile Include="ProceduralTexture\GrassTexture.cpp">
       <Filter>ProceduralTexture</Filter>
     </ClCompile>
     <ClCompile Include="ProceduralTexture\PerlinNoise.cpp">
       <Filter>ProceduralTexture</Filter>
-    </ClCompile>
-    <ClCompile Include="Terrain\Cloud.cpp">
-      <Filter>Terrain</Filter>
-    </ClCompile>
-    <ClCompile Include="Terrain\RainCone.cpp">
-      <Filter>Terrain</Filter>
     </ClCompile>
     <ClCompile Include="Model\Model.cpp">
       <Filter>Model</Filter>
@@ -138,14 +111,41 @@
     <ClCompile Include="Shader\ShaderManager.cpp">
       <Filter>Shader</Filter>
     </ClCompile>
-    <ClCompile Include="Render\Renderer.cpp">
-      <Filter>Render</Filter>
-    </ClCompile>
     <ClCompile Include="ProceduralTexture\Convert_Normal_Height.cpp">
       <Filter>ProceduralTexture</Filter>
     </ClCompile>
     <ClCompile Include="System\BoundingBox.cpp">
       <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="Render\RenderingManager.cpp">
+      <Filter>Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Environment\Cloud.cpp">
+      <Filter>Environment</Filter>
+    </ClCompile>
+    <ClCompile Include="Environment\Environment.cpp">
+      <Filter>Environment</Filter>
+    </ClCompile>
+    <ClCompile Include="Environment\Landscape.cpp">
+      <Filter>Environment</Filter>
+    </ClCompile>
+    <ClCompile Include="Environment\QuadTree.cpp">
+      <Filter>Environment</Filter>
+    </ClCompile>
+    <ClCompile Include="Environment\RainCone.cpp">
+      <Filter>Environment</Filter>
+    </ClCompile>
+    <ClCompile Include="Environment\Skydome.cpp">
+      <Filter>Environment</Filter>
+    </ClCompile>
+    <ClCompile Include="Environment\Skyplane.cpp">
+      <Filter>Environment</Filter>
+    </ClCompile>
+    <ClCompile Include="Environment\TerrainGrass.cpp">
+      <Filter>Environment</Filter>
+    </ClCompile>
+    <ClCompile Include="Environment\Water.cpp">
+      <Filter>Environment</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -170,9 +170,6 @@
     </ClInclude>
     <ClInclude Include="System\TweakBar.h">
       <Filter>System</Filter>
-    </ClInclude>
-    <ClInclude Include="Render\Texture.h">
-      <Filter>Render</Filter>
     </ClInclude>
     <ClInclude Include="Render\VertexLayout.h">
       <Filter>Render</Filter>
@@ -210,35 +207,11 @@
     <ClInclude Include="Render\Frustum.h">
       <Filter>Render</Filter>
     </ClInclude>
-    <ClInclude Include="Terrain\QuadTree.h">
-      <Filter>Terrain</Filter>
-    </ClInclude>
-    <ClInclude Include="Terrain\Skydome.h">
-      <Filter>Terrain</Filter>
-    </ClInclude>
-    <ClInclude Include="Terrain\Skyplane.h">
-      <Filter>Terrain</Filter>
-    </ClInclude>
-    <ClInclude Include="Terrain\Water.h">
-      <Filter>Terrain</Filter>
-    </ClInclude>
-    <ClInclude Include="Terrain\TerrainGrass.h">
-      <Filter>Terrain</Filter>
-    </ClInclude>
     <ClInclude Include="ProceduralTexture\GrassTexture.h">
       <Filter>ProceduralTexture</Filter>
     </ClInclude>
-    <ClInclude Include="Terrain\Landscape.h">
-      <Filter>Terrain</Filter>
-    </ClInclude>
     <ClInclude Include="ProceduralTexture\PerlinNoise.h">
       <Filter>ProceduralTexture</Filter>
-    </ClInclude>
-    <ClInclude Include="Terrain\Cloud.h">
-      <Filter>Terrain</Filter>
-    </ClInclude>
-    <ClInclude Include="Terrain\RainCone.h">
-      <Filter>Terrain</Filter>
     </ClInclude>
     <ClInclude Include="Model\Model.h">
       <Filter>Model</Filter>
@@ -328,12 +301,6 @@
     <ClInclude Include="Shader\LightBuffer.h">
       <Filter>Shader\Buffers</Filter>
     </ClInclude>
-    <ClInclude Include="Render\Renderer.h">
-      <Filter>Render</Filter>
-    </ClInclude>
-    <ClInclude Include="Render\iRenderObject.h">
-      <Filter>Render</Filter>
-    </ClInclude>
     <ClInclude Include="Shader\OrthoWindowBuffer.h">
       <Filter>Shader\Buffers</Filter>
     </ClInclude>
@@ -355,6 +322,36 @@
     <ClInclude Include="Shader\CascadeShadowBuffer.h">
       <Filter>Shader\Buffers</Filter>
     </ClInclude>
+    <ClInclude Include="Render\RenderingManager.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Environment\Cloud.h">
+      <Filter>Environment</Filter>
+    </ClInclude>
+    <ClInclude Include="Environment\Environment.h">
+      <Filter>Environment</Filter>
+    </ClInclude>
+    <ClInclude Include="Environment\Landscape.h">
+      <Filter>Environment</Filter>
+    </ClInclude>
+    <ClInclude Include="Environment\QuadTree.h">
+      <Filter>Environment</Filter>
+    </ClInclude>
+    <ClInclude Include="Environment\RainCone.h">
+      <Filter>Environment</Filter>
+    </ClInclude>
+    <ClInclude Include="Environment\Skydome.h">
+      <Filter>Environment</Filter>
+    </ClInclude>
+    <ClInclude Include="Environment\Skyplane.h">
+      <Filter>Environment</Filter>
+    </ClInclude>
+    <ClInclude Include="Environment\TerrainGrass.h">
+      <Filter>Environment</Filter>
+    </ClInclude>
+    <ClInclude Include="Environment\Water.h">
+      <Filter>Environment</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="System">
@@ -375,9 +372,6 @@
     <Filter Include="Object">
       <UniqueIdentifier>{a63c572a-ace9-47d6-99b9-2989996ca2c5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Terrain">
-      <UniqueIdentifier>{f735152f-a932-4153-86a6-c07d550df435}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Model">
       <UniqueIdentifier>{fe90afe0-7796-45fd-9626-0ea7aefdb044}</UniqueIdentifier>
     </Filter>
@@ -392,6 +386,9 @@
     </Filter>
     <Filter Include="FX">
       <UniqueIdentifier>{0b34cee2-31a1-44d7-8e50-56c1f7d6c774}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Environment">
+      <UniqueIdentifier>{040e6d4f-8b92-41de-9cdf-06820068b6f8}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -489,6 +486,12 @@
       <Filter>FX</Filter>
     </None>
     <None Include="FX\FBXShadowShader.fx">
+      <Filter>FX</Filter>
+    </None>
+    <None Include="FX\GrassLightViewShader.fx">
+      <Filter>FX</Filter>
+    </None>
+    <None Include="FX\GrassShadowShader.fx">
       <Filter>FX</Filter>
     </None>
   </ItemGroup>

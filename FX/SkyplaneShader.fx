@@ -36,9 +36,6 @@ cbuffer SkyBuffer : register(b0)
     float _scale;
 };
 
-
-Texture2D _perlin : register(t0);
-
 SamplerState samp[3];
 
 

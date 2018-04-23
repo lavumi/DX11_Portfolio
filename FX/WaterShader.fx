@@ -91,7 +91,7 @@ Texture2D _map : register(t0);
 Texture2D _normalMap : register(t1);
 
 
-Texture2D _perlin : register(t14);
+
 Texture2D _reflectionMap : register(t11);
 Texture2D _refractionMap : register(t10);
 

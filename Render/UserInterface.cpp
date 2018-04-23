@@ -109,8 +109,10 @@ void UserInterface::AddPattern(float * width, float * count, D3DXCOLOR* color1, 
 UserInterface::UserInterface()
 	: fillMode(0)
 {
-	bar = TweakBar::Get()->GetBar();
 
+	
+	bar = TweakBar::Get()->GetBar();
+	return;
 	function<void(void *)> f = bind
 	(
 		&UserInterface::FillMode
@@ -133,11 +135,11 @@ void UserInterface::FillMode(void * value)
 	if (*mode == 0)
 	{
 		*mode = 1;
-		Rasterizer::Get()->SetWireframe();
+		//Rasterizer::Get()->SetWireframe();
 	}
 	else if(*mode == 1)
 	{
 		*mode = 0;
-		Rasterizer::Get()->SetSolid();
+		//Rasterizer::Get()->SetSolid();
 	}
 }

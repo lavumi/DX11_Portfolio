@@ -1,7 +1,7 @@
 #pragma once
 
 class NormalShaderBuffer;
-class TestCube :public iRenderObject
+class TestCube
 {
 public:
 	TestCube();

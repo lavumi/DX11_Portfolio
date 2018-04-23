@@ -9,7 +9,9 @@ ShaderManager::ShaderManager()
 	assert(CreateShader(L"BlurShader", VertexTexture::desc, VertexTexture::count)											);
 	assert(CreateShader(L"ColorShader", VertexColor::desc, VertexColor::count)												);
 	assert(CreateShader(L"FBXModelShader", VertexTextureNormalTangentBlend::desc, VertexTextureNormalTangentBlend::count)	);
-	assert(CreateShader(L"GrassShader", VertexInstance::desc, VertexInstance::count)										);
+	assert(CreateShader(L"GrassLightViewShader", VertexInstance::desc, VertexInstance::count)										);
+	assert(CreateShader(L"GrassShader", VertexInstance::desc, VertexInstance::count));
+	assert(CreateShader(L"GrassShadowShader", VertexInstance::desc, VertexInstance::count));
 	assert(CreateShader(L"LightViewShader", VertexTextureNormalTangent::desc, VertexTextureNormalTangent::count)			);
 	assert(CreateShader(L"FBXLightViewShader", VertexTextureNormalTangentBlend::desc, VertexTextureNormalTangentBlend::count));
 	assert(CreateShader(L"NormalMapShader", VertexTextureNormalTangent::desc, VertexTextureNormalTangent::count)			);

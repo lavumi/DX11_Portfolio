@@ -76,7 +76,6 @@ void MosaicTile::DrawTexture()
 	D3D::GetDeviceContext()->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
 	D3D::GetDeviceContext()->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R32_UINT, 0);
 	D3D::GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	Sampler::Get()->SetDefault();
 
 
 
@@ -251,7 +250,7 @@ void MosaicTile::Render()
 	if (finalResult != nullptr)
 		D3D::GetDeviceContext()->PSSetShaderResources(0, 1, &finalResult);;
 
-	Sampler::Get()->SetDefault();
+
 
 
 	D3D::GetDeviceContext()->DrawIndexed(6, 0, 0);

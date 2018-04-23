@@ -4,7 +4,7 @@
 #include "../Model/ModelScene.h"
 #include "../Model/ModelAnimation.h"
 
-#include "../Terrain/Landscape.h"
+#include "../Environment/Environment.h"
 #include "../Camera/Camera.h"
 Character::Character()
 {
@@ -19,7 +19,7 @@ Character::~Character()
 	SAFE_DELETE(model);
 }
 
-void Character::Initialize(Landscape* land)
+void Character::Initialize(Environment* land)
 {
 	//model->LoadFbx(L"/Contents/Models/Sword And Shield Idle.fbx");
 	//
@@ -39,11 +39,11 @@ void Character::Initialize(Landscape* land)
 
 	this->land = land;
 	position = D3DXVECTOR3(140, 0, 110);
-	land->GetY(position);
+	land->GetLandY(position);
 	D3DXMatrixTranslation(&world, position.x, position.y, position.z);
 	speed = 1;
 
-	SetCamera(Camera::Get());
+ //	SetCamera(Camera::Get());
 }
 
 void Character::MoveTo(float x, float y, float z)
@@ -57,7 +57,7 @@ void Character::Move(float x, float z)
 	//return;
 	position.x += x * speed;
 	position.z += z * speed;
-	land->GetY(position);
+	land->GetLandY(position);
 	D3DXMatrixTranslation(&world, position.x, position.y, position.z);
 }
 

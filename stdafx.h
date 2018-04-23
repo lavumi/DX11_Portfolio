@@ -13,10 +13,7 @@
 #include <fstream>
 using namespace std;
 
-
-
 //#include <xnamath.h>
-
 
 #include <dxgi.h>
 #include <d3dcommon.h>
@@ -41,14 +38,17 @@ using namespace std;
 #pragma comment(lib, "libfbxsdk.lib")
 using namespace fbxsdk;
 
+#include "AntTweakBar.h"
+#pragma comment(lib, "AntTweakBar.lib")
+
+
 
 
 #define SAFE_RELEASE(p) { if (p) { (p)->Release(); (p)=NULL; } }
 #define SAFE_DELETE(p) { if (p) { delete (p); (p)=NULL; } }
 #define SAFE_DELETE_ARRAY(p) { if (p) { delete[] (p); (p)=NULL; } }
 
-#include "AntTweakBar.h"
-#pragma comment(lib, "AntTweakBar.lib")
+
 
 #include "./System/D3D.h"
 #include "./System/Keyboard.h"
@@ -56,13 +56,10 @@ using namespace fbxsdk;
 #include "./System/Frames.h"
 #include "./System/TweakBar.h"
 
-#include "./Render/Texture.h"
-#include "./Render/Rasterizer.h"
-#include "./Render/Sampler.h"
 #include "./Render/VertexLayout.h"
 #include "./Render/UserInterface.h"
-#include "./Render/LightManager.h"
-#include "./Render/iRenderObject.h"
+
+
 
 
 #include "./Shader/WorldBuffer.h"
@@ -74,4 +71,5 @@ using namespace fbxsdk;
 #include "./Utility/BinaryFile.h"
 
 
-#define QWE assert(SUCCEEDED(hr));
+
+

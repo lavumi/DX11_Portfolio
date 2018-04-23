@@ -3,8 +3,8 @@
 class Rasterizer
 {
 public:
-	static Rasterizer* Get();
-	static void Delete();
+	Rasterizer();
+	~Rasterizer();
 
 	void SetSolid();
 	void SetWireframe();
@@ -15,10 +15,9 @@ public:
 
 
 private:
-	static Rasterizer* instance;
 
-	Rasterizer();
-	~Rasterizer();
+
+
 
 	ID3D11RasterizerState* solidState;
 	ID3D11RasterizerState* wireframeState;

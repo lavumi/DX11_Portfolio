@@ -134,7 +134,6 @@ float4 PS(PixelInput input) : SV_Target
     projectTexCoord.x = input.viewPosition.x / input.viewPosition.w / 2.0f + 0.5f;
     projectTexCoord.y = -input.viewPosition.y / input.viewPosition.w / 2.0f + 0.5f;
     float shadowValue = _lightMap.Sample(samp[1], projectTexCoord).g;
-   // shadowValue *= 0.3f;
     intensity *= shadowValue;
 
 

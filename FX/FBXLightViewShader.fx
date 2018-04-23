@@ -59,10 +59,6 @@ GeoInput VS(VertexInput input)
 }
 
 
-cbuffer GsData : register(b10)
-{
-    matrix cropMatrix[3];
-}
 
 
 [maxvertexcount(27)]

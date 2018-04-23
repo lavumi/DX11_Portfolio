@@ -1,11 +1,14 @@
 #pragma once
+class LightManager;
 class Frustum
 {
 public:
 	Frustum();
 	~Frustum();
 
-	void SetFrustum(D3DXMATRIX projectionMatrix, D3DXMATRIX viewMatrix);
+	void Initialize(LightManager* light);
+
+	
 	void Update();
 
 	bool CheckCapsule(D3DXVECTOR3 start, D3DXVECTOR3 end, float radius);
@@ -25,10 +28,15 @@ public:
 private:
 	D3DXPLANE m_planes[6];
 	D3DXVECTOR3 vtx[8];
+	void SetFrustum();
+
 
 	vector<D3DXVECTOR3> splitedVtx;
 	UINT splitCount;
+	D3DXMATRIX cropMatrix[3];
+	void MakeCropMatrix();
 
+	LightManager* lightM;
 	
 
 	WorldBuffer* wBuffer;

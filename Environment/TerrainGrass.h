@@ -2,6 +2,7 @@
 
 class Landscape;
 class GrassBuffer;
+class Character;
 class TerrainGrass
 {
 public:
@@ -13,6 +14,7 @@ public:
 	void Update();
 	void Render();
 
+	void SetCharacterPos(D3DXVECTOR3* pos);
 
 
 
@@ -22,12 +24,16 @@ public:
 	
 	
 private:
+
+	void CreateBuffer();
 	void CreateBufferTemp();
 	void CreateInstanceData();
 
 	ID3D11Buffer* vertexBuffer;
 	ID3D11Buffer* instanceBuffer;
 
+
+	ID3D11ShaderResourceView* heightMap;
 
 	UINT vertexCount;
 
@@ -37,4 +43,5 @@ private:
 	Landscape* land;
 
 	GrassBuffer* buffer;
+	Character* player;
 };

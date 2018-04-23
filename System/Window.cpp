@@ -120,8 +120,8 @@ WPARAM Window::Run()
 	TweakBar::Get()->Start();
 	Frames::Get()->Start();
 	//DepthStencil::Get();
-	Rasterizer::Get();
-	Sampler::Get();
+	//Rasterizer::Get();
+	//Sampler::Get();
 	
 	Initialize();
 
@@ -143,16 +143,14 @@ WPARAM Window::Run()
 			
 			Update();
 
-			PreRender();
-			D3D::Get()->BeginScene();
-			{
-				D3D::Get()->SetDefaultRenderView();
-				Render();
+			//PreRender();
+			
 
-				if (Keyboard::Get()->KeyDown(VK_F11))
-					TweakBar::Get()->ChangeDraw();
-				TweakBar::Get()->Render();
-			}
+
+			Render();
+
+				//if (Keyboard::Get()->KeyDown(VK_F11))					TweakBar::Get()->ChangeDraw();
+			TweakBar::Get()->Render();
 			D3D::Get()->EndScene();
 		}
 	}
@@ -160,8 +158,8 @@ WPARAM Window::Run()
 	
 	Keyboard::Delete();
 	Mouse::Delete();
-	Rasterizer::Delete();
-	Sampler::Delete();
+	//Rasterizer::Delete();
+	//Sampler::Delete();
 	//DepthStencil::Delete();
 	TweakBar::Delete();
 

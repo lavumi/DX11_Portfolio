@@ -1,14 +1,15 @@
 #pragma once
 #pragma once
 #include "ShaderBuffer.h"
+#include "../Render/LightManager.h"
 
 class LightBuffer
 {
 public:
-	LightBuffer()
+	LightBuffer(LightManager* light)
 	{
 		desc.Usage = D3D11_USAGE_DYNAMIC;
-		desc.ByteWidth = sizeof(LightManager::LightData);
+		desc.ByteWidth = sizeof(LightData);
 		desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 		desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 		desc.MiscFlags = 0;
@@ -17,15 +18,15 @@ public:
 		HRESULT hr = D3D::GetDevice()->CreateBuffer(&desc, NULL, &buffer);
 		assert(SUCCEEDED(hr));
 
-
+		this->light = light;
 	}
 
 
 	void SetBuffers() {
 
-		LightManager::Get()->GetDirection(&data.lightDirection);
-		LightManager::Get()->GetView(&data.lightView);
-		LightManager::Get()->GetProjection(&data.lightProjection);
+		light->GetDirection(&data.lightDirection);
+		light->GetView(&data.lightView);
+		light->GetProjection(&data.lightProjection);
 
 		
 
@@ -46,6 +47,7 @@ public:
 		D3D::GetDeviceContext()->Unmap(buffer, 0);
 
 		D3D::GetDeviceContext()->VSSetConstantBuffers(11, 1, &buffer);
+		D3D::GetDeviceContext()->GSSetConstantBuffers(11, 1, &buffer);
 		D3D::GetDeviceContext()->PSSetConstantBuffers(11, 1, &buffer);
 	}
 
@@ -68,5 +70,6 @@ public:
 private:
 	D3D11_BUFFER_DESC desc;
 	ID3D11Buffer* buffer;
+	LightManager* light;
 	LightData data;
 };

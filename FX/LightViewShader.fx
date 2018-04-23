@@ -34,12 +34,6 @@ GeoInput VS(VertexInput input)
 }
 
 
-cbuffer GsData : register(b10)
-{
-    matrix cropMatrix[3];
-}
-
-
 [maxvertexcount(27)]
 void GS(triangle GeoInput input[3], inout TriangleStream<PixelInput> triStream)
 {
@@ -64,17 +58,3 @@ struct PixelOutput
     float4 split0 : SV_TARGET0;
 };
 
-
-//PixelOutput PS(PixelInput input)
-//{
-//    PixelOutput output;
-//    float4 depthValue;
-//
-//    depthValue = input.worldPosition.z / input.worldPosition.w;
-//
-//
-//    output.split0 = depthValue;
-//
-//    return output;
-//
-//}

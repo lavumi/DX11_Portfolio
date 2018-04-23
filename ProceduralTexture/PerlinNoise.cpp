@@ -121,8 +121,6 @@ void PerlinNoise::Render()
 	D3D::GetDeviceContext()->PSSetShader(pixelShaderfinal, NULL, 0);
 	D3D::GetDeviceContext()->PSSetShaderResources(0, 1, rndNoise->GetShadowResourceView());;
 	
-	Sampler::Get()->SetDefault();
-	
 	
 	D3D::GetDeviceContext()->DrawIndexed(6, 0, 0);
 }

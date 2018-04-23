@@ -72,13 +72,75 @@ void Landscape::Initialize()
 void Landscape::LoadHeightMap()
 {
 	ID3D11Texture2D* texture;
-	Texture::LoadTexture(L"./Terrain/heightmap.jpg", &texture);
+
+	ID3D11Texture2D* srcTexture;
+	HRESULT hr = D3DX11CreateTextureFromFile
+	(
+		D3D::GetDevice()
+		, L"./Environment/heightmap.jpg"
+		, NULL
+		, NULL
+		, (ID3D11Resource **)&srcTexture
+		, NULL
+	);
+	assert(SUCCEEDED(hr));
+
+	D3D11_TEXTURE2D_DESC srcTextureDesc;
+	srcTexture->GetDesc(&srcTextureDesc);
+
+
+	D3D11_TEXTURE2D_DESC destTextureDesc;
+	ZeroMemory(&destTextureDesc, sizeof(D3D11_TEXTURE2D_DESC));
+	destTextureDesc.Width = srcTextureDesc.Width;
+	destTextureDesc.Height = srcTextureDesc.Height;
+	destTextureDesc.MipLevels = 1;
+	destTextureDesc.ArraySize = 1;
+	destTextureDesc.Format = srcTextureDesc.Format;
+	destTextureDesc.SampleDesc.Count = 1;
+	destTextureDesc.SampleDesc.Quality = 0;
+	destTextureDesc.CPUAccessFlags = D3D11_CPU_ACCESS_READ;
+	destTextureDesc.Usage = D3D11_USAGE_STAGING;
+
+	ID3D11Texture2D* destTexture;
+	hr = D3D::GetDevice()->CreateTexture2D(&destTextureDesc, NULL, &destTexture);
+	assert(SUCCEEDED(hr));
+
+	hr = D3DX11LoadTextureFromTexture
+	(
+		D3D::GetDeviceContext()
+		, srcTexture
+		, NULL
+		, destTexture
+	);
+	assert(SUCCEEDED(hr));
+
+	texture = destTexture;
+
+	SAFE_RELEASE(srcTexture);
+
+
+
+	//Texture::LoadTexture(L"./Terrain/heightmap.jpg", &texture);
 
 	D3D11_TEXTURE2D_DESC desc;
 	texture->GetDesc(&desc);
 
 	UINT* colors = new UINT[desc.Width * desc.Height];
-	Texture::LoadPixel(texture, &colors);
+
+
+	D3D11_MAPPED_SUBRESOURCE mapResource;
+	hr = D3D::GetDeviceContext()->Map(texture, 0, D3D11_MAP_READ, NULL, &mapResource);
+	assert(SUCCEEDED(hr));
+
+	UINT width = mapResource.RowPitch / sizeof(UINT);
+	UINT height = desc.Height;
+
+	colors = new UINT[width * height];
+	memcpy(colors, mapResource.pData, sizeof(UINT) * width * height);
+
+	D3D::GetDeviceContext()->Unmap(texture, 0);
+
+	//Texture::LoadPixel(texture, &colors);
 
 	worldWidth = desc.Width;
 	worldHeight = desc.Height;
@@ -497,16 +559,16 @@ void Landscape::LoadTextures()
 {
 	diffuseMap = new ID3D11ShaderResourceView*[3];
 
-	HRESULT hr = D3DX11CreateShaderResourceViewFromFile(D3D::GetDevice(), L"./Terrain/normal.jpg", nullptr, nullptr, &normalMap, nullptr);
+	HRESULT hr;
+	hr = D3DX11CreateShaderResourceViewFromFile(D3D::GetDevice(), L"./Environment/normal.jpg", nullptr, nullptr, &normalMap, nullptr);
 	assert(SUCCEEDED(hr));
-	hr = D3DX11CreateShaderResourceViewFromFile(D3D::GetDevice(), L"./Terrain/underwater.jpg", nullptr, nullptr, &diffuseMap[1], nullptr);
+	hr = D3DX11CreateShaderResourceViewFromFile(D3D::GetDevice(), L"./Environment/underwater.jpg", nullptr, nullptr, &diffuseMap[1], nullptr);
 	assert(SUCCEEDED(hr));
-	hr = D3DX11CreateShaderResourceViewFromFile(D3D::GetDevice(), L"./Terrain/mountain.jpg", nullptr, nullptr, &diffuseMap[2], nullptr);
+	hr = D3DX11CreateShaderResourceViewFromFile(D3D::GetDevice(), L"./Environment/mountain.jpg", nullptr, nullptr, &diffuseMap[2], nullptr);
 	assert(SUCCEEDED(hr));
-
-	hr = D3DX11CreateShaderResourceViewFromFile(D3D::GetDevice(), L"./Terrain/heightmap.jpg", nullptr, nullptr, &heightMap, nullptr);
+	hr = D3DX11CreateShaderResourceViewFromFile(D3D::GetDevice(), L"./Environment/heightmap.jpg", nullptr, nullptr, &heightMap, nullptr);
 	assert(SUCCEEDED(hr));
-	hr = D3DX11CreateShaderResourceViewFromFile(D3D::GetDevice(), L"./Terrain/worldNormalMap.png", nullptr, nullptr, &worldNormalMap, nullptr);
+	hr = D3DX11CreateShaderResourceViewFromFile(D3D::GetDevice(), L"./Environment/worldNormalMap.png", nullptr, nullptr, &worldNormalMap, nullptr);
 	assert(SUCCEEDED(hr));
 }
 
@@ -518,7 +580,7 @@ void Landscape::CheckGround()
 
 	D3DXMATRIX position, rotation, world;
 	for(UINT i = 0;i<fullVertexCount;i++){
-		if (fullVertexData[i].normal.y >= 0.95f){// && fullVertexData[i].position.y > -7.0f && fullVertexData[i].position.y <0.0f) {
+		if (fullVertexData[i].normal.y >= 0.95f && fullVertexData[i].position.y > -7.0f && fullVertexData[i].position.y <0.0f) {
 			
 			D3DXMatrixTranslation(&position, fullVertexData[i].position.x, fullVertexData[i].position.y, fullVertexData[i].position.z);
 	

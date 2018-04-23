@@ -8,10 +8,6 @@ cbuffer BoneBuffer : register(b0)
     float3 _bonePadding;
 }
 
-cbuffer GsData : register(b10)
-{
-    matrix cropMatrix[4];
-}
 
 struct VertexInput
 {

@@ -2,14 +2,14 @@
 #include "LightManager.h"
 
 
-LightManager* LightManager::instance = nullptr;
+//LightManager* LightManager::instance = nullptr;
 
-LightManager * LightManager::Get()
-{
-	if (instance == nullptr)
-		instance = new LightManager();
-	return instance;
-}
+//LightManager * LightManager::Get()
+//{
+//	if (instance == nullptr)
+//		instance = new LightManager();
+//	return instance;
+//}
 
 void LightManager::Update()
 {
@@ -55,7 +55,7 @@ void LightManager::Update()
 
 void LightManager::Delete()
 {
-	SAFE_DELETE(instance);
+//	SAFE_DELETE(instance);
 }
 
 LightManager::LightManager()
@@ -69,5 +69,5 @@ LightManager::LightManager()
 
 LightManager::~LightManager()
 {
-	SAFE_DELETE(instance);
+//	SAFE_DELETE(instance);
 }

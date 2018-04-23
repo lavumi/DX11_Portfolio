@@ -2,7 +2,7 @@
 
 class ModelScene;
 class Shader;
-class Landscape;
+class Environment;
 
 #include "../Camera/iFallowCamera.h"
 class Character  : public iFallowCamera
@@ -12,7 +12,7 @@ public:
 	Character();
 	~Character();
 
-	void Initialize(Landscape* );
+	void Initialize(Environment* );
 	void MoveTo(float x, float y, float z);
 	void Move(float x, float z);
 	void Update();
@@ -28,5 +28,5 @@ private:
 	D3DXMATRIX world;
 	D3DXVECTOR3 position;
 	float speed;
-	Landscape* land;
+	Environment* land;
 };

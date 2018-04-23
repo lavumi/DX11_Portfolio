@@ -4,7 +4,7 @@
 class Frustum;
 class QuadTree;
 class TerrainBuffer;
-class Landscape : public iRenderObject
+class Landscape
 {
 public:
 	Landscape();
@@ -23,9 +23,8 @@ public:
 	void GetY(D3DXVECTOR3 &position);
 	//Brush* brush;
 
-	void SetTexture(ID3D11ShaderResourceView* diffuse, ID3D11ShaderResourceView* normal, ID3D11ShaderResourceView* specular) {
+	void SetTexture(ID3D11ShaderResourceView* diffuse) {
 		diffuseMap[0] = diffuse;
-		specularMap = specular;
 	}
 
 
@@ -44,8 +43,14 @@ public:
 
 	 void SetPlane(D3DXPLANE& plane);
 
+	 void GetHeightMap(ID3D11ShaderResourceView*& heightMap) {
+		 heightMap = this->heightMap;
+	 }
+
 
 private:
+
+
 
 	void LoadHeightMap();
 	void CreateVertexData();

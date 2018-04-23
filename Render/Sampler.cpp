@@ -1,7 +1,7 @@
 #include "../stdafx.h"
 #include "Sampler.h"
 
-Sampler* Sampler::instance = NULL;
+
 
 Sampler::Sampler()
 {
@@ -50,21 +50,10 @@ Sampler::Sampler()
 
 Sampler::~Sampler()
 {
-	
+	for (int i = 0; i < 3; i++)
+		SAFE_RELEASE(samplerState[i]);
 }
 
-Sampler * Sampler::Get()
-{
-	if (instance == NULL)
-		instance = new Sampler();
-
-	return instance;
-}
-
-void Sampler::Delete()
-{
-	SAFE_DELETE(instance);
-}
 
 void Sampler::SetDefault()
 {
