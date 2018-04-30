@@ -1,19 +1,13 @@
 #include "ShaderPreset.hlsli"
 
-cbuffer BoneBuffer : register(b0)
-{
-    matrix _boneScale;
-    matrix _boneArray[100];
-    uint _skinning;
-    float3 _bonePadding;
-}
-
 
 struct VertexInput
 {
     float4 position : POSITION0;
-    float4 boneIndices : BLENDINDICES;
-    float4 boneWeights : BLENDWEIGHT;
+    float4 world0 : INSTMATRIX0;
+    float4 world1 : INSTMATRIX1;
+    float4 world2 : INSTMATRIX2;
+    float4 world3 : INSTMATRIX3;
 };
 
 
@@ -32,23 +26,9 @@ PixelInput VS(VertexInput input)
     PixelInput output;
 
     input.position.w = 1.0f;
-    if (_skinning == 0)
-    {
-        output.position = input.position;
-    }
-    else
-    {
-        float4x4 skinTransform = 0;
-        skinTransform += mul(input.boneWeights.x, _boneArray[(uint) input.boneIndices.x]);
-        skinTransform += mul(input.boneWeights.y, _boneArray[(uint) input.boneIndices.y]);
-        skinTransform += mul(input.boneWeights.z, _boneArray[(uint) input.boneIndices.z]);
-        skinTransform += mul(input.boneWeights.w, _boneArray[(uint) input.boneIndices.w]);
-  
-        output.position = mul(input.position, skinTransform);
-    }
 
-    output.position = mul(output.position, _world);
-   // output.position = mul(input.position, _world);
+    float4x4 world = float4x4(input.world0, input.world1, input.world2, input.world3);
+    output.position = mul(input.position, world);
 
     float4 lightWorldPosition;
     lightWorldPosition = mul(output.position, _lightView);
@@ -122,7 +102,7 @@ float4 PS(PixelInput input) : SV_TARGET
            break;
         }
     }
-    shadow += 0.3f;
+   // shadow += 0.3f;
     return float4(shadow, shadow, shadow, 1);
  
 }

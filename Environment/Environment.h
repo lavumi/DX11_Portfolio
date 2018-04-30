@@ -6,6 +6,7 @@ class Water;
 class Skyplane;
 class TerrainGrass;
 class Character;
+class TreeMaker;
 class Environment {
 public:
 	Environment();
@@ -13,6 +14,8 @@ public:
 
 	void Initialize();
 	void Update();
+	
+
 	
 
 
@@ -27,6 +30,9 @@ public:
 	void RenderWater();
 	void RenderGrass();
 
+	void RenderTree();
+	void RenderTreeLeaf();
+
 	/********************************
 	TODO : 
 	잔디 설정을 위한 캐릭터 위치 입력
@@ -37,13 +43,22 @@ public:
 	void GetLandY(D3DXVECTOR3 &position);
 private:
 
-
 	Landscape * landscape;
 	Skydome* skydome;
 	Skyplane* cloud;
 
 	Water* lake;
 	TerrainGrass* grass;
+
+	TreeMaker* treeTest;
+
+
+	vector<TreeMaker*> trees;
 	
 	D3DXVECTOR3* characterPos;
+
+
+
+	void CreateTree(int count); 
+	void DeleteTree();
 };

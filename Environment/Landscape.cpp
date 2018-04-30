@@ -5,40 +5,62 @@
 #include "../Shader/TerrainBuffer.h"
 //#include "../ProceduralTexture/PerlinNoise.h"
 
+
+
 Landscape::Landscape()
 {
 	D3DXMatrixIdentity(&world);
-	diffuseMap = 0;
-	normalMap = 0;
-	specularMap = 0;
-	LoadTextures();
 
+
+
+	quadTree=0;
+	vertexData=0;
+	fullVertexData=0;
 
 	indexBuffer = 0;
 	vertexBuffer = 0;
 
 	fullindexBuffer = 0;
 	fullvertexBuffer = 0;
+
+	wBuffer = 0;
+	buffer = 0;
+
+	quadTree = 0;
+
+	diffuseMap = 0;
+	normalMap = 0;
+	specularMap = 0;
+	LoadTextures();
 }
 
 
 
 Landscape::~Landscape()
 {
-//	SAFE_DELETE(quadTree);
+	SAFE_DELETE(quadTree);
+
 	SAFE_DELETE_ARRAY(vertexData);
 	SAFE_DELETE_ARRAY(fullVertexData);
-	
+	SAFE_DELETE_ARRAY(heightData);
+
+	SAFE_DELETE(wBuffer);
+	SAFE_DELETE(buffer);
+
+
+
+
 	SAFE_RELEASE(indexBuffer);
 	SAFE_RELEASE(vertexBuffer);
 
 	SAFE_RELEASE(fullindexBuffer);
 	SAFE_RELEASE(fullvertexBuffer);
-
-
-
-	SAFE_DELETE(wBuffer);
-	SAFE_DELETE(buffer);
+	for (int i = 0; i < 3; i++)
+		SAFE_RELEASE(diffuseMap[i]);
+	SAFE_RELEASE(normalMap);
+	SAFE_RELEASE(worldNormalMap);
+	SAFE_RELEASE(specularMap);
+	SAFE_RELEASE(heightMap);
 }
 
 void Landscape::Initialize()
@@ -47,16 +69,15 @@ void Landscape::Initialize()
 	height = 8;
 	width = 8;
 	CreateVertexData();
-	//CreateQuadVertexData();
-	CreateQuadIndexData();
+	CreateIndexData();
 	
 
 
 	CreateFullVertexData();
-	CreateIndexData();
+	CreateFullIndexData();
 	CreateNormalData();
-	CheckGround();
 
+	MakeTreePosition();
 
 
 	CreateBuffer();
@@ -154,10 +175,69 @@ void Landscape::LoadHeightMap()
 
 			UINT color = colors[tempY * worldWidth + x];
 			BYTE r = ((color & 0x00FF0000) >> 16);
-			heightData[z * worldWidth + x] = (float)r / 255.0f * 34.0f - 18.0f;
+			heightData[z * worldWidth + x] = (float)r / 255.0f * 34.0f   - 18.0f;
 		}
 	}
 
+	////worldWidth *= landscapeScale;
+	////worldHeight *= landscapeScale;
+	//
+	//heightData = new float[worldWidth * worldHeight * landscapeScale * landscapeScale];
+	//
+	//
+	//int counter = 0;
+	//for (UINT z = 0; z < worldHeight; z++)
+	//{
+	//	for (UINT x = 0; x < worldWidth; x++)
+	//	{
+	//		float v0 = heightTemp[z * worldWidth + x];
+	//		float v1 = heightTemp[z * worldWidth + x + 1];
+	//		float v2 = heightTemp[(z+1) * worldWidth + x];
+	//		float v3 = heightTemp[(z+1) * worldWidth + x+1];
+	//
+	//		for (UINT k = 0; k < landscapeScale; k++) {
+	//			for (UINT l = 0; l < landscapeScale; l++) {
+	//				UINT index = x * (UINT)landscapeScale + l + (z* (UINT)landscapeScale + k) * worldWidth * (UINT)landscapeScale;
+	//				float p1 = v0 + (v1 - v0) * (float)l / (float)landscapeScale;
+	//				float p2 = v2 + (v3 - v2) * (float)l / (float)landscapeScale;
+	//
+	//				heightData[index] = p1 + (p2 - p1) * (float)k / (float)landscapeScale;
+	//				counter++;
+	//			}
+	//		}
+	//
+	//
+	//
+	//
+	//		//heightData[x + 0 + (z + 0) * worldWidth * (UINT)landscapeScale] = v0;
+	//		//heightData[x + 1 + (z + 0) * worldWidth * (UINT)landscapeScale] = v0 ;
+	//		//heightData[x + 2 + (z + 0) * worldWidth * (UINT)landscapeScale] = ;
+	//		//
+	//		//heightData[x + 0 + (z + 2) * worldWidth * (UINT)landscapeScale] = ;
+	//		//heightData[x + 1 + (z + 2) * worldWidth * (UINT)landscapeScale] = ;
+	//		//heightData[x + 2 + (z + 2) * worldWidth * (UINT)landscapeScale] = ;
+	//		//
+	//		//heightData[x + 0 + (z + 2) * worldWidth * (UINT)landscapeScale] = ;
+	//		//heightData[x + 1 + (z + 2) * worldWidth * (UINT)landscapeScale] = ;
+	//		//heightData[x + 2 + (z + 2) * worldWidth * (UINT)landscapeScale] = ;
+	//
+	//	}
+	//}
+	//
+	//
+	//float x = heightData[258];
+	//
+	////heightData[worldWidth * worldHeight - 1];
+	////heightData[worldWidth * worldHeight];
+	////heightData[worldWidth * worldHeight * landscapeScale];
+	//
+	//if (counter != worldWidth * worldHeight * landscapeScale * landscapeScale)
+	//	assert(0);
+	//worldWidth *= landscapeScale;
+	//worldHeight *= landscapeScale;
+	//
+	//
+	//SAFE_DELETE_ARRAY(heightTemp);
 	worldWidth--;
 	worldHeight--;
 }
@@ -174,12 +254,12 @@ void Landscape::CreateVertexData()
 		{
 			int index = (width + 1) * z + x;
 
-			vertexData[index].position.x = (float)x * 32;
+			vertexData[index].position.x = (float)x * 32;// *landscapeScale;
 			vertexData[index].position.y = 0; //(float)heightData[index] / 7.5f - 18;
-			vertexData[index].position.z = (float)z * 32;
+			vertexData[index].position.z = (float)z * 32;// *landscapeScale;
 			
-			vertexData[index].uv.x = (float)(x) * 32;// (float)width;
-			vertexData[index].uv.y = (float)(z) * 32;// (float)height;
+			vertexData[index].uv.x = (float)(x) * 32;// *landscapeScale;// (float)width;
+			vertexData[index].uv.y = (float)(z) * 32;// *landscapeScale;// (float)height;
 
 
 			//vertexData[index].position.x = (float)x ;
@@ -193,8 +273,31 @@ void Landscape::CreateVertexData()
 		}
 	}
 }
-
 void Landscape::CreateIndexData()
+{
+	indexCount = width * height * 4;
+
+
+	UINT count = 0;
+	for (UINT z = 0; z < height; z++)
+	{
+		for (UINT x = 0; x < width; x++)
+		{
+			indexData.push_back((width + 1) * (z + 1) + x);
+			indexData.push_back((width + 1) * (z + 1) + (x + 1));
+
+			indexData.push_back((width + 1) * z + x);
+			indexData.push_back((width + 1) * z + x + 1);
+		}//for(x)
+	}//for(z)
+
+	if (indexData.size() != indexCount)
+		assert(0);
+}
+
+
+
+void Landscape::CreateFullIndexData()
 {
 	//indexCount = width * height * 6;
 	//indexData;// = new UINT[indexCount];
@@ -265,27 +368,7 @@ void Landscape::CreateQuadVertexData()
 	}
 }
 */
-void Landscape::CreateQuadIndexData()
-{
-	indexCount = width * height * 4;
-	
 
-	UINT count = 0;
-	for (UINT z = 0; z < height; z++)
-	{
-		for (UINT x = 0; x < width; x++)
-		{
-			indexData.push_back((width + 1) * (z + 1) + x);
-			indexData.push_back((width + 1) * (z + 1) + (x + 1));
-			
-			indexData.push_back((width + 1) * z + x);
-			indexData.push_back((width + 1) * z + x + 1);
-		}//for(x)
-	}//for(z)
-
-	if (indexData.size() != indexCount)
-		assert(0);
-}
 
 void Landscape::CreateNormalData()
 {
@@ -327,6 +410,7 @@ void Landscape::CreateNormalData()
 		D3DXVec3Normalize(&fullVertexData[i].tangent, &fullVertexData[i].tangent);
 	}
 }
+
 
 void Landscape::CreateBuffer()
 {
@@ -511,12 +595,16 @@ void Landscape::GetY(D3DXVECTOR3 &position)
 	//float deltaX = (position.x - v0.x);
 	//float deltaZ = (position.z - v0.z);
 	float temp;
+
+	//temp = v0 + (v3 - v0) * deltaZ;
+
+
 	if (deltaX + deltaZ <= 1)
 		temp = v0 + (v2 - v0) * deltaX + (v1 - v0)* deltaZ;
 	else {
 		deltaX = 1 - deltaX;
 		deltaZ = 1 - deltaZ;
-		temp = v3 + (v2 - v3) * deltaX + (v1 - v3)* deltaZ;
+		temp = v3 +(v1 - v3) * deltaX + (v2 - v3)* deltaZ;
 	}
 
 	
@@ -572,31 +660,77 @@ void Landscape::LoadTextures()
 	assert(SUCCEEDED(hr));
 }
 
-void Landscape::CheckGround()
+void Landscape::MakeTreePosition()
 {
-	//D3DXMatrixTranslation(&world, 0, 0, 0);
-	//grassGround.push_back(world);
-
-
-	D3DXMATRIX position, rotation, world;
-	for(UINT i = 0;i<fullVertexCount;i++){
-		if (fullVertexData[i].normal.y >= 0.95f && fullVertexData[i].position.y > -7.0f && fullVertexData[i].position.y <0.0f) {
-			
-			D3DXMatrixTranslation(&position, fullVertexData[i].position.x, fullVertexData[i].position.y, fullVertexData[i].position.z);
 	
-			//D3DXMatrixRotationY(&rotation, (float)D3DX_PI / 180 *0);
-			world = position;
-			grassGround.push_back(world);
-			
-			//D3DXMatrixRotationY(&rotation, (float)D3DX_PI / 180 * 120);
-			//world = rotation * position;
-			//grassGround.push_back(world);
-			//
-			//D3DXMatrixRotationY(&rotation, (float)D3DX_PI / 180 * 240);
-			//world = rotation * position;
-			//grassGround.push_back(world);
-		}
-			
-	}
-	int a = 10;
+	D3DXVECTOR3 position = D3DXVECTOR3(136,0,102);
+	GetY(position);
+	treePos.push_back(position);
+	position = D3DXVECTOR3(142,0,98);	GetY(position);
+	treePos.push_back(position);
+	position = D3DXVECTOR3(115,0,182);	GetY(position);
+	treePos.push_back(position);
+	position = D3DXVECTOR3(122,0,188);	GetY(position);
+	treePos.push_back(position);
+	position = D3DXVECTOR3(131,0,193);	GetY(position);
+	treePos.push_back(position);
+	position = D3DXVECTOR3(102,0,62);	GetY(position);
+	treePos.push_back(position);
+	position = D3DXVECTOR3(94,0,77);	GetY(position);
+	treePos.push_back(position);
+	position = D3DXVECTOR3(88,0,67);	GetY(position);
+	treePos.push_back(position);
+	position = D3DXVECTOR3(83,0,72);	GetY(position);
+	treePos.push_back(position);
+	position = D3DXVECTOR3(91,0,70);	GetY(position);
+	treePos.push_back(position);
+	position = D3DXVECTOR3(97,0,67);	GetY(position);
+	treePos.push_back(position);
+	position = D3DXVECTOR3(84,0,82);	GetY(position);
+	treePos.push_back(position);
+	position = D3DXVECTOR3(80,0,80);	GetY(position);
+	treePos.push_back(position);
+
+
+
+
+	//for(UINT i = 0;i<fullVertexCount;i++){
+	//	if (fullVertexData[i].normal.y >= 0.95f && fullVertexData[i].position.y > -7.0f && fullVertexData[i].position.y <0.0f) {
+	//		
+	//		if(rand() % 1000 == 59)
+	//			treePos.push_back(fullVertexData[i].position);
+	//
+	//	}
+	//		
+	//}
 }
+
+//
+//void Landscape::CheckGround()
+//{
+//	//D3DXMatrixTranslation(&world, 0, 0, 0);
+//	//grassGround.push_back(world);
+//
+//
+//	D3DXMATRIX position, rotation, world;
+//	for(UINT i = 0;i<fullVertexCount;i++){
+//		if (fullVertexData[i].normal.y >= 0.95f && fullVertexData[i].position.y > -7.0f && fullVertexData[i].position.y <0.0f) {
+//			
+//			D3DXMatrixTranslation(&position, fullVertexData[i].position.x, fullVertexData[i].position.y, fullVertexData[i].position.z);
+//	
+//			//D3DXMatrixRotationY(&rotation, (float)D3DX_PI / 180 *0);
+//			world = position;
+//			grassGround.push_back(world);
+//			
+//			//D3DXMatrixRotationY(&rotation, (float)D3DX_PI / 180 * 120);
+//			//world = rotation * position;
+//			//grassGround.push_back(world);
+//			//
+//			//D3DXMatrixRotationY(&rotation, (float)D3DX_PI / 180 * 240);
+//			//world = rotation * position;
+//			//grassGround.push_back(world);
+//		}
+//			
+//	}
+//	int a = 10;
+//}

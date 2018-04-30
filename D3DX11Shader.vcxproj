@@ -189,10 +189,11 @@
     <ClInclude Include="Object\OrthoWindowPlane.h" />
     <ClInclude Include="Object\TestCube.h" />
     <ClInclude Include="Object\TestPlane.h" />
-    <ClInclude Include="ProceduralTexture\Convert_Normal_Height.h" />
-    <ClInclude Include="ProceduralTexture\GrassTexture.h" />
-    <ClInclude Include="ProceduralTexture\MosaicTile.h" />
-    <ClInclude Include="ProceduralTexture\PerlinNoise.h" />
+    <ClInclude Include="ProceduralGenerator\Convert_Normal_Height.h" />
+    <ClInclude Include="ProceduralGenerator\GrassTexture.h" />
+    <ClInclude Include="ProceduralGenerator\MosaicTile.h" />
+    <ClInclude Include="ProceduralGenerator\PerlinNoise.h" />
+    <ClInclude Include="ProceduralGenerator\TreeMaker.h" />
     <ClInclude Include="Render\Frustum.h" />
     <ClInclude Include="Render\LightManager.h" />
     <ClInclude Include="Render\Rasterizer.h" />
@@ -258,10 +259,11 @@
     <ClCompile Include="Object\OrthoWindowPlane.cpp" />
     <ClCompile Include="Object\TestCube.cpp" />
     <ClCompile Include="Object\TestPlane.cpp" />
-    <ClCompile Include="ProceduralTexture\Convert_Normal_Height.cpp" />
-    <ClCompile Include="ProceduralTexture\GrassTexture.cpp" />
-    <ClCompile Include="ProceduralTexture\MosaicTile.cpp" />
-    <ClCompile Include="ProceduralTexture\PerlinNoise.cpp" />
+    <ClCompile Include="ProceduralGenerator\Convert_Normal_Height.cpp" />
+    <ClCompile Include="ProceduralGenerator\GrassTexture.cpp" />
+    <ClCompile Include="ProceduralGenerator\MosaicTile.cpp" />
+    <ClCompile Include="ProceduralGenerator\PerlinNoise.cpp" />
+    <ClCompile Include="ProceduralGenerator\TreeMaker.cpp" />
     <ClCompile Include="Render\Frustum.cpp" />
     <ClCompile Include="Render\LightManager.cpp" />
     <ClCompile Include="Render\Rasterizer.cpp" />
@@ -326,11 +328,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Shader\FX\MirrorShader.fx">
-      <FileType>Document</FileType>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Shader\FX\InstanceTextureShader.fx">
       <FileType>Document</FileType>
     </None>
   </ItemGroup>
@@ -406,6 +403,21 @@
       <FileType>Document</FileType>
     </None>
     <None Include="FX\GrassShadowShader.fx">
+      <FileType>Document</FileType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="FX\InstanceTextureShader.fx">
+      <FileType>Document</FileType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="FX\InstanceTextureLightViewShader.fx">
+      <FileType>Document</FileType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="FX\InstanceTextureShadowShader.fx">
       <FileType>Document</FileType>
     </None>
   </ItemGroup>

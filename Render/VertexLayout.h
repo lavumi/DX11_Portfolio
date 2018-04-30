@@ -175,3 +175,14 @@ struct VertexInstance {
 	static D3D11_INPUT_ELEMENT_DESC desc[];
 	static UINT count;
 };
+
+
+struct VertexTextureInstance {
+	VertexTextureInstance();
+	VertexTextureInstance(D3DXVECTOR3 position, D3DXVECTOR2 uv);
+
+	D3DXVECTOR3 position;
+	D3DXVECTOR2 uv;
+	static D3D11_INPUT_ELEMENT_DESC desc[];
+	static UINT count;
+};

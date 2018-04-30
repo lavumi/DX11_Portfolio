@@ -8,10 +8,10 @@ const float Camera::screenNear = 0.1f;
 const float Camera::screenDepth = 200.0f;
 
 Camera::Camera()
-	: position(0, 10, 0)
-	, forward(0, 128, 0), right(0, 0, 0), up(0, 0, 0)
+	: position(0, 0, -30)
+	, forward(0, 1, 0), right(0, 0, 0), up(0, 0, 0)
 	, rotate(0, 0)
-	, translationSpeed(88.0f), rotationSpeed(1.5f)
+	, translationSpeed(48.0f), rotationSpeed(1.5f)
 	, targetpos(nullptr), angle_pie(3.141592f/8*3), angle_theta(3.141592f/2), targetDistance(8)
 {
 	D3DXMatrixIdentity(&view);
@@ -136,6 +136,10 @@ void Camera::Update()
 		position = *targetpos + cameraChildPos;
 
 		forward = - cameraChildPos;
+		D3DXVec3Normalize(&forward, &forward);
+
+		D3DXVec3Cross(&right, &up, &forward);
+		D3DXVec3Normalize(&right, &right);
 		UpdateViewMatrix();
 	}
 

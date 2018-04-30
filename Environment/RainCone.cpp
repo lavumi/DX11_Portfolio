@@ -1,6 +1,6 @@
 #include "../stdafx.h"
 #include "RainCone.h"
-#include "../ProceduralTexture/PerlinNoise.h"
+#include "../ProceduralGenerator/PerlinNoise.h"
 
 RainCone::RainCone()
 {

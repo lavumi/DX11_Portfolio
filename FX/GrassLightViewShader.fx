@@ -39,17 +39,6 @@ cbuffer GsData : register(b0)
 }
 
 
-static float rndTable[36] =
-{
-    0.42, 0.32, 0.82, 0.52, 0.33, 0.18,
-    0.04, 0.81, 0.68, 0.68, 0.13, 0.97,
-    0.39, 0.43, 0.66, 0.28, 0.46, 0.39,
-    0.97, 0.25, 0.78, 0.59, 0.37, 0.05,
-    0.67, 0.21, 0.07, 0.78, 0.38, 0.70,
-    0.39, 0.27, 0.59, 0.29, 0.85, 0.16
-};
-
-
 
 [maxvertexcount(256)]
 void GS(point PixelInput input[1], inout TriangleStream<PixelInput> triStream)

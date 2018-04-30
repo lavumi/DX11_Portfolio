@@ -52,6 +52,11 @@ public:
 	void RotateRight();
 
 
+
+	
+	void GetCamAngle(float*& angle) {
+		angle = &angle_theta;
+	}
 	
 
 	void GetView(D3DXMATRIX* view)
@@ -109,6 +114,8 @@ private:
 	//FallowCamera
 	D3DXVECTOR3* targetpos;
 	float targetDistance;
+
+	//fallowcamera용 회전 변수
 	float angle_pie, angle_theta;
 
 };

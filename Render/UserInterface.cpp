@@ -44,6 +44,12 @@ void UserInterface::AddSkyplane(float* scale, float* speed)
 
 }
 
+void UserInterface::AddViewValue(float * value, float* value2)
+{
+	TwAddVarRO(bar, "CharPosx", TW_TYPE_FLOAT, value, "group='Charac'");
+	TwAddVarRO(bar, "CharPosz", TW_TYPE_FLOAT, value2, "group='Charac'");
+}
+
 void UserInterface::AddWave(float * translation, float * size, float* angle)
 {
 	TwAddVarRW(bar, "translation", TW_TYPE_FLOAT, translation, "min=0 max=1 step=0.001 group='Water'");

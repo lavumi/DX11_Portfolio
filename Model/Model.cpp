@@ -68,8 +68,10 @@ Model::~Model()
 		SAFE_DELETE(iter->second);
 	}
 
-	for (size_t i = 0; i < parts.size(); i++)
-		SAFE_DELETE(parts[i]);
+	for each (ModelPart* part in parts)
+	{
+		SAFE_DELETE(part);
+	}
 }
 
 void Model::Update(bool isAnimation, D3DXMATRIX* worldPos)

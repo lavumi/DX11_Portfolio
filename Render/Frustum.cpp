@@ -2,6 +2,7 @@
 #include "Frustum.h"
 #include "../System/BoundingBox.h"
 #include "LightManager.h"
+#include "../Shader/CascadeShadowBuffer.h"
 
 Frustum::Frustum()
 {
@@ -14,9 +15,10 @@ Frustum::~Frustum()
 {
 }
 
-void Frustum::Initialize(LightManager* light)
+void Frustum::Initialize(LightManager* light, CascadeShadowBuffer* buffer)
 {
 	lightM = light;
+	csBuffer = buffer;
 }
 
 void Frustum::SetFrustum()
@@ -25,7 +27,7 @@ void Frustum::SetFrustum()
 	D3DXMATRIX view, projection;
 	Camera::Get()->GetView(&view);
 	D3D::Get()->GetProjection(&projection);
-	//D3DXVECTOR3* vtx = new D3DXVECTOR3[8];
+	vtx = new D3DXVECTOR3[8];
 	
 
 	//뷰, 프로젝션 연산이 끝나면 모든 점은 (-1, -1, 0) ~ (1, 1, 1)  사이의 값으로 변환된다
@@ -60,7 +62,65 @@ void Frustum::SetFrustum()
 	//	D3DXPlaneFromPoints(&m_plane[5], &vtx  ,  &vtx[4], &vtx[5]);	// 근 평면(near)
 
 	SplitFrustum(3);
+
+	SAFE_DELETE_ARRAY(vtx);
 }
+
+void Frustum::SplitFrustum(UINT count)
+{
+	splitCount = count;
+	splitedVtx.clear();
+
+	splitedVtx.push_back(vtx[0]);
+	splitedVtx.push_back(vtx[1]);
+	splitedVtx.push_back(vtx[2]);
+	splitedVtx.push_back(vtx[3]);
+	for (UINT i = 0; i < splitCount - 1; i++) {
+		float split = ((float)i + 1) / splitCount;
+		split *= split;
+		splitedVtx.push_back(vtx[0] * (1 - split) + vtx[4] * split);
+		splitedVtx.push_back(vtx[1] * (1 - split) + vtx[5] * split);
+		splitedVtx.push_back(vtx[2] * (1 - split) + vtx[6] * split);
+		splitedVtx.push_back(vtx[3] * (1 - split) + vtx[7] * split);
+	}
+	splitedVtx.push_back(vtx[4]);
+	splitedVtx.push_back(vtx[5]);
+	splitedVtx.push_back(vtx[6]);
+	splitedVtx.push_back(vtx[7]);
+
+
+
+
+	//Buffer에 프러스텀 끝 지점 z좌표를 계산해서 넣어주려 했으나
+	//의문의 버퍼 밀림 현상때문에 보류
+	//D3DXMATRIX view, projection;
+	//Camera::Get()->GetView(&view);
+	//D3D::Get()->GetProjection(&projection);
+	//
+	//D3DXMATRIX viewProj = view * projection;
+	//
+	//
+	//D3DXVECTOR3 sFrustumPoint[3];
+	//sFrustumPoint[0] = splitedVtx[4];
+	//sFrustumPoint[1] = splitedVtx[8];
+	//sFrustumPoint[2] = splitedVtx[12];
+	//
+	//
+	//
+	////TODO : 버퍼와 프러스텀간의 캡슐화. 이대로 괜찮은가???!!!
+	//for (int i = 0; i < 3; i++) {
+	//	D3DXVec3TransformCoord(&sFrustumPoint[i], &sFrustumPoint[i], &viewProj);
+	//	csBuffer->gsData.sFrustumMaxZ[i] = sFrustumPoint[i].z;
+	//}
+		
+
+
+
+
+	assert(splitedVtx.size() == (splitCount + 1) * 4);
+}
+
+
 
 void Frustum::MakeCropMatrix()
 {
@@ -106,6 +166,9 @@ void Frustum::Update()
 {
 	SetFrustum();
 	MakeCropMatrix();
+
+
+
 	return;
 	if (!fixFrustum) {
 		frustumWorld = ViewProjectionInverse;
@@ -181,33 +244,7 @@ bool Frustum::CheckSphere(D3DXVECTOR3 center, float radius)
 	return true;
 }
 
-void Frustum::SplitFrustum(UINT count)
-{
-	splitCount = count;
-	splitedVtx.clear();
 
-	splitedVtx.push_back(vtx[0]);
-	splitedVtx.push_back(vtx[1]);
-	splitedVtx.push_back(vtx[2]);
-	splitedVtx.push_back(vtx[3]);
-	for (UINT i = 0; i < splitCount - 1; i++) {
-		float split = ((float)i+1)/ splitCount;
-		split *= split*split;
-		splitedVtx.push_back(vtx[0] * (1 - split) + vtx[4] * split);
-		splitedVtx.push_back(vtx[1] * (1 - split) + vtx[5] * split);
-		splitedVtx.push_back(vtx[2] * (1 - split) + vtx[6] * split);
-		splitedVtx.push_back(vtx[3] * (1 - split) + vtx[7] * split);
-	}
-	splitedVtx.push_back(vtx[4]);
-	splitedVtx.push_back(vtx[5]);
-	splitedVtx.push_back(vtx[6]);
-	splitedVtx.push_back(vtx[7]);
-
-
-
-
-	assert(splitedVtx.size() == (splitCount + 1) * 4);
-}
 
 void Frustum::Render()
 {
@@ -231,6 +268,7 @@ D3DXMATRIX Frustum::GetCropMatrix(UINT index)
 {
 	return cropMatrix[index];
 }
+
 void Frustum::CreateBuffer()
 {
 	HRESULT hr;

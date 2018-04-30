@@ -50,6 +50,14 @@ using namespace fbxsdk;
 
 
 
+static float RandFloat(float min, float max) {
+	float rndFloat = (float)(rand() % (int)((max - min) * 1000)) / ((max - min) * 1000) + min;
+	return rndFloat;
+}
+
+
+
+
 #include "./System/D3D.h"
 #include "./System/Keyboard.h"
 #include "./System/Mouse.h"

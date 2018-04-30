@@ -1,7 +1,7 @@
 #include "../stdafx.h"
 #include "GrassTexture.h"
 #include "../Render/RenderTexture.h"
-#include "../ProceduralTexture/PerlinNoise.h"
+#include "PerlinNoise.h"
 
 
 GrassTexture::GrassTexture()

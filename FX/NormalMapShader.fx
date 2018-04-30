@@ -116,31 +116,31 @@ float4 PS(PixelInput input) : SV_TARGET
 
     float2 delta_uv = viewDir.xy * scale / (viewDir.z * layer);
     float2 cur_uv = input.uv;
-
-
-
-    float depth_from_tex = _heightMap.Sample(samp[0], cur_uv).r;
-
-
-    for (int layerstep = 0; layerstep < 32; layerstep++)
-    {
-        cur_layer_depth += layer_depth;
-        cur_uv -= delta_uv;
-        depth_from_tex = _heightMap.Sample(samp[0], cur_uv).r;
-        if (depth_from_tex < cur_layer_depth)
-        {
-            break;
-        }
-    }
-
-
     uv = cur_uv;
-           
-    float2 prev_uv = cur_uv + delta_uv;
-    float next = depth_from_tex - cur_layer_depth;
-    float prev = _heightMap.Sample(samp[0], prev_uv).r - cur_layer_depth + layer_depth;
-    float weight = next / (next - prev);
-    uv = lerp(cur_uv, prev_uv, weight);
+
+   //여기부터
+  //  float depth_from_tex = _heightMap.Sample(samp[0], cur_uv).r;
+  //
+  //
+  //  for (int layerstep = 0; layerstep < 32; layerstep++)
+  //  {
+  //      cur_layer_depth += layer_depth;
+  //      cur_uv -= delta_uv;
+  //      depth_from_tex = _heightMap.Sample(samp[0], cur_uv).r;
+  //      if (depth_from_tex < cur_layer_depth)
+  //      {
+  //          break;
+  //      }
+  //  }
+  //
+  //
+  //  uv = cur_uv;
+  //         
+  //  float2 prev_uv = cur_uv + delta_uv;
+  //  float next = depth_from_tex - cur_layer_depth;
+  //  float prev = _heightMap.Sample(samp[0], prev_uv).r - cur_layer_depth + layer_depth;
+  //  float weight = next / (next - prev);
+  //  uv = lerp(cur_uv, prev_uv, weight);
     
 
     //여기까지 parallex occlusive normalmap의 uv 계산

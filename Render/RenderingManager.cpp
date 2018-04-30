@@ -7,9 +7,9 @@
 #include "LightManager.h"
 
 
-#include "../ProceduralTexture/GrassTexture.h"
-#include "../ProceduralTexture/PerlinNoise.h"
-#include "../ProceduralTexture/Convert_Normal_Height.h"
+#include "../ProceduralGenerator/GrassTexture.h"
+#include "../ProceduralGenerator/PerlinNoise.h"
+#include "../ProceduralGenerator/Convert_Normal_Height.h"
 
 
 #include "../Environment/Environment.h"
@@ -99,7 +99,8 @@ void RenderingManager::Initianlize(Environment* envi)
 	sampler->SetDefault();
 	
 
-	frustum->Initialize(light);
+	frustum->Initialize(light, shadowBuffer);
+
 
 	depthShadowTexture->IntializeShadowTexture(3);
 	shadowTexture->Initialize();
@@ -116,6 +117,9 @@ void RenderingManager::Initianlize(Environment* envi)
 
 	grassTexture->DrawTexture();
 	environment->SetLandTexture(grassTexture->diffuse);
+
+
+	
 
 
 	D3D::GetDeviceContext()->PSSetShaderResources(14, 1, noise->GetPerlinNoise());
@@ -136,13 +140,12 @@ void RenderingManager::Test(TestCube * testcube)
 
 void RenderingManager::Update()
 {
-	frustum->Update();
-	light->Update();
-}
 
-void RenderingManager::Render()
-{
+	light->Update();
 	lightBuffer->SetBuffers();
+
+
+	frustum->Update();
 
 	for (UINT i = 0; i < 3; i++) {
 		cropMatrix[i] = frustum->GetCropMatrix(i);
@@ -152,6 +155,16 @@ void RenderingManager::Render()
 	shadowBuffer->UpdateMatrix(cropMatrix);
 
 	shadowBuffer->SetBuffers();
+}
+
+void RenderingManager::Render()
+{
+	//TreeRenderTest();
+	//
+	//return;
+
+
+
 
 
 	LightView();
@@ -163,6 +176,41 @@ void RenderingManager::Render()
 
 	
 	FinalRender();
+}
+
+
+
+
+
+
+void RenderingManager::TreeRenderTest()
+{
+
+	D3D::Get()->BeginScene();
+	D3D::Get()->SetDefaultRenderView();
+
+	Camera::Get()->GetView(&view);
+	D3D::Get()->GetProjection(&projection);
+
+
+	vpBuffer->SetVPMatrix(view, projection);
+	D3D::Get()->SetBlender(D3D::BL_state::Off);
+
+
+	assert(shaderManager->SetShader(L"TextureShader"));
+	environment->RenderTree();
+
+	
+	assert(shaderManager->SetShader(L"InstanceTextureShader"));
+	rasterizer->SetOffCullMode();
+	{
+		environment->RenderTreeLeaf();
+	}
+	rasterizer->SetOnCullMode();
+
+	//assert(shaderManager->SetShader(L"NormalMapShader"));
+	//testcube->Render();
+
 }
 
 void RenderingManager::LightView()
@@ -179,16 +227,22 @@ void RenderingManager::LightView()
 	//environment->RenderLandForShadow();
 
 	testcube->Render();
+	environment->RenderTree();
+
+
+	
+	assert(shaderManager->SetShader(L"InstanceTextureLightViewShader"));
+	rasterizer->SetOffCullMode();
+	environment->RenderTreeLeaf();
+	rasterizer->SetOnCullMode();
+
 
 	assert(shaderManager->SetShader(L"FBXLightViewShader"));
-	for(size_t i = 0;i<characters.size();i++)
-		characters[i]->Render();
+	for each (Character* character in characters)
+	{
+		character->Render();
+	}
 
-
-	light->GetView(&view);
-	light->GetProjection(&projection);
-	D3DXMatrixMultiply(&projection, &projection, &cropMatrix[0]);
-	vpBuffer->SetVPMatrix(view, projection);
 
 	//rasterizer->SetOffCullMode();
 	//assert(shaderManager->SetShader(L"GrassLightViewShader"));
@@ -211,6 +265,13 @@ void RenderingManager::RenderShadow()
 	environment->RenderLandForShadow();
 	
 	testcube->Render();
+	environment->RenderTree();
+
+
+	assert(shaderManager->SetShader(L"InstanceTextureShadowShader"));
+	environment->RenderTreeLeaf();
+
+
 
 	assert(shaderManager->SetShader(L"FBXShadowShader"));
 	for (size_t i = 0; i<characters.size(); i++)
@@ -328,9 +389,16 @@ void RenderingManager::RenderMain()
 	D3D::GetDeviceContext()->PSSetShaderResources(13, 1, shadowTexture->GetShadowResourceView());
 	testcube->Render();
 
+	environment->RenderTree();
+
 
 	assert(shaderManager->SetShader(L"TerrainShader"));
 	environment->RenderLand();
+	
+	//rasterizer->SetWireframe();
+	//assert(shaderManager->SetShader(L"TextureShader"));
+	//environment->RenderLandForShadow();
+	//rasterizer->SetSolid();
 
 	D3D::GetDeviceContext()->PSSetShaderResources(11, 1, lakeReflectionTexture->GetShadowResourceView());
 	D3D::GetDeviceContext()->PSSetShaderResources(10, 1, lakeRefractionTexture->GetShadowResourceView());
@@ -340,14 +408,19 @@ void RenderingManager::RenderMain()
 
 
 
+//	assert(shaderManager->SetShader(L"NormalMapShader"));
+	
 
 
-	rasterizer->SetOffCullMode();
-	assert(shaderManager->SetShader(L"GrassShader"));
-	environment->RenderGrass();
+	rasterizer->SetOffCullMode(); 
+	{
+		assert(shaderManager->SetShader(L"InstanceTextureShader"));
+		environment->RenderTreeLeaf();
+		assert(shaderManager->SetShader(L"GrassShader"));
+		environment->RenderGrass();
+	}
 	rasterizer->SetOnCullMode();
-
-
+	
 
 
 	assert(shaderManager->SetShader(L"FBXModelShader"));

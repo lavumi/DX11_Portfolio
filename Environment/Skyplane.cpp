@@ -1,7 +1,6 @@
 #include "../stdafx.h"
 #include "Skyplane.h"
 
-#include "../ProceduralTexture/PerlinNoise.h"
 #include "../Shader/SkyplaneBuffer.h"
 Skyplane::Skyplane()
 {
@@ -37,7 +36,7 @@ void Skyplane::Initialize()
 	CreateIndexData();
 	CreateBuffer();
 
-//	perlinNoise = new PerlinNoise();
+
 
 
 	MakeCloudPerlin();

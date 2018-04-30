@@ -29,16 +29,6 @@ PixelInput VS(VertexInput input)
 }
 
 
-
-Texture2D _map : register(t0);
-
-cbuffer color : register(b0)
-{
-    float4 inputColor;
-};
-
-
-
 float4 PS(PixelInput input) : SV_Target
 {
     float4 color = input.color;

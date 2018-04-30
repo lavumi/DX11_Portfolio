@@ -2,6 +2,9 @@
 #include "Water.h"
 #include "../Shader/WaterBuffer.h"
 
+
+#include "Landscape.h"
+
 Water::Water()
 	: vertexBuffer(nullptr), indexBuffer(nullptr)
 {
@@ -105,9 +108,9 @@ void Water::CreateBuffer()
 		{
 			int index = (width + 1) * z + x;
 
-			vertexData[index].position.x = (float)x * 255 / (width);
+			vertexData[index].position.x = (float)x * 255 / (width);// *landscapeScale;
 			vertexData[index].position.y = 0;
-			vertexData[index].position.z = (float)z * 255 / (height);
+			vertexData[index].position.z = (float)z * 255 / (height);// *landscapeScale;
 
 			vertexData[index].uv.x = (float)(x);// (float)width;
 			vertexData[index].uv.y = (float)(z);// (float)height;

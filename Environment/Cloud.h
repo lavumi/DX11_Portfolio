@@ -36,8 +36,7 @@ private:
 
 	UINT vertexCount;
 	UINT indexCount;
-	VertexTexture* vertexData;
-	vector<UINT> indexData;
+
 
 
 
@@ -49,5 +48,5 @@ private:
 	D3DXMATRIX world, scale;
 
 
-	PerlinNoise* noise;
+	//PerlinNoise* noise;
 };

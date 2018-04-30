@@ -60,7 +60,7 @@ Texture2DArray _lightMap : register(t13);
 SamplerComparisonState samp[3];
 
 //static const float splitedFrustum[3] = { 7.5f, 60.0f, 200.0f };
-static const float splitedFrustum[3] = { 0.997112471f, 0.998811450f, 1 };
+//static const float splitedFrustum[3] = { 0.997112471f, 0.998811450f, 1 };
 
 float4 PS(PixelInput input) : SV_TARGET
 {

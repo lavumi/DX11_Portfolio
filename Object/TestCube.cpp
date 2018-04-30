@@ -9,7 +9,7 @@ TestCube::TestCube()
 	{
 
 	for (int i = 0; i < 6; i++) {
-		//D3DXMatrixTranslation(&world[i], 10 + 4* (float)(i%3) , 5, 10 * (float)(i/3));
+		//D3DXMatrixTranslation(&world[i], 10 + 4* (float)(i%3) , 5 , 10 * (float)(i/3));
 
 
 		D3DXMatrixTranslation(&world[i], 128 + 10 + 4* (float)(i%3) , 5, 188 + 10 * (float)(i/3));
@@ -36,6 +36,8 @@ TestCube::~TestCube()
 		SAFE_DELETE(wBuffers[i])
 	}
 	SAFE_DELETE(buffer);
+	SAFE_RELEASE(vertexBuffer);
+	SAFE_RELEASE(indexBuffer);
 }
 
 void TestCube::Update()

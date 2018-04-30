@@ -1,6 +1,7 @@
 #pragma once
 #include "ShaderBuffer.h"
 
+class Frustum;
 class CascadeShadowBuffer 
 {
 public:
@@ -24,6 +25,10 @@ public:
 	~CascadeShadowBuffer() {
 		SAFE_RELEASE(buffer);
 	}
+
+
+
+
 
 	void UpdateMatrix(D3DXMATRIX cropMatrix[4]) {
 
@@ -55,11 +60,15 @@ public:
 	struct GS_DATA
 	{
 		D3DXMATRIX cropMatrix[4];
+	//	float sFrustumMaxZ[4];
 	};
 
 
 
 private:
+	//TODO : ¹öÆÛ¿Í ÇÁ·¯½ºÅÒ°£ÀÇ Ä¸½¶È­. ÀÌ´ë·Î ±¦ÂúÀº°¡???!!!
+	friend class Frustum;
+
 	D3D11_BUFFER_DESC desc;
 	ID3D11Buffer* buffer;
 	GS_DATA gsData;

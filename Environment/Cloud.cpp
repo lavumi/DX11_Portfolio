@@ -1,6 +1,6 @@
 #include "../stdafx.h"
 #include "Cloud.h"
-#include "../ProceduralTexture/PerlinNoise.h"
+#include "../ProceduralGenerator/PerlinNoise.h"
 
 Cloud::Cloud()
 {
@@ -13,6 +13,7 @@ Cloud::~Cloud()
 
 	SAFE_RELEASE(vertexBuffer);
 	SAFE_RELEASE(indexBuffer);
+	SAFE_DELETE(perlinNoise);
 }
 
 void Cloud::Initialize()
@@ -68,6 +69,8 @@ void Cloud::MakeCloudPerlin()
 void Cloud::CreateBuffer()
 {
 	HRESULT hr;
+
+//	vector<UINT> indexData;
 
 
 	vertexCount = 24;

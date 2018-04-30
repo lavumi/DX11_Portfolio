@@ -1,11 +1,13 @@
 #include "../stdafx.h"
 #include "Environment.h"
 
-#include "../Environment/Skydome.h"
-#include "../Environment/Skyplane.h"
-#include "../Environment/Landscape.h"
-#include "../Environment/Water.h"
-#include "../Environment/TerrainGrass.h"
+#include "Skydome.h"
+#include "Skyplane.h"
+#include "Landscape.h"
+#include "Water.h"
+#include "TerrainGrass.h"
+
+#include "../ProceduralGenerator/TreeMaker.h"
 
 #include "../Object/Character.h"
 
@@ -17,10 +19,22 @@ Environment::Environment()
 	landscape = new Landscape();
 	lake = new Water();
 	grass = new TerrainGrass();
+	//treeTest = new TreeMaker();
 }
 
 Environment::~Environment()
 {
+	DeleteTree();
+
+	SAFE_DELETE(skydome);
+	SAFE_DELETE(cloud);
+	SAFE_DELETE(landscape);
+	SAFE_DELETE(lake);
+	SAFE_DELETE(grass);
+
+
+
+
 }
 
 void Environment::Initialize()
@@ -29,8 +43,9 @@ void Environment::Initialize()
 	grass->Initialize(landscape);
 	cloud->Initialize();
 
-
-
+	CreateTree(12);
+	//treeTest = new TreeMaker();
+	//treeTest->Initialize(10, 0, 10);
 }
 
 
@@ -42,6 +57,27 @@ void Environment::Update()
 	
 
 	grass->SetCharacterPos(characterPos);
+}
+
+void Environment::CreateTree(int count)
+{
+	DeleteTree();
+
+	for (int i = 0; i < count; i++) {
+		treeTest = new TreeMaker();
+		treeTest->Initialize(landscape->treePos[i]);
+
+		trees.push_back(treeTest);
+	}
+
+}
+
+void Environment::DeleteTree()
+{
+	for each (TreeMaker* singleTree in trees)
+	{
+		SAFE_DELETE(singleTree);
+	}
 }
 
 void Environment::SetLandTexture(ID3D11ShaderResourceView * diffuse)
@@ -84,6 +120,26 @@ void Environment::RenderWater()
 void Environment::RenderGrass()
 {
 	grass->Render();
+}
+
+void Environment::RenderTree()
+{
+
+	for each (TreeMaker* singleTree in trees)
+	{
+		singleTree->Render();
+	}
+
+//	treeTest->Render();
+}
+
+void Environment::RenderTreeLeaf()
+{
+	for each (TreeMaker* singleTree in trees)
+	{
+		singleTree->LeafRender();
+	}
+	//treeTest->LeafRender();
 }
 
 void Environment::SetCharacter(Character  *character)

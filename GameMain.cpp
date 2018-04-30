@@ -36,7 +36,7 @@ void GameMain::Initialize()
 	environment->Initialize();
 
 	player->Initialize(environment);
-
+	player->SetFallowCamera();
 
 }
 
@@ -59,11 +59,11 @@ void GameMain::Update()
 	player->Update();
 
 	if (Keyboard::Get()->KeyUp(VK_SPACE)) {
-		testvalue++;
-		if (testvalue == 3)
-			testvalue = 0;
-
-		player->SetAni(testvalue);
+		//testvalue++;
+		//if (testvalue == 6)
+		//	testvalue = 0;
+		//
+		//player->SetAni(testvalue);
 	}
 
 
@@ -155,15 +155,7 @@ void GameMain::Render()
 void GameMain::ControlCamera()
 {
 	if (Camera::Get()->Fallowing()) {
-		if (Keyboard::Get()->KeyPress('W'))
-			player->Move(0, 0.2f);
-		else if (Keyboard::Get()->KeyPress('S'))
-			player->Move(0, -0.2f);
 
-		if (Keyboard::Get()->KeyPress('A'))
-			player->Move(-0.2f, 0);
-		else if (Keyboard::Get()->KeyPress('D'))
-			player->Move(0.2f, 0);
 	}
 	else {
 		if (Keyboard::Get()->KeyPress('W'))

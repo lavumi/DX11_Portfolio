@@ -41,9 +41,6 @@
     <ClCompile Include="Render\RenderTexture.cpp">
       <Filter>Render</Filter>
     </ClCompile>
-    <ClCompile Include="ProceduralTexture\MosaicTile.cpp">
-      <Filter>ProceduralTexture</Filter>
-    </ClCompile>
     <ClCompile Include="Render\LightManager.cpp">
       <Filter>Render</Filter>
     </ClCompile>
@@ -58,12 +55,6 @@
     </ClCompile>
     <ClCompile Include="Object\OrthoWindowPlane.cpp">
       <Filter>Object</Filter>
-    </ClCompile>
-    <ClCompile Include="ProceduralTexture\GrassTexture.cpp">
-      <Filter>ProceduralTexture</Filter>
-    </ClCompile>
-    <ClCompile Include="ProceduralTexture\PerlinNoise.cpp">
-      <Filter>ProceduralTexture</Filter>
     </ClCompile>
     <ClCompile Include="Model\Model.cpp">
       <Filter>Model</Filter>
@@ -111,9 +102,6 @@
     <ClCompile Include="Shader\ShaderManager.cpp">
       <Filter>Shader</Filter>
     </ClCompile>
-    <ClCompile Include="ProceduralTexture\Convert_Normal_Height.cpp">
-      <Filter>ProceduralTexture</Filter>
-    </ClCompile>
     <ClCompile Include="System\BoundingBox.cpp">
       <Filter>System</Filter>
     </ClCompile>
@@ -145,6 +133,21 @@
       <Filter>Environment</Filter>
     </ClCompile>
     <ClCompile Include="Environment\Water.cpp">
+      <Filter>Environment</Filter>
+    </ClCompile>
+    <ClCompile Include="ProceduralGenerator\Convert_Normal_Height.cpp">
+      <Filter>ProceduralGenerator</Filter>
+    </ClCompile>
+    <ClCompile Include="ProceduralGenerator\GrassTexture.cpp">
+      <Filter>ProceduralGenerator</Filter>
+    </ClCompile>
+    <ClCompile Include="ProceduralGenerator\MosaicTile.cpp">
+      <Filter>ProceduralGenerator</Filter>
+    </ClCompile>
+    <ClCompile Include="ProceduralGenerator\PerlinNoise.cpp">
+      <Filter>ProceduralGenerator</Filter>
+    </ClCompile>
+    <ClCompile Include="ProceduralGenerator\TreeMaker.cpp">
       <Filter>Environment</Filter>
     </ClCompile>
   </ItemGroup>
@@ -189,9 +192,6 @@
     <ClInclude Include="Render\RenderTexture.h">
       <Filter>Render</Filter>
     </ClInclude>
-    <ClInclude Include="ProceduralTexture\MosaicTile.h">
-      <Filter>ProceduralTexture</Filter>
-    </ClInclude>
     <ClInclude Include="Render\LightManager.h">
       <Filter>Render</Filter>
     </ClInclude>
@@ -206,12 +206,6 @@
     </ClInclude>
     <ClInclude Include="Render\Frustum.h">
       <Filter>Render</Filter>
-    </ClInclude>
-    <ClInclude Include="ProceduralTexture\GrassTexture.h">
-      <Filter>ProceduralTexture</Filter>
-    </ClInclude>
-    <ClInclude Include="ProceduralTexture\PerlinNoise.h">
-      <Filter>ProceduralTexture</Filter>
     </ClInclude>
     <ClInclude Include="Model\Model.h">
       <Filter>Model</Filter>
@@ -313,9 +307,6 @@
     <ClInclude Include="Object\TestPlane.h">
       <Filter>Object</Filter>
     </ClInclude>
-    <ClInclude Include="ProceduralTexture\Convert_Normal_Height.h">
-      <Filter>ProceduralTexture</Filter>
-    </ClInclude>
     <ClInclude Include="System\BoundingBox.h">
       <Filter>System</Filter>
     </ClInclude>
@@ -352,6 +343,21 @@
     <ClInclude Include="Environment\Water.h">
       <Filter>Environment</Filter>
     </ClInclude>
+    <ClInclude Include="ProceduralGenerator\Convert_Normal_Height.h">
+      <Filter>ProceduralGenerator</Filter>
+    </ClInclude>
+    <ClInclude Include="ProceduralGenerator\GrassTexture.h">
+      <Filter>ProceduralGenerator</Filter>
+    </ClInclude>
+    <ClInclude Include="ProceduralGenerator\MosaicTile.h">
+      <Filter>ProceduralGenerator</Filter>
+    </ClInclude>
+    <ClInclude Include="ProceduralGenerator\PerlinNoise.h">
+      <Filter>ProceduralGenerator</Filter>
+    </ClInclude>
+    <ClInclude Include="ProceduralGenerator\TreeMaker.h">
+      <Filter>Environment</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="System">
@@ -366,9 +372,6 @@
     <Filter Include="Shader">
       <UniqueIdentifier>{55ca23e0-d999-4a31-a218-2e166de4f1b6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ProceduralTexture">
-      <UniqueIdentifier>{073f2afb-1241-4f9a-a8a1-c98ee22134b1}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Object">
       <UniqueIdentifier>{a63c572a-ace9-47d6-99b9-2989996ca2c5}</UniqueIdentifier>
     </Filter>
@@ -381,64 +384,64 @@
     <Filter Include="Shader\Buffers">
       <UniqueIdentifier>{55de613b-74c9-4327-9e91-08230fb6ad24}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ProceduralTexture\FX">
-      <UniqueIdentifier>{caf5405c-847a-4e3d-85bb-567eb1844735}</UniqueIdentifier>
-    </Filter>
     <Filter Include="FX">
       <UniqueIdentifier>{0b34cee2-31a1-44d7-8e50-56c1f7d6c774}</UniqueIdentifier>
     </Filter>
     <Filter Include="Environment">
       <UniqueIdentifier>{040e6d4f-8b92-41de-9cdf-06820068b6f8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ProceduralGenerator">
+      <UniqueIdentifier>{073f2afb-1241-4f9a-a8a1-c98ee22134b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ProceduralGenerator\FX">
+      <UniqueIdentifier>{caf5405c-847a-4e3d-85bb-567eb1844735}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="Shader\FX\BaseTile.fx">
-      <Filter>ProceduralTexture\FX</Filter>
+      <Filter>ProceduralGenerator\FX</Filter>
     </None>
     <None Include="Shader\FX\CreateTangentMap.fx">
-      <Filter>ProceduralTexture\FX</Filter>
+      <Filter>ProceduralGenerator\FX</Filter>
     </None>
     <None Include="Shader\FX\directionalWarp.fx">
-      <Filter>ProceduralTexture\FX</Filter>
+      <Filter>ProceduralGenerator\FX</Filter>
     </None>
     <None Include="Shader\FX\DrawPatternInTile.fx">
-      <Filter>ProceduralTexture\FX</Filter>
+      <Filter>ProceduralGenerator\FX</Filter>
     </None>
     <None Include="Shader\FX\finalDraw.fx">
-      <Filter>ProceduralTexture\FX</Filter>
+      <Filter>ProceduralGenerator\FX</Filter>
     </None>
     <None Include="Shader\FX\midPointGrad.fx">
-      <Filter>ProceduralTexture\FX</Filter>
+      <Filter>ProceduralGenerator\FX</Filter>
     </None>
     <None Include="Shader\FX\randomSRT.fx">
-      <Filter>ProceduralTexture\FX</Filter>
+      <Filter>ProceduralGenerator\FX</Filter>
     </None>
     <None Include="Shader\FX\randomSRTInstance.fx">
-      <Filter>ProceduralTexture\FX</Filter>
+      <Filter>ProceduralGenerator\FX</Filter>
     </None>
     <None Include="Shader\FX\singleGrass.fx">
-      <Filter>ProceduralTexture\FX</Filter>
+      <Filter>ProceduralGenerator\FX</Filter>
     </None>
     <None Include="Shader\FX\SquarePattern.fx">
-      <Filter>ProceduralTexture\FX</Filter>
+      <Filter>ProceduralGenerator\FX</Filter>
     </None>
     <None Include="Shader\FX\UIShader.fx">
-      <Filter>ProceduralTexture\FX</Filter>
+      <Filter>ProceduralGenerator\FX</Filter>
     </None>
     <None Include="Shader\FX\MirrorShader.fx">
-      <Filter>ProceduralTexture\FX</Filter>
-    </None>
-    <None Include="Shader\FX\InstanceTextureShader.fx">
-      <Filter>ProceduralTexture\FX</Filter>
+      <Filter>ProceduralGenerator\FX</Filter>
     </None>
     <None Include="Shader\FX\perlin.fx">
-      <Filter>ProceduralTexture\FX</Filter>
+      <Filter>ProceduralGenerator\FX</Filter>
     </None>
     <None Include="Shader\FX\3dPerlin.fx">
-      <Filter>ProceduralTexture\FX</Filter>
+      <Filter>ProceduralGenerator\FX</Filter>
     </None>
     <None Include="Shader\FX\ShaderPreset.hlsli">
-      <Filter>ProceduralTexture\FX</Filter>
+      <Filter>ProceduralGenerator\FX</Filter>
     </None>
     <None Include="FX\ShaderPreset.hlsli">
       <Filter>FX</Filter>
@@ -492,6 +495,15 @@
       <Filter>FX</Filter>
     </None>
     <None Include="FX\GrassShadowShader.fx">
+      <Filter>FX</Filter>
+    </None>
+    <None Include="FX\InstanceTextureShader.fx">
+      <Filter>FX</Filter>
+    </None>
+    <None Include="FX\InstanceTextureLightViewShader.fx">
+      <Filter>FX</Filter>
+    </None>
+    <None Include="FX\InstanceTextureShadowShader.fx">
       <Filter>FX</Filter>
     </None>
   </ItemGroup>

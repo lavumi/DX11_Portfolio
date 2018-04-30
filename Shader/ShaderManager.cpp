@@ -23,9 +23,9 @@ ShaderManager::ShaderManager()
 	assert(CreateShader(L"TerrainShader", VertexTexture::desc, VertexTexture::count)										);
 	assert(CreateShader(L"TextureShader", VertexTexture::desc, VertexTexture::count)										);
 	assert(CreateShader(L"WaterShader", VertexTextureNormalTangent::desc, VertexTextureNormalTangent::count)				);
-
-
-
+	assert(CreateShader(L"InstanceTextureShader", VertexTextureInstance::desc, VertexTextureInstance::count));
+	assert(CreateShader(L"InstanceTextureLightViewShader", VertexTextureInstance::desc, VertexTextureInstance::count));
+	assert(CreateShader(L"InstanceTextureShadowShader", VertexTextureInstance::desc, VertexTextureInstance::count));
 	}
 
 ShaderManager::~ShaderManager()

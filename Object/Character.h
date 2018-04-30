@@ -14,19 +14,35 @@ public:
 
 	void Initialize(Environment* );
 	void MoveTo(float x, float y, float z);
-	void Move(float x, float z);
+	
+
+	
 	void Update();
 	void Render();
 
 
 	void SetAni(int index);
-	void SetCamera(Camera* camera);
-	void GetPosition(D3DXVECTOR3*& pos);
-private:
 
+	void GetPosition(D3DXVECTOR3*& pos);
+
+
+	//ifCamera
+	virtual void SetFallowCamera();
+private:
+	void Move(float x, float z);
+	void MoveControl();
+
+	bool moveState;
 	ModelScene * model;
 	D3DXMATRIX world;
 	D3DXVECTOR3 position;
 	float speed;
 	Environment* land;
+
+	UINT currentAnime;
+
+	
+
+	//방향 각도
+	float* forwardAngle;
 };

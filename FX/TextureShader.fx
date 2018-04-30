@@ -38,6 +38,16 @@ SamplerState samp[3];
 
 float4 PS(PixelInput input) : SV_Target
 {
+
+
+  //  float test = input.uv.y / 4;
+  //  float b = 1 - test;
+  //  float r = 0.50 - test;
+  //  float g = 0.75 - test;
+  //
+  //  float4 color = float4(r, g, b, 1);
+
     float4 color = _map.Sample(samp[0], input.uv);
-    return  color;
+   
+    return color;
 }

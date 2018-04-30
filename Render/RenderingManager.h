@@ -41,6 +41,10 @@ public:
 	void Render();
 private:
 
+	void TreeRenderTest();
+
+
+
 	void LightView();
 	void RenderShadow();
 	void RenderReflection();

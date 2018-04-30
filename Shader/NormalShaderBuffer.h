@@ -18,10 +18,14 @@ public:
 		UpdateVSBuffer(&vsData, sizeof(VS_DATA));
 		UpdatePSBuffer(&psData, sizeof(PS_DATA));
 	}
-	void SetMaterial(D3DXCOLOR& ambient, D3DXCOLOR& diffuse, D3DXCOLOR& globalAmbient) {
+	void SetMaterial(D3DXCOLOR& ambient, D3DXCOLOR& diffuse, D3DXCOLOR& specular,
+		float shininess, float scale, float layer) {
 		psData.ambient = ambient;
 		psData.diffuse = diffuse;
-		psData.globalAmbient = globalAmbient;
+		psData.specular = specular;
+		psData.shininess = shininess;
+		psData.scale = scale;
+		psData.layer = layer;
 
 		UpdatePSBuffer(&psData, sizeof(PS_DATA));
 	}

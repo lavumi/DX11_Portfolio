@@ -627,8 +627,10 @@ void ModelScene::ProcessBoneWeights(FbxSkin * skin, vector<ModelBoneWeights>& me
 	{
 		case FbxCluster::eNormalize: // 모든 Weight의 합이 1 로 정규화
 			{
-				for (int i = 0; i < (int)skinBoneWeights.size(); ++i)
-					skinBoneWeights[i].Normalize();
+				for each (ModelBoneWeights boneWeight in skinBoneWeights)
+				{
+					boneWeight.Normalize();
+				}
 			}
 			break;
 

@@ -1,15 +1,4 @@
-cbuffer MatrixBuffer : register(b12)
-{
-    matrix _viewXprojection;
-};
 
-
-
-cbuffer Camera : register(b1)
-{
-    float3 _cameraPosition;
-    float _paddd;
-}
 
 struct VertexInput
 {
@@ -36,7 +25,7 @@ PixelInput VS(VertexInput input)
     float4x4 world = float4x4(input.world0, input.world1, input.world2, input.world3);
 
     output.position = mul(input.position, world);
-    output.position = mul(output.position, _viewXprojection);
+  //  output.position = mul(output.position, _viewXprojection);
 
     output.uv = input.uv;
 

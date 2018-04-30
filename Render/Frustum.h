@@ -1,12 +1,13 @@
 #pragma once
 class LightManager;
+class CascadeShadowBuffer;
 class Frustum
 {
 public:
 	Frustum();
 	~Frustum();
 
-	void Initialize(LightManager* light);
+	void Initialize(LightManager* light, CascadeShadowBuffer* buffer);
 
 	
 	void Update();
@@ -22,19 +23,22 @@ public:
 
 	void Render();
 
-
 	D3DXMATRIX GetCropMatrix(UINT index);
+
 	bool fixFrustum;
 private:
 	D3DXPLANE m_planes[6];
-	D3DXVECTOR3 vtx[8];
+	D3DXVECTOR3* vtx;
 	void SetFrustum();
 
 
 	vector<D3DXVECTOR3> splitedVtx;
 	UINT splitCount;
 	D3DXMATRIX cropMatrix[3];
+	
 	void MakeCropMatrix();
+	
+
 
 	LightManager* lightM;
 	
@@ -45,4 +49,6 @@ private:
 	void CreateBuffer();
 	ID3D11Buffer* vertexBuffer;
 	ID3D11Buffer* indexBuffer;
+
+	CascadeShadowBuffer* csBuffer;
 };

@@ -1,6 +1,6 @@
 #pragma once
 
-
+//static UINT landscapeScale = 3;
 class Frustum;
 class QuadTree;
 class TerrainBuffer;
@@ -36,9 +36,9 @@ public:
 
 	 void changeLOD(Frustum* frustum);
 
-	 void GetGroundPos(vector<D3DXMATRIX>& grassGround) {
-		 grassGround = this->grassGround;
-	 }
+
+
+	 
 
 
 	 void SetPlane(D3DXPLANE& plane);
@@ -48,42 +48,41 @@ public:
 	 }
 
 
-private:
 
+
+
+	 vector<D3DXVECTOR3> treePos;
+private:
+	int testNumber = 0;
 
 
 	void LoadHeightMap();
 	void CreateVertexData();
-	void CreateQuadIndexData();
-
-
+	void CreateIndexData();
 
 	void CreateFullVertexData();
-	void CreateIndexData();
+	void CreateFullIndexData();
 	void CreateNormalData();
-	void CheckGround();
 
-	
-	
+
+	void MakeTreePosition();
+
 	
 	void CreateBuffer();
 	void LoadTextures();
 	
 
+	D3DXMATRIX world;
 
-	//MaterialBuffer* materialBuffer;
-
-	
 	float* heightData;
 
 
-	vector<D3DXMATRIX> grassGround;
 
 
 
 
-	ID3D11Buffer* vertexBuffer;
-	ID3D11Buffer* indexBuffer;
+
+
 
 	UINT width, height;
 	VertexTexture* vertexData;
@@ -94,8 +93,8 @@ private:
 
 
 
-	ID3D11Buffer* fullvertexBuffer;
-	ID3D11Buffer* fullindexBuffer;
+
+
 
 
 	UINT worldWidth, worldHeight;
@@ -107,27 +106,23 @@ private:
 
 
 
-	//UINT tessWidth, tessHeight;
-	//VertexTextureNormalTangent* tessVertexData;
-	//vector<UINT> tessIndexData;
-	//
-	//UINT tessVertexCount;
-	//UINT tessIndexCount;
+
+	WorldBuffer* wBuffer;
+	TerrainBuffer* buffer;
 
 
+	QuadTree* quadTree;
 
+	ID3D11Buffer* vertexBuffer;
+	ID3D11Buffer* indexBuffer;
+
+	ID3D11Buffer* fullvertexBuffer;
+	ID3D11Buffer* fullindexBuffer;
 
 	ID3D11ShaderResourceView** diffuseMap;
 	ID3D11ShaderResourceView* normalMap;
 	ID3D11ShaderResourceView* worldNormalMap;
 	ID3D11ShaderResourceView* specularMap;
 	ID3D11ShaderResourceView* heightMap;
-	D3DXMATRIX world;
-	WorldBuffer* wBuffer;
 
-	QuadTree* quadTree;
-
-
-
-	TerrainBuffer* buffer;
 };

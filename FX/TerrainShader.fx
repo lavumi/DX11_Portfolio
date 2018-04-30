@@ -58,10 +58,10 @@ PatchTess ConstantHS(InputPatch<VertexOut, 4> patch, uint patchID : SV_Primitive
     edgeDistance[2] = distance(0.5f * (patch[1].position + patch[3].position).xyz, _cameraPosition);
     edgeDistance[3] = distance(0.5f * (patch[2].position + patch[3].position).xyz, _cameraPosition);
 
-    pt.EdgeTess[0] = 64.0f / ceil(edgeDistance[0] / 20);
-    pt.EdgeTess[1] = 64.0f / ceil(edgeDistance[1] / 20);
-    pt.EdgeTess[2] = 64.0f / ceil(edgeDistance[2] / 20);
-    pt.EdgeTess[3] = 64.0f / ceil(edgeDistance[3] / 20);
+    pt.EdgeTess[0] = 128.0f / ceil(edgeDistance[0] / 20);
+    pt.EdgeTess[1] = 128.0f / ceil(edgeDistance[1] / 20);
+    pt.EdgeTess[2] = 128.0f / ceil(edgeDistance[2] / 20);
+    pt.EdgeTess[3] = 128.0f / ceil(edgeDistance[3] / 20);
 
     float tess = 0.25f * (pt.EdgeTess[0] + pt.EdgeTess[1] + pt.EdgeTess[2] + pt.EdgeTess[3]);
 
@@ -140,19 +140,20 @@ DomainOut DS(PatchTess patchTess,
     outData.position = lerp(p1, p2, uv.y);
 
 
-    float2 heightuv = outData.position.xz / 256;
+    //scaleFactor
+    float2 heightuv = (outData.position.xz) / 255;
     //이미지에 대한 uv 좌표 처리
     heightuv.y *= -1;
     heightuv.y += 1;
     
     outData.position.y = _map.SampleLevel(samp[0], heightuv, 0).r * 34.0f - 18.0f;
-
+    outData.normal = _worldNormalMap.SampleLevel(samp[0], heightuv, 0).rgb * 2 - 1;
 
     float2 uv1 = lerp(quad[0].uv, quad[1].uv, uv.x);
     float2 uv2 = lerp(quad[2].uv, quad[3].uv, uv.x);
     outData.uv = lerp(uv1, uv2, uv.y);
 
-    outData.normal = _worldNormalMap.SampleLevel(samp[0], heightuv, 0).rgb*2-1;
+    
 
    
     
