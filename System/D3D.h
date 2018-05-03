@@ -181,7 +181,7 @@ private:
 	ID3D11Texture2D* subRenderTexture[1];
 
 	ID3D11ShaderResourceView* subRenderShaderResource[1];
-
+	ID3D11ShaderResourceView* depthBufferShaderResource;
 	ID3D11DepthStencilState** depthstencilstate;
 
 };

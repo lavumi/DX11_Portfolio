@@ -26,7 +26,8 @@ PixelInput VS(VertexInput input)
     float4x4 world = float4x4(input.world0, input.world1, input.world2, input.world3);
     output.position = mul(input.position, world);
  //   output.position = mul(input.position, _world);
-    output.position = mul(output.position, _viewXprojection);
+    output.position = MulVP(output.position);
+
     output.viewPosition = output.position;
 
     output.uv = input.uv;

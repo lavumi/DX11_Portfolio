@@ -66,8 +66,7 @@ Landscape::~Landscape()
 void Landscape::Initialize()
 {
 	LoadHeightMap();
-	height = 8;
-	width = 8;
+
 	CreateVertexData();
 	CreateIndexData();
 	
@@ -98,7 +97,7 @@ void Landscape::LoadHeightMap()
 	HRESULT hr = D3DX11CreateTextureFromFile
 	(
 		D3D::GetDevice()
-		, L"./Environment/heightmap.jpg"
+		, L"./Environment/heightmap.png"
 		, NULL
 		, NULL
 		, (ID3D11Resource **)&srcTexture
@@ -175,10 +174,11 @@ void Landscape::LoadHeightMap()
 
 			UINT color = colors[tempY * worldWidth + x];
 			BYTE r = ((color & 0x00FF0000) >> 16);
-			heightData[z * worldWidth + x] = (float)r / 255.0f * 34.0f   - 18.0f;
+			heightData[z * worldWidth + x] = (float)r / 255.0f * 64.0f   - 26.0f;
 		}
 	}
-
+	this->height = worldHeight / 32;
+	this->width = worldWidth / 32;
 	////worldWidth *= landscapeScale;
 	////worldHeight *= landscapeScale;
 	//
@@ -564,17 +564,17 @@ void Landscape::GetY(D3DXVECTOR3 &position)
 	float deltaZ = position.z - (float)z;
 
 
-	if (x < 0 || x >= 256)
+	if (x < 0 || x >= 512)
 		return;
-	if (z < 0 || z >= 256)
+	if (z < 0 || z >= 512)
 		return;
 
 
 
-	UINT index0 = (255 + 1) * z + x;
-	UINT index1 = (255 + 1) *(z + 1) + x;
-	UINT index2 = (255 + 1) * z + x + 1;
-	UINT index3 = (255 + 1) *(z + 1) + x + 1;
+	UINT index0 = (511 + 1) * z + x;
+	UINT index1 = (511 + 1) *(z + 1) + x;
+	UINT index2 = (511 + 1) * z + x + 1;
+	UINT index3 = (511 + 1) *(z + 1) + x + 1;
 
 
 
@@ -654,7 +654,7 @@ void Landscape::LoadTextures()
 	assert(SUCCEEDED(hr));
 	hr = D3DX11CreateShaderResourceViewFromFile(D3D::GetDevice(), L"./Environment/mountain.jpg", nullptr, nullptr, &diffuseMap[2], nullptr);
 	assert(SUCCEEDED(hr));
-	hr = D3DX11CreateShaderResourceViewFromFile(D3D::GetDevice(), L"./Environment/heightmap.jpg", nullptr, nullptr, &heightMap, nullptr);
+	hr = D3DX11CreateShaderResourceViewFromFile(D3D::GetDevice(), L"./Environment/heightmap.png", nullptr, nullptr, &heightMap, nullptr);
 	assert(SUCCEEDED(hr));
 	hr = D3DX11CreateShaderResourceViewFromFile(D3D::GetDevice(), L"./Environment/worldNormalMap.png", nullptr, nullptr, &worldNormalMap, nullptr);
 	assert(SUCCEEDED(hr));

@@ -2,6 +2,7 @@
 
 class Landscape;
 class GrassBuffer;
+class WorldBuffer;
 class Character;
 class TerrainGrass
 {
@@ -18,9 +19,7 @@ public:
 
 
 
-	UINT getInstanceCount() {
-		return instanceData.size();
-	}
+
 	
 	
 private:
@@ -37,11 +36,12 @@ private:
 
 	UINT vertexCount;
 
-	VertexTexture* vertexData;
+	//VertexTexture* vertexData;
 	vector<D3DXMATRIX> instanceData;
 
 	Landscape* land;
-
+	D3DXMATRIX world;
+	WorldBuffer* wBuffer;
 	GrassBuffer* buffer;
 	Character* player;
 };

@@ -1,10 +1,10 @@
 #pragma once
 #include "ShaderBuffer.h"
 
-class BaseBuffer : public ShaderBuffer
+class ColorBuffer : public ShaderBuffer
 {
 public:
-	BaseBuffer()
+	ColorBuffer()
 		: ShaderBuffer(0, 0,0,0, sizeof(PS_DATA))
 	{
 		SetColor(0, 0, 0, 1);

@@ -31,9 +31,7 @@ PixelInput VS(VertexInput input)
     output.position = mul(input.position, world);
 
     float4 lightWorldPosition;
-    lightWorldPosition = mul(output.position, _lightView);
-    lightWorldPosition = mul(lightWorldPosition, _lightProjection);
-
+    lightWorldPosition = MulLightVP(output.position);
     
     
    [unroll] for (int i = 0; i < 3; i++)
@@ -42,10 +40,9 @@ PixelInput VS(VertexInput input)
    }
 
     //3번에는 view matrix 들어있다
-    output.lightWorldPosition[3] = mul(output.position, _viewXprojection);
+    output.lightWorldPosition[3] = MulVP(output.position);
 
-    output.position = mul(output.position, _viewXprojection);
-
+    output.position = MulVP(output.position);
 
 
     return output;

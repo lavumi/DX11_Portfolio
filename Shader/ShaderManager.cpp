@@ -9,7 +9,7 @@ ShaderManager::ShaderManager()
 	assert(CreateShader(L"BlurShader", VertexTexture::desc, VertexTexture::count)											);
 	assert(CreateShader(L"ColorShader", VertexColor::desc, VertexColor::count)												);
 	assert(CreateShader(L"FBXModelShader", VertexTextureNormalTangentBlend::desc, VertexTextureNormalTangentBlend::count)	);
-	assert(CreateShader(L"GrassLightViewShader", VertexInstance::desc, VertexInstance::count)										);
+	//assert(CreateShader(L"GrassLightViewShader", VertexInstance::desc, VertexInstance::count)										);
 	assert(CreateShader(L"GrassShader", VertexInstance::desc, VertexInstance::count));
 	assert(CreateShader(L"GrassShadowShader", VertexInstance::desc, VertexInstance::count));
 	assert(CreateShader(L"LightViewShader", VertexTextureNormalTangent::desc, VertexTextureNormalTangent::count)			);
@@ -26,6 +26,8 @@ ShaderManager::ShaderManager()
 	assert(CreateShader(L"InstanceTextureShader", VertexTextureInstance::desc, VertexTextureInstance::count));
 	assert(CreateShader(L"InstanceTextureLightViewShader", VertexTextureInstance::desc, VertexTextureInstance::count));
 	assert(CreateShader(L"InstanceTextureShadowShader", VertexTextureInstance::desc, VertexTextureInstance::count));
+	assert(CreateShader(L"FontShader", VertexTexture::desc, VertexTexture::count));
+	assert(CreateShader(L"DepthFogShader", VertexTexture::desc, VertexTexture::count));
 	}
 
 ShaderManager::~ShaderManager()

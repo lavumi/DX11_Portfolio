@@ -223,6 +223,7 @@
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="System\BoundingBox.h" />
     <ClInclude Include="System\D3D.h" />
+    <ClInclude Include="System\TextManager.h" />
     <ClInclude Include="System\Frames.h" />
     <ClInclude Include="System\Keyboard.h" />
     <ClInclude Include="System\Mouse.h" />
@@ -276,6 +277,7 @@
     <ClCompile Include="Shader\Shader.cpp" />
     <ClCompile Include="System\BoundingBox.cpp" />
     <ClCompile Include="System\D3D.cpp" />
+    <ClCompile Include="System\TextManager.cpp" />
     <ClCompile Include="System\Frames.cpp" />
     <ClCompile Include="System\Keyboard.cpp" />
     <ClCompile Include="System\Mouse.cpp" />
@@ -399,9 +401,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="FX\GrassLightViewShader.fx">
-      <FileType>Document</FileType>
-    </None>
     <None Include="FX\GrassShadowShader.fx">
       <FileType>Document</FileType>
     </None>
@@ -418,6 +417,16 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="FX\InstanceTextureShadowShader.fx">
+      <FileType>Document</FileType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="FX\FontShader.fx">
+      <FileType>Document</FileType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="FX\DepthFogShader.fx">
       <FileType>Document</FileType>
     </None>
   </ItemGroup>

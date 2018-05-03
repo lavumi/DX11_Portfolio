@@ -97,26 +97,47 @@ void RenderTexture::Initialize(UINT count)
 	depthBufferDesc.Height = this->height;
 	depthBufferDesc.MipLevels = 1;
 	depthBufferDesc.ArraySize = 1;
-	depthBufferDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+	depthBufferDesc.Format = DXGI_FORMAT_R32_TYPELESS;
 	depthBufferDesc.SampleDesc.Count = 1;
 	depthBufferDesc.SampleDesc.Quality = 0;
 	depthBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-	depthBufferDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+	depthBufferDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_DEPTH_STENCIL;
 	depthBufferDesc.CPUAccessFlags = 0;
 	depthBufferDesc.MiscFlags = 0;
 
-	D3D::GetDevice()->CreateTexture2D(&depthBufferDesc, NULL, &depthStencilBuffer);
 
+	//shadowMapDesc.Format = DXGI_FORMAT_R32_TYPELESS;
+	//shadowMapDesc.ArraySize = count;
+	//shadowMapDesc.MipLevels = 1;
+	//shadowMapDesc.SampleDesc.Count = 1;
+	//shadowMapDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_DEPTH_STENCIL;
+	//shadowMapDesc.Width = this->width;
+	//shadowMapDesc.Height = this->height;
+
+
+	hr = D3D::GetDevice()->CreateTexture2D(&depthBufferDesc, NULL, &depthStencilBuffer);
+	assert(SUCCEEDED(hr));
 
 
 	D3D11_DEPTH_STENCIL_VIEW_DESC depthStencilViewDesc;
 	ZeroMemory(&depthStencilViewDesc, sizeof(depthStencilViewDesc));
 
-	depthStencilViewDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+	depthStencilViewDesc.Format = DXGI_FORMAT_D32_FLOAT;
 	depthStencilViewDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
 	depthStencilViewDesc.Texture2D.MipSlice = 0;
 
-	D3D::GetDevice()->CreateDepthStencilView(depthStencilBuffer, &depthStencilViewDesc, &depthStencilView);
+	hr = D3D::GetDevice()->CreateDepthStencilView(depthStencilBuffer, &depthStencilViewDesc, &depthStencilView);
+	assert(SUCCEEDED(hr));
+
+
+
+	ZeroMemory(&viewDesc, sizeof(D3D11_SHADER_RESOURCE_VIEW_DESC));
+	viewDesc.Format = DXGI_FORMAT_R32_FLOAT;
+	viewDesc.ViewDimension = D3D_SRV_DIMENSION_TEXTURE2D;
+	viewDesc.Texture2D.MipLevels = 1;
+
+	hr = D3D::GetDevice()->CreateShaderResourceView(depthStencilBuffer, &viewDesc, &dbResourceView);
+	assert(SUCCEEDED(hr));
 
 
 
@@ -128,11 +149,25 @@ void RenderTexture::Initialize(UINT count)
 	viewport.TopLeftY = 0.0f;
 
 
-	D3DXMatrixPerspectiveFovLH(&projectionMatrix, ((float)D3DX_PI / 4.0f), ((float)this->width / (float)this->height), Camera::screenNear, Camera::screenDepth);
+
 	D3DXMatrixOrthoLH(&orthoMatrix,
 		(float)this->width, (float)this->height,
 		Camera::screenNear, Camera::screenDepth
 	);
+	orthoMatrix._33 /= Camera::screenDepth;
+	orthoMatrix._43 /= Camera::screenDepth;
+
+	D3DXMatrixPerspectiveFovLH(&projectionMatrix, ((float)D3DX_PI / 4.0f), ((float)this->width / (float)this->height), Camera::screenNear, Camera::screenDepth);
+
+	//중요! 기억해놓자
+	//이걸 함으로서 linear한 depth buffer 생성
+	//쉐이더에서도 한번 더 연산을 해줘야함
+	//버텍스의 크기가 매우 커지면 오류가 생긴다.
+	//water.cpp의 width, height를 1로 해놓고 확인해보자
+	projectionMatrix._33 /= Camera::screenDepth;
+	projectionMatrix._43 /= Camera::screenDepth;
+
+
 }
 
 void RenderTexture::IntializeShadowTexture(UINT count)
@@ -183,6 +218,10 @@ void RenderTexture::IntializeShadowTexture(UINT count)
 		&resourceView[0]
 	);
 
+
+
+
+
 	renderView = nullptr;	
 	subRT_count = 0;
 	viewport.Width = (float)this->width;
@@ -192,12 +231,17 @@ void RenderTexture::IntializeShadowTexture(UINT count)
 	viewport.TopLeftX = 0.0f;
 	viewport.TopLeftY = 0.0f;
 
-
-	D3DXMatrixPerspectiveFovLH(&projectionMatrix, ((float)D3DX_PI / 4.0f), ((float)this->width / (float)this->height), Camera::screenNear, Camera::screenDepth);
 	D3DXMatrixOrthoLH(&orthoMatrix,
 		(float)this->width, (float)this->height,
 		Camera::screenNear, Camera::screenDepth
 	);
+	//orthoMatrix._33 /= Camera::screenDepth;
+	//orthoMatrix._43 /= Camera::screenDepth;
+
+	D3DXMatrixPerspectiveFovLH(&projectionMatrix, ((float)D3DX_PI / 4.0f), ((float)this->width / (float)this->height), Camera::screenNear, Camera::screenDepth);
+	//projectionMatrix._33 /= Camera::screenDepth;
+	//projectionMatrix._43 /= Camera::screenDepth;
+
 }
 
 void RenderTexture::Clear(float r , float g , float b , float a )

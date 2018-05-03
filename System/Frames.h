@@ -9,6 +9,11 @@ public:
 	static bool IsTimerStopped() { return isTimerStopped; }
 	static float TimeElapsed() { return isTimerStopped ? 0.0f : timeElapsed; }
 
+
+	float getFrame() {
+		return framePerSecond;
+	}
+
 	void Update();
 	void Print();
 

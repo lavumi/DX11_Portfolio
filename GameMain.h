@@ -6,29 +6,23 @@ class Character;
 class TestCube;
 
 class RenderingManager;
-
+class TextManager;
 class GameMain : public Window
 {
 public:
 	void Initialize();
 	void Destroy();
 	void Update();
-	//void PreRender();
 	void Render();
 
 private:
 	RenderingManager * renderManager;
+	TextManager* txtManager;
 	void ControlCamera();
 
 
 	Environment* environment;
 
-	//Skydome* skydome;
-	//Skyplane* cloud;
-	//Landscape* landscape;
-	//Water* lake;
-	//TerrainGrass* grass;
-	//RainCone* rainCone;
 
 
 	TestCube* testcube;

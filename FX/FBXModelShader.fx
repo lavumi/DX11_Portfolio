@@ -74,8 +74,8 @@ PixelInput VS(VertexInput input)
     output.viewDir = mul(viewDir, tbnMatrix);
 
    
-    output.position = mul(output.position, _viewXprojection);
-   // output.position = mul(output.position, _projection);
+    output.position = MulVP(output.position);
+
    
     output.viewPosition = output.position;
 

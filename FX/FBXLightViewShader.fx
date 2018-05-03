@@ -50,8 +50,7 @@ GeoInput VS(VertexInput input)
     output.position = mul(output.position, _world);
     //output.position = mul(input.position, _world);
 
-    output.position = mul(output.position, _lightView);
-    output.position = mul(output.position, _lightProjection);
+    output.position = MulLightVP(output.position);
     output.worldPosition = output.position;
 
 

@@ -93,14 +93,19 @@ D3D::D3D()
 	viewport.TopLeftY = 0.0f;
 	D3D::GetDeviceContext()->RSSetViewports(1, &viewport);
 	
-	screenAspect = (float)d3dInfo.screenWidth / (float)d3dInfo.screenHeight;
-	
-	D3DXMatrixPerspectiveFovLH(&defaultProjection, (float)D3DX_PI/4, screenAspect, Camera::screenNear, Camera::screenDepth);
 
+	
 	D3DXMatrixOrthoLH(&defaultOrthoProjection,
 		(float)d3dInfo.screenWidth, (float)d3dInfo.screenHeight,
 		Camera::screenNear, Camera::screenDepth
 	);
+
+	screenAspect = (float)d3dInfo.screenWidth / (float)d3dInfo.screenHeight;
+	D3DXMatrixPerspectiveFovLH(&defaultProjection, (float)D3DX_PI/4, screenAspect, Camera::screenNear, Camera::screenDepth);
+	//defaultProjection._33 /= Camera::screenDepth;
+	//defaultProjection._43 /= Camera::screenDepth;
+
+
 
 
 

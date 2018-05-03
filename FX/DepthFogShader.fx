@@ -31,20 +31,24 @@ PixelInput VS(VertexInput input)
 
 
 Texture2D _map : register(t10);
-
+Texture2D _depthmap : register(t0);
 
 SamplerState samp[3];
-
-
 float4 PS(PixelInput input) : SV_Target
 {
 
 
-    float4 color = _map.Sample(samp[0], input.uv);
-   
+    float4 main = _map.Sample(samp[0], input.uv);
+    float depth = _depthmap.Sample(samp[0], input.uv).r;
+                        
+    if(depth < 0.999f)
+        main += depth*0.5f;
 
 
-
-
-    return color;
+  // depth = pow(depth, 160)*0.6;
+  //
+  // main += depth;
+  
+  //  main += depth;
+    return main;
 }

@@ -30,21 +30,26 @@ PixelInput VS(VertexInput input)
 
 
 
-Texture2D _map : register(t10);
-
-
+Texture2D _map : register(t0);
 SamplerState samp[3];
 
+cbuffer PixelBuffer
+{
+    float4 pixelColor;
+};
 
 float4 PS(PixelInput input) : SV_Target
 {
 
-
     float4 color = _map.Sample(samp[0], input.uv);
-   
 
-
-
+  if (color.g < 0.5f){
+      color.a = 0.0f;
+  } 
+  else { 
+      color.a = 1.0f; 
+      color.rgb = 0; 
+  }
 
     return color;
 }

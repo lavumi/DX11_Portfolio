@@ -35,6 +35,7 @@
 #include "../Shader/CascadeShadowBuffer.h"
 
 
+#include "../System/TextManager.h"
 
 
 RenderingManager::RenderingManager()
@@ -94,8 +95,11 @@ RenderingManager::~RenderingManager()
 	SAFE_DELETE(lightBuffer);
 }
 
-void RenderingManager::Initianlize(Environment* envi)
+void RenderingManager::Initianlize(TextManager* txt, Environment* envi)
 {
+	txtManager = txt;
+	environment = envi;
+
 	sampler->SetDefault();
 	
 
@@ -111,7 +115,7 @@ void RenderingManager::Initianlize(Environment* envi)
 	postRendering->Initialize();
 
 
-	environment = envi;
+
 
 	noise->MakePerlinNoise();
 
@@ -173,7 +177,7 @@ void RenderingManager::Render()
 	RenderRefraction();
 	RenderMain();
 
-
+	PostRender();
 	
 	FinalRender();
 }
@@ -230,7 +234,7 @@ void RenderingManager::LightView()
 	environment->RenderTree();
 
 
-	
+
 	assert(shaderManager->SetShader(L"InstanceTextureLightViewShader"));
 	rasterizer->SetOffCullMode();
 	environment->RenderTreeLeaf();
@@ -263,7 +267,6 @@ void RenderingManager::RenderShadow()
 	D3D::GetDeviceContext()->PSSetShaderResources(13, 1, depthShadowTexture->GetShadowResourceView());
 	assert(shaderManager->SetShader(L"ShadowShader"));
 	environment->RenderLandForShadow();
-	
 	testcube->Render();
 	environment->RenderTree();
 
@@ -406,7 +409,7 @@ void RenderingManager::RenderMain()
 	assert(shaderManager->SetShader(L"WaterShader"));
 	environment->RenderWater();
 
-
+	
 
 //	assert(shaderManager->SetShader(L"NormalMapShader"));
 	
@@ -426,6 +429,32 @@ void RenderingManager::RenderMain()
 	assert(shaderManager->SetShader(L"FBXModelShader"));
 	for (size_t i = 0; i<characters.size(); i++)
 		characters[i]->Render();
+
+
+
+
+
+}
+
+void RenderingManager::PostRender()
+{
+	postRendering->SetTarget();
+	postRendering->Clear();
+
+	Camera::Get()->GetDefaultView(&view);
+	D3D::Get()->GetOrthoProjection(&projection);
+
+
+	D3D::Get()->SetBlender(D3D::BL_state::Off);
+	vpBuffer->SetVPMatrix(view, projection);
+
+
+	D3D::GetDeviceContext()->PSSetShaderResources(10, 1, mainRendering->GetShadowResourceView());
+	D3D::GetDeviceContext()->PSSetShaderResources(0, 1, mainRendering->GetDepthBuffer());
+	assert(shaderManager->SetShader(L"DepthFogShader"));
+	orthoWindow->Render();
+
+
 }
 
 void RenderingManager::FinalRender()
@@ -444,12 +473,20 @@ void RenderingManager::FinalRender()
 
 
 
-	D3D::GetDeviceContext()->PSSetShaderResources(10, 1, mainRendering->GetShadowResourceView());
-	//D3D::GetDeviceContext()->PSSetShaderResources(10, 1, shadowTexture->GetShadowResourceView());
+	D3D::GetDeviceContext()->PSSetShaderResources(10, 1, postRendering->GetShadowResourceView());
 	assert(shaderManager->SetShader(L"TextureShader"));
 	orthoWindow->Render();
+
+
+	D3D::Get()->SetDepthStencilState(D3D::DS_state::offState);
+	D3D::Get()->SetBlender(D3D::BL_state::Linear);
+	assert(shaderManager->SetShader(L"FontShader"));
+	txtManager->Render();
 
 	D3D::Get()->SetBlender(D3D::BL_state::Off);
 	rasterizer->SetOnCullMode();
 	D3D::Get()->SetDepthStencilState(D3D::DS_state::onState);
+
+
+
 }

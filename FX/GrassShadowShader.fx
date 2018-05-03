@@ -17,7 +17,7 @@ PixelInput VS(VertexInput input)
     PixelInput output;
     input.position.w = 1;
 
-    output.position = input.position;
+    output.position = mul(input.position, _world);
 //    output.viewPosition = input.position;
     return output;
 }
@@ -53,12 +53,10 @@ void GS(point PixelInput input[1], inout TriangleStream<PixelInput> triStream)
     rnd %= 100;
 
 
-    float2 heightuv = base.position.xz / 256;
-    //이미지에 대한 uv 좌표 처리
+    float2 heightuv = base.position.xz / 512;
     heightuv.y *= -1;
     heightuv.y += 1;
-    
-    base.position.y = _map.SampleLevel(samp[0], heightuv, 0).r * 34.0f - 18.0f;
+    base.position.y = _map.SampleLevel(samp[0], heightuv, 0).r * 64.0f - 26.2f;
 
 
     //풀을 표현할 벡터
@@ -98,17 +96,26 @@ void GS(point PixelInput input[1], inout TriangleStream<PixelInput> triStream)
     leftVector = heightVector - widthVector;
     rightVector = heightVector + widthVector;
     topVector = heightVector * 2;
-    
+
+
+
+     //캐릭터 위치에 따른 기울어짐
     float3 characterToRoot = root.position.xyz - _characterPos.xyz;
     float3 rotationAxisVector = cross(characterToRoot, float3(0, 1, 0));
     rotationAxisVector = normalize(rotationAxisVector);
     float rotationDegree = (1 - saturate((characterToRoot.x * characterToRoot.x + characterToRoot.z * characterToRoot.z) * 0.2f)) * 1.570796f * 0.4f;
     
     float3x3 rotationMatrix = RotationMatrix(rotationAxisVector, rotationDegree);
+    float3x3 rotationMatrixHalf = RotationMatrix(rotationAxisVector, rotationDegree * 0.8f);
 
     leftVector = mul(leftVector, rotationMatrix);
     rightVector = mul(rightVector, rotationMatrix);
-    topVector = mul(topVector, rotationMatrix);
+    topVector = mul(topVector, rotationMatrixHalf);
+
+
+
+
+
 
     left.position.xyz += leftVector;
     right.position.xyz += rightVector;
@@ -119,27 +126,30 @@ void GS(point PixelInput input[1], inout TriangleStream<PixelInput> triStream)
 
 
     float4 lightWorldPosition;
-    lightWorldPosition = mul(root.position, _lightView);
-    lightWorldPosition = mul(lightWorldPosition, _lightProjection);
+
+    lightWorldPosition = MulLightVP(root.position);
     root.lightWorldPosition = mul(lightWorldPosition, cropMatrix[0]);
 
-    lightWorldPosition = mul(left.position, _lightView);
-    lightWorldPosition = mul(lightWorldPosition, _lightProjection);
+
+    lightWorldPosition = MulLightVP(left.position);
     left.lightWorldPosition = mul(lightWorldPosition, cropMatrix[0]);
 
-    lightWorldPosition = mul(right.position, _lightView);
-    lightWorldPosition = mul(lightWorldPosition, _lightProjection);
+
+    lightWorldPosition = MulLightVP(right.position);
     right.lightWorldPosition = mul(lightWorldPosition, cropMatrix[0]);
 
-    lightWorldPosition = mul(top.position, _lightView);
-    lightWorldPosition = mul(lightWorldPosition, _lightProjection);
+
+    lightWorldPosition = MulLightVP(top.position);
     top.lightWorldPosition = mul(lightWorldPosition, cropMatrix[0]);
     
 
-    root.position = mul(root.position, _viewXprojection);
-    left.position = mul(left.position, _viewXprojection);
-    right.position = mul(right.position, _viewXprojection);
-    top.position = mul(top.position, _viewXprojection);
+    root.position = MulVP(root.position);
+
+    left.position = MulVP(left.position);
+
+    right.position = MulVP(right.position);
+
+    top.position = MulVP(top.position);
 
 
 

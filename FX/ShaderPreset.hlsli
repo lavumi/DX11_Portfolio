@@ -8,6 +8,16 @@ cbuffer MatrixBuffer : register(b12)
     matrix _viewXprojection;
 };
 
+float4 MulVP(float4 input)
+{
+    float4 output = mul(input, _viewXprojection);
+
+    output.z *= output.w;
+    return output;
+}
+
+
+
 cbuffer LightData : register(b11)
 {
     matrix _lightView;
@@ -15,6 +25,16 @@ cbuffer LightData : register(b11)
     float3 _lightDir;
     float padding;
 }
+
+float4 MulLightVP(float4 input)
+{
+    float4 output = mul(input, _lightView);
+    output = mul(output, _lightProjection);
+  //  output.z *= output.w;
+    return output;
+}
+
+
 
 cbuffer CascadeShadow : register(b10)
 {

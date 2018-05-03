@@ -52,10 +52,12 @@ void Environment::Initialize()
 void Environment::Update()
 {
 	skydome->Update();
-	landscape->Update();
-	cloud->Update();
-	
 
+	landscape->Update();
+
+	cloud->Update();
+
+	grass->Update();
 	grass->SetCharacterPos(characterPos);
 }
 

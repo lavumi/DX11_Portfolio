@@ -26,12 +26,14 @@ class Frustum;
 
 class Character;
 
+
+class TextManager;
 class RenderingManager {
 public:
 	RenderingManager();
 	~RenderingManager();
 
-	void Initianlize(Environment*);
+	void Initianlize(TextManager*, Environment*);
 
 	void AddCharacter(Character* );
 	void Test(TestCube* testcube);
@@ -50,6 +52,8 @@ private:
 	void RenderReflection();
 	void RenderRefraction();
 	void RenderMain();
+
+	void PostRender();
 
 	void FinalRender();
 
@@ -97,6 +101,8 @@ private:
 	//Landscape
 	Environment* environment;
 
+
+	TextManager* txtManager;
 
 	TestCube* testcube;
 

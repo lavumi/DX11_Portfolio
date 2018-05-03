@@ -19,7 +19,9 @@ public:
 	ID3D11ShaderResourceView** GetShadowResourceView(UINT i = 0) {
 		return &resourceView[i];
 	}
-
+	ID3D11ShaderResourceView** GetDepthBuffer() {
+		return &dbResourceView;
+	}
 	void ClearDepthStencil(UINT clearFlag, float depth, UINT8 stencil);
 private:
 	UINT width, height;
@@ -34,7 +36,7 @@ private:
 
 	ID3D11Texture2D* depthStencilBuffer;
 	ID3D11DepthStencilView* depthStencilView;
-
+	ID3D11ShaderResourceView* dbResourceView;
 
 	D3D11_VIEWPORT viewport;
 

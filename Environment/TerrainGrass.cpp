@@ -2,6 +2,7 @@
 #include "TerrainGrass.h"
 #include "Landscape.h"
 #include "../Shader/GrassBuffer.h"
+#include "../Shader/WorldBuffer.h"
 
 TerrainGrass::TerrainGrass()
 {
@@ -9,14 +10,19 @@ TerrainGrass::TerrainGrass()
 	instanceBuffer = 0;
 
 	buffer = new GrassBuffer();
+	wBuffer = new WorldBuffer();
+	D3DXMatrixIdentity(&world);
+	wBuffer->SetWorld(world);
 }
 
 TerrainGrass::~TerrainGrass()
 {
 
-
 	SAFE_RELEASE(vertexBuffer);
 	SAFE_RELEASE(instanceBuffer);
+
+	SAFE_DELETE(buffer);
+	SAFE_DELETE(wBuffer);
 }
 
 void TerrainGrass::Initialize(Landscape* land)
@@ -32,6 +38,14 @@ void TerrainGrass::Initialize(Landscape* land)
 void TerrainGrass::Update()
 {
 
+	D3DXVECTOR3 position, forward;
+	Camera::Get()->GetPosition(&position, &forward);
+	position.x = floor(position.x + forward.x * 7);
+	position.z = floor(position.z + forward.z * 7);
+
+	D3DXMatrixTranslation(&world, position.x, 0, position.z);
+
+	wBuffer->SetWorld(world);
 }
 
 void TerrainGrass::Render()
@@ -50,7 +64,7 @@ void TerrainGrass::Render()
 	bufferPointers[0] = vertexBuffer;
 	//bufferPointers[1] = instanceBuffer;
 
-
+	wBuffer->SetBuffer();
 	buffer->SetBuffers();
 	D3D::GetDeviceContext()->IASetVertexBuffers(0, 1, bufferPointers, stride, offset);
 	D3D::GetDeviceContext()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_POINTLIST);
@@ -74,10 +88,10 @@ void TerrainGrass::CreateBuffer()
 {
 	HRESULT hr;
 	int grassdense = 15;
-	int densetile = 9;
+	int densetile = 15;
 
 
-	vertexCount =(float)( grassdense* grassdense*densetile * densetile);
+	vertexCount =(UINT)( grassdense* grassdense*densetile * densetile);
 
 	
 	int rndx, rndy;
@@ -88,9 +102,9 @@ void TerrainGrass::CreateBuffer()
 			rndx = rand() % 100;
 			rndy = rand() % 100;
 			vertexData[i++].position = D3DXVECTOR3(
-				(float)(j / grassdense) / grassdense + (float)(3 - k % densetile) + 140.0f + (float)(rndx - 50) / 100.0f, 
+				(float)(j / grassdense) / grassdense + (float)(10 - k % densetile)  + (float)(rndx - 50) / 100.0f, 
 				0.0f, 
-				(float)(j % grassdense) / grassdense + (float)(3 - k / densetile) + 110.0f + (float)(rndy - 50) / 100.0f) ;
+				(float)(j % grassdense) / grassdense + (float)(10 - k / densetile)  + (float)(rndy - 50) / 100.0f) ;
 		}
 	}
 

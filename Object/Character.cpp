@@ -9,7 +9,7 @@
 Character::Character()
 {
 	model = new ModelScene();
-	position = D3DXVECTOR3(128, 0, 128);
+	position = D3DXVECTOR3(158, 0, 158);
 	D3DXMatrixTranslation(&world, position.x, position.y, position.z);
 
 	moveState = false;
@@ -47,7 +47,7 @@ void Character::Initialize(Environment* land)
 	position = D3DXVECTOR3(140, 0, 110);
 	land->GetLandY(position);
 	D3DXMatrixTranslation(&world, position.x, position.y, position.z);
-	speed = 0.13f;
+	speed = 0.03f;
 
  	
 }

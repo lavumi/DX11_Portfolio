@@ -141,12 +141,12 @@ DomainOut DS(PatchTess patchTess,
 
 
     //scaleFactor
-    float2 heightuv = (outData.position.xz) / 255;
+    float2 heightuv = (outData.position.xz) / 512;
     //이미지에 대한 uv 좌표 처리
     heightuv.y *= -1;
     heightuv.y += 1;
     
-    outData.position.y = _map.SampleLevel(samp[0], heightuv, 0).r * 34.0f - 18.0f;
+    outData.position.y = _map.SampleLevel(samp[0], heightuv, 0).r * 64.0f - 26.0f;
     outData.normal = _worldNormalMap.SampleLevel(samp[0], heightuv, 0).rgb * 2 - 1;
 
     float2 uv1 = lerp(quad[0].uv, quad[1].uv, uv.x);
@@ -155,39 +155,20 @@ DomainOut DS(PatchTess patchTess,
 
     
 
-   
-    
-   // float3 t1 = lerp(quad[0].tangent, quad[1].tangent, uv.x);
-   // float3 t2 = lerp(quad[2].tangent, quad[3].tangent, uv.x);
-   // outData.tangent = lerp(t1, t2, uv.y);
-
-
-
-
-    
     dout.position = outData.position;
     dout.worldPosition = dout.position.y;
-    dout.position = mul(dout.position, _viewXprojection);
-   // dout.position = mul(dout.position, _lightView);
-   // dout.position = mul(dout.position, _lightProjection);
+
+
+    dout.position = MulVP(dout.position);
+
+    //dout.position = mul(dout.position, _viewXprojection);
+    //dout.position.z *= dout.position.w;
 
 
 
     dout.viewPosition = dout.position.xyw;
     dout.uv = outData.uv;
     
-   // float3 n = mul(outData.normal, (float3x3) worldInverseTransposeMatrix);
-   // float3 t = mul(outData.tangent, (float3x3) worldInverseTransposeMatrix);
-   // float3 b = cross(n, t);
-   //
-   //
-   // float3x3 tbnMatrix = float3x3(t.x, b.x, n.x,
-	//                            t.y, b.y, n.y,
-	//                            t.z, b.z, n.z);
-   //
-
-   // dout.lightDir = normalize(mul(-_lightDir, tbnMatrix));
-   // dout.normal = normalize(mul(outData.normal, tbnMatrix));
 
 
     dout.uv = outData.uv;

@@ -23,8 +23,8 @@ PixelInput VS(VertexInput input)
     input.position.w = 1;
 
 //    float4x4 world = float4x4(input.world0, input.world1, input.world2, input.world3);
-   // output.position = mul(input.position, world);
-    output.position = input.position;
+    output.position = mul(input.position, _world);
+   // output.position = input.position;
 
 
     return output;
@@ -81,10 +81,10 @@ void GS(point PixelInput input[1], inout TriangleStream<PixelInput> triStream)
 
 
     //높이값 설정    //이미지에 대한 uv 좌표 처리
-    float2 heightuv = base.position.xz / 255;
+    float2 heightuv = base.position.xz / 512;
     heightuv.y *= -1;
     heightuv.y += 1;
-    base.position.y = _map.SampleLevel(samp[0], heightuv, 0).r * 34.0f  - 18.2f;
+    base.position.y = _map.SampleLevel(samp[0], heightuv, 0).r * 64.0f  - 26.2f;
 
 
 
@@ -122,16 +122,19 @@ void GS(point PixelInput input[1], inout TriangleStream<PixelInput> triStream)
 
 
 
+
+    //캐릭터 위치에 따른 기울어짐
     float3 characterToRoot = root.position.xyz - _characterPos.xyz;
     float3 rotationAxisVector = cross(characterToRoot, float3(0, 1, 0));
     rotationAxisVector = normalize(rotationAxisVector);
     float rotationDegree = (1 - saturate((characterToRoot.x * characterToRoot.x + characterToRoot.z * characterToRoot.z)*0.2f)) * 1.570796f * 0.4f;
     
     float3x3 rotationMatrix = RotationMatrix(rotationAxisVector, rotationDegree);
+    float3x3 rotationMatrixHalf = RotationMatrix(rotationAxisVector, rotationDegree *0.8f);
 
     leftVector = mul(leftVector, rotationMatrix);
     rightVector = mul(rightVector, rotationMatrix);
-    topVector = mul(topVector, rotationMatrix);
+    topVector = mul(topVector, rotationMatrixHalf);
 
 
 
@@ -161,11 +164,13 @@ void GS(point PixelInput input[1], inout TriangleStream<PixelInput> triStream)
 
 
 
-    root.position = mul(root.position, _viewXprojection);
-    left.position = mul(left.position, _viewXprojection);
-    right.position = mul(right.position, _viewXprojection);
-    top.position = mul(top.position, _viewXprojection);
+    root.position = MulVP(root.position);
 
+    left.position = MulVP(left.position);
+
+    right.position = MulVP(right.position);
+
+    top.position = MulVP(top.position);
 
     root.screenPosition = root.position;
     left.screenPosition = left.position;

@@ -41,10 +41,10 @@ PixelInput VS(VertexInput input)
     
     input.position.w = 1.0f;
 
-    output.position = mul(input.position, _world);
+    float4 world = mul(input.position, _world);
 
 
-    float3 viewDir = _cameraPosition.xyz - output.position.xyz;
+    float3 viewDir = _cameraPosition.xyz - world.xyz;
 
     float3 halfVector =  normalize(normalize(-_lightDir) + normalize(viewDir));
 
@@ -66,10 +66,10 @@ PixelInput VS(VertexInput input)
 
     output.viewDir = viewDir;
    
-    output.position = mul(output.position, _viewXprojection);
-
+    output.position = MulVP(world);
    
-    output.viewPosition = output.position;
+    output.viewPosition = mul(world, _viewXprojection);
+
 
     output.uv = input.uv;
     output.normal = normalize(mul(input.normal, tbnMatrix));
@@ -118,8 +118,9 @@ struct PixelOutput
     float4 viewSpaceVector : SV_TARGET2;
 };
 
-PixelOutput PS(PixelInput input) : SV_TARGET0
+PixelOutput PS(PixelInput input) 
 {
+
     
     //반사, 굴절된 이미지의 Texcoord 세팅
     float2 projectTexCoord;
@@ -128,6 +129,7 @@ PixelOutput PS(PixelInput input) : SV_TARGET0
 
 
     //터레인의 a값에 저장된 수면부터의 거리값 받아와 깊이 설정
+    //TODO 
     //망함 이걸로 하면 안된다
     //뭔가 다른 방식으로 물의 깊이값을 받아오자
     float waterDepth = _refractionMap.Sample(samp[1], projectTexCoord).a;

@@ -95,7 +95,9 @@ void Water::CreateBuffer()
 
 
 
-	UINT width =1, height =1;
+
+	
+	UINT width =16, height =16;
 	
 
 	vertexCount = (width + 1) * (height + 1);
@@ -108,9 +110,9 @@ void Water::CreateBuffer()
 		{
 			int index = (width + 1) * z + x;
 
-			vertexData[index].position.x = (float)x * 255 / (width);// *landscapeScale;
+			vertexData[index].position.x = (float)x * 512 / (width);// *landscapeScale;
 			vertexData[index].position.y = 0;
-			vertexData[index].position.z = (float)z * 255 / (height);// *landscapeScale;
+			vertexData[index].position.z = (float)z * 512 / (height);// *landscapeScale;
 
 			vertexData[index].uv.x = (float)(x);// (float)width;
 			vertexData[index].uv.y = (float)(z);// (float)height;

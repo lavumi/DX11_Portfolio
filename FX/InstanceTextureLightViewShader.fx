@@ -31,8 +31,7 @@ GeoInput VS(VertexInput input)
     float4x4 world = float4x4(input.world0, input.world1, input.world2, input.world3);
     output.position = mul(input.position, world);
 
-    output.position = mul(output.position, _lightView);
-    output.position = mul(output.position, _lightProjection);
+    output.position = MulLightVP(output.position);
     output.worldPosition = output.position;
 
 

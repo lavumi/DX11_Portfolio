@@ -31,7 +31,7 @@ void TweakBar::Start()
 	TwDefine("TweakBar color='0 128 255' alpha=128");
 	TwDefine("TweakBar valueswidth=120");
 	TwDefine("TweakBar movable=true");
-	TwDefine("TweakBar iconpos=topleft");
+	TwDefine("TweakBar iconpos=topright");
 	
 
 	width = 250;
@@ -49,7 +49,7 @@ void TweakBar::Start()
 	option += to_string(info.screenHeight - 10) + "'";
 	TwDefine(option.c_str());
 
-	iconified = false;
+	iconified = true;
 	SetDraw(iconified);
 }
 
