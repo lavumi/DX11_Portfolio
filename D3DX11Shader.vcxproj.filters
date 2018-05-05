@@ -30,7 +30,7 @@
       <Filter>Render</Filter>
     </ClCompile>
     <ClCompile Include="Shader\Shader.cpp">
-      <Filter>Shader</Filter>
+      <Filter>Render\Shader</Filter>
     </ClCompile>
     <ClCompile Include="Render\Rasterizer.cpp">
       <Filter>Render</Filter>
@@ -100,7 +100,7 @@
     </ClCompile>
     <ClCompile Include="GameMain.cpp" />
     <ClCompile Include="Shader\ShaderManager.cpp">
-      <Filter>Shader</Filter>
+      <Filter>Render\Shader</Filter>
     </ClCompile>
     <ClCompile Include="System\BoundingBox.cpp">
       <Filter>System</Filter>
@@ -184,7 +184,7 @@
       <Filter>Render</Filter>
     </ClInclude>
     <ClInclude Include="Shader\Shader.h">
-      <Filter>Shader</Filter>
+      <Filter>Render\Shader</Filter>
     </ClInclude>
     <ClInclude Include="Render\Rasterizer.h">
       <Filter>Render</Filter>
@@ -263,49 +263,49 @@
       <Filter>Camera</Filter>
     </ClInclude>
     <ClInclude Include="Shader\TerrainBuffer.h">
-      <Filter>Shader\Buffers</Filter>
+      <Filter>Render\Shader\Buffers</Filter>
     </ClInclude>
     <ClInclude Include="Shader\WorldBuffer.h">
-      <Filter>Shader\Buffers</Filter>
+      <Filter>Render\Shader\Buffers</Filter>
     </ClInclude>
     <ClInclude Include="Shader\VPBuffer.h">
-      <Filter>Shader\Buffers</Filter>
+      <Filter>Render\Shader\Buffers</Filter>
     </ClInclude>
     <ClInclude Include="Shader\WaterBuffer.h">
-      <Filter>Shader\Buffers</Filter>
+      <Filter>Render\Shader\Buffers</Filter>
     </ClInclude>
     <ClInclude Include="Shader\BaseBuffer.h">
-      <Filter>Shader\Buffers</Filter>
+      <Filter>Render\Shader\Buffers</Filter>
     </ClInclude>
     <ClInclude Include="Shader\ColorBuffer.h">
-      <Filter>Shader\Buffers</Filter>
+      <Filter>Render\Shader\Buffers</Filter>
     </ClInclude>
     <ClInclude Include="Shader\GrassBuffer.h">
-      <Filter>Shader\Buffers</Filter>
+      <Filter>Render\Shader\Buffers</Filter>
     </ClInclude>
     <ClInclude Include="Shader\NormalShaderBuffer.h">
-      <Filter>Shader\Buffers</Filter>
+      <Filter>Render\Shader\Buffers</Filter>
     </ClInclude>
     <ClInclude Include="Shader\RainBuffer.h">
-      <Filter>Shader\Buffers</Filter>
+      <Filter>Render\Shader\Buffers</Filter>
     </ClInclude>
     <ClInclude Include="Shader\SkyplaneBuffer.h">
-      <Filter>Shader\Buffers</Filter>
+      <Filter>Render\Shader\Buffers</Filter>
     </ClInclude>
     <ClInclude Include="Shader\ShaderManager.h">
-      <Filter>Shader</Filter>
+      <Filter>Render\Shader</Filter>
     </ClInclude>
     <ClInclude Include="Shader\LightBuffer.h">
-      <Filter>Shader\Buffers</Filter>
+      <Filter>Render\Shader\Buffers</Filter>
     </ClInclude>
     <ClInclude Include="Shader\OrthoWindowBuffer.h">
-      <Filter>Shader\Buffers</Filter>
+      <Filter>Render\Shader\Buffers</Filter>
     </ClInclude>
     <ClInclude Include="Model\ModelBuffer.h">
-      <Filter>Shader\Buffers</Filter>
+      <Filter>Render\Shader\Buffers</Filter>
     </ClInclude>
     <ClInclude Include="Shader\ShaderBuffer.h">
-      <Filter>Shader</Filter>
+      <Filter>Render\Shader</Filter>
     </ClInclude>
     <ClInclude Include="Object\TestPlane.h">
       <Filter>Object</Filter>
@@ -314,7 +314,7 @@
       <Filter>System</Filter>
     </ClInclude>
     <ClInclude Include="Shader\CascadeShadowBuffer.h">
-      <Filter>Shader\Buffers</Filter>
+      <Filter>Render\Shader\Buffers</Filter>
     </ClInclude>
     <ClInclude Include="Render\RenderingManager.h">
       <Filter>Render</Filter>
@@ -364,6 +364,9 @@
     <ClInclude Include="System\TextManager.h">
       <Filter>System</Filter>
     </ClInclude>
+    <ClInclude Include="Shader\GAbuffer.h">
+      <Filter>Render\Shader\Buffers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="System">
@@ -375,9 +378,6 @@
     <Filter Include="Render">
       <UniqueIdentifier>{25457864-9887-4cb1-809d-4f1243c8c952}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Shader">
-      <UniqueIdentifier>{55ca23e0-d999-4a31-a218-2e166de4f1b6}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Object">
       <UniqueIdentifier>{a63c572a-ace9-47d6-99b9-2989996ca2c5}</UniqueIdentifier>
     </Filter>
@@ -386,9 +386,6 @@
     </Filter>
     <Filter Include="Utility">
       <UniqueIdentifier>{396c9709-56b0-4eb0-a69d-18929b6e0ff7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Shader\Buffers">
-      <UniqueIdentifier>{55de613b-74c9-4327-9e91-08230fb6ad24}</UniqueIdentifier>
     </Filter>
     <Filter Include="FX">
       <UniqueIdentifier>{0b34cee2-31a1-44d7-8e50-56c1f7d6c774}</UniqueIdentifier>
@@ -401,6 +398,12 @@
     </Filter>
     <Filter Include="ProceduralGenerator\FX">
       <UniqueIdentifier>{caf5405c-847a-4e3d-85bb-567eb1844735}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Render\Shader">
+      <UniqueIdentifier>{55ca23e0-d999-4a31-a218-2e166de4f1b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Render\Shader\Buffers">
+      <UniqueIdentifier>{55de613b-74c9-4327-9e91-08230fb6ad24}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

@@ -4,6 +4,7 @@
 struct VertexInput
 {
     float4 position : POSITION0;
+    float2 world0 : INSTMATRIX0;
 };
 
 struct PixelInput
@@ -17,8 +18,8 @@ PixelInput VS(VertexInput input)
     PixelInput output;
     input.position.w = 1;
 
-    output.position = mul(input.position, _world);
-//    output.viewPosition = input.position;
+    output.position = input.position;
+    output.position.xz += input.world0.xy;
     return output;
 }
 
@@ -189,8 +190,7 @@ float4 PS(PixelInput input) : SV_Target
  
     //라이트 텍스쳐가 존재하는 부분만 그림자 처리 연산
     if ((saturate(projectTexCoord.x) == projectTexCoord.x)
-        && (saturate(projectTexCoord.y) == projectTexCoord.y)
-        && (lightDepthValue > 0))
+        && (saturate(projectTexCoord.y) == projectTexCoord.y))
     {
        
               //marginBias = acos(saturate(dot(normal, lightDir)));

@@ -101,6 +101,14 @@ D3D11_INPUT_ELEMENT_DESC VertexTextureInstance::desc[] =
 UINT VertexTextureInstance::count = 6;
 
 
+D3D11_INPUT_ELEMENT_DESC VertexGrass::desc[] =
+{
+	{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+	{ "INSTMATRIX",0, DXGI_FORMAT_R32G32_FLOAT, 1,0 , D3D11_INPUT_PER_INSTANCE_DATA, 1 },
+};
+UINT VertexGrass::count = 2;
+
+
 //////////////////////////////////////////////////////////
 
 Vertex::Vertex()
@@ -253,18 +261,3 @@ VertexTextureNormalTangentBlend::VertexTextureNormalTangentBlend(D3DXVECTOR3 pos
 
 
 
-
-VertexInstance::VertexInstance()
-{
-	position = D3DXVECTOR3(0, 0, 0);
-}
-
-VertexTextureInstance::VertexTextureInstance()
-{
-
-}
-
-VertexTextureInstance::VertexTextureInstance(D3DXVECTOR3 position, D3DXVECTOR2 uv)
-{
-
-}

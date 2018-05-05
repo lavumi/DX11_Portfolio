@@ -106,8 +106,7 @@ float4 PS(PixelInput input) : SV_TARGET
 
              //라이트 텍스쳐가 존재하는 부분만 그림자 처리 연산
             if ((saturate(projectTexCoord.x) == projectTexCoord.x) &&
-                 (saturate(projectTexCoord.y) == projectTexCoord.y) &&
-                 (lightDepthValue > 0))
+                 (saturate(projectTexCoord.y) == projectTexCoord.y))
             {
         
                //marginBias = acos(saturate(dot(normal, lightDir)));

@@ -2,7 +2,7 @@
 
 class Landscape;
 class GrassBuffer;
-class WorldBuffer;
+class Frustum;
 class Character;
 class TerrainGrass
 {
@@ -17,12 +17,13 @@ public:
 
 	void SetCharacterPos(D3DXVECTOR3* pos);
 
-
+	void SetPosByFrustum(Frustum* frustum);
 
 
 	
 	
 private:
+
 
 	void CreateBuffer();
 	void CreateBufferTemp();
@@ -36,12 +37,13 @@ private:
 
 	UINT vertexCount;
 
-	//VertexTexture* vertexData;
-	vector<D3DXMATRIX> instanceData;
+
+	//TODO 고치자 이거
+	friend class Environment;
+	vector<D3DXVECTOR2> instanceData;
+
 
 	Landscape* land;
-	D3DXMATRIX world;
-	WorldBuffer* wBuffer;
 	GrassBuffer* buffer;
 	Character* player;
 };

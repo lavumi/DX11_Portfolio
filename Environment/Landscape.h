@@ -1,8 +1,6 @@
 #pragma once
 
-//static UINT landscapeScale = 3;
-class Frustum;
-class QuadTree;
+
 class TerrainBuffer;
 class Landscape
 {
@@ -12,46 +10,37 @@ public:
 
 
 	void Initialize();
-
-
-
-
-
 	void Update();
 	void Render();
 	void RenderShadow();
+
 	void GetY(D3DXVECTOR3 &position);
-	//Brush* brush;
 
 	void SetTexture(ID3D11ShaderResourceView* diffuse) {
 		diffuseMap[0] = diffuse;
 	}
 
-
-
 	void getVertexData(VertexTextureNormalTangent* vertices) {
 		memcpy(vertices, vertexData, sizeof(VertexTextureNormalTangent) * vertexCount);
 	};
 
+	//CPU lod system
+	//void changeLOD(Frustum* frustum);
 
-	 void changeLOD(Frustum* frustum);
+	//호수 평면 세팅
+	void SetPlane(D3DXPLANE& plane);
 
-
-
-	 
-
-
-	 void SetPlane(D3DXPLANE& plane);
-
-	 void GetHeightMap(ID3D11ShaderResourceView*& heightMap) {
+	void GetHeightMap(ID3D11ShaderResourceView*& heightMap) {
 		 heightMap = this->heightMap;
 	 }
 
+	vector<D3DXVECTOR3> treePos;
 
-
-
-
-	 vector<D3DXVECTOR3> treePos;
+	void GetSize(UINT& width, UINT& height) {
+		width = worldWidth;
+		height = worldHeight;
+			
+	}
 private:
 	int testNumber = 0;
 
@@ -111,7 +100,7 @@ private:
 	TerrainBuffer* buffer;
 
 
-	QuadTree* quadTree;
+
 
 	ID3D11Buffer* vertexBuffer;
 	ID3D11Buffer* indexBuffer;

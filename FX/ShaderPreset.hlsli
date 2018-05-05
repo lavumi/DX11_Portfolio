@@ -8,11 +8,12 @@ cbuffer MatrixBuffer : register(b12)
     matrix _viewXprojection;
 };
 
+
+
 float4 MulVP(float4 input)
 {
     float4 output = mul(input, _viewXprojection);
 
-    output.z *= output.w;
     return output;
 }
 
@@ -30,7 +31,6 @@ float4 MulLightVP(float4 input)
 {
     float4 output = mul(input, _lightView);
     output = mul(output, _lightProjection);
-  //  output.z *= output.w;
     return output;
 }
 
@@ -39,6 +39,12 @@ float4 MulLightVP(float4 input)
 cbuffer CascadeShadow : register(b10)
 {
     matrix cropMatrix[4];
+}
+
+
+cbuffer GAbuffer : register(b2)
+{
+    float4 globalAmbient;
 }
 
 Texture2D _perlin : register(t14);
@@ -74,3 +80,18 @@ static float rndTable[100] =
 
 
 static const float splitedFrustum[3] = { 0.996013939f, 0.999374747f, 1 };
+
+
+
+float ConvertToLinearDepth(float Depth)
+{
+    float CameraFar, CameraNear;
+
+    CameraFar = 400.0f;
+    CameraNear = 0.1f;
+
+    float a = CameraFar / (CameraFar - CameraNear);
+    float b = (-CameraNear) / (CameraFar - CameraNear);
+
+    return b / (Depth - a);
+}

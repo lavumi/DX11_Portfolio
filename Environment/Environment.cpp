@@ -6,6 +6,7 @@
 #include "Landscape.h"
 #include "Water.h"
 #include "TerrainGrass.h"
+//#include "QuadTree.h"
 
 #include "../ProceduralGenerator/TreeMaker.h"
 
@@ -14,11 +15,16 @@
 
 Environment::Environment()
 {
+	//quadTree = 0;
 	skydome = new Skydome();
 	cloud = new Skyplane();
 	landscape = new Landscape();
 	lake = new Water();
 	grass = new TerrainGrass();
+
+
+	//quadTree = new QuadTree();
+	
 	//treeTest = new TreeMaker();
 }
 
@@ -32,9 +38,7 @@ Environment::~Environment()
 	SAFE_DELETE(lake);
 	SAFE_DELETE(grass);
 
-
-
-
+	//SAFE_DELETE(quadTree);
 }
 
 void Environment::Initialize()
@@ -44,8 +48,13 @@ void Environment::Initialize()
 	cloud->Initialize();
 
 	CreateTree(12);
-	//treeTest = new TreeMaker();
-	//treeTest->Initialize(10, 0, 10);
+
+
+	UINT width, height;
+	landscape->GetSize(width, height);
+	//quadTree->Initialize(width, height);
+	//quadTree->CreateTree();
+
 }
 
 
@@ -66,7 +75,7 @@ void Environment::CreateTree(int count)
 	DeleteTree();
 
 	for (int i = 0; i < count; i++) {
-		treeTest = new TreeMaker();
+		TreeMaker* treeTest = new TreeMaker();
 		treeTest->Initialize(landscape->treePos[i]);
 
 		trees.push_back(treeTest);
@@ -86,6 +95,12 @@ void Environment::SetLandTexture(ID3D11ShaderResourceView * diffuse)
 {
 	landscape->SetTexture(diffuse);
 }
+
+void Environment::MakeGrassPosData(Frustum * frustum)
+{
+	grass->SetPosByFrustum(frustum);
+}
+
 
 void Environment::RenderSkydome()
 {
@@ -132,7 +147,6 @@ void Environment::RenderTree()
 		singleTree->Render();
 	}
 
-//	treeTest->Render();
 }
 
 void Environment::RenderTreeLeaf()
@@ -141,13 +155,11 @@ void Environment::RenderTreeLeaf()
 	{
 		singleTree->LeafRender();
 	}
-	//treeTest->LeafRender();
 }
 
 void Environment::SetCharacter(Character  *character)
 {
 	character->GetPosition(characterPos);
-
 }
 
 void Environment::GetLandY(D3DXVECTOR3 & position)

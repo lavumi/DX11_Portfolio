@@ -1,6 +1,6 @@
 #include "../stdafx.h"
 #include "Landscape.h"
-#include "QuadTree.h"
+
 
 #include "../Shader/TerrainBuffer.h"
 //#include "../ProceduralTexture/PerlinNoise.h"
@@ -13,7 +13,7 @@ Landscape::Landscape()
 
 
 
-	quadTree=0;
+	
 	vertexData=0;
 	fullVertexData=0;
 
@@ -26,8 +26,6 @@ Landscape::Landscape()
 	wBuffer = 0;
 	buffer = 0;
 
-	quadTree = 0;
-
 	diffuseMap = 0;
 	normalMap = 0;
 	specularMap = 0;
@@ -38,7 +36,7 @@ Landscape::Landscape()
 
 Landscape::~Landscape()
 {
-	SAFE_DELETE(quadTree);
+	
 
 	SAFE_DELETE_ARRAY(vertexData);
 	SAFE_DELETE_ARRAY(fullVertexData);
@@ -80,8 +78,8 @@ void Landscape::Initialize()
 
 
 	CreateBuffer();
-	//quadTree = new QuadTree(width + 1, height + 1);
-	//quadTree->CreateTree();
+	
+	
 
 	wBuffer = new WorldBuffer();
 	wBuffer->SetWorld(world);
@@ -179,67 +177,9 @@ void Landscape::LoadHeightMap()
 	}
 	this->height = worldHeight / 32;
 	this->width = worldWidth / 32;
-	////worldWidth *= landscapeScale;
-	////worldHeight *= landscapeScale;
-	//
-	//heightData = new float[worldWidth * worldHeight * landscapeScale * landscapeScale];
-	//
-	//
-	//int counter = 0;
-	//for (UINT z = 0; z < worldHeight; z++)
-	//{
-	//	for (UINT x = 0; x < worldWidth; x++)
-	//	{
-	//		float v0 = heightTemp[z * worldWidth + x];
-	//		float v1 = heightTemp[z * worldWidth + x + 1];
-	//		float v2 = heightTemp[(z+1) * worldWidth + x];
-	//		float v3 = heightTemp[(z+1) * worldWidth + x+1];
-	//
-	//		for (UINT k = 0; k < landscapeScale; k++) {
-	//			for (UINT l = 0; l < landscapeScale; l++) {
-	//				UINT index = x * (UINT)landscapeScale + l + (z* (UINT)landscapeScale + k) * worldWidth * (UINT)landscapeScale;
-	//				float p1 = v0 + (v1 - v0) * (float)l / (float)landscapeScale;
-	//				float p2 = v2 + (v3 - v2) * (float)l / (float)landscapeScale;
-	//
-	//				heightData[index] = p1 + (p2 - p1) * (float)k / (float)landscapeScale;
-	//				counter++;
-	//			}
-	//		}
-	//
-	//
-	//
-	//
-	//		//heightData[x + 0 + (z + 0) * worldWidth * (UINT)landscapeScale] = v0;
-	//		//heightData[x + 1 + (z + 0) * worldWidth * (UINT)landscapeScale] = v0 ;
-	//		//heightData[x + 2 + (z + 0) * worldWidth * (UINT)landscapeScale] = ;
-	//		//
-	//		//heightData[x + 0 + (z + 2) * worldWidth * (UINT)landscapeScale] = ;
-	//		//heightData[x + 1 + (z + 2) * worldWidth * (UINT)landscapeScale] = ;
-	//		//heightData[x + 2 + (z + 2) * worldWidth * (UINT)landscapeScale] = ;
-	//		//
-	//		//heightData[x + 0 + (z + 2) * worldWidth * (UINT)landscapeScale] = ;
-	//		//heightData[x + 1 + (z + 2) * worldWidth * (UINT)landscapeScale] = ;
-	//		//heightData[x + 2 + (z + 2) * worldWidth * (UINT)landscapeScale] = ;
-	//
-	//	}
-	//}
-	//
-	//
-	//float x = heightData[258];
-	//
-	////heightData[worldWidth * worldHeight - 1];
-	////heightData[worldWidth * worldHeight];
-	////heightData[worldWidth * worldHeight * landscapeScale];
-	//
-	//if (counter != worldWidth * worldHeight * landscapeScale * landscapeScale)
-	//	assert(0);
-	//worldWidth *= landscapeScale;
-	//worldHeight *= landscapeScale;
-	//
-	//
-	//SAFE_DELETE_ARRAY(heightTemp);
-	worldWidth--;
-	worldHeight--;
+	
+	//worldWidth--;
+	//worldHeight--;
 }
 
 void Landscape::CreateVertexData()
@@ -262,14 +202,6 @@ void Landscape::CreateVertexData()
 			vertexData[index].uv.y = (float)(z) * 32;// *landscapeScale;// (float)height;
 
 
-			//vertexData[index].position.x = (float)x ;
-			//vertexData[index].position.y = (float)heightData[index];
-			//vertexData[index].position.z = (float)z;
-			//
-			//vertexData[index].uv.x = (float)(x);// (float)width;
-			//vertexData[index].uv.y = (float)(z);// (float)height;
-			//
-			//vertexData[index].normal = D3DXVECTOR3(0, 0, 0);
 		}
 	}
 }
@@ -295,42 +227,15 @@ void Landscape::CreateIndexData()
 		assert(0);
 }
 
-
-
-void Landscape::CreateFullIndexData()
-{
-	//indexCount = width * height * 6;
-	//indexData;// = new UINT[indexCount];
-
-	UINT count = 0;
-	for (UINT z = 0; z < worldHeight; z++)
-	{
-		for (UINT x = 0; x < worldWidth; x++)
-		{
-
-			fullIndexData.push_back((worldWidth + 1) * z + x);
-			fullIndexData.push_back((worldWidth + 1) * (z + 1) + x);
-			fullIndexData.push_back((worldWidth + 1) * z + x + 1);
-			fullIndexData.push_back((worldWidth + 1) * z + x + 1);
-			fullIndexData.push_back((worldWidth + 1) * (z + 1) + x);
-			fullIndexData.push_back((worldWidth + 1) * (z + 1) + (x + 1));
-			//count += 6;
-		}//for(x)
-	}//for(z)
-
-	fullIndexCount = fullIndexData.size();
-}
 void Landscape::CreateFullVertexData()
 {
-	fullVertexCount = (worldWidth + 1) * (worldHeight + 1);
+	fullVertexCount = worldWidth * worldHeight;
 
 	UINT heightIndex = 0;
 	fullVertexData = new VertexTextureNormalTangent[fullVertexCount];
-	for (UINT z = 0; z <= worldHeight; z++)
-	{
-		for (UINT x = 0; x <= worldWidth; x++)
-		{
-			int index = (worldWidth + 1) * z + x;
+	for (UINT z = 0; z < worldHeight; z++)	{
+		for (UINT x = 0; x < worldWidth; x++)	{
+			int index = worldWidth  * z + x;
 
 			fullVertexData[index].position.x = (float)x ;
 			fullVertexData[index].position.y = heightData[index];
@@ -345,29 +250,22 @@ void Landscape::CreateFullVertexData()
 
 
 }
-/*
-void Landscape::CreateQuadVertexData()
+void Landscape::CreateFullIndexData()
 {
-	tessVertexCount = (tessWidth + 1) * (tessHeight + 1);
+	UINT count = 0;
+	for (UINT z = 0; z < worldHeight-1; z++){
+		for (UINT x = 0; x < worldWidth-1; x++){
+			fullIndexData.push_back(worldWidth * z + x);
+			fullIndexData.push_back(worldWidth * (z + 1) + x);
+			fullIndexData.push_back(worldWidth * z + x + 1);
+			fullIndexData.push_back(worldWidth * z + x + 1);
+			fullIndexData.push_back(worldWidth * (z + 1) + x);
+			fullIndexData.push_back(worldWidth * (z + 1) + (x + 1));
+		}//for(x)
+	}//for(z)
 
-	UINT heightIndex = 0;
-	tessVertexData = new VertexTextureNormalTangent[tessVertexCount];
-	for (UINT z = 0; z <= tessHeight; z++)
-	{
-		for (UINT x = 0; x <= tessWidth; x++)
-		{
-			int index = (tessWidth + 1) * z + x;
-
-			tessVertexData[index].position.x = (float)x * 32;
-			tessVertexData[index].position.y = 0; //(float)heightData[index] / 7.5f - 18;
-			tessVertexData[index].position.z = (float)z * 32;
-
-			tessVertexData[index].uv.x = (float)(x) * 32;// (float)width;
-			tessVertexData[index].uv.y = (float)(z) * 32;// (float)height;
-		}
-	}
+	fullIndexCount = fullIndexData.size();
 }
-*/
 
 
 void Landscape::CreateNormalData()
@@ -411,7 +309,6 @@ void Landscape::CreateNormalData()
 	}
 }
 
-
 void Landscape::CreateBuffer()
 {
 
@@ -452,21 +349,6 @@ void Landscape::CreateBuffer()
 
 
 
-	//D3D11_MAPPED_SUBRESOURCE isubResource = { 0 };
-	//
-	//ZeroMemory(&subResource, sizeof(D3D11_MAPPED_SUBRESOURCE));
-	//D3D::GetDeviceContext()->Map
-	//(
-	//	indexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &isubResource
-	//);
-	//
-	//memcpy(isubResource.pData, &indexData[0], sizeof(UINT) * indexData.size());
-	//
-	//D3D::GetDeviceContext()->Unmap(indexBuffer, 0);
-
-
-
-
 
 	vertexDesc = { 0 };
 	vertexDesc.Usage = D3D11_USAGE_DEFAULT;
@@ -502,7 +384,8 @@ void Landscape::CreateBuffer()
 
 
 
-
+	SAFE_DELETE_ARRAY(fullVertexData);
+	fullIndexData.clear();
 
 
 }
@@ -564,40 +447,24 @@ void Landscape::GetY(D3DXVECTOR3 &position)
 	float deltaZ = position.z - (float)z;
 
 
-	if (x < 0 || x >= 512)
+	if (x < 0 || x >= worldWidth)
 		return;
-	if (z < 0 || z >= 512)
+	if (z < 0 || z >= worldHeight)
 		return;
 
 
 
-	UINT index0 = (511 + 1) * z + x;
-	UINT index1 = (511 + 1) *(z + 1) + x;
-	UINT index2 = (511 + 1) * z + x + 1;
-	UINT index3 = (511 + 1) *(z + 1) + x + 1;
-
-
-
-	//float height1 = heightData[index0] * (1 - deltax) + heightData[index1] * deltax;
-	//float height2 = heightData[index2] * (1 - deltax) + heightData[index3] * deltax;
-	//
-	//position.y = height1 * (1 - deltaz) + height2 * deltaz;
-
-
+	UINT index0 = worldWidth * z + x;
+	UINT index1 = worldWidth *(z + 1) + x;
+	UINT index2 = worldWidth * z + x + 1;
+	UINT index3 = worldWidth *(z + 1) + x + 1;
 
 	float v0 = heightData[index0];
 	float v1 = heightData[index1];
 	float v2 = heightData[index2];
 	float v3 = heightData[index3];
 	
-	////float nx = vertexData[index0].normal.x;
-	//
-	//float deltaX = (position.x - v0.x);
-	//float deltaZ = (position.z - v0.z);
 	float temp;
-
-	//temp = v0 + (v3 - v0) * deltaZ;
-
 
 	if (deltaX + deltaZ <= 1)
 		temp = v0 + (v2 - v0) * deltaX + (v1 - v0)* deltaZ;
@@ -611,32 +478,32 @@ void Landscape::GetY(D3DXVECTOR3 &position)
 	position.y = temp;
 }
 
-void Landscape::changeLOD(Frustum* frustum)
-{
-
-	vector<UINT> indexDataTemp;
-	quadTree->setIndexByLOD(indexDataTemp, frustum);
-
-	D3D11_MAPPED_SUBRESOURCE subResource = { 0 };
-
-	ZeroMemory(&subResource, sizeof(D3D11_MAPPED_SUBRESOURCE));
-	D3D::GetDeviceContext()->Map
-	(
-		indexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &subResource
-	);
-
-	if (indexDataTemp.size() == 0) {
-		D3D::GetDeviceContext()->Unmap(indexBuffer, 0);
-		indexCount = indexDataTemp.size();
-		return;
-	}
-		
-	memcpy(subResource.pData, &indexDataTemp[0], sizeof(UINT) * indexDataTemp.size());
-
-	D3D::GetDeviceContext()->Unmap(indexBuffer, 0);
-	indexCount = indexDataTemp.size();
-
-}
+//void Landscape::changeLOD(Frustum* frustum)
+//{
+//
+//	vector<UINT> indexDataTemp;
+////	quadTree->setIndexByLOD(indexDataTemp, frustum);
+//
+//	D3D11_MAPPED_SUBRESOURCE subResource = { 0 };
+//
+//	ZeroMemory(&subResource, sizeof(D3D11_MAPPED_SUBRESOURCE));
+//	D3D::GetDeviceContext()->Map
+//	(
+//		indexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &subResource
+//	);
+//
+//	if (indexDataTemp.size() == 0) {
+//		D3D::GetDeviceContext()->Unmap(indexBuffer, 0);
+//		indexCount = indexDataTemp.size();
+//		return;
+//	}
+//		
+//	memcpy(subResource.pData, &indexDataTemp[0], sizeof(UINT) * indexDataTemp.size());
+//
+//	D3D::GetDeviceContext()->Unmap(indexBuffer, 0);
+//	indexCount = indexDataTemp.size();
+//
+//}
 
 void Landscape::SetPlane(D3DXPLANE & plane)
 {

@@ -33,6 +33,7 @@
 #include "../Shader/VPBuffer.h"
 #include "../Shader/LightBuffer.h"
 #include "../Shader/CascadeShadowBuffer.h"
+#include "../Shader/GAbuffer.h"
 
 
 #include "../System/TextManager.h"
@@ -66,6 +67,7 @@ RenderingManager::RenderingManager()
 	shadowBuffer = new CascadeShadowBuffer();
 	vpBuffer = new VPBuffer();
 	lightBuffer = new LightBuffer(light);
+	gaBuffer = new GAbuffer();
 
 	frustum = new Frustum();
 
@@ -93,19 +95,15 @@ RenderingManager::~RenderingManager()
 	SAFE_DELETE(shadowBuffer);
 	SAFE_DELETE(vpBuffer);
 	SAFE_DELETE(lightBuffer);
+	SAFE_DELETE(gaBuffer);
 }
 
-void RenderingManager::Initianlize(TextManager* txt, Environment* envi)
+void RenderingManager::Initianlize(Environment* envi)
 {
-	txtManager = txt;
 	environment = envi;
 
 	sampler->SetDefault();
 	
-
-	frustum->Initialize(light, shadowBuffer);
-
-
 	depthShadowTexture->IntializeShadowTexture(3);
 	shadowTexture->Initialize();
 	lakeReflectionTexture->Initialize();
@@ -117,13 +115,19 @@ void RenderingManager::Initianlize(TextManager* txt, Environment* envi)
 
 
 
+	frustum->Initialize(mainRendering, light);
+
+
+
+
 	noise->MakePerlinNoise();
 
 	grassTexture->DrawTexture();
 	environment->SetLandTexture(grassTexture->diffuse);
 
 
-	
+	float light = 0.3f;
+	gaBuffer->SetGA(D3DXCOLOR(light, light, light, 1));
 
 
 	D3D::GetDeviceContext()->PSSetShaderResources(14, 1, noise->GetPerlinNoise());
@@ -144,12 +148,10 @@ void RenderingManager::Test(TestCube * testcube)
 
 void RenderingManager::Update()
 {
+	frustum->Update();
 
 	light->Update();
 	lightBuffer->SetBuffers();
-
-
-	frustum->Update();
 
 	for (UINT i = 0; i < 3; i++) {
 		cropMatrix[i] = frustum->GetCropMatrix(i);
@@ -159,17 +161,13 @@ void RenderingManager::Update()
 	shadowBuffer->UpdateMatrix(cropMatrix);
 
 	shadowBuffer->SetBuffers();
+
+	gaBuffer->SetBuffer();
+	
 }
 
 void RenderingManager::Render()
 {
-	//TreeRenderTest();
-	//
-	//return;
-
-
-
-
 
 	LightView();
 	RenderShadow();
@@ -375,13 +373,13 @@ void RenderingManager::RenderMain()
 		assert(shaderManager->SetShader(L"SkydomeShader"));
 		environment->RenderSkydome();
 
-		D3D::Get()->SetBlender(D3D::BL_state::Add);
-
-		assert(shaderManager->SetShader(L"SkyplaneShader"));
-		environment->RenderSkyplane();
-
-
-		D3D::Get()->SetBlender(D3D::BL_state::Off);
+		//D3D::Get()->SetBlender(D3D::BL_state::Add);
+		//
+		//assert(shaderManager->SetShader(L"SkyplaneShader"));
+		//environment->RenderSkyplane();
+		//
+		//
+		//D3D::Get()->SetBlender(D3D::BL_state::Off);
 	}
 	D3D::Get()->SetDepthStencilState(D3D::DS_state::onState);
 	rasterizer->SetOnCullMode();
@@ -481,7 +479,11 @@ void RenderingManager::FinalRender()
 	D3D::Get()->SetDepthStencilState(D3D::DS_state::offState);
 	D3D::Get()->SetBlender(D3D::BL_state::Linear);
 	assert(shaderManager->SetShader(L"FontShader"));
-	txtManager->Render();
+	TextManager::Get()->Render();
+
+
+
+
 
 	D3D::Get()->SetBlender(D3D::BL_state::Off);
 	rasterizer->SetOnCullMode();

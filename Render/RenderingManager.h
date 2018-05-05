@@ -20,20 +20,18 @@ class OrthoWindowPlane;
 class CascadeShadowBuffer;
 class VPBuffer;
 class LightBuffer;
+class GAbuffer;
 
 class Frustum;
 
 
 class Character;
-
-
-class TextManager;
 class RenderingManager {
 public:
 	RenderingManager();
 	~RenderingManager();
 
-	void Initianlize(TextManager*, Environment*);
+	void Initianlize(Environment*);
 
 	void AddCharacter(Character* );
 	void Test(TestCube* testcube);
@@ -41,6 +39,10 @@ public:
 	void Update();
 
 	void Render();
+
+	Frustum* GetFrustum() {
+		return frustum;
+	}
 private:
 
 	void TreeRenderTest();
@@ -84,6 +86,7 @@ private:
 	CascadeShadowBuffer* shadowBuffer; //10¹ø ½½·Ô
 	VPBuffer* vpBuffer;       //12¹ø ½½·Ô
 	LightBuffer* lightBuffer;//11¹ø ½½·Ô
+	GAbuffer* gaBuffer;//PS2¹ø ½½·Ô
 
 	D3DXMATRIX view, projection;
 
@@ -101,8 +104,6 @@ private:
 	//Landscape
 	Environment* environment;
 
-
-	TextManager* txtManager;
 
 	TestCube* testcube;
 

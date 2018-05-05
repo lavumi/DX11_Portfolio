@@ -9,7 +9,7 @@
 Character::Character()
 {
 	model = new ModelScene();
-	position = D3DXVECTOR3(158, 0, 158);
+	position = D3DXVECTOR3(208, 0, 208);
 	D3DXMatrixTranslation(&world, position.x, position.y, position.z);
 
 	moveState = false;
@@ -44,12 +44,12 @@ void Character::Initialize(Environment* land)
 
 
 	this->land = land;
-	position = D3DXVECTOR3(140, 0, 110);
+	position = D3DXVECTOR3(160, 0, 160);
 	land->GetLandY(position);
 	D3DXMatrixTranslation(&world, position.x, position.y, position.z);
 	speed = 0.03f;
 
- 	
+	textID = TextManager::Get()->AddText(D3DXVECTOR2(10, 32), "Position");
 }
 
 void Character::MoveTo(float x, float y, float z)
@@ -116,6 +116,25 @@ void  Character::MoveControl()
 	else
 		SetAni(2);
 	
+	PrintCharacterPos();
+}
+
+void Character::PrintCharacterPos()
+{
+	strcpy_s(text, "Position : ");
+
+	_itoa_s((int)position.x, frametxt, 10);
+	strcat_s(text, frametxt);
+	strcat_s(text, ", ");
+
+	_itoa_s((int)position.y, frametxt, 10);
+	strcat_s(text, frametxt);
+	strcat_s(text, ", ");
+
+	_itoa_s((int)position.z, frametxt, 10);
+	strcat_s(text, frametxt);
+	strcat_s(text, ", ");
+	TextManager::Get()->ChangeText(textID, text);
 }
 
 void Character::SetFallowCamera()

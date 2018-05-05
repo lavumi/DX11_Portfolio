@@ -197,7 +197,7 @@ cbuffer PSBuffer : register(b0)
 {
     float4 ambient;
     float4 diffuse;
-    float4 globalAmbient;
+  //  float4 globalAmbient;
 
 };
 
@@ -254,6 +254,7 @@ PixelOut PS(DomainOut input)
 
     diffuseMap.a = input.clip;
 
+    diffuseMap *= globalAmbient;
 
 
 

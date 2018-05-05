@@ -4,7 +4,7 @@
 struct VertexInput
 {
     float4 position : POSITION0;
-//   float4 world0 : INSTMATRIX0;
+    float2 world0 : INSTMATRIX0;
 //   float4 world1 : INSTMATRIX1;
 //   float4 world2 : INSTMATRIX2;
 //   float4 world3 : INSTMATRIX3;
@@ -22,8 +22,9 @@ PixelInput VS(VertexInput input)
     PixelInput output;
     input.position.w = 1;
 
-//    float4x4 world = float4x4(input.world0, input.world1, input.world2, input.world3);
-    output.position = mul(input.position, _world);
+    //float4x4 world = float4x4(input.world0, input.world1, input.world2, input.world3);
+    output.position = input.position;
+    output.position.xz += input.world0.xy;
    // output.position = input.position;
 
 
@@ -209,6 +210,7 @@ float4 PS(PixelInput input) : SV_Target
     float shadowValue = _lightMap.Sample(samp[1], projectTexCoord).g;
     color *= shadowValue;
    
+    color *= globalAmbient;
 
 
 

@@ -7,23 +7,12 @@
 #include "../Object/Character.h"
 
 #include "../Render/RenderingManager.h"
-#include "../System/TextManager.h"
+
 
 void GameMain::Initialize()
 {
 	renderManager = new RenderingManager();
-	txtManager = new TextManager();
-
-
-	char frametxt[5];
-	int frame = Frames::Get()->getFrame();
-	_itoa_s(frame, frametxt, 5);
-
-
-	char text[16];
-	strcpy_s(text, "FPS : ");
-	strcat_s(text, frametxt);
-	txtManager->AddText(D3DXVECTOR2(10, 10), text);
+	//txtManager = new TextManager();
 
 	Camera::Get();
 	UserInterface::Get();
@@ -40,7 +29,7 @@ void GameMain::Initialize()
 
 
 
-	renderManager->Initianlize(txtManager, environment);
+	renderManager->Initianlize(environment);
 	renderManager->AddCharacter(player);
 	renderManager->Test(testcube);
 
@@ -67,10 +56,6 @@ void GameMain::Destroy()
 
 void GameMain::Update()
 {
-	environment->Update();
-	testcube->Update();
-	player->Update();
-
 
 	if (Keyboard::Get()->KeyUp(VK_SPACE)) {
 
@@ -79,21 +64,19 @@ void GameMain::Update()
 	ControlCamera();
 	Camera::Get()->Update();
 
+
+	environment->Update();
+	environment->MakeGrassPosData(renderManager->GetFrustum());
+	 
+
+	testcube->Update();
+	player->Update();
+
 	renderManager->Update();
 
 
 
 
-	char frametxt[5];
-	int frame = (int)Frames::Get()->getFrame();
-	_itoa_s(frame, frametxt, 10);
-
-	
-
-	char text[16];
-	strcpy_s(text, "FPS : ");
-	strcat_s(text, frametxt);
-	txtManager->ChangeText(0, text);
 }
 
 

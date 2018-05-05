@@ -154,19 +154,8 @@ void RenderTexture::Initialize(UINT count)
 		(float)this->width, (float)this->height,
 		Camera::screenNear, Camera::screenDepth
 	);
-	orthoMatrix._33 /= Camera::screenDepth;
-	orthoMatrix._43 /= Camera::screenDepth;
 
 	D3DXMatrixPerspectiveFovLH(&projectionMatrix, ((float)D3DX_PI / 4.0f), ((float)this->width / (float)this->height), Camera::screenNear, Camera::screenDepth);
-
-	//중요! 기억해놓자
-	//이걸 함으로서 linear한 depth buffer 생성
-	//쉐이더에서도 한번 더 연산을 해줘야함
-	//버텍스의 크기가 매우 커지면 오류가 생긴다.
-	//water.cpp의 width, height를 1로 해놓고 확인해보자
-	projectionMatrix._33 /= Camera::screenDepth;
-	projectionMatrix._43 /= Camera::screenDepth;
-
 
 }
 

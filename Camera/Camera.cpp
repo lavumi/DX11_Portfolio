@@ -8,12 +8,22 @@ const float Camera::screenNear = 0.1f;
 const float Camera::screenDepth = 400.0f;
 
 Camera::Camera()
-	: position(0, 0, -30)
-	, forward(0, 1, 0), right(0, 0, 0), up(0, 0, 0)
-	, rotate(0, 0)
-	, translationSpeed(48.0f), rotationSpeed(1.5f)
-	, targetpos(nullptr), angle_pie(3.141592f/8*3), angle_theta(3.141592f/2), targetDistance(8)
 {
+	position = D3DXVECTOR3(0, 0, -30);
+	forward = D3DXVECTOR3(0, 1, 0);
+	right = D3DXVECTOR3(0, 0, 0);
+	up = D3DXVECTOR3(0, 0, 0);
+	rotate = D3DXVECTOR2(0, 0);
+	translationSpeed = 38.0f;
+	rotationSpeed = 1.5f;
+	targetpos = nullptr;
+	angle_pie = 3.141592f / 8 * 3;
+	angle_theta = 3.141592f / 2;
+	targetDistance = 6;
+	targetHeightOffset = 2;
+
+
+
 	D3DXMatrixIdentity(&view);
 
 
@@ -129,11 +139,13 @@ void Camera::UpdateViewMatrix()
 void Camera::Update()
 {
 	if (targetpos != nullptr) {
+		//구면좌표계를 사용하여 카메라 위치 세팅
 		D3DXVECTOR3 cameraChildPos;
 		cameraChildPos.x = targetDistance * sinf(angle_pie) * cosf(angle_theta);
 		cameraChildPos.z = -targetDistance * sinf(angle_pie) * sinf(angle_theta) ;
-		cameraChildPos.y = targetDistance * cosf(angle_pie)+2;
+		cameraChildPos.y = targetDistance * cosf(angle_pie);
 		position = *targetpos + cameraChildPos;
+		position.y += targetHeightOffset;
 
 		forward = - cameraChildPos;
 		D3DXVec3Normalize(&forward, &forward);

@@ -4,9 +4,8 @@
 class Environment;
 class Character;
 class TestCube;
-
 class RenderingManager;
-class TextManager;
+
 class GameMain : public Window
 {
 public:
@@ -17,7 +16,6 @@ public:
 
 private:
 	RenderingManager * renderManager;
-	TextManager* txtManager;
 	void ControlCamera();
 
 
@@ -29,11 +27,6 @@ private:
 	
 	Character* player;
 
-
-
-
-
-
-
+	
 	int testvalue = 0;
 };

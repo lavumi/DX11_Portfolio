@@ -2,6 +2,21 @@
 #include "TextManager.h"
 
 
+TextManager* TextManager::instance = nullptr;
+
+TextManager * TextManager::Get()
+{
+	if (instance == nullptr)
+		instance = new TextManager();
+	return instance;
+}
+
+void TextManager::Delete()
+{
+	SAFE_DELETE(instance);
+}
+
+
 TextManager::TextManager()
 {
 	m_Font = 0;
@@ -16,21 +31,6 @@ TextManager::TextManager()
 
 	m_screenHeight = info.screenHeight;
 	m_screenWidth = info.screenWidth;
-
-	HRESULT hr;
-	hr = D3DX11CreateShaderResourceViewFromFile(D3D::GetDevice(), L"./Contents/Font/font.dds", nullptr, nullptr, &fontImage, nullptr);
-	assert(SUCCEEDED(hr));
-	
-
-	LoadFontData();
-
-	wBuffer = new WorldBuffer();
-
-
-	D3DXMATRIX world;
-	D3DXMatrixIdentity(&world);
-
-	wBuffer->SetWorld(world);
 }
 
 TextManager::~TextManager()
@@ -39,6 +39,25 @@ TextManager::~TextManager()
 	SAFE_DELETE(wBuffer);
 	SAFE_RELEASE(fontImage);
 
+}
+
+
+void TextManager::Initizlize()
+{
+
+
+	HRESULT hr;
+	hr = D3DX11CreateShaderResourceViewFromFile(D3D::GetDevice(), L"./Contents/Font/font.dds", nullptr, nullptr, &fontImage, nullptr);
+	assert(SUCCEEDED(hr));
+
+	LoadFontData();
+
+	wBuffer = new WorldBuffer();
+
+
+	D3DXMATRIX world;
+	D3DXMatrixIdentity(&world);
+	wBuffer->SetWorld(world);
 }
 
 UINT TextManager::AddText(D3DXVECTOR2 position, char * text)
@@ -63,7 +82,6 @@ void TextManager::ChangeText(UINT index, char * text)
 
 void TextManager::Render()
 {
-
 	D3D::GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	wBuffer->SetBuffer();
 	D3D::GetDeviceContext()->PSSetShaderResources(0, 1, &fontImage);
@@ -100,15 +118,6 @@ void TextManager::LoadFontData()
 		fin >> m_Font[i].size; 
 	}  
 	fin.close(); 
-}
-
-void TextManager::BuildVertexArray(int textBoxNum, char* text, int positionX, int positionY, float r, float g, float b)
-{
-
-}
-
-void TextManager::CreateBuffer()
-{
 }
 
 TextManager::TextBox::TextBox()

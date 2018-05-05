@@ -3,8 +3,11 @@
 class TextBuffer;
 class TextManager {
 public:
-	TextManager();
-	~TextManager();
+	static TextManager* Get();
+	static void Delete();
+
+
+	void Initizlize();
 
 	UINT AddText(D3DXVECTOR2 position, char* text);
 	void ChangeText(UINT index, char* text);
@@ -14,7 +17,11 @@ public:
 
 
 private:
+	static TextManager* instance;
 
+
+	TextManager();
+	~TextManager();
 	UINT LetterCount = 95;
 
 	struct FontType { 
@@ -52,10 +59,6 @@ private:
 
 	void LoadFontData();
 
-	void BuildVertexArray(int textBoxNum, char* text, int positionx, int positiony, float r, float g, float b);
-	void CreateBuffer();
-	
-	
 	
 
 	ID3D11ShaderResourceView* fontImage;

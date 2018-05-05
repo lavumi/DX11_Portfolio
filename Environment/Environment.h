@@ -7,6 +7,10 @@ class Skyplane;
 class TerrainGrass;
 class Character;
 class TreeMaker;
+
+
+
+class Frustum;
 class Environment {
 public:
 	Environment();
@@ -21,6 +25,7 @@ public:
 
 	void SetLandTexture(ID3D11ShaderResourceView* diffuse);
 
+	void MakeGrassPosData(Frustum* frustum);
 
 	void RenderSkydome();
 	void RenderSkyplane();
@@ -50,11 +55,11 @@ private:
 	Water* lake;
 	TerrainGrass* grass;
 
-	TreeMaker* treeTest;
-
-
 	vector<TreeMaker*> trees;
 	
+
+
+	//QuadTree* quadTree;
 	D3DXVECTOR3* characterPos;
 
 

@@ -119,7 +119,7 @@ void TreeMaker::Render()
 void TreeMaker::LeafRender()
 {
 	UINT stride[2];
-	stride[0] = sizeof(VertexTextureInstance);
+	stride[0] = sizeof(VertexTexture);
 	stride[1] = sizeof(D3DXMATRIX);
 
 

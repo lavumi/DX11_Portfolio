@@ -1,13 +1,14 @@
 #pragma once
 class LightManager;
 class CascadeShadowBuffer;
+class RenderTexture;
 class Frustum
 {
 public:
 	Frustum();
 	~Frustum();
 
-	void Initialize(LightManager* light, CascadeShadowBuffer* buffer);
+	void Initialize(RenderTexture* mainRender, LightManager* light);
 
 	
 	void Update();
@@ -29,8 +30,13 @@ public:
 private:
 	D3DXPLANE m_planes[6];
 	D3DXVECTOR3* vtx;
+
+	
 	void SetFrustum();
 
+
+	//mainRenderingTexture 지정해두자
+	RenderTexture* mainRenderTarget;
 
 	vector<D3DXVECTOR3> splitedVtx;
 	UINT splitCount;
@@ -50,5 +56,4 @@ private:
 	ID3D11Buffer* vertexBuffer;
 	ID3D11Buffer* indexBuffer;
 
-	CascadeShadowBuffer* csBuffer;
 };

@@ -22,6 +22,11 @@ public:
 	ID3D11ShaderResourceView** GetDepthBuffer() {
 		return &dbResourceView;
 	}
+
+	void GetProjection(D3DXMATRIX& proj) {
+		proj = projectionMatrix;
+	}
+
 	void ClearDepthStencil(UINT clearFlag, float depth, UINT8 stencil);
 private:
 	UINT width, height;

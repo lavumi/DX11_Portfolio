@@ -11,7 +11,7 @@ public:
 		psData.diffuse = D3DXCOLOR(0.7f, 0.7f, 0.7f, 1.0f);
 		psData.specular = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 		psData.shininess = 70;
-		psData.globalAmbient = D3DXCOLOR(0.6f, 0.6f, 0.6f, 1.0f);
+//		psData.globalAmbient = D3DXCOLOR(0.6f, 0.6f, 0.6f, 1.0f);
 		psData.scale = 0.1f;
 		psData.layer = 32;
 
@@ -55,7 +55,7 @@ public:
 		D3DXCOLOR ambient;
 		D3DXCOLOR diffuse;
 		D3DXCOLOR specular;
-		D3DXCOLOR globalAmbient;
+	//	D3DXCOLOR globalAmbient;
 		float shininess;
 		float scale;
 		float layer;

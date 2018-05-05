@@ -9,7 +9,7 @@ public:
 	{
 		psData.ambient = D3DXCOLOR(0.5f, 0.5f, 0.5f, 1.0f);
 		psData.diffuse = D3DXCOLOR(0.7f, 0.7f, 0.7f, 1.0f);
-		psData.globalAmbient = D3DXCOLOR(0.6f, 0.6f, 0.6f, 1.0f);
+	//	psData.globalAmbient = D3DXCOLOR(0.3f, 0.3f, 0.3f, 1.0f);
 		D3DXMATRIX world;
 		D3DXMatrixIdentity(&world);
 		gdData.invTransWorld = world;
@@ -25,10 +25,10 @@ public:
 		UpdateDSBuffer(&gdData, sizeof(DS_Data));
 	}
 
-	void SetMaterial(D3DXCOLOR& ambient, D3DXCOLOR& diffuse, D3DXCOLOR& globalAmbient) {
+	void SetMaterial(D3DXCOLOR& ambient, D3DXCOLOR& diffuse) {
 		psData.ambient = ambient;
 		psData.diffuse = diffuse;
-		psData.globalAmbient = globalAmbient;
+	//	psData.globalAmbient = globalAmbient;
 
 		UpdatePSBuffer(&psData, sizeof(PS_DATA));
 	}
@@ -58,7 +58,7 @@ public:
 	{
 		D3DXCOLOR ambient;
 		D3DXCOLOR diffuse;
-		D3DXCOLOR globalAmbient;
+	//	D3DXCOLOR globalAmbient;
 	//	D3DXMATRIX cameraSpaceBuffer;
 	};
 	struct HS_DATA {

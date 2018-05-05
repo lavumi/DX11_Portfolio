@@ -103,7 +103,7 @@ cbuffer PSBuffer : register(b0)
     float4 ambient;
     float4 diffuse;
     float4 specular;
-    float4 globalAmbient;
+ //   float4 globalAmbient;
     float shininess;
     float _translation;
     float _scale;

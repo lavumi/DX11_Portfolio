@@ -114,6 +114,7 @@ private:
 	//FallowCamera
 	D3DXVECTOR3* targetpos;
 	float targetDistance;
+	float targetHeightOffset;
 
 	//fallowcamera용 회전 변수
 	float angle_pie, angle_theta;

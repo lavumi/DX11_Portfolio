@@ -41,7 +41,12 @@ private:
 
 	UINT currentAnime;
 
+
+	UINT textID;
+	char text[64];
+	char frametxt[5];
 	
+	void PrintCharacterPos();
 
 	//방향 각도
 	float* forwardAngle;

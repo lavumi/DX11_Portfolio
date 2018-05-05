@@ -58,6 +58,15 @@ void Frames::Update()
 	}
 
 	lastTime = currentTime;
+
+
+
+	_itoa_s((int)framePerSecond, frametxt, 10);
+	
+	strcpy_s(text, "FPS : ");
+	strcat_s(text, frametxt);
+
+	TextManager::Get()->ChangeText(0, text);
 }
 
 void Frames::Print()
@@ -65,13 +74,16 @@ void Frames::Print()
 	
 }
 
-void Frames::Start()
+void Frames::Initialize()
 {
 	if(!isTimerStopped)
 		assert(false);
 
 	QueryPerformanceCounter((LARGE_INTEGER *)&lastTime);
 	isTimerStopped = false;
+
+
+	TextManager::Get()->AddText(D3DXVECTOR2(10, 10), "");
 }
 
 void Frames::Stop()

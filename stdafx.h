@@ -64,13 +64,11 @@ static float RandFloat(float min, float max) {
 #include "./System/Frames.h"
 #include "./System/TweakBar.h"
 
-#include "./Render/VertexLayout.h"
 #include "./Render/UserInterface.h"
 
-
-
-
+#include "./Render/VertexLayout.h"
 #include "./Shader/WorldBuffer.h"
+
 
 #include "./Camera/Camera.h"
 
@@ -79,5 +77,7 @@ static float RandFloat(float min, float max) {
 #include "./Utility/BinaryFile.h"
 
 
+
+#include "./System/TextManager.h"
 
 

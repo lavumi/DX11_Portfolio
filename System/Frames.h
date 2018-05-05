@@ -10,14 +10,10 @@ public:
 	static float TimeElapsed() { return isTimerStopped ? 0.0f : timeElapsed; }
 
 
-	float getFrame() {
-		return framePerSecond;
-	}
-
 	void Update();
 	void Print();
 
-	void Start();
+	void Initialize();
 	void Stop();
 
 	float FramePerSecond() const { return framePerSecond; }
@@ -42,4 +38,9 @@ private:
 	UINT frameCount;///< 프레임 수
 	float runningTime;///< 진행 시간
 	float framePerSecond;///< FPS
+
+
+	//프레임 표시용
+	char text[16];
+	char frametxt[5];
 };

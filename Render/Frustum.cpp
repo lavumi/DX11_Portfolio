@@ -3,6 +3,7 @@
 #include "../System/BoundingBox.h"
 #include "LightManager.h"
 #include "../Shader/CascadeShadowBuffer.h"
+#include "../Render/RenderTexture.h"
 
 Frustum::Frustum()
 {
@@ -15,20 +16,22 @@ Frustum::~Frustum()
 {
 }
 
-void Frustum::Initialize(LightManager* light, CascadeShadowBuffer* buffer)
+void Frustum::Initialize(RenderTexture* mainRender, LightManager* light)
 {
 	lightM = light;
-	csBuffer = buffer;
+	mainRenderTarget = mainRender;
 }
 
 void Frustum::SetFrustum()
 {
 
-	D3DXMATRIX view, projection;
+	D3DXMATRIX view, projection, projection2;
 	Camera::Get()->GetView(&view);
-	D3D::Get()->GetProjection(&projection);
+
+	mainRenderTarget->GetProjection(projection);
+	//D3D::Get()->GetProjection(&projection);
 	vtx = new D3DXVECTOR3[8];
-	
+	D3DXVECTOR4 temp[8];
 
 	//뷰, 프로젝션 연산이 끝나면 모든 점은 (-1, -1, 0) ~ (1, 1, 1)  사이의 값으로 변환된다
 	//그 꼭지점 값들을 지정해둔다...
@@ -43,16 +46,29 @@ void Frustum::SetFrustum()
 	vtx[7] = D3DXVECTOR3(-1.0f, 1.0f, 1.0f);
 
 
+
 	//뷰, 프로젝션 연산의 역행렬을 구해서
 	D3DXMATRIX viewProj = view * projection;
 	D3DXMatrixInverse(&ViewProjectionInverse, NULL, &viewProj);
 
-
 	//각 점에 곱해주면 점들의 기존 위치를 알수 있게 된다.
 	//이 점들을 이용해 평면을 만든다.
-	for (int i = 0; i < 8; i++)
+	for (int i = 0; i < 8; i++) {
 		D3DXVec3TransformCoord(&vtx[i], &vtx[i], &ViewProjectionInverse);
+	}
+		
+	
+	 vtx[4] = vtx[0] * 0.5f + vtx[4]*0.5f;
+	 vtx[5] = vtx[1] * 0.5f + vtx[5]*0.5f;
+	 vtx[6] = vtx[2] * 0.5f + vtx[6]*0.5f;
+	 vtx[7] = vtx[3] * 0.5f + vtx[7]*0.5f;
 
+	
+	 D3DXVECTOR3 closeVtx[3];
+
+	 closeVtx[0] = vtx[0] * 0.5f + vtx[4] * 0.5f;
+	 closeVtx[1] = vtx[1] * 0.5f + vtx[5] * 0.5f;
+	 closeVtx[2] = vtx[2] * 0.5f + vtx[6] * 0.5f;
 
 	D3DXPlaneFromPoints(&m_planes[0], &vtx[5], &vtx[6], &vtx[7]);		// 원 평면(far)
 	D3DXPlaneFromPoints(&m_planes[1], &vtx[0], &vtx[4], &vtx[7]);		// 좌 평면(left)
@@ -60,6 +76,10 @@ void Frustum::SetFrustum()
 	//	D3DXPlaneFromPoints(&m_plane[3], &vtx[4], &vtx[7], &vtx[6]);	// 상 평면(top)
 	//	D3DXPlaneFromPoints(&m_plane[4], &vtx  ,  &vtx[1], &vtx[2]);	// 하 평면(bottom)
 	//	D3DXPlaneFromPoints(&m_plane[5], &vtx  ,  &vtx[4], &vtx[5]);	// 근 평면(near)
+
+
+
+	D3DXPlaneFromPoints(&m_planes[4], &closeVtx[0], &closeVtx[1], &closeVtx[2]);
 
 	SplitFrustum(3);
 
@@ -90,29 +110,6 @@ void Frustum::SplitFrustum(UINT count)
 
 
 
-
-	//Buffer에 프러스텀 끝 지점 z좌표를 계산해서 넣어주려 했으나
-	//의문의 버퍼 밀림 현상때문에 보류
-	//D3DXMATRIX view, projection;
-	//Camera::Get()->GetView(&view);
-	//D3D::Get()->GetProjection(&projection);
-	//
-	//D3DXMATRIX viewProj = view * projection;
-	//
-	//
-	//D3DXVECTOR3 sFrustumPoint[3];
-	//sFrustumPoint[0] = splitedVtx[4];
-	//sFrustumPoint[1] = splitedVtx[8];
-	//sFrustumPoint[2] = splitedVtx[12];
-	//
-	//
-	//
-	////TODO : 버퍼와 프러스텀간의 캡슐화. 이대로 괜찮은가???!!!
-	//for (int i = 0; i < 3; i++) {
-	//	D3DXVec3TransformCoord(&sFrustumPoint[i], &sFrustumPoint[i], &viewProj);
-	//	csBuffer->gsData.sFrustumMaxZ[i] = sFrustumPoint[i].z;
-	//}
-		
 
 
 
@@ -222,7 +219,7 @@ bool Frustum::CheckPoint(D3DXVECTOR3 point)
 
 bool Frustum::CheckSphere(float xCenter, float yCenter, float zCenter, float radius)
 {
-	for (int i = 0; i<3; i++)
+	for (int i = 0; i<4; i++)
 	{
 		if (D3DXPlaneDotCoord(&m_planes[i], &D3DXVECTOR3(xCenter, yCenter, zCenter)) > radius)
 		{

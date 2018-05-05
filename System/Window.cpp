@@ -116,9 +116,17 @@ WPARAM Window::Run()
 	D3D::GetInfo(&info);
 
 	D3D::Get();
+	Mouse::Get(); 
+	TweakBar::Get(); 
+	Frames::Get(); 
+	TextManager::Get();
+
+
+
 	Mouse::Get()->SetHandle(info.mainHandle);
 	TweakBar::Get()->Start();
-	Frames::Get()->Start();
+	Frames::Get()->Initialize();
+	TextManager::Get()->Initizlize();
 	//DepthStencil::Get();
 	//Rasterizer::Get();
 	//Sampler::Get();

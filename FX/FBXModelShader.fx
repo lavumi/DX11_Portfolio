@@ -98,7 +98,7 @@ cbuffer PSBuffer : register(b0)
     float4 ambient;
     float4 diffuse;
     float4 specular;
-    float4 globalAmbient;
+ //   float4 globalAmbient;
     float shininess;
 };
 
@@ -125,8 +125,9 @@ float4 PS(PixelInput input) : SV_Target
 
     float power = pow(nDotH, shininess);
 
-    float4 intensity = ambient * globalAmbient + diffuse * nDotL + specular * power;
+    float4 intensity = ambient  + diffuse * nDotL + specular * power;
 
+    diffuseMap *= globalAmbient;
 
 
     float2 projectTexCoord;
