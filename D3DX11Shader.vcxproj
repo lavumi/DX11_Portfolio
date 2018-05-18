@@ -164,6 +164,7 @@
     <ClInclude Include="Environment\Cloud.h" />
     <ClInclude Include="Environment\Environment.h" />
     <ClInclude Include="Environment\Landscape.h" />
+    <ClInclude Include="Environment\Moon.h" />
     <ClInclude Include="Environment\QuadTree.h" />
     <ClInclude Include="Environment\RainCone.h" />
     <ClInclude Include="Environment\Skydome.h" />
@@ -188,7 +189,7 @@
     <ClInclude Include="Object\Mirror.h" />
     <ClInclude Include="Object\OrthoWindowPlane.h" />
     <ClInclude Include="Object\TestCube.h" />
-    <ClInclude Include="Object\TestPlane.h" />
+    <ClInclude Include="Object\TexturePlane.h" />
     <ClInclude Include="ProceduralGenerator\Convert_Normal_Height.h" />
     <ClInclude Include="ProceduralGenerator\GrassTexture.h" />
     <ClInclude Include="ProceduralGenerator\MosaicTile.h" />
@@ -203,7 +204,7 @@
     <ClInclude Include="Render\UserInterface.h" />
     <ClInclude Include="Render\VertexLayout.h" />
     <ClInclude Include="Shader\BaseBuffer.h" />
-    <ClInclude Include="Shader\CascadeShadowBuffer.h" />
+    <ClInclude Include="Shader\FrustumBuffer.h" />
     <ClInclude Include="Shader\GAbuffer.h" />
     <ClInclude Include="Shader\OrthoWindowBuffer.h" />
     <ClInclude Include="Shader\ColorBuffer.h" />
@@ -239,6 +240,7 @@
     <ClCompile Include="Environment\Cloud.cpp" />
     <ClCompile Include="Environment\Environment.cpp" />
     <ClCompile Include="Environment\Landscape.cpp" />
+    <ClCompile Include="Environment\Moon.cpp" />
     <ClCompile Include="Environment\QuadTree.cpp" />
     <ClCompile Include="Environment\RainCone.cpp" />
     <ClCompile Include="Environment\Skydome.cpp" />
@@ -260,7 +262,7 @@
     <ClCompile Include="Object\Mirror.cpp" />
     <ClCompile Include="Object\OrthoWindowPlane.cpp" />
     <ClCompile Include="Object\TestCube.cpp" />
-    <ClCompile Include="Object\TestPlane.cpp" />
+    <ClCompile Include="Object\TexturePlane.cpp" />
     <ClCompile Include="ProceduralGenerator\Convert_Normal_Height.cpp" />
     <ClCompile Include="ProceduralGenerator\GrassTexture.cpp" />
     <ClCompile Include="ProceduralGenerator\MosaicTile.cpp" />

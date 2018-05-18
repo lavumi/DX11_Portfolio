@@ -95,7 +95,7 @@ void Landscape::LoadHeightMap()
 	HRESULT hr = D3DX11CreateTextureFromFile
 	(
 		D3D::GetDevice()
-		, L"./Environment/heightmap.png"
+		, L"./Contents/Textures/heightmap.jpg"
 		, NULL
 		, NULL
 		, (ID3D11Resource **)&srcTexture
@@ -515,50 +515,45 @@ void Landscape::LoadTextures()
 	diffuseMap = new ID3D11ShaderResourceView*[3];
 
 	HRESULT hr;
-	hr = D3DX11CreateShaderResourceViewFromFile(D3D::GetDevice(), L"./Environment/normal.jpg", nullptr, nullptr, &normalMap, nullptr);
+	hr = D3DX11CreateShaderResourceViewFromFile(D3D::GetDevice(), L"./Contents/Textures/normal.jpg", nullptr, nullptr, &normalMap, nullptr);
 	assert(SUCCEEDED(hr));
-	hr = D3DX11CreateShaderResourceViewFromFile(D3D::GetDevice(), L"./Environment/underwater.jpg", nullptr, nullptr, &diffuseMap[1], nullptr);
+	hr = D3DX11CreateShaderResourceViewFromFile(D3D::GetDevice(), L"./Contents/Textures/underwater.jpg", nullptr, nullptr, &diffuseMap[1], nullptr);
 	assert(SUCCEEDED(hr));
-	hr = D3DX11CreateShaderResourceViewFromFile(D3D::GetDevice(), L"./Environment/mountain.jpg", nullptr, nullptr, &diffuseMap[2], nullptr);
+	hr = D3DX11CreateShaderResourceViewFromFile(D3D::GetDevice(), L"./Contents/Textures/mountain.jpg", nullptr, nullptr, &diffuseMap[2], nullptr);
 	assert(SUCCEEDED(hr));
-	hr = D3DX11CreateShaderResourceViewFromFile(D3D::GetDevice(), L"./Environment/heightmap.png", nullptr, nullptr, &heightMap, nullptr);
+	hr = D3DX11CreateShaderResourceViewFromFile(D3D::GetDevice(), L"./Contents/Textures/heightmap.jpg", nullptr, nullptr, &heightMap, nullptr);
 	assert(SUCCEEDED(hr));
-	hr = D3DX11CreateShaderResourceViewFromFile(D3D::GetDevice(), L"./Environment/worldNormalMap.png", nullptr, nullptr, &worldNormalMap, nullptr);
+	hr = D3DX11CreateShaderResourceViewFromFile(D3D::GetDevice(), L"./Contents/Textures/worldNormalMap.png", nullptr, nullptr, &worldNormalMap, nullptr);
 	assert(SUCCEEDED(hr));
 }
 
 void Landscape::MakeTreePosition()
 {
 	
-	D3DXVECTOR3 position = D3DXVECTOR3(136,0,102);
-	GetY(position);
-	treePos.push_back(position);
-	position = D3DXVECTOR3(142,0,98);	GetY(position);
-	treePos.push_back(position);
-	position = D3DXVECTOR3(115,0,182);	GetY(position);
-	treePos.push_back(position);
-	position = D3DXVECTOR3(122,0,188);	GetY(position);
-	treePos.push_back(position);
-	position = D3DXVECTOR3(131,0,193);	GetY(position);
-	treePos.push_back(position);
-	position = D3DXVECTOR3(102,0,62);	GetY(position);
-	treePos.push_back(position);
-	position = D3DXVECTOR3(94,0,77);	GetY(position);
-	treePos.push_back(position);
-	position = D3DXVECTOR3(88,0,67);	GetY(position);
-	treePos.push_back(position);
-	position = D3DXVECTOR3(83,0,72);	GetY(position);
-	treePos.push_back(position);
-	position = D3DXVECTOR3(91,0,70);	GetY(position);
-	treePos.push_back(position);
-	position = D3DXVECTOR3(97,0,67);	GetY(position);
-	treePos.push_back(position);
-	position = D3DXVECTOR3(84,0,82);	GetY(position);
-	treePos.push_back(position);
-	position = D3DXVECTOR3(80,0,80);	GetY(position);
-	treePos.push_back(position);
-
-
+	D3DXVECTOR3 position;
+	position = D3DXVECTOR3(142, 0, 150);	GetY(position);	treePos.push_back(position);
+	position = D3DXVECTOR3(149, 0, 147);	GetY(position);	treePos.push_back(position);
+	position = D3DXVECTOR3(160, 0, 143);	GetY(position);	treePos.push_back(position);
+	position = D3DXVECTOR3(164, 0, 158);	GetY(position);	treePos.push_back(position);
+	position = D3DXVECTOR3(173, 0, 137);	GetY(position);	treePos.push_back(position);
+	position = D3DXVECTOR3(223, 0, 155);	GetY(position);	treePos.push_back(position);
+	position = D3DXVECTOR3(187, 0, 130);	GetY(position);	treePos.push_back(position);
+	position = D3DXVECTOR3(187, 0, 127);	GetY(position);	treePos.push_back(position);
+	position = D3DXVECTOR3(197, 0, 133);	GetY(position);	treePos.push_back(position);
+	position = D3DXVECTOR3(205, 0, 138);	GetY(position);	treePos.push_back(position);
+	position = D3DXVECTOR3(133, 0, 254);	GetY(position);	treePos.push_back(position);
+	position = D3DXVECTOR3(191, 0, 154);	GetY(position);	treePos.push_back(position);
+	position = D3DXVECTOR3(148, 0, 222);	GetY(position);	treePos.push_back(position);
+	position = D3DXVECTOR3(186, 0, 144);	GetY(position);	treePos.push_back(position);
+	position = D3DXVECTOR3(213, 0, 164);	GetY(position);	treePos.push_back(position);
+	position = D3DXVECTOR3(200, 0, 183);	GetY(position);	treePos.push_back(position);
+	position = D3DXVECTOR3(195, 0, 188);	GetY(position);	treePos.push_back(position);
+	position = D3DXVECTOR3(190, 0, 175);	GetY(position);	treePos.push_back(position);
+	position = D3DXVECTOR3(148, 0, 237);	GetY(position);	treePos.push_back(position);
+	position = D3DXVECTOR3(152, 0, 242);	GetY(position);	treePos.push_back(position);
+	position = D3DXVECTOR3(155, 0, 253);	GetY(position);	treePos.push_back(position);
+	position = D3DXVECTOR3(157, 0, 268);	GetY(position);	treePos.push_back(position);
+	position = D3DXVECTOR3(148, 0, 265);	GetY(position);	treePos.push_back(position);
 
 
 	//for(UINT i = 0;i<fullVertexCount;i++){

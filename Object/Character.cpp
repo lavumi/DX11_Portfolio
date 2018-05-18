@@ -17,11 +17,6 @@ Character::Character()
 	forwardAngle = 0;
 }
 
-Character::~Character()
-{
-	SAFE_DELETE(model);
-}
-
 void Character::Initialize(Environment* land)
 {
 	//model->LoadFbx(L"/Contents/Models/Sword And Shield Idle.fbx");
@@ -33,10 +28,10 @@ void Character::Initialize(Environment* land)
 	//model->LoadAniFbx(L"/contents/Models/Anime/strafe1.fbx", L"strafe1");
 	//model->LoadAniFbx(L"/contents/Models/Anime/strafe3.fbx", L"strafe3");
 	//model->LoadAniFbx(L"/contents/Models/Anime/walk.fbx", L"walk");
-	
-	
+
+
 	//model->GetAnimation(L"walk")->SetRootType(RootType::RootType_FirstFrame);
-	
+
 	//model->SaveBinary(L"./Contents/Models/", L"Paladin");
 
 	model->LoadBinary(L"./Contents/Models/", L"Paladin");
@@ -50,7 +45,15 @@ void Character::Initialize(Environment* land)
 	speed = 0.03f;
 
 	textID = TextManager::Get()->AddText(D3DXVECTOR2(10, 32), "Position");
+
 }
+
+
+Character::~Character()
+{
+	SAFE_DELETE(model);
+}
+
 
 void Character::MoveTo(float x, float y, float z)
 {
@@ -61,9 +64,6 @@ void Character::MoveTo(float x, float y, float z)
 
 void Character::Move(float x, float z)
 {
-	//model->SetAni(0);
-
-
 	if (forwardAngle == 0) {
 		return;
 		position.x += x * speed;
@@ -86,37 +86,28 @@ void Character::Move(float x, float z)
 
 		D3DXMatrixMultiply(&world, &rotation, &world);
 	}
-
-
 }
 
 void  Character::MoveControl()
 {
-	//UINT moving = 0;
 	if (Keyboard::Get()->KeyPress('W')) {
 		Move(0, 1);
-//		moving = 1;
 		SetAni(6);
 	}
 	else if (Keyboard::Get()->KeyPress('S')) {
 		Move(0, -1);
-//		moving = 0;
 		SetAni(0);
 	}
 	else if (Keyboard::Get()->KeyPress('A')) {
 		Move(-1, 0);
-//		moving = 3;
 		SetAni(5);
 	}
 	else if (Keyboard::Get()->KeyPress('D')) {
 		Move(1, 0);
-//		moving = 4;
 		SetAni(4);
 	}
 	else
 		SetAni(2);
-	
-	PrintCharacterPos();
 }
 
 void Character::PrintCharacterPos()
@@ -147,20 +138,7 @@ void Character::Update()
 {
 	model->Update(&world);
 	MoveControl();
-	//bool curMove = MoveControl();
-	//if (moveState != curMove) {
-	//	if (moveState == true) {
-	//		SetAni(0);
-	//		moveState = false;
-	//	}
-	//	else
-	//	{
-	//		SetAni(1);
-	//		moveState = true;
-	//	}
-	//		
-	//}
-
+	PrintCharacterPos();
 }
 
 void Character::Render()

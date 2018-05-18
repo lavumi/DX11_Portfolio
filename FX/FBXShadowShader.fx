@@ -133,7 +133,7 @@ float4 PS(PixelInput input) : SV_TARGET
 float4 PS2(PixelInput input) : SV_TARGET
 {
    // float3 normal = normalize(input.normal);
-    float3 lightDir = normalize(-_lightDir.xyz);
+    float3 lightDir = normalize(_lightDir.xyz);
     float shadow = 0.2f;
     float3 projectTexCoord;
     float lightDepthValue;

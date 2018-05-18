@@ -42,9 +42,13 @@ float4 PS(PixelInput input) : SV_Target
     float depth = _depthmap.Sample(samp[0], input.uv).r;
                         
 
-    depth = ConvertToLinearDepth(depth);
-    if(depth < 1)
-        main += depth;
+    depth = ConvertToLinearDepth(depth) ;
+    if (depth > 0.999f)
+    {
+        depth = 0;
+    }
+
+    main += depth * globalAmbient*0.5f;
 
     return main;
 }

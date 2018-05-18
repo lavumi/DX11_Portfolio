@@ -32,7 +32,7 @@
 
 #include "../Shader/VPBuffer.h"
 #include "../Shader/LightBuffer.h"
-#include "../Shader/CascadeShadowBuffer.h"
+#include "../Shader/FrustumBuffer.h"
 #include "../Shader/GAbuffer.h"
 
 
@@ -44,7 +44,7 @@ RenderingManager::RenderingManager()
 	shaderManager = new ShaderManager();
 	sampler = new Sampler();
 	rasterizer = new Rasterizer();
-	light = new LightManager();
+	lightManager = new LightManager();
 
 	depthShadowTexture = new RenderTexture(2048, 2048);
 	shadowTexture = new RenderTexture();
@@ -64,9 +64,9 @@ RenderingManager::RenderingManager()
 
 	
 
-	shadowBuffer = new CascadeShadowBuffer();
+	frustumBuffer = new FrustumBuffer();
 	vpBuffer = new VPBuffer();
-	lightBuffer = new LightBuffer(light);
+	lightBuffer = new LightBuffer(lightManager);
 	gaBuffer = new GAbuffer();
 
 	frustum = new Frustum();
@@ -92,7 +92,7 @@ RenderingManager::~RenderingManager()
 
 	SAFE_DELETE(shaderManager);
 
-	SAFE_DELETE(shadowBuffer);
+	SAFE_DELETE(frustumBuffer);
 	SAFE_DELETE(vpBuffer);
 	SAFE_DELETE(lightBuffer);
 	SAFE_DELETE(gaBuffer);
@@ -115,7 +115,7 @@ void RenderingManager::Initianlize(Environment* envi)
 
 
 
-	frustum->Initialize(mainRendering, light);
+	frustum->Initialize(mainRendering, lightManager);
 
 
 
@@ -126,8 +126,8 @@ void RenderingManager::Initianlize(Environment* envi)
 	environment->SetLandTexture(grassTexture->diffuse);
 
 
-	float light = 0.3f;
-	gaBuffer->SetGA(D3DXCOLOR(light, light, light, 1));
+
+	gaBuffer->SetGA(lightManager->GetGA());
 
 
 	D3D::GetDeviceContext()->PSSetShaderResources(14, 1, noise->GetPerlinNoise());
@@ -150,18 +150,27 @@ void RenderingManager::Update()
 {
 	frustum->Update();
 
-	light->Update();
+	lightManager->Update();
 	lightBuffer->SetBuffers();
+
 
 	for (UINT i = 0; i < 3; i++) {
 		cropMatrix[i] = frustum->GetCropMatrix(i);
 	}
 	Camera::Get()->GetView(&cropMatrix[3]);
 	D3DXMatrixTranspose(&cropMatrix[3], &cropMatrix[3]);
-	shadowBuffer->UpdateMatrix(cropMatrix);
 
-	shadowBuffer->SetBuffers();
 
+
+
+	frustumBuffer->UpdateBuffer(cropMatrix, frustum->GetPlanes());
+
+
+
+	frustumBuffer->SetBuffers();
+
+
+	gaBuffer->SetGA(lightManager->GetGA());
 	gaBuffer->SetBuffer();
 	
 }
@@ -173,6 +182,9 @@ void RenderingManager::Render()
 	RenderShadow();
 	RenderReflection();
 	RenderRefraction();
+
+
+
 	RenderMain();
 
 	PostRender();
@@ -356,7 +368,7 @@ void RenderingManager::RenderRefraction()
 void RenderingManager::RenderMain()
 {
 	mainRendering->SetTarget();
-	mainRendering->Clear();
+	mainRendering->Clear(0.5f,0.5f,0.5f,1);
 
 
 

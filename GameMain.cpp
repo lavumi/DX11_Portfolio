@@ -35,7 +35,7 @@ void GameMain::Initialize()
 
 
 
-	environment->Initialize();
+	environment->Initialize(renderManager->GetFrustum());
 
 	player->Initialize(environment);
 	player->SetFallowCamera();
@@ -60,6 +60,9 @@ void GameMain::Update()
 	if (Keyboard::Get()->KeyUp(VK_SPACE)) {
 
 	}
+	renderManager->Update();
+
+
 
 	ControlCamera();
 	Camera::Get()->Update();
@@ -72,7 +75,7 @@ void GameMain::Update()
 	testcube->Update();
 	player->Update();
 
-	renderManager->Update();
+
 
 
 

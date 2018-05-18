@@ -6,6 +6,11 @@ struct VertexInput
     float4 position : POSITION0;
     float2 world0 : INSTMATRIX0;
 };
+struct GeoInput
+{
+    float4 position : SV_POSITION;
+    float clip : SV_ClipDistance0;
+};
 
 struct PixelInput
 {
@@ -13,13 +18,14 @@ struct PixelInput
     float4 lightWorldPosition : TEXCOORD0;
 };
 
-PixelInput VS(VertexInput input)
+GeoInput VS(VertexInput input)
 {
-    PixelInput output;
+    GeoInput output;
     input.position.w = 1;
 
     output.position = input.position;
     output.position.xz += input.world0.xy;
+    output.clip = 0;
     return output;
 }
 
@@ -38,14 +44,15 @@ cbuffer GsData : register(b0)
 }
 
 [maxvertexcount(6)]
-void GS(point PixelInput input[1], inout TriangleStream<PixelInput> triStream)
+void GS(point GeoInput input[1], inout TriangleStream<PixelInput> triStream)
 {
   
 
     float grassheight = _grassHeight;
     float grasswidth = _grassWidth;
     
-    PixelInput base = input[0];
+    PixelInput base;
+    base.position = input[0].position;
 
     int rndx, rndz;
     rndx = base.position.x * 399;
@@ -54,7 +61,7 @@ void GS(point PixelInput input[1], inout TriangleStream<PixelInput> triStream)
     rnd %= 100;
 
 
-    float2 heightuv = base.position.xz / 512;
+    float2 heightuv = base.position.xz / ImageSize;
     heightuv.y *= -1;
     heightuv.y += 1;
     base.position.y = _map.SampleLevel(samp[0], heightuv, 0).r * 64.0f - 26.2f;

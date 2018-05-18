@@ -17,7 +17,7 @@ class PerlinNoise;
 
 
 class OrthoWindowPlane;
-class CascadeShadowBuffer;
+class FrustumBuffer;
 class VPBuffer;
 class LightBuffer;
 class GAbuffer;
@@ -63,7 +63,7 @@ private:
 	ShaderManager * shaderManager;
 	Sampler* sampler;
 	Rasterizer* rasterizer;
-	LightManager* light;
+	LightManager* lightManager;
 
 	//RT
 	RenderTexture * depthShadowTexture;
@@ -83,7 +83,7 @@ private:
 	OrthoWindowPlane* orthoWindow;
 
 	//ÅëÇÕ¹öÆÛµé
-	CascadeShadowBuffer* shadowBuffer; //10¹ø ½½·Ô
+	FrustumBuffer* frustumBuffer; //10¹ø ½½·Ô
 	VPBuffer* vpBuffer;       //12¹ø ½½·Ô
 	LightBuffer* lightBuffer;//11¹ø ½½·Ô
 	GAbuffer* gaBuffer;//PS2¹ø ½½·Ô

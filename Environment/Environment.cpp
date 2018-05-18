@@ -8,9 +8,12 @@
 #include "TerrainGrass.h"
 //#include "QuadTree.h"
 
+#include "../Render/Frustum.h"
+
 #include "../ProceduralGenerator/TreeMaker.h"
 
 #include "../Object/Character.h"
+#include "../Object/TexturePlane.h"
 
 
 Environment::Environment()
@@ -41,17 +44,25 @@ Environment::~Environment()
 	//SAFE_DELETE(quadTree);
 }
 
-void Environment::Initialize()
+void Environment::Initialize(Frustum* frustum)
 {
 	landscape->Initialize();
 	grass->Initialize(landscape);
 	cloud->Initialize();
 
-	CreateTree(12);
+	this->frustum = frustum;
+
+
+	CreateTree(23);
 
 
 	UINT width, height;
 	landscape->GetSize(width, height);
+
+
+	D3DXMATRIX world;
+
+	D3DXMatrixIdentity(&world);
 	//quadTree->Initialize(width, height);
 	//quadTree->CreateTree();
 
@@ -68,6 +79,8 @@ void Environment::Update()
 
 	grass->Update();
 	grass->SetCharacterPos(characterPos);
+
+	
 }
 
 void Environment::CreateTree(int count)
@@ -107,6 +120,7 @@ void Environment::RenderSkydome()
 	skydome->Render();
 }
 
+
 void Environment::RenderSkyplane()
 {
 	cloud->Render();
@@ -141,19 +155,19 @@ void Environment::RenderGrass()
 
 void Environment::RenderTree()
 {
-
-	for each (TreeMaker* singleTree in trees)
-	{
-		singleTree->Render();
+	for (size_t i = 0; i < trees.size(); i++) {
+		if(frustum->CheckSphere(landscape->treePos[i], 20))
+		trees[i]->Render();
 	}
+		
 
 }
 
 void Environment::RenderTreeLeaf()
 {
-	for each (TreeMaker* singleTree in trees)
-	{
-		singleTree->LeafRender();
+	for (size_t i = 0; i < trees.size(); i++) {
+		if (frustum->CheckSphere(landscape->treePos[i], 20))
+		trees[i]->LeafRender();
 	}
 }
 

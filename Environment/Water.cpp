@@ -5,6 +5,7 @@
 
 #include "Landscape.h"
 
+static const float ImageSize = 512;
 Water::Water()
 	: vertexBuffer(nullptr), indexBuffer(nullptr)
 {
@@ -21,9 +22,11 @@ Water::Water()
 	waterPlane = D3DXPLANE(0, 1, 0, -waterHeight);
 	CreateBuffer();
 
-	HRESULT hr = D3DX11CreateShaderResourceViewFromFile(D3D::GetDevice(), L"./Environment/water_normal.jpg", nullptr, nullptr, &normal, nullptr);
+	HRESULT hr = D3DX11CreateShaderResourceViewFromFile(D3D::GetDevice(), L"./Contents/Textures/water_normal.jpg", nullptr, nullptr, &normal, nullptr);
 	assert(SUCCEEDED(hr)); 
 
+
+	
 }
 
 Water::~Water()
@@ -110,9 +113,9 @@ void Water::CreateBuffer()
 		{
 			int index = (width + 1) * z + x;
 
-			vertexData[index].position.x = (float)x * 512 / (width);// *landscapeScale;
+			vertexData[index].position.x = (float)x * ImageSize / (width);// *landscapeScale;
 			vertexData[index].position.y = 0;
-			vertexData[index].position.z = (float)z * 512 / (height);// *landscapeScale;
+			vertexData[index].position.z = (float)z * ImageSize / (height);// *landscapeScale;
 
 			vertexData[index].uv.x = (float)(x);// (float)width;
 			vertexData[index].uv.y = (float)(z);// (float)height;

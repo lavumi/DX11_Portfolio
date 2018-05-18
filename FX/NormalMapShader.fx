@@ -44,7 +44,7 @@ PixelInput VS(VertexInput input)
 
 
     float3 viewDir = _cameraPosition.xyz - output.position.xyz;
-    float3 halfVector = normalize(-_lightDir) + normalize(viewDir);
+    float3 halfVector = normalize(_lightDir) + normalize(viewDir);
 
 
    // float3 n = mul(input.normal, (float3x3) worldInverseTransposeMatrix);
@@ -58,7 +58,7 @@ PixelInput VS(VertexInput input)
 
 
     output.halfVector = mul(halfVector, tbnMatrix);
-    output.lightDir = mul(-_lightDir, tbnMatrix);
+    output.lightDir = mul(_lightDir, tbnMatrix);
     output.viewDir = mul(viewDir, tbnMatrix);
 
    

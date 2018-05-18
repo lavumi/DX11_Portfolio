@@ -13,45 +13,63 @@
 
 void LightManager::Update()
 {
-	D3DXVECTOR3 position, forward;
-	//Camera::Get()->GetPosition(&position, &forward);
-	position = D3DXVECTOR3(128, 0,128);
+	D3DXVECTOR3 position;
+	position = D3DXVECTOR3(256, 0,256);
 
-	angley -= (float)D3DX_PI / 180 * speed;
 
-	lightData.lightDirection.x = cosf(angley);
-	lightData.lightDirection.y = sinf(angley);
+	//구면좌표계를 통해 광원의 위치 설정
+	angle_theta += 3.141592f / 180 * speed;
+
+
+	if (angle_pie < 3.141592f / 180 * 30)
+		anglePieDir = 0.666666f;
+	else if (angle_pie > 3.141592f / 180 * 150)
+		anglePieDir = -0.666666f;
+	
+	angle_pie += 3.141592f / 180 * speed * anglePieDir;
 	
 
-	
+	lightData.lightPosition.x = sinf(angle_pie) * cosf(angle_theta);
+	lightData.lightPosition.z = sinf(angle_pie) * sinf(angle_theta);
+	lightData.lightPosition.y = cosf(angle_pie);
 
 
-	D3DXVec3Normalize(&lightData.lightDirection, &lightData.lightDirection);
-
-
-
-
-	D3DXMatrixLookAtLH(&lightData.lightView, &(position - lightData.lightDirection * 300), &(position), &up);
-	D3DXMatrixOrthoLH(&lightData.lightProjection, 500, 500, 0.1f, 1000);
-	//lightData.lightProjection._33 /= 1000;
-	//lightData.lightProjection._43 /= 1000;
-	
-	
+	if (angle_pie > 3.141592f / 180 * 90)
+		lightData.night = 1;
+	else
+		lightData.night = 0;
 
 
 
 	
-	//D3DXMatrixTranspose(&lightData.lightView, &lightData.lightView);
-	//D3DXMatrixTranspose(&lightData.lightProjection, &lightData.lightProjection);
-	//D3DXMATRIX view, projection;
-	//
-	//D3DXMatrixLookAtLH(&view, &(position - lightData.lightDirection * 300), &(position), &up);
-	//D3DXMatrixOrthoLH(&projection,500, 500, 0.1f, 500);
-	//
-	//view *= projection;
-	//
-	//D3DXMatrixTranspose(&lightData.lightView, &view);
+	//데이터 입력
+	D3DXVec3Normalize(&lightData.lightPosition, &lightData.lightPosition);
+
+	D3DXMATRIX view, proj;
+
+	if(lightData.night == 1)
+		D3DXMatrixLookAtLH(&view, &(position - lightData.lightPosition * 300), &(position), &up);
+	else
+		D3DXMatrixLookAtLH(&view, &(position + lightData.lightPosition * 300), &(position), &up);
+	D3DXMatrixOrthoLH(&proj, 500, 500, 0.1f, 1000);
+
+	D3DXMatrixMultiply(&lightData.lightViewXProjection, &view, &proj);
+
 	
+
+
+	//빛의 위치에 따른 global ambient 설정
+	float r, g, b;
+
+	r = sinf(angle_theta);
+	b = D3DXVec3Dot(&lightData.lightPosition, &D3DXVECTOR3(0, 0.8660f, 0.5f));
+	g = (r + b) / 2;
+
+	r = max(r, 0.2f);
+	g = max(g, 0.2f);
+	b = max(b, 0.2f);
+
+	globalAmbient = D3DXCOLOR(r, g, b, 1);
 }
 
 void LightManager::Delete()
@@ -61,11 +79,18 @@ void LightManager::Delete()
 
 LightManager::LightManager()
 {
-	lightData.lightDirection = D3DXVECTOR3(0.01f, -1, 0.01f);
+	//lightData.lightPosition = D3DXVECTOR3(0.01f, -1, 0.01f);
 
-	anglex = angley = (float)D3DX_PI / 180 * -45;
+	angle_pie = 3.141592f / 6;
+	angle_theta = 3.141592f / 2;
+	anglePieDir = -0.333333f;
+
+	lightData.lightPosition.x = sinf(angle_pie) * cosf(angle_theta);
+	lightData.lightPosition.z = sinf(angle_pie) * sinf(angle_theta);
+	lightData.lightPosition.y = cosf(angle_pie);
+
 	speed = 0;
-	UserInterface::Get()->AddSun(&lightData.lightDirection, &speed);
+	UserInterface::Get()->AddSun(&lightData.lightPosition, &speed);
 }
 
 LightManager::~LightManager()

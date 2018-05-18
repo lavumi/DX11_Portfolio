@@ -85,10 +85,6 @@ private:
 	TreeNode* root;
 
 
-
-
-	D3DXVECTOR3 treePosition;
-
 	void CreateBuffer();
 	//void CreateBufferTest();
 	ID3D11Buffer* vertexBuffer;

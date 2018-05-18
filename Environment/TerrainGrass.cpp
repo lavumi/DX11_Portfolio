@@ -32,7 +32,23 @@ void TerrainGrass::Initialize(Landscape* land)
 	this->land = land;
 	//this->frustum = frustum;
 
-	CreateInstanceData();
+
+	int size = 30;
+	for (int i = 0; i < size; i++) {
+		for (int j = 0; j < size; j++) {
+			if (abs(i - 15) + abs(j - 15) > 15)
+				continue;
+			D3DXVECTOR3 position;
+			position.x = i * 2+160;
+			position.z = j * 2+160;
+			land->GetY(position);
+			if (position.y <0 && position.y > -7)
+				instanceData.push_back(D3DXVECTOR2(i * 2 + 160, j * 2 + 160));
+		}
+	}
+
+
+	//CreateInstanceData();
 	CreateBuffer();
 
 	land->GetHeightMap(heightMap);
@@ -40,6 +56,22 @@ void TerrainGrass::Initialize(Landscape* land)
 	buffer->SetGrassData(1.0f, 0.04f, D3DXVECTOR3(1,0,0));
 
 	
+
+
+
+
+	//D3D11_MAPPED_SUBRESOURCE subResource;
+	//
+	//HRESULT hr = D3D::GetDeviceContext()->Map
+	//(
+	//	instanceBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &subResource
+	//);
+	//
+	//memcpy(subResource.pData, &instanceData[0], sizeof(D3DXVECTOR2) * instanceData.size());
+	//
+	//D3D::GetDeviceContext()->Unmap(instanceBuffer, 0);
+
+
 }
 
 void TerrainGrass::Update()
@@ -91,7 +123,7 @@ void TerrainGrass::SetCharacterPos(D3DXVECTOR3* pos)
 
 void TerrainGrass::SetPosByFrustum(Frustum * frustum)
 {
-
+	return;
 	instanceData.clear();
 	D3DXVECTOR3 position, forward;
 	Camera::Get()->GetPosition(&position, &forward);
@@ -100,7 +132,7 @@ void TerrainGrass::SetPosByFrustum(Frustum * frustum)
 	land->GetY(position);
 
 
-	int size = 20;
+	int size = 150;
 	for (int i = 0; i < size; i++) {
 		for (int j = 0; j < size; j++) {
 			D3DXVECTOR3 temp;
@@ -108,9 +140,9 @@ void TerrainGrass::SetPosByFrustum(Frustum * frustum)
 			temp = position;
 			temp.x += i*2 - size;
 			temp.z += j*2 - size;
-			//if (frustum->CheckSphere(temp, 3)) {
+			if (frustum->CheckSphere(temp, 3)) {
 				instanceData.push_back(D3DXVECTOR2(temp.x, temp.z));
-			//}
+			}
 		}
 	}
 
@@ -180,20 +212,20 @@ void TerrainGrass::CreateBuffer()
 
 	ZeroMemory(&desc, sizeof(D3D11_BUFFER_DESC));
 	desc.Usage = D3D11_USAGE_DYNAMIC;
-	desc.ByteWidth = sizeof(D3DXVECTOR2) * 400;
+	desc.ByteWidth = sizeof(D3DXVECTOR2) * instanceData.size();
 	desc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 	desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 	desc.MiscFlags = 0;
 	desc.StructureByteStride = 0;
 
-	//ZeroMemory(&data, sizeof(D3D11_SUBRESOURCE_DATA));
-	//data.pSysMem = &instanceData[0];
-	//data.SysMemPitch = 0;
-	//data.SysMemSlicePitch = 0;
+	ZeroMemory(&data, sizeof(D3D11_SUBRESOURCE_DATA));
+	data.pSysMem = &instanceData[0];
+	data.SysMemPitch = 0;
+	data.SysMemSlicePitch = 0;
 
 
 
-	hr = D3D::GetDevice()->CreateBuffer(&desc, NULL, &instanceBuffer);
+	hr = D3D::GetDevice()->CreateBuffer(&desc, &data, &instanceBuffer);
 	assert(SUCCEEDED(hr));
 }
 

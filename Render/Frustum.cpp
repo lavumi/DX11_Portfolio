@@ -2,7 +2,7 @@
 #include "Frustum.h"
 #include "../System/BoundingBox.h"
 #include "LightManager.h"
-#include "../Shader/CascadeShadowBuffer.h"
+#include "../Shader/FrustumBuffer.h"
 #include "../Render/RenderTexture.h"
 
 Frustum::Frustum()
@@ -122,10 +122,11 @@ void Frustum::SplitFrustum(UINT count)
 void Frustum::MakeCropMatrix()
 {
 	D3DXVECTOR3 vtx_input[8];
-	D3DXMATRIX view, projection;
+	D3DXMATRIX viewXproj;
+	lightM->GetViewXProjection(&viewXproj);
 
-	lightM->GetView(&view);
-	lightM->GetProjection(&projection);
+	//lightM->GetView(&view);
+	//lightM->GetProjection(&projection);
 
 	float scaleX, scaleY, scaleZ;
 	float offsetX, offsetY, offsetZ;
@@ -137,7 +138,7 @@ void Frustum::MakeCropMatrix()
 		}
 
 
-		BoundingBox box = BoundingBox::CreateAABB(vtx_input, view*projection);
+		BoundingBox box = BoundingBox::CreateAABB(vtx_input, viewXproj);
 
 
 		box.min.z = 0;

@@ -5,29 +5,33 @@ struct VertexInput
 {
     float4 position : POSITION0;
     float2 world0 : INSTMATRIX0;
-//   float4 world1 : INSTMATRIX1;
-//   float4 world2 : INSTMATRIX2;
-//   float4 world3 : INSTMATRIX3;
 };
+
+struct GeoInput
+{
+    float4 position : SV_POSITION;
+ 
+};
+
+
 
 struct PixelInput
 {
     float4 position : SV_POSITION;
     float4 screenPosition : TEXCOORD0;
     float ColorTable : TEXCOORD1;
+    float clip0 : SV_ClipDistance0;
+    float clip1 : SV_ClipDistance1;
+ //   float clip2 : SV_ClipDistance2;
 };
 
-PixelInput VS(VertexInput input)
+GeoInput VS(VertexInput input)
 {
-    PixelInput output;
+    GeoInput output;
     input.position.w = 1;
 
-    //float4x4 world = float4x4(input.world0, input.world1, input.world2, input.world3);
     output.position = input.position;
     output.position.xz += input.world0.xy;
-   // output.position = input.position;
-
-
     return output;
 }
 
@@ -43,33 +47,19 @@ cbuffer GsData : register(b0)
     //TODO : GrassBuffer 확인해보자 왜 float 1개만큼 밀려났을까
     float4 _characterPos;
     float2 _wind;
-    
-  
 }
-//static float rndTable[36] =
-//{
-//    0.42, 0.32, 0.82, 0.52, 0.33, 0.18,
-//    0.04, 0.81, 0.68, 0.68, 0.13, 0.97,
-//    0.39, 0.43, 0.66, 0.28, 0.46, 0.39,
-//    0.97, 0.25, 0.78, 0.59, 0.37, 0.05,
-//    0.67, 0.21, 0.07, 0.78, 0.38, 0.70,
-//    0.39, 0.27, 0.59, 0.29, 0.85, 0.16
-//};
-
-
-
 
 
 
 [maxvertexcount(6)]
-void GS(point PixelInput input[1], inout TriangleStream<PixelInput> triStream)
+void GS(point GeoInput input[1], inout TriangleStream<PixelInput> triStream)
 {
-  
-
     float grassheight = _grassHeight;
     float grasswidth = _grassWidth;
     
-    PixelInput base = input[0];
+    PixelInput base;
+    base.position = input[0].position;
+
     int rndx, rndz;
     rndx = base.position.x * 399;
     rndz = base.position.z * 928;
@@ -77,19 +67,23 @@ void GS(point PixelInput input[1], inout TriangleStream<PixelInput> triStream)
 
 
     rnd %= 100;
-
     base.ColorTable = rndTable[rnd]; // saturate(rndTable[rnd] * 0.3f + 0.7f);
 
 
     //높이값 설정    //이미지에 대한 uv 좌표 처리
-    float2 heightuv = base.position.xz / 512;
+    float2 heightuv = base.position.xz / ImageSize;
     heightuv.y *= -1;
     heightuv.y += 1;
     base.position.y = _map.SampleLevel(samp[0], heightuv, 0).r * 64.0f  - 26.2f;
 
+    if (base.position.y < -7 || base.position.y > 0)
+        return;
+    base.clip0 = -dot(base.position, frustumPlane[0]);
+    base.clip1 = dot(base.position, frustumPlane[1]) * dot(base.position, frustumPlane[2]);
 
 
 
+  //  base.clip2 = 0;//    -;
     //풀을 표현할 벡터
     float3 heightVector, widthVector;
     heightVector.x = (float) (rndx % 3) - 1;
@@ -97,8 +91,7 @@ void GS(point PixelInput input[1], inout TriangleStream<PixelInput> triStream)
     heightVector.z = (float) (rndz % 3) - 1;
     heightVector = normalize(heightVector);
    
-  //  float2 wind = normalize(_wind);
- //   heightVector.xz += _wind * (sin(_timer * 3.141592f * 2 + base.position.x * 0.5f) + 1) * 0.016f;
+
     heightVector = normalize(heightVector);
 
     widthVector.z = 1;
@@ -157,27 +150,21 @@ void GS(point PixelInput input[1], inout TriangleStream<PixelInput> triStream)
     left.position.xyz += leftVector;
     right.position.xyz += rightVector;
     top.position.xyz += topVector;
-    
- 
-
-
-
-
+   
 
 
     root.position = MulVP(root.position);
-
     left.position = MulVP(left.position);
-
     right.position = MulVP(right.position);
-
     top.position = MulVP(top.position);
+
 
     root.screenPosition = root.position;
     left.screenPosition = left.position;
     right.screenPosition = right.position;
     top.screenPosition = top.position;
     
+
     triStream.Append(root);
     triStream.Append(left);
     triStream.Append(right);
@@ -198,9 +185,10 @@ float4 PS(PixelInput input) : SV_Target
 {
     //float4 color = float4(0.7137f, 0.90981f, 0.4156f, 1);
     float4 color = float4(0.20784f, 0.48431f, 0.26666f, 1);
+   // float4 color2 = float4(0.22784f, 0.44431f, 0.24666f, 1);
     float4 color2 = float4(0.88f, 0.87f, 0.6f, 1);
 
-    color = lerp(color, color2, input.ColorTable) * 0.6f;
+    color = lerp(color, color2, input.ColorTable) * 0.7f;
    // color *= input.ColorTable;
 
 

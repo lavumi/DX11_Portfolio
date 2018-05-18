@@ -8,38 +8,30 @@ public:
 	~LightManager();
 
 	struct LightData {
-
-		D3DXMATRIX lightView;
-		D3DXMATRIX lightProjection;
-		//D3DXMATRIX lightViewXProjection;
-		D3DXVECTOR3 lightDirection;
-		float padding;
+		D3DXMATRIX lightViewXProjection;
+		D3DXVECTOR3 lightPosition;
+		float night;
 	};
 
-
-
-
-	void GetView(D3DXMATRIX* view) {
-		memcpy(view, this->lightData.lightView, sizeof(D3DXMATRIX));
-	}
-	void GetProjection(D3DXMATRIX* view) {
-		memcpy(view, this->lightData.lightProjection, sizeof(D3DXMATRIX));
-	}
 	void GetDirection(D3DXVECTOR3* view) {
-		memcpy(view, this->lightData.lightDirection, sizeof(D3DXVECTOR3));
+		memcpy(view, this->lightData.lightPosition, sizeof(D3DXVECTOR3));
 	}
 
-	//void GetViewXProjection(D3DXMATRIX* view) {
-	//	memcpy(view, this->lightData.lightViewXProjection, sizeof(D3DXMATRIX));
+	void GetViewXProjection(D3DXMATRIX* view) {
+		memcpy(view, this->lightData.lightViewXProjection, sizeof(D3DXMATRIX));
+	}
+
+	void GetLightData(LightData* view) {
+		memcpy(view, &lightData, sizeof(LightData));
+	}
+
+
+	//LightData* GetLightData() {
+	//	return &lightData;
 	//}
 
-	//void GetLightDirection(D3DXVECTOR3* out_lightDir) {
-	//	memcpy(out_lightDir, this->lightData.lightDirection, sizeof(D3DXVECTOR3));
-	//
-	//}
-
-	LightData* GetLightData() {
-		return &lightData;
+	D3DXCOLOR GetGA() {
+		return globalAmbient;
 	}
 
 	void Update();
@@ -53,5 +45,8 @@ private:
 	D3DXVECTOR3 up = D3DXVECTOR3(0, 1, 0);
 
 	float speed;
-	float anglex, angley;
+	float angle_pie, angle_theta;
+	float anglePieDir;
+
+	D3DXCOLOR globalAmbient;
 };

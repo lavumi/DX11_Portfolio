@@ -7,7 +7,7 @@ class Skyplane;
 class TerrainGrass;
 class Character;
 class TreeMaker;
-
+class TexturePlane;
 
 
 class Frustum;
@@ -16,7 +16,8 @@ public:
 	Environment();
 	~Environment();
 
-	void Initialize();
+	void Initialize(Frustum* frustum);
+
 	void Update();
 	
 
@@ -28,6 +29,8 @@ public:
 	void MakeGrassPosData(Frustum* frustum);
 
 	void RenderSkydome();
+
+
 	void RenderSkyplane();
 	void RenderLand();
 	void RenderReflectedLand();
@@ -38,10 +41,9 @@ public:
 	void RenderTree();
 	void RenderTreeLeaf();
 
+
 	/********************************
-	TODO : 
-	잔디 설정을 위한 캐릭터 위치 입력
-	수정 필수
+	TODO : 	잔디 설정을 위한 캐릭터 위치 입력	수정 필수 	그런데 어떻게???
 	**********************************/
 	void SetCharacter(Character*);
 
@@ -54,6 +56,10 @@ private:
 
 	Water* lake;
 	TerrainGrass* grass;
+	
+	Frustum* frustum;
+
+
 
 	vector<TreeMaker*> trees;
 	

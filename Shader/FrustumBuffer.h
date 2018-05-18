@@ -2,10 +2,10 @@
 #include "ShaderBuffer.h"
 
 class Frustum;
-class CascadeShadowBuffer 
+class FrustumBuffer 
 {
 public:
-	CascadeShadowBuffer()
+	FrustumBuffer()
 	{
 		D3DXMatrixIdentity(&gsData.cropMatrix[0]);
 		D3DXMatrixIdentity(&gsData.cropMatrix[1]);
@@ -22,7 +22,7 @@ public:
 		HRESULT hr = D3D::GetDevice()->CreateBuffer(&desc, NULL, &buffer);
 		assert(SUCCEEDED(hr));
 	}
-	~CascadeShadowBuffer() {
+	~FrustumBuffer() {
 		SAFE_RELEASE(buffer);
 	}
 
@@ -30,13 +30,15 @@ public:
 
 
 
-	void UpdateMatrix(D3DXMATRIX cropMatrix[4]) {
+	void UpdateBuffer(D3DXMATRIX cropMatrix[4], D3DXPLANE* plane) {
 
 
 
 		for (UINT i = 0; i < 4; i++) {
 			D3DXMatrixTranspose(&gsData.cropMatrix[i] , &cropMatrix[i]);
 		}
+		memcpy(&gsData.frustumPlane, plane, sizeof(D3DXPLANE) * 3);
+
 
 		D3D11_MAPPED_SUBRESOURCE subResource;
 
@@ -60,7 +62,7 @@ public:
 	struct GS_DATA
 	{
 		D3DXMATRIX cropMatrix[4];
-	//	float sFrustumMaxZ[4];
+		D3DXPLANE frustumPlane[3];
 	};
 
 

@@ -21,24 +21,23 @@ float4 MulVP(float4 input)
 
 cbuffer LightData : register(b11)
 {
-    matrix _lightView;
-    matrix _lightProjection;
-    float3 _lightDir;
-    float padding;
+    matrix _lightViewxProj;
+     float3 _lightDir;
+    float night;
 }
 
 float4 MulLightVP(float4 input)
 {
-    float4 output = mul(input, _lightView);
-    output = mul(output, _lightProjection);
+    float4 output = mul(input, _lightViewxProj);
     return output;
 }
 
 
 
-cbuffer CascadeShadow : register(b10)
+cbuffer Frustum : register(b10)
 {
     matrix cropMatrix[4];
+    float4 frustumPlane[3];
 }
 
 
@@ -81,7 +80,7 @@ static float rndTable[100] =
 
 static const float splitedFrustum[3] = { 0.996013939f, 0.999374747f, 1 };
 
-
+static const float ImageSize = 512;
 
 float ConvertToLinearDepth(float Depth)
 {

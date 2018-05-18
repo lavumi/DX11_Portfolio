@@ -1,6 +1,6 @@
 #pragma once
 class LightManager;
-class CascadeShadowBuffer;
+class FrustumBuffer;
 class RenderTexture;
 class Frustum
 {
@@ -25,6 +25,10 @@ public:
 	void Render();
 
 	D3DXMATRIX GetCropMatrix(UINT index);
+	D3DXPLANE* GetPlanes() {
+		return &m_planes[0];
+	}
+
 
 	bool fixFrustum;
 private:

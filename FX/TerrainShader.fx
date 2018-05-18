@@ -119,7 +119,7 @@ struct DomainOut
     
     float3 viewPosition : TEXCOORD5;
    
-    float4 clip : SV_ClipDistance0;
+    float clip : SV_ClipDistance0;
 };
 
 Texture2D _map : register(t0);
@@ -141,7 +141,7 @@ DomainOut DS(PatchTess patchTess,
 
 
     //scaleFactor
-    float2 heightuv = (outData.position.xz) / 512;
+    float2 heightuv = (outData.position.xz) / ImageSize;
     //이미지에 대한 uv 좌표 처리
     heightuv.y *= -1;
     heightuv.y += 1;
@@ -243,10 +243,10 @@ PixelOut PS(DomainOut input)
    // blending.y -=   (blending.x + blending.z) /2;
     //blending = normalize(blending);
        
-    float4 Mountain = _texture[2].Sample(samp[0], uv);
-    float4 Grass = _texture[0].Sample(samp[0], uv);
+    float4 Mountain = float4(0.88f, 0.87f, 0.6f, 1)*0.7f; //_texture[2].Sample(samp[0], uv);
+    float4 Grass =  _texture[0].Sample(samp[0], uv) ;
 
-    float4 landNmountain = lerp(Mountain, Grass, landNormal * landNormal * landNormal );
+    float4 landNmountain = lerp(Mountain, Grass, landNormal * landNormal);
 
 
     float blendFactor2 = saturate((input.worldPosition + 8.0f) / 0.7f);

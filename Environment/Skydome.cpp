@@ -16,6 +16,8 @@ Skydome::~Skydome()
 
 	SAFE_RELEASE(vertexBuffer);
 	SAFE_RELEASE(indexBuffer);
+
+	SAFE_DELETE(wBuffer);
 }
 
 void Skydome::Update()
@@ -23,6 +25,9 @@ void Skydome::Update()
 	
 	D3DXVECTOR3 position;
 	Camera::Get()->GetPosition(&position);
+
+
+
 	D3DXMatrixTranslation(&world, position.x, position.y, position.z);
 	wBuffer->SetWorld(world);
 
@@ -40,12 +45,6 @@ void Skydome::Render()
 	
 	D3D::GetDeviceContext()->DrawIndexed(indexCount, 0, 0);
 }
-
-void Skydome::RenderReflection()
-{
-
-}
-
 
 
 

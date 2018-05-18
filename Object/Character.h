@@ -1,7 +1,6 @@
 #pragma once
 
 class ModelScene;
-class Shader;
 class Environment;
 
 #include "../Camera/iFallowCamera.h"

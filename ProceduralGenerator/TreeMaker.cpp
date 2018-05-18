@@ -44,9 +44,9 @@ void TreeMaker::Initialize(D3DXVECTOR3 position)
 	buffer = new NormalShaderBuffer();
 
 	HRESULT hr;
-	hr = D3DX11CreateShaderResourceViewFromFile(D3D::GetDevice(), L"./Environment/treebark_diffuse.jpg", nullptr, nullptr, &diffuseMap, nullptr);
+	hr = D3DX11CreateShaderResourceViewFromFile(D3D::GetDevice(), L"./Contents/Textures/treebark_diffuse.jpg", nullptr, nullptr, &diffuseMap, nullptr);
 	assert(SUCCEEDED(hr));
-	hr = D3DX11CreateShaderResourceViewFromFile(D3D::GetDevice(), L"./Environment/treebark_normal.jpg", nullptr, nullptr, &normalMap, nullptr);
+	hr = D3DX11CreateShaderResourceViewFromFile(D3D::GetDevice(), L"./Contents/Textures/treebark_normal.jpg", nullptr, nullptr, &normalMap, nullptr);
 	assert(SUCCEEDED(hr));
 	
 	CreateTree(position.x, position.y, position.z);
@@ -66,7 +66,7 @@ void TreeMaker::CreateTree(float x, float y, float z)
 	buffer->SetWorld(world);
 	buffer->SetMaterial(D3DXCOLOR(0.5f, 0.5f, 0.5f, 1.0f), D3DXCOLOR(0.7f, 0.7f, 0.7f, 1.0f), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f),1,1,1);
 
-	treePosition = D3DXVECTOR3(x, y, z);
+//	treePosition = D3DXVECTOR3(x, y, z);
 
 
 	root = new TreeNode(D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(0, 1, 0),1);
@@ -320,8 +320,8 @@ void TreeMaker::LeafPosotionSetting(TreeNode * node)
 
 	float sideleafCount = 5;
 	
-	D3DXMATRIX treeTrans;
-	D3DXMatrixTranslation(&treeTrans, treePosition.x, treePosition.y, treePosition.z);
+//	D3DXMATRIX treeTrans;
+//	D3DXMatrixTranslation(&treeTrans, treePosition.x, treePosition.y, treePosition.z);
 	for (int i = 0; i < (int)sideleafCount; i++) {
 
 		leafPos = node->point + node->direction * (float)i / sideleafCount;
@@ -335,11 +335,6 @@ void TreeMaker::LeafPosotionSetting(TreeNode * node)
 		D3DXMatrixMultiply(&matrix, &matrix, &world);
 		leafInstanceData.push_back(matrix);
 	}
-
-
-
-
-
 
 }
 

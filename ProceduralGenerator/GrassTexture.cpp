@@ -39,9 +39,11 @@ GrassTexture::GrassTexture()
 	rotation = 180;
 	minSize = 0.3f;
 	maxSize = 0.5f;
+	//float4(0.80f, 0.80f, 0.65f, 1);
 	color1 = D3DXCOLOR(0.20784f, 0.48431f, 0.26666f,	1);
+	//color1 = D3DXCOLOR(0.20784f, 0.48431f, 0.26666f, 1);
 	color2 = D3DXCOLOR(0.88f,	0.87f,	 0.6f,		1);
-
+	//color2 = D3DXCOLOR(0.22784f, 0.44431f, 0.24666f, 1);
 
 
 
