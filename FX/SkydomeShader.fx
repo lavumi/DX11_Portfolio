@@ -85,6 +85,7 @@ float4 PS(PixelInput input) : SV_TARGET0
     //파란 빛은 사실상 거의 산란된 빛들
      //산란되는 양을 고정시키고 빛의 각도에 따라 파란빛을 추가시킴
     //TODO : 지금 파란 빛은 페이크가 심함. 더 좋은 방법이 있을까?
+    //파란빛 뿐만 아니라 전체적으로 색이 너무 진한 느낌이 들기도 한다..
     lightRGB.b = scatteredLight + lightGroundCos;
 
     lightRGB.g = (lightRGB.r + lightRGB.b) /2;
