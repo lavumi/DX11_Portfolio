@@ -255,5 +255,10 @@ void TestCube::CreateBuffer()
 
 	hr = D3D::GetDevice()->CreateBuffer(&desc, &data, &indexBuffer);
 	assert(SUCCEEDED(hr));
+
+
+
+	SAFE_DELETE_ARRAY(vertexData);
+	SAFE_DELETE_ARRAY(indexData);
 }
 
